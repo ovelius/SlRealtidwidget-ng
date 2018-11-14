@@ -1,0 +1,58 @@
+syntax = "proto3";
+
+package se.locutus.proto;
+
+option java_outer_classname = "Ng";
+
+message RequestHeader {
+  int32 api = 1;
+  int32 id = 2;
+}
+message RequestData {
+  RequestHeader request_header = 1;
+
+  bool short_format = 2;
+  bool realtime_departures_only = 3;
+
+  PingRequest ping_request = 4;
+  MetroRequest metro_request = 5;
+  DeparturesRequest departures_request = 6;
+}
+
+message ResponseData {
+  int32 id = 1;
+
+  string line1 = 2;
+  string line2 = 3;
+  string minutes = 4;
+  int32 seconds = 5;
+  
+  string idle_message = 6;
+  string url = 7;
+
+  repeated string departures = 8;
+}
+
+message MetroRequest {
+  int64 site_id = 1;
+  int32 metro_index = 2;
+}
+
+message DeparturesRequest {
+  int64 site_id = 1;
+  repeated string departures = 2;
+}
+
+message PingRequest {
+  int64 local_timestamp_millis = 1;
+}
+
+message WidgetConfiguration {
+  int64 widget_id = 1;
+  repeated StopConfiguration stop_configuration = 2;
+}
+
+message StopConfiguration {
+  DeparturesRequest departures_request = 1;
+  string display_name = 2;
+}
