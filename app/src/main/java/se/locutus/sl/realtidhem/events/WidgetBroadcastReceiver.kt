@@ -15,26 +15,10 @@ import se.locutus.sl.realtidhem.R
 import android.content.ComponentName
 import android.app.job.JobInfo
 import android.os.PersistableBundle
+import se.locutus.sl.realtidhem.widget.WIDGET_CONFIG_PREFS
+import se.locutus.sl.realtidhem.widget.loadWidgetConfigOrDefault
 
-@SuppressLint("NewApi")
-class ResetWidget : JobService() {
-    override fun onStopJob(params: JobParameters?): Boolean {
-        WidgetBroadcastReceiver.LOG.info("job stopped!")
-        return false
-    }
 
-    override fun onStartJob(params: JobParameters?): Boolean {
-        val widgetId: Int = params!!.extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID)
-        WidgetBroadcastReceiver.LOG.info("job started, clearing widget $widgetId!")
-        val manager = getSystemService(Context.APPWIDGET_SERVICE) as AppWidgetManager
-        val views = RemoteViews(packageName, R.layout.widgetlayout_t1)
-        views.setTextViewText(R.id.widgettext, "done")
-        manager.updateAppWidget(widgetId, views)
-        stopSelf()
-        return true
-    }
-
-}
 class WidgetBroadcastReceiver  : BroadcastReceiver() {
     companion object {
         val LOG = Logger.getLogger(WidgetBroadcastReceiver::class.java.name)
@@ -44,8 +28,12 @@ class WidgetBroadcastReceiver  : BroadcastReceiver() {
         LOG.info("Received intent $incomingIntent with extra $widgetId")
         val intent = Intent(context, BackgroundUpdaterService::class.java)
         intent.putExtras(incomingIntent)
-        //context!!.startService(intent)
-        ScrollThread(widgetId, context!!).start()
+
+        val prefs = context!!.getSharedPreferences(WIDGET_CONFIG_PREFS, 0)
+        val widgetConfig = loadWidgetConfigOrDefault(prefs, widgetId)
+        val line = if (widgetConfig.stopConfigurationCount > 0) widgetConfig.getStopConfiguration(0).stopData.canonicalName else  "faiiiiiiil"
+
+        ScrollThread(widgetId, line, context!!).start()
         scheduleSingleUpdate(context, widgetId)
     }
 
@@ -68,6 +56,7 @@ class WidgetBroadcastReceiver  : BroadcastReceiver() {
 
     internal class ScrollThread(
         private val widgetId: Int,
+        private val theLine: String,
         private val context: Context
     ) : Thread() {
         private var running = true
@@ -78,8 +67,8 @@ class WidgetBroadcastReceiver  : BroadcastReceiver() {
 
         override fun run() {
             val manager = context.getSystemService(Context.APPWIDGET_SERVICE) as AppWidgetManager
-            val views = RemoteViews(context.packageName, R.layout.widgetlayout_t1)
-            var line2 = "ooga booga hedgehoooooggggg"
+            val views = RemoteViews(context.packageName, R.layout.widgetlayout_base)
+            var line2 = theLine
 
             var s = line2 + "     " + line2
             val set = arrayOfNulls<String>(line2.length + 5)
@@ -108,4 +97,24 @@ class WidgetBroadcastReceiver  : BroadcastReceiver() {
             manager.updateAppWidget(widgetId, views)
         }
     }
+}
+
+@SuppressLint("NewApi")
+class ResetWidget : JobService() {
+    override fun onStopJob(params: JobParameters?): Boolean {
+        WidgetBroadcastReceiver.LOG.info("job stopped!")
+        return false
+    }
+
+    override fun onStartJob(params: JobParameters?): Boolean {
+        val widgetId: Int = params!!.extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID)
+        WidgetBroadcastReceiver.LOG.info("job started, clearing widget $widgetId!")
+        val manager = getSystemService(Context.APPWIDGET_SERVICE) as AppWidgetManager
+        val views = RemoteViews(packageName, R.layout.widgetlayout_base)
+        views.setTextViewText(R.id.widgettext, "done")
+        manager.updateAppWidget(widgetId, views)
+        stopSelf()
+        return true
+    }
+
 }

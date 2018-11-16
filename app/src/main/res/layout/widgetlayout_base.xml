@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/widgetmain"
+    android:layout_width="fill_parent"
+    android:layout_height="72dip"
+    android:layout_gravity="center"
+    android:clickable="true"
+    android:maxHeight="72dip"
+    android:minHeight="72dip"
+    android:maxWidth="294dip"
+    android:translationZ="8dp"
+    android:minWidth="294dip" >
+
+    <ImageView
+        android:id="@+id/larrow"
+        android:layout_width="wrap_content"
+        android:layout_height="fill_parent"
+        android:layout_gravity="left"
+        android:clickable="true"
+        android:src="@drawable/larrow"
+        tools:ignore="ContentDescription" >
+    </ImageView>
+
+    <ImageView
+        android:id="@+id/rarrow"
+        android:layout_width="wrap_content"
+        android:layout_height="fill_parent"
+        android:layout_gravity="right"
+        android:clickable="true"
+        android:maxWidth="82dip"
+        android:minWidth="82dip"
+        android:src="@drawable/rarrow"
+        tools:ignore="ContentDescription" >
+
+    </ImageView>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:background="@color/baseWidgetGreyBg"
+        android:weightSum="100"
+        android:orientation="vertical" >
+
+    <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="0dp"
+            android:layout_weight="30"
+            android:background="@color/baseWidgetBg"
+            android:translationZ="12dp"
+            android:orientation="vertical" >
+        <TextView
+            android:id="@+id/widgettag"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:maxLines="1"
+            android:text="Information"
+            android:textColor="#F5F5F5"
+            android:textSize="12dip"
+            android:textStyle="bold"
+            android:typeface="monospace" />
+    </LinearLayout>
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="0dp"
+            android:layout_weight="33"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:id="@+id/widgetline1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:maxLines="1"
+                android:paddingLeft="10dip"
+                android:text="@string/wait"
+                android:textColor="#ff9900"
+                android:textSize="14dip"
+                android:typeface="monospace" />
+
+            <TextView
+                android:id="@+id/widgetmin"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="right"
+                android:maxLines="1"
+                android:paddingRight="10dip"
+                android:text="min"
+                android:textColor="#ff9900"
+                android:textSize="14dip"
+                android:typeface="monospace" />
+        </LinearLayout>
+
+        <ImageView
+                android:layout_width="fill_parent"
+                android:layout_height="0dp"
+                android:layout_weight="4"
+                android:translationZ="8dp"
+                android:src="@color/baseWidgetGreyerBg"
+                tools:ignore="ContentDescription" />
+
+        <TextView
+            android:id="@+id/widgettext"
+            android:layout_width="fill_parent"
+            android:layout_height="0dp"
+            android:layout_weight="33"
+            android:layout_gravity="center"
+            android:clickable="true"
+            android:gravity="left"
+            android:singleLine="true"
+            android:ellipsize="none"
+                        android:paddingLeft="10dip"
+            android:paddingRight="10dip"
+            android:text="@string/nothing_happens"
+            android:textColor="#ff9900"
+            android:textSize="12dip"
+            android:typeface="monospace" >
+        </TextView>
+    </LinearLayout>
+
+    </FrameLayout>
+

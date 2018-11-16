@@ -352,41 +352,22 @@ public final class Ng {
     se.locutus.proto.Ng.RequestHeader getRequestHeader();
 
     /**
-     * <code>optional bool short_format = 2;</code>
-     */
-    boolean getShortFormat();
-
-    /**
-     * <code>optional bool realtime_departures_only = 3;</code>
-     */
-    boolean getRealtimeDeparturesOnly();
-
-    /**
-     * <code>optional .se.locutus.proto.PingRequest ping_request = 4;</code>
+     * <code>optional .se.locutus.proto.PingRequest ping_request = 2;</code>
      */
     boolean hasPingRequest();
     /**
-     * <code>optional .se.locutus.proto.PingRequest ping_request = 4;</code>
+     * <code>optional .se.locutus.proto.PingRequest ping_request = 2;</code>
      */
     se.locutus.proto.Ng.PingRequest getPingRequest();
 
     /**
-     * <code>optional .se.locutus.proto.MetroRequest metro_request = 5;</code>
+     * <code>optional .se.locutus.proto.StopDataRequest stop_data_request = 3;</code>
      */
-    boolean hasMetroRequest();
+    boolean hasStopDataRequest();
     /**
-     * <code>optional .se.locutus.proto.MetroRequest metro_request = 5;</code>
+     * <code>optional .se.locutus.proto.StopDataRequest stop_data_request = 3;</code>
      */
-    se.locutus.proto.Ng.MetroRequest getMetroRequest();
-
-    /**
-     * <code>optional .se.locutus.proto.DeparturesRequest departures_request = 6;</code>
-     */
-    boolean hasDeparturesRequest();
-    /**
-     * <code>optional .se.locutus.proto.DeparturesRequest departures_request = 6;</code>
-     */
-    se.locutus.proto.Ng.DeparturesRequest getDeparturesRequest();
+    se.locutus.proto.Ng.StopDataRequest getStopDataRequest();
   }
   /**
    * Protobuf type {@code se.locutus.proto.RequestData}
@@ -450,68 +431,22 @@ public final class Ng {
       
     }
 
-    public static final int SHORT_FORMAT_FIELD_NUMBER = 2;
-    private boolean shortFormat_;
-    /**
-     * <code>optional bool short_format = 2;</code>
-     */
-    public boolean getShortFormat() {
-      return shortFormat_;
-    }
-    /**
-     * <code>optional bool short_format = 2;</code>
-     */
-    private void setShortFormat(boolean value) {
-      
-      shortFormat_ = value;
-    }
-    /**
-     * <code>optional bool short_format = 2;</code>
-     */
-    private void clearShortFormat() {
-      
-      shortFormat_ = false;
-    }
-
-    public static final int REALTIME_DEPARTURES_ONLY_FIELD_NUMBER = 3;
-    private boolean realtimeDeparturesOnly_;
-    /**
-     * <code>optional bool realtime_departures_only = 3;</code>
-     */
-    public boolean getRealtimeDeparturesOnly() {
-      return realtimeDeparturesOnly_;
-    }
-    /**
-     * <code>optional bool realtime_departures_only = 3;</code>
-     */
-    private void setRealtimeDeparturesOnly(boolean value) {
-      
-      realtimeDeparturesOnly_ = value;
-    }
-    /**
-     * <code>optional bool realtime_departures_only = 3;</code>
-     */
-    private void clearRealtimeDeparturesOnly() {
-      
-      realtimeDeparturesOnly_ = false;
-    }
-
-    public static final int PING_REQUEST_FIELD_NUMBER = 4;
+    public static final int PING_REQUEST_FIELD_NUMBER = 2;
     private se.locutus.proto.Ng.PingRequest pingRequest_;
     /**
-     * <code>optional .se.locutus.proto.PingRequest ping_request = 4;</code>
+     * <code>optional .se.locutus.proto.PingRequest ping_request = 2;</code>
      */
     public boolean hasPingRequest() {
       return pingRequest_ != null;
     }
     /**
-     * <code>optional .se.locutus.proto.PingRequest ping_request = 4;</code>
+     * <code>optional .se.locutus.proto.PingRequest ping_request = 2;</code>
      */
     public se.locutus.proto.Ng.PingRequest getPingRequest() {
       return pingRequest_ == null ? se.locutus.proto.Ng.PingRequest.getDefaultInstance() : pingRequest_;
     }
     /**
-     * <code>optional .se.locutus.proto.PingRequest ping_request = 4;</code>
+     * <code>optional .se.locutus.proto.PingRequest ping_request = 2;</code>
      */
     private void setPingRequest(se.locutus.proto.Ng.PingRequest value) {
       if (value == null) {
@@ -521,7 +456,7 @@ public final class Ng {
       
       }
     /**
-     * <code>optional .se.locutus.proto.PingRequest ping_request = 4;</code>
+     * <code>optional .se.locutus.proto.PingRequest ping_request = 2;</code>
      */
     private void setPingRequest(
         se.locutus.proto.Ng.PingRequest.Builder builderForValue) {
@@ -529,7 +464,7 @@ public final class Ng {
       
     }
     /**
-     * <code>optional .se.locutus.proto.PingRequest ping_request = 4;</code>
+     * <code>optional .se.locutus.proto.PingRequest ping_request = 2;</code>
      */
     private void mergePingRequest(se.locutus.proto.Ng.PingRequest value) {
       if (pingRequest_ != null &&
@@ -542,113 +477,61 @@ public final class Ng {
       
     }
     /**
-     * <code>optional .se.locutus.proto.PingRequest ping_request = 4;</code>
+     * <code>optional .se.locutus.proto.PingRequest ping_request = 2;</code>
      */
     private void clearPingRequest() {  pingRequest_ = null;
       
     }
 
-    public static final int METRO_REQUEST_FIELD_NUMBER = 5;
-    private se.locutus.proto.Ng.MetroRequest metroRequest_;
+    public static final int STOP_DATA_REQUEST_FIELD_NUMBER = 3;
+    private se.locutus.proto.Ng.StopDataRequest stopDataRequest_;
     /**
-     * <code>optional .se.locutus.proto.MetroRequest metro_request = 5;</code>
+     * <code>optional .se.locutus.proto.StopDataRequest stop_data_request = 3;</code>
      */
-    public boolean hasMetroRequest() {
-      return metroRequest_ != null;
+    public boolean hasStopDataRequest() {
+      return stopDataRequest_ != null;
     }
     /**
-     * <code>optional .se.locutus.proto.MetroRequest metro_request = 5;</code>
+     * <code>optional .se.locutus.proto.StopDataRequest stop_data_request = 3;</code>
      */
-    public se.locutus.proto.Ng.MetroRequest getMetroRequest() {
-      return metroRequest_ == null ? se.locutus.proto.Ng.MetroRequest.getDefaultInstance() : metroRequest_;
+    public se.locutus.proto.Ng.StopDataRequest getStopDataRequest() {
+      return stopDataRequest_ == null ? se.locutus.proto.Ng.StopDataRequest.getDefaultInstance() : stopDataRequest_;
     }
     /**
-     * <code>optional .se.locutus.proto.MetroRequest metro_request = 5;</code>
+     * <code>optional .se.locutus.proto.StopDataRequest stop_data_request = 3;</code>
      */
-    private void setMetroRequest(se.locutus.proto.Ng.MetroRequest value) {
+    private void setStopDataRequest(se.locutus.proto.Ng.StopDataRequest value) {
       if (value == null) {
         throw new NullPointerException();
       }
-      metroRequest_ = value;
+      stopDataRequest_ = value;
       
       }
     /**
-     * <code>optional .se.locutus.proto.MetroRequest metro_request = 5;</code>
+     * <code>optional .se.locutus.proto.StopDataRequest stop_data_request = 3;</code>
      */
-    private void setMetroRequest(
-        se.locutus.proto.Ng.MetroRequest.Builder builderForValue) {
-      metroRequest_ = builderForValue.build();
+    private void setStopDataRequest(
+        se.locutus.proto.Ng.StopDataRequest.Builder builderForValue) {
+      stopDataRequest_ = builderForValue.build();
       
     }
     /**
-     * <code>optional .se.locutus.proto.MetroRequest metro_request = 5;</code>
+     * <code>optional .se.locutus.proto.StopDataRequest stop_data_request = 3;</code>
      */
-    private void mergeMetroRequest(se.locutus.proto.Ng.MetroRequest value) {
-      if (metroRequest_ != null &&
-          metroRequest_ != se.locutus.proto.Ng.MetroRequest.getDefaultInstance()) {
-        metroRequest_ =
-          se.locutus.proto.Ng.MetroRequest.newBuilder(metroRequest_).mergeFrom(value).buildPartial();
+    private void mergeStopDataRequest(se.locutus.proto.Ng.StopDataRequest value) {
+      if (stopDataRequest_ != null &&
+          stopDataRequest_ != se.locutus.proto.Ng.StopDataRequest.getDefaultInstance()) {
+        stopDataRequest_ =
+          se.locutus.proto.Ng.StopDataRequest.newBuilder(stopDataRequest_).mergeFrom(value).buildPartial();
       } else {
-        metroRequest_ = value;
+        stopDataRequest_ = value;
       }
       
     }
     /**
-     * <code>optional .se.locutus.proto.MetroRequest metro_request = 5;</code>
+     * <code>optional .se.locutus.proto.StopDataRequest stop_data_request = 3;</code>
      */
-    private void clearMetroRequest() {  metroRequest_ = null;
-      
-    }
-
-    public static final int DEPARTURES_REQUEST_FIELD_NUMBER = 6;
-    private se.locutus.proto.Ng.DeparturesRequest departuresRequest_;
-    /**
-     * <code>optional .se.locutus.proto.DeparturesRequest departures_request = 6;</code>
-     */
-    public boolean hasDeparturesRequest() {
-      return departuresRequest_ != null;
-    }
-    /**
-     * <code>optional .se.locutus.proto.DeparturesRequest departures_request = 6;</code>
-     */
-    public se.locutus.proto.Ng.DeparturesRequest getDeparturesRequest() {
-      return departuresRequest_ == null ? se.locutus.proto.Ng.DeparturesRequest.getDefaultInstance() : departuresRequest_;
-    }
-    /**
-     * <code>optional .se.locutus.proto.DeparturesRequest departures_request = 6;</code>
-     */
-    private void setDeparturesRequest(se.locutus.proto.Ng.DeparturesRequest value) {
-      if (value == null) {
-        throw new NullPointerException();
-      }
-      departuresRequest_ = value;
-      
-      }
-    /**
-     * <code>optional .se.locutus.proto.DeparturesRequest departures_request = 6;</code>
-     */
-    private void setDeparturesRequest(
-        se.locutus.proto.Ng.DeparturesRequest.Builder builderForValue) {
-      departuresRequest_ = builderForValue.build();
-      
-    }
-    /**
-     * <code>optional .se.locutus.proto.DeparturesRequest departures_request = 6;</code>
-     */
-    private void mergeDeparturesRequest(se.locutus.proto.Ng.DeparturesRequest value) {
-      if (departuresRequest_ != null &&
-          departuresRequest_ != se.locutus.proto.Ng.DeparturesRequest.getDefaultInstance()) {
-        departuresRequest_ =
-          se.locutus.proto.Ng.DeparturesRequest.newBuilder(departuresRequest_).mergeFrom(value).buildPartial();
-      } else {
-        departuresRequest_ = value;
-      }
-      
-    }
-    /**
-     * <code>optional .se.locutus.proto.DeparturesRequest departures_request = 6;</code>
-     */
-    private void clearDeparturesRequest() {  departuresRequest_ = null;
+    private void clearStopDataRequest() {  stopDataRequest_ = null;
       
     }
 
@@ -657,20 +540,11 @@ public final class Ng {
       if (requestHeader_ != null) {
         output.writeMessage(1, getRequestHeader());
       }
-      if (shortFormat_ != false) {
-        output.writeBool(2, shortFormat_);
-      }
-      if (realtimeDeparturesOnly_ != false) {
-        output.writeBool(3, realtimeDeparturesOnly_);
-      }
       if (pingRequest_ != null) {
-        output.writeMessage(4, getPingRequest());
+        output.writeMessage(2, getPingRequest());
       }
-      if (metroRequest_ != null) {
-        output.writeMessage(5, getMetroRequest());
-      }
-      if (departuresRequest_ != null) {
-        output.writeMessage(6, getDeparturesRequest());
+      if (stopDataRequest_ != null) {
+        output.writeMessage(3, getStopDataRequest());
       }
     }
 
@@ -683,25 +557,13 @@ public final class Ng {
         size += com.google.protobuf.CodedOutputStream
           .computeMessageSize(1, getRequestHeader());
       }
-      if (shortFormat_ != false) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeBoolSize(2, shortFormat_);
-      }
-      if (realtimeDeparturesOnly_ != false) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeBoolSize(3, realtimeDeparturesOnly_);
-      }
       if (pingRequest_ != null) {
         size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(4, getPingRequest());
+          .computeMessageSize(2, getPingRequest());
       }
-      if (metroRequest_ != null) {
+      if (stopDataRequest_ != null) {
         size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(5, getMetroRequest());
-      }
-      if (departuresRequest_ != null) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(6, getDeparturesRequest());
+          .computeMessageSize(3, getStopDataRequest());
       }
       memoizedSerializedSize = size;
       return size;
@@ -835,65 +697,19 @@ public final class Ng {
       }
 
       /**
-       * <code>optional bool short_format = 2;</code>
-       */
-      public boolean getShortFormat() {
-        return instance.getShortFormat();
-      }
-      /**
-       * <code>optional bool short_format = 2;</code>
-       */
-      public Builder setShortFormat(boolean value) {
-        copyOnWrite();
-        instance.setShortFormat(value);
-        return this;
-      }
-      /**
-       * <code>optional bool short_format = 2;</code>
-       */
-      public Builder clearShortFormat() {
-        copyOnWrite();
-        instance.clearShortFormat();
-        return this;
-      }
-
-      /**
-       * <code>optional bool realtime_departures_only = 3;</code>
-       */
-      public boolean getRealtimeDeparturesOnly() {
-        return instance.getRealtimeDeparturesOnly();
-      }
-      /**
-       * <code>optional bool realtime_departures_only = 3;</code>
-       */
-      public Builder setRealtimeDeparturesOnly(boolean value) {
-        copyOnWrite();
-        instance.setRealtimeDeparturesOnly(value);
-        return this;
-      }
-      /**
-       * <code>optional bool realtime_departures_only = 3;</code>
-       */
-      public Builder clearRealtimeDeparturesOnly() {
-        copyOnWrite();
-        instance.clearRealtimeDeparturesOnly();
-        return this;
-      }
-
-      /**
-       * <code>optional .se.locutus.proto.PingRequest ping_request = 4;</code>
+       * <code>optional .se.locutus.proto.PingRequest ping_request = 2;</code>
        */
       public boolean hasPingRequest() {
         return instance.hasPingRequest();
       }
       /**
-       * <code>optional .se.locutus.proto.PingRequest ping_request = 4;</code>
+       * <code>optional .se.locutus.proto.PingRequest ping_request = 2;</code>
        */
       public se.locutus.proto.Ng.PingRequest getPingRequest() {
         return instance.getPingRequest();
       }
       /**
-       * <code>optional .se.locutus.proto.PingRequest ping_request = 4;</code>
+       * <code>optional .se.locutus.proto.PingRequest ping_request = 2;</code>
        */
       public Builder setPingRequest(se.locutus.proto.Ng.PingRequest value) {
         copyOnWrite();
@@ -901,7 +717,7 @@ public final class Ng {
         return this;
         }
       /**
-       * <code>optional .se.locutus.proto.PingRequest ping_request = 4;</code>
+       * <code>optional .se.locutus.proto.PingRequest ping_request = 2;</code>
        */
       public Builder setPingRequest(
           se.locutus.proto.Ng.PingRequest.Builder builderForValue) {
@@ -910,7 +726,7 @@ public final class Ng {
         return this;
       }
       /**
-       * <code>optional .se.locutus.proto.PingRequest ping_request = 4;</code>
+       * <code>optional .se.locutus.proto.PingRequest ping_request = 2;</code>
        */
       public Builder mergePingRequest(se.locutus.proto.Ng.PingRequest value) {
         copyOnWrite();
@@ -918,7 +734,7 @@ public final class Ng {
         return this;
       }
       /**
-       * <code>optional .se.locutus.proto.PingRequest ping_request = 4;</code>
+       * <code>optional .se.locutus.proto.PingRequest ping_request = 2;</code>
        */
       public Builder clearPingRequest() {  copyOnWrite();
         instance.clearPingRequest();
@@ -926,92 +742,47 @@ public final class Ng {
       }
 
       /**
-       * <code>optional .se.locutus.proto.MetroRequest metro_request = 5;</code>
+       * <code>optional .se.locutus.proto.StopDataRequest stop_data_request = 3;</code>
        */
-      public boolean hasMetroRequest() {
-        return instance.hasMetroRequest();
+      public boolean hasStopDataRequest() {
+        return instance.hasStopDataRequest();
       }
       /**
-       * <code>optional .se.locutus.proto.MetroRequest metro_request = 5;</code>
+       * <code>optional .se.locutus.proto.StopDataRequest stop_data_request = 3;</code>
        */
-      public se.locutus.proto.Ng.MetroRequest getMetroRequest() {
-        return instance.getMetroRequest();
+      public se.locutus.proto.Ng.StopDataRequest getStopDataRequest() {
+        return instance.getStopDataRequest();
       }
       /**
-       * <code>optional .se.locutus.proto.MetroRequest metro_request = 5;</code>
+       * <code>optional .se.locutus.proto.StopDataRequest stop_data_request = 3;</code>
        */
-      public Builder setMetroRequest(se.locutus.proto.Ng.MetroRequest value) {
+      public Builder setStopDataRequest(se.locutus.proto.Ng.StopDataRequest value) {
         copyOnWrite();
-        instance.setMetroRequest(value);
+        instance.setStopDataRequest(value);
         return this;
         }
       /**
-       * <code>optional .se.locutus.proto.MetroRequest metro_request = 5;</code>
+       * <code>optional .se.locutus.proto.StopDataRequest stop_data_request = 3;</code>
        */
-      public Builder setMetroRequest(
-          se.locutus.proto.Ng.MetroRequest.Builder builderForValue) {
+      public Builder setStopDataRequest(
+          se.locutus.proto.Ng.StopDataRequest.Builder builderForValue) {
         copyOnWrite();
-        instance.setMetroRequest(builderForValue);
+        instance.setStopDataRequest(builderForValue);
         return this;
       }
       /**
-       * <code>optional .se.locutus.proto.MetroRequest metro_request = 5;</code>
+       * <code>optional .se.locutus.proto.StopDataRequest stop_data_request = 3;</code>
        */
-      public Builder mergeMetroRequest(se.locutus.proto.Ng.MetroRequest value) {
+      public Builder mergeStopDataRequest(se.locutus.proto.Ng.StopDataRequest value) {
         copyOnWrite();
-        instance.mergeMetroRequest(value);
+        instance.mergeStopDataRequest(value);
         return this;
       }
       /**
-       * <code>optional .se.locutus.proto.MetroRequest metro_request = 5;</code>
+       * <code>optional .se.locutus.proto.StopDataRequest stop_data_request = 3;</code>
        */
-      public Builder clearMetroRequest() {  copyOnWrite();
-        instance.clearMetroRequest();
-        return this;
-      }
-
-      /**
-       * <code>optional .se.locutus.proto.DeparturesRequest departures_request = 6;</code>
-       */
-      public boolean hasDeparturesRequest() {
-        return instance.hasDeparturesRequest();
-      }
-      /**
-       * <code>optional .se.locutus.proto.DeparturesRequest departures_request = 6;</code>
-       */
-      public se.locutus.proto.Ng.DeparturesRequest getDeparturesRequest() {
-        return instance.getDeparturesRequest();
-      }
-      /**
-       * <code>optional .se.locutus.proto.DeparturesRequest departures_request = 6;</code>
-       */
-      public Builder setDeparturesRequest(se.locutus.proto.Ng.DeparturesRequest value) {
-        copyOnWrite();
-        instance.setDeparturesRequest(value);
-        return this;
-        }
-      /**
-       * <code>optional .se.locutus.proto.DeparturesRequest departures_request = 6;</code>
-       */
-      public Builder setDeparturesRequest(
-          se.locutus.proto.Ng.DeparturesRequest.Builder builderForValue) {
-        copyOnWrite();
-        instance.setDeparturesRequest(builderForValue);
-        return this;
-      }
-      /**
-       * <code>optional .se.locutus.proto.DeparturesRequest departures_request = 6;</code>
-       */
-      public Builder mergeDeparturesRequest(se.locutus.proto.Ng.DeparturesRequest value) {
-        copyOnWrite();
-        instance.mergeDeparturesRequest(value);
-        return this;
-      }
-      /**
-       * <code>optional .se.locutus.proto.DeparturesRequest departures_request = 6;</code>
-       */
-      public Builder clearDeparturesRequest() {  copyOnWrite();
-        instance.clearDeparturesRequest();
+      public Builder clearStopDataRequest() {  copyOnWrite();
+        instance.clearStopDataRequest();
         return this;
       }
 
@@ -1037,13 +808,8 @@ public final class Ng {
           Visitor visitor = (Visitor) arg0;
           se.locutus.proto.Ng.RequestData other = (se.locutus.proto.Ng.RequestData) arg1;
           requestHeader_ = visitor.visitMessage(requestHeader_, other.requestHeader_);
-          shortFormat_ = visitor.visitBoolean(shortFormat_ != false, shortFormat_,
-              other.shortFormat_ != false, other.shortFormat_);
-          realtimeDeparturesOnly_ = visitor.visitBoolean(realtimeDeparturesOnly_ != false, realtimeDeparturesOnly_,
-              other.realtimeDeparturesOnly_ != false, other.realtimeDeparturesOnly_);
           pingRequest_ = visitor.visitMessage(pingRequest_, other.pingRequest_);
-          metroRequest_ = visitor.visitMessage(metroRequest_, other.metroRequest_);
-          departuresRequest_ = visitor.visitMessage(departuresRequest_, other.departuresRequest_);
+          stopDataRequest_ = visitor.visitMessage(stopDataRequest_, other.stopDataRequest_);
           if (visitor == com.google.protobuf.GeneratedMessageLite.MergeFromVisitor
               .INSTANCE) {
           }
@@ -1081,17 +847,7 @@ public final class Ng {
 
                   break;
                 }
-                case 16: {
-
-                  shortFormat_ = input.readBool();
-                  break;
-                }
-                case 24: {
-
-                  realtimeDeparturesOnly_ = input.readBool();
-                  break;
-                }
-                case 34: {
+                case 18: {
                   se.locutus.proto.Ng.PingRequest.Builder subBuilder = null;
                   if (pingRequest_ != null) {
                     subBuilder = pingRequest_.toBuilder();
@@ -1104,28 +860,15 @@ public final class Ng {
 
                   break;
                 }
-                case 42: {
-                  se.locutus.proto.Ng.MetroRequest.Builder subBuilder = null;
-                  if (metroRequest_ != null) {
-                    subBuilder = metroRequest_.toBuilder();
+                case 26: {
+                  se.locutus.proto.Ng.StopDataRequest.Builder subBuilder = null;
+                  if (stopDataRequest_ != null) {
+                    subBuilder = stopDataRequest_.toBuilder();
                   }
-                  metroRequest_ = input.readMessage(se.locutus.proto.Ng.MetroRequest.parser(), extensionRegistry);
+                  stopDataRequest_ = input.readMessage(se.locutus.proto.Ng.StopDataRequest.parser(), extensionRegistry);
                   if (subBuilder != null) {
-                    subBuilder.mergeFrom(metroRequest_);
-                    metroRequest_ = subBuilder.buildPartial();
-                  }
-
-                  break;
-                }
-                case 50: {
-                  se.locutus.proto.Ng.DeparturesRequest.Builder subBuilder = null;
-                  if (departuresRequest_ != null) {
-                    subBuilder = departuresRequest_.toBuilder();
-                  }
-                  departuresRequest_ = input.readMessage(se.locutus.proto.Ng.DeparturesRequest.parser(), extensionRegistry);
-                  if (subBuilder != null) {
-                    subBuilder.mergeFrom(departuresRequest_);
-                    departuresRequest_ = subBuilder.buildPartial();
+                    subBuilder.mergeFrom(stopDataRequest_);
+                    stopDataRequest_ = subBuilder.buildPartial();
                   }
 
                   break;
@@ -1239,25 +982,6 @@ public final class Ng {
      */
     com.google.protobuf.ByteString
         getUrlBytes();
-
-    /**
-     * <code>repeated string departures = 8;</code>
-     */
-    java.util.List<String>
-        getDeparturesList();
-    /**
-     * <code>repeated string departures = 8;</code>
-     */
-    int getDeparturesCount();
-    /**
-     * <code>repeated string departures = 8;</code>
-     */
-    java.lang.String getDepartures(int index);
-    /**
-     * <code>repeated string departures = 8;</code>
-     */
-    com.google.protobuf.ByteString
-        getDeparturesBytes(int index);
   }
   /**
    * Protobuf type {@code se.locutus.proto.ResponseData}
@@ -1273,9 +997,7 @@ public final class Ng {
       minutes_ = "";
       idleMessage_ = "";
       url_ = "";
-      departures_ = com.google.protobuf.GeneratedMessageLite.emptyProtobufList();
     }
-    private int bitField0_;
     public static final int ID_FIELD_NUMBER = 1;
     private int id_;
     /**
@@ -1552,90 +1274,6 @@ public final class Ng {
       url_ = value.toStringUtf8();
     }
 
-    public static final int DEPARTURES_FIELD_NUMBER = 8;
-    private com.google.protobuf.Internal.ProtobufList<String> departures_;
-    /**
-     * <code>repeated string departures = 8;</code>
-     */
-    public java.util.List<String> getDeparturesList() {
-      return departures_;
-    }
-    /**
-     * <code>repeated string departures = 8;</code>
-     */
-    public int getDeparturesCount() {
-      return departures_.size();
-    }
-    /**
-     * <code>repeated string departures = 8;</code>
-     */
-    public java.lang.String getDepartures(int index) {
-      return departures_.get(index);
-    }
-    /**
-     * <code>repeated string departures = 8;</code>
-     */
-    public com.google.protobuf.ByteString
-        getDeparturesBytes(int index) {
-      return com.google.protobuf.ByteString.copyFromUtf8(
-          departures_.get(index));
-    }
-    private void ensureDeparturesIsMutable() {
-      if (!departures_.isModifiable()) {
-        departures_ =
-            com.google.protobuf.GeneratedMessageLite.mutableCopy(departures_);
-       }
-    }
-    /**
-     * <code>repeated string departures = 8;</code>
-     */
-    private void setDepartures(
-        int index, java.lang.String value) {
-      if (value == null) {
-    throw new NullPointerException();
-  }
-  ensureDeparturesIsMutable();
-      departures_.set(index, value);
-    }
-    /**
-     * <code>repeated string departures = 8;</code>
-     */
-    private void addDepartures(
-        java.lang.String value) {
-      if (value == null) {
-    throw new NullPointerException();
-  }
-  ensureDeparturesIsMutable();
-      departures_.add(value);
-    }
-    /**
-     * <code>repeated string departures = 8;</code>
-     */
-    private void addAllDepartures(
-        java.lang.Iterable<java.lang.String> values) {
-      ensureDeparturesIsMutable();
-      com.google.protobuf.AbstractMessageLite.addAll(
-          values, departures_);
-    }
-    /**
-     * <code>repeated string departures = 8;</code>
-     */
-    private void clearDepartures() {
-      departures_ = com.google.protobuf.GeneratedMessageLite.emptyProtobufList();
-    }
-    /**
-     * <code>repeated string departures = 8;</code>
-     */
-    private void addDeparturesBytes(
-        com.google.protobuf.ByteString value) {
-      if (value == null) {
-    throw new NullPointerException();
-  }
-  checkByteStringIsUtf8(value);
-      ensureDeparturesIsMutable();
-      departures_.add(value.toStringUtf8());
-    }
-
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
       if (id_ != 0) {
@@ -1658,9 +1296,6 @@ public final class Ng {
       }
       if (!url_.isEmpty()) {
         output.writeString(7, getUrl());
-      }
-      for (int i = 0; i < departures_.size(); i++) {
-        output.writeString(8, departures_.get(i));
       }
     }
 
@@ -1696,15 +1331,6 @@ public final class Ng {
       if (!url_.isEmpty()) {
         size += com.google.protobuf.CodedOutputStream
           .computeStringSize(7, getUrl());
-      }
-      {
-        int dataSize = 0;
-        for (int i = 0; i < departures_.size(); i++) {
-          dataSize += com.google.protobuf.CodedOutputStream
-            .computeStringSizeNoTag(departures_.get(i));
-        }
-        size += dataSize;
-        size += 1 * getDeparturesList().size();
       }
       memoizedSerializedSize = size;
       return size;
@@ -2038,78 +1664,6 @@ public final class Ng {
         return this;
       }
 
-      /**
-       * <code>repeated string departures = 8;</code>
-       */
-      public java.util.List<String>
-          getDeparturesList() {
-        return java.util.Collections.unmodifiableList(
-            instance.getDeparturesList());
-      }
-      /**
-       * <code>repeated string departures = 8;</code>
-       */
-      public int getDeparturesCount() {
-        return instance.getDeparturesCount();
-      }
-      /**
-       * <code>repeated string departures = 8;</code>
-       */
-      public java.lang.String getDepartures(int index) {
-        return instance.getDepartures(index);
-      }
-      /**
-       * <code>repeated string departures = 8;</code>
-       */
-      public com.google.protobuf.ByteString
-          getDeparturesBytes(int index) {
-        return instance.getDeparturesBytes(index);
-      }
-      /**
-       * <code>repeated string departures = 8;</code>
-       */
-      public Builder setDepartures(
-          int index, java.lang.String value) {
-        copyOnWrite();
-        instance.setDepartures(index, value);
-        return this;
-      }
-      /**
-       * <code>repeated string departures = 8;</code>
-       */
-      public Builder addDepartures(
-          java.lang.String value) {
-        copyOnWrite();
-        instance.addDepartures(value);
-        return this;
-      }
-      /**
-       * <code>repeated string departures = 8;</code>
-       */
-      public Builder addAllDepartures(
-          java.lang.Iterable<java.lang.String> values) {
-        copyOnWrite();
-        instance.addAllDepartures(values);
-        return this;
-      }
-      /**
-       * <code>repeated string departures = 8;</code>
-       */
-      public Builder clearDepartures() {
-        copyOnWrite();
-        instance.clearDepartures();
-        return this;
-      }
-      /**
-       * <code>repeated string departures = 8;</code>
-       */
-      public Builder addDeparturesBytes(
-          com.google.protobuf.ByteString value) {
-        copyOnWrite();
-        instance.addDeparturesBytes(value);
-        return this;
-      }
-
       // @@protoc_insertion_point(builder_scope:se.locutus.proto.ResponseData)
     }
     protected final Object dynamicMethod(
@@ -2123,7 +1677,6 @@ public final class Ng {
           return DEFAULT_INSTANCE;
         }
         case MAKE_IMMUTABLE: {
-          departures_.makeImmutable();
           return null;
         }
         case NEW_BUILDER: {
@@ -2146,10 +1699,8 @@ public final class Ng {
               !other.idleMessage_.isEmpty(), other.idleMessage_);
           url_ = visitor.visitString(!url_.isEmpty(), url_,
               !other.url_.isEmpty(), other.url_);
-          departures_= visitor.visitList(departures_, other.departures_);
           if (visitor == com.google.protobuf.GeneratedMessageLite.MergeFromVisitor
               .INSTANCE) {
-            bitField0_ |= other.bitField0_;
           }
           return this;
         }
@@ -2212,15 +1763,6 @@ public final class Ng {
                   url_ = s;
                   break;
                 }
-                case 66: {
-                  String s = input.readStringRequireUtf8();
-                  if (!departures_.isModifiable()) {
-                    departures_ =
-                        com.google.protobuf.GeneratedMessageLite.mutableCopy(departures_);
-                  }
-                  departures_.add(s);
-                  break;
-                }
               }
             }
           } catch (com.google.protobuf.InvalidProtocolBufferException e) {
@@ -2267,83 +1809,83 @@ public final class Ng {
     }
   }
 
-  public interface MetroRequestOrBuilder extends
-      // @@protoc_insertion_point(interface_extends:se.locutus.proto.MetroRequest)
+  public interface LineBasedRequestOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:se.locutus.proto.LineBasedRequest)
       com.google.protobuf.MessageLiteOrBuilder {
 
     /**
-     * <code>optional int64 site_id = 1;</code>
+     * <code>optional int32 group_of_line_id = 1;</code>
      */
-    long getSiteId();
+    int getGroupOfLineId();
 
     /**
-     * <code>optional int32 metro_index = 2;</code>
+     * <code>optional int32 direction_id = 2;</code>
      */
-    int getMetroIndex();
+    int getDirectionId();
   }
   /**
-   * Protobuf type {@code se.locutus.proto.MetroRequest}
+   * Protobuf type {@code se.locutus.proto.LineBasedRequest}
    */
-  public  static final class MetroRequest extends
+  public  static final class LineBasedRequest extends
       com.google.protobuf.GeneratedMessageLite<
-          MetroRequest, MetroRequest.Builder> implements
-      // @@protoc_insertion_point(message_implements:se.locutus.proto.MetroRequest)
-      MetroRequestOrBuilder {
-    private MetroRequest() {
+          LineBasedRequest, LineBasedRequest.Builder> implements
+      // @@protoc_insertion_point(message_implements:se.locutus.proto.LineBasedRequest)
+      LineBasedRequestOrBuilder {
+    private LineBasedRequest() {
     }
-    public static final int SITE_ID_FIELD_NUMBER = 1;
-    private long siteId_;
+    public static final int GROUP_OF_LINE_ID_FIELD_NUMBER = 1;
+    private int groupOfLineId_;
     /**
-     * <code>optional int64 site_id = 1;</code>
+     * <code>optional int32 group_of_line_id = 1;</code>
      */
-    public long getSiteId() {
-      return siteId_;
+    public int getGroupOfLineId() {
+      return groupOfLineId_;
     }
     /**
-     * <code>optional int64 site_id = 1;</code>
+     * <code>optional int32 group_of_line_id = 1;</code>
      */
-    private void setSiteId(long value) {
+    private void setGroupOfLineId(int value) {
       
-      siteId_ = value;
+      groupOfLineId_ = value;
     }
     /**
-     * <code>optional int64 site_id = 1;</code>
+     * <code>optional int32 group_of_line_id = 1;</code>
      */
-    private void clearSiteId() {
+    private void clearGroupOfLineId() {
       
-      siteId_ = 0L;
+      groupOfLineId_ = 0;
     }
 
-    public static final int METRO_INDEX_FIELD_NUMBER = 2;
-    private int metroIndex_;
+    public static final int DIRECTION_ID_FIELD_NUMBER = 2;
+    private int directionId_;
     /**
-     * <code>optional int32 metro_index = 2;</code>
+     * <code>optional int32 direction_id = 2;</code>
      */
-    public int getMetroIndex() {
-      return metroIndex_;
+    public int getDirectionId() {
+      return directionId_;
     }
     /**
-     * <code>optional int32 metro_index = 2;</code>
+     * <code>optional int32 direction_id = 2;</code>
      */
-    private void setMetroIndex(int value) {
+    private void setDirectionId(int value) {
       
-      metroIndex_ = value;
+      directionId_ = value;
     }
     /**
-     * <code>optional int32 metro_index = 2;</code>
+     * <code>optional int32 direction_id = 2;</code>
      */
-    private void clearMetroIndex() {
+    private void clearDirectionId() {
       
-      metroIndex_ = 0;
+      directionId_ = 0;
     }
 
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
-      if (siteId_ != 0L) {
-        output.writeInt64(1, siteId_);
+      if (groupOfLineId_ != 0) {
+        output.writeInt32(1, groupOfLineId_);
       }
-      if (metroIndex_ != 0) {
-        output.writeInt32(2, metroIndex_);
+      if (directionId_ != 0) {
+        output.writeInt32(2, directionId_);
       }
     }
 
@@ -2352,72 +1894,72 @@ public final class Ng {
       if (size != -1) return size;
 
       size = 0;
-      if (siteId_ != 0L) {
+      if (groupOfLineId_ != 0) {
         size += com.google.protobuf.CodedOutputStream
-          .computeInt64Size(1, siteId_);
+          .computeInt32Size(1, groupOfLineId_);
       }
-      if (metroIndex_ != 0) {
+      if (directionId_ != 0) {
         size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(2, metroIndex_);
+          .computeInt32Size(2, directionId_);
       }
       memoizedSerializedSize = size;
       return size;
     }
 
-    public static se.locutus.proto.Ng.MetroRequest parseFrom(
+    public static se.locutus.proto.Ng.LineBasedRequest parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return com.google.protobuf.GeneratedMessageLite.parseFrom(
           DEFAULT_INSTANCE, data);
     }
-    public static se.locutus.proto.Ng.MetroRequest parseFrom(
+    public static se.locutus.proto.Ng.LineBasedRequest parseFrom(
         com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return com.google.protobuf.GeneratedMessageLite.parseFrom(
           DEFAULT_INSTANCE, data, extensionRegistry);
     }
-    public static se.locutus.proto.Ng.MetroRequest parseFrom(byte[] data)
+    public static se.locutus.proto.Ng.LineBasedRequest parseFrom(byte[] data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return com.google.protobuf.GeneratedMessageLite.parseFrom(
           DEFAULT_INSTANCE, data);
     }
-    public static se.locutus.proto.Ng.MetroRequest parseFrom(
+    public static se.locutus.proto.Ng.LineBasedRequest parseFrom(
         byte[] data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return com.google.protobuf.GeneratedMessageLite.parseFrom(
           DEFAULT_INSTANCE, data, extensionRegistry);
     }
-    public static se.locutus.proto.Ng.MetroRequest parseFrom(java.io.InputStream input)
+    public static se.locutus.proto.Ng.LineBasedRequest parseFrom(java.io.InputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageLite.parseFrom(
           DEFAULT_INSTANCE, input);
     }
-    public static se.locutus.proto.Ng.MetroRequest parseFrom(
+    public static se.locutus.proto.Ng.LineBasedRequest parseFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageLite.parseFrom(
           DEFAULT_INSTANCE, input, extensionRegistry);
     }
-    public static se.locutus.proto.Ng.MetroRequest parseDelimitedFrom(java.io.InputStream input)
+    public static se.locutus.proto.Ng.LineBasedRequest parseDelimitedFrom(java.io.InputStream input)
         throws java.io.IOException {
       return parseDelimitedFrom(DEFAULT_INSTANCE, input);
     }
-    public static se.locutus.proto.Ng.MetroRequest parseDelimitedFrom(
+    public static se.locutus.proto.Ng.LineBasedRequest parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return parseDelimitedFrom(DEFAULT_INSTANCE, input, extensionRegistry);
     }
-    public static se.locutus.proto.Ng.MetroRequest parseFrom(
+    public static se.locutus.proto.Ng.LineBasedRequest parseFrom(
         com.google.protobuf.CodedInputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageLite.parseFrom(
           DEFAULT_INSTANCE, input);
     }
-    public static se.locutus.proto.Ng.MetroRequest parseFrom(
+    public static se.locutus.proto.Ng.LineBasedRequest parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
@@ -2428,78 +1970,78 @@ public final class Ng {
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
     }
-    public static Builder newBuilder(se.locutus.proto.Ng.MetroRequest prototype) {
+    public static Builder newBuilder(se.locutus.proto.Ng.LineBasedRequest prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
 
     /**
-     * Protobuf type {@code se.locutus.proto.MetroRequest}
+     * Protobuf type {@code se.locutus.proto.LineBasedRequest}
      */
     public static final class Builder extends
         com.google.protobuf.GeneratedMessageLite.Builder<
-          se.locutus.proto.Ng.MetroRequest, Builder> implements
-        // @@protoc_insertion_point(builder_implements:se.locutus.proto.MetroRequest)
-        se.locutus.proto.Ng.MetroRequestOrBuilder {
-      // Construct using se.locutus.proto.Ng.MetroRequest.newBuilder()
+          se.locutus.proto.Ng.LineBasedRequest, Builder> implements
+        // @@protoc_insertion_point(builder_implements:se.locutus.proto.LineBasedRequest)
+        se.locutus.proto.Ng.LineBasedRequestOrBuilder {
+      // Construct using se.locutus.proto.Ng.LineBasedRequest.newBuilder()
       private Builder() {
         super(DEFAULT_INSTANCE);
       }
 
 
       /**
-       * <code>optional int64 site_id = 1;</code>
+       * <code>optional int32 group_of_line_id = 1;</code>
        */
-      public long getSiteId() {
-        return instance.getSiteId();
+      public int getGroupOfLineId() {
+        return instance.getGroupOfLineId();
       }
       /**
-       * <code>optional int64 site_id = 1;</code>
+       * <code>optional int32 group_of_line_id = 1;</code>
        */
-      public Builder setSiteId(long value) {
+      public Builder setGroupOfLineId(int value) {
         copyOnWrite();
-        instance.setSiteId(value);
+        instance.setGroupOfLineId(value);
         return this;
       }
       /**
-       * <code>optional int64 site_id = 1;</code>
+       * <code>optional int32 group_of_line_id = 1;</code>
        */
-      public Builder clearSiteId() {
+      public Builder clearGroupOfLineId() {
         copyOnWrite();
-        instance.clearSiteId();
-        return this;
-      }
-
-      /**
-       * <code>optional int32 metro_index = 2;</code>
-       */
-      public int getMetroIndex() {
-        return instance.getMetroIndex();
-      }
-      /**
-       * <code>optional int32 metro_index = 2;</code>
-       */
-      public Builder setMetroIndex(int value) {
-        copyOnWrite();
-        instance.setMetroIndex(value);
-        return this;
-      }
-      /**
-       * <code>optional int32 metro_index = 2;</code>
-       */
-      public Builder clearMetroIndex() {
-        copyOnWrite();
-        instance.clearMetroIndex();
+        instance.clearGroupOfLineId();
         return this;
       }
 
-      // @@protoc_insertion_point(builder_scope:se.locutus.proto.MetroRequest)
+      /**
+       * <code>optional int32 direction_id = 2;</code>
+       */
+      public int getDirectionId() {
+        return instance.getDirectionId();
+      }
+      /**
+       * <code>optional int32 direction_id = 2;</code>
+       */
+      public Builder setDirectionId(int value) {
+        copyOnWrite();
+        instance.setDirectionId(value);
+        return this;
+      }
+      /**
+       * <code>optional int32 direction_id = 2;</code>
+       */
+      public Builder clearDirectionId() {
+        copyOnWrite();
+        instance.clearDirectionId();
+        return this;
+      }
+
+      // @@protoc_insertion_point(builder_scope:se.locutus.proto.LineBasedRequest)
     }
     protected final Object dynamicMethod(
         com.google.protobuf.GeneratedMessageLite.MethodToInvoke method,
         Object arg0, Object arg1) {
       switch (method) {
         case NEW_MUTABLE_INSTANCE: {
-          return new se.locutus.proto.Ng.MetroRequest();
+          return new se.locutus.proto.Ng.LineBasedRequest();
         }
         case IS_INITIALIZED: {
           return DEFAULT_INSTANCE;
@@ -2512,11 +2054,11 @@ public final class Ng {
         }
         case VISIT: {
           Visitor visitor = (Visitor) arg0;
-          se.locutus.proto.Ng.MetroRequest other = (se.locutus.proto.Ng.MetroRequest) arg1;
-          siteId_ = visitor.visitLong(siteId_ != 0L, siteId_,
-              other.siteId_ != 0L, other.siteId_);
-          metroIndex_ = visitor.visitInt(metroIndex_ != 0, metroIndex_,
-              other.metroIndex_ != 0, other.metroIndex_);
+          se.locutus.proto.Ng.LineBasedRequest other = (se.locutus.proto.Ng.LineBasedRequest) arg1;
+          groupOfLineId_ = visitor.visitInt(groupOfLineId_ != 0, groupOfLineId_,
+              other.groupOfLineId_ != 0, other.groupOfLineId_);
+          directionId_ = visitor.visitInt(directionId_ != 0, directionId_,
+              other.directionId_ != 0, other.directionId_);
           if (visitor == com.google.protobuf.GeneratedMessageLite.MergeFromVisitor
               .INSTANCE) {
           }
@@ -2543,12 +2085,12 @@ public final class Ng {
                 }
                 case 8: {
 
-                  siteId_ = input.readInt64();
+                  groupOfLineId_ = input.readInt32();
                   break;
                 }
                 case 16: {
 
-                  metroIndex_ = input.readInt32();
+                  directionId_ = input.readInt32();
                   break;
                 }
               }
@@ -2566,7 +2108,7 @@ public final class Ng {
           return DEFAULT_INSTANCE;
         }
         case GET_PARSER: {
-          if (PARSER == null) {    synchronized (se.locutus.proto.Ng.MetroRequest.class) {
+          if (PARSER == null) {    synchronized (se.locutus.proto.Ng.LineBasedRequest.class) {
               if (PARSER == null) {
                 PARSER = new DefaultInstanceBasedParser(DEFAULT_INSTANCE);
               }
@@ -2579,20 +2121,20 @@ public final class Ng {
     }
 
 
-    // @@protoc_insertion_point(class_scope:se.locutus.proto.MetroRequest)
-    private static final se.locutus.proto.Ng.MetroRequest DEFAULT_INSTANCE;
+    // @@protoc_insertion_point(class_scope:se.locutus.proto.LineBasedRequest)
+    private static final se.locutus.proto.Ng.LineBasedRequest DEFAULT_INSTANCE;
     static {
-      DEFAULT_INSTANCE = new MetroRequest();
+      DEFAULT_INSTANCE = new LineBasedRequest();
       DEFAULT_INSTANCE.makeImmutable();
     }
 
-    public static se.locutus.proto.Ng.MetroRequest getDefaultInstance() {
+    public static se.locutus.proto.Ng.LineBasedRequest getDefaultInstance() {
       return DEFAULT_INSTANCE;
     }
 
-    private static volatile com.google.protobuf.Parser<MetroRequest> PARSER;
+    private static volatile com.google.protobuf.Parser<LineBasedRequest> PARSER;
 
-    public static com.google.protobuf.Parser<MetroRequest> parser() {
+    public static com.google.protobuf.Parser<LineBasedRequest> parser() {
       return DEFAULT_INSTANCE.getParserForType();
     }
   }
@@ -2602,25 +2144,20 @@ public final class Ng {
       com.google.protobuf.MessageLiteOrBuilder {
 
     /**
-     * <code>optional int64 site_id = 1;</code>
-     */
-    long getSiteId();
-
-    /**
-     * <code>repeated string departures = 2;</code>
+     * <code>repeated string departures = 1;</code>
      */
     java.util.List<String>
         getDeparturesList();
     /**
-     * <code>repeated string departures = 2;</code>
+     * <code>repeated string departures = 1;</code>
      */
     int getDeparturesCount();
     /**
-     * <code>repeated string departures = 2;</code>
+     * <code>repeated string departures = 1;</code>
      */
     java.lang.String getDepartures(int index);
     /**
-     * <code>repeated string departures = 2;</code>
+     * <code>repeated string departures = 1;</code>
      */
     com.google.protobuf.ByteString
         getDeparturesBytes(int index);
@@ -2636,52 +2173,28 @@ public final class Ng {
     private DeparturesRequest() {
       departures_ = com.google.protobuf.GeneratedMessageLite.emptyProtobufList();
     }
-    private int bitField0_;
-    public static final int SITE_ID_FIELD_NUMBER = 1;
-    private long siteId_;
-    /**
-     * <code>optional int64 site_id = 1;</code>
-     */
-    public long getSiteId() {
-      return siteId_;
-    }
-    /**
-     * <code>optional int64 site_id = 1;</code>
-     */
-    private void setSiteId(long value) {
-      
-      siteId_ = value;
-    }
-    /**
-     * <code>optional int64 site_id = 1;</code>
-     */
-    private void clearSiteId() {
-      
-      siteId_ = 0L;
-    }
-
-    public static final int DEPARTURES_FIELD_NUMBER = 2;
+    public static final int DEPARTURES_FIELD_NUMBER = 1;
     private com.google.protobuf.Internal.ProtobufList<String> departures_;
     /**
-     * <code>repeated string departures = 2;</code>
+     * <code>repeated string departures = 1;</code>
      */
     public java.util.List<String> getDeparturesList() {
       return departures_;
     }
     /**
-     * <code>repeated string departures = 2;</code>
+     * <code>repeated string departures = 1;</code>
      */
     public int getDeparturesCount() {
       return departures_.size();
     }
     /**
-     * <code>repeated string departures = 2;</code>
+     * <code>repeated string departures = 1;</code>
      */
     public java.lang.String getDepartures(int index) {
       return departures_.get(index);
     }
     /**
-     * <code>repeated string departures = 2;</code>
+     * <code>repeated string departures = 1;</code>
      */
     public com.google.protobuf.ByteString
         getDeparturesBytes(int index) {
@@ -2695,7 +2208,7 @@ public final class Ng {
        }
     }
     /**
-     * <code>repeated string departures = 2;</code>
+     * <code>repeated string departures = 1;</code>
      */
     private void setDepartures(
         int index, java.lang.String value) {
@@ -2706,7 +2219,7 @@ public final class Ng {
       departures_.set(index, value);
     }
     /**
-     * <code>repeated string departures = 2;</code>
+     * <code>repeated string departures = 1;</code>
      */
     private void addDepartures(
         java.lang.String value) {
@@ -2717,7 +2230,7 @@ public final class Ng {
       departures_.add(value);
     }
     /**
-     * <code>repeated string departures = 2;</code>
+     * <code>repeated string departures = 1;</code>
      */
     private void addAllDepartures(
         java.lang.Iterable<java.lang.String> values) {
@@ -2726,13 +2239,13 @@ public final class Ng {
           values, departures_);
     }
     /**
-     * <code>repeated string departures = 2;</code>
+     * <code>repeated string departures = 1;</code>
      */
     private void clearDepartures() {
       departures_ = com.google.protobuf.GeneratedMessageLite.emptyProtobufList();
     }
     /**
-     * <code>repeated string departures = 2;</code>
+     * <code>repeated string departures = 1;</code>
      */
     private void addDeparturesBytes(
         com.google.protobuf.ByteString value) {
@@ -2746,11 +2259,8 @@ public final class Ng {
 
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
-      if (siteId_ != 0L) {
-        output.writeInt64(1, siteId_);
-      }
       for (int i = 0; i < departures_.size(); i++) {
-        output.writeString(2, departures_.get(i));
+        output.writeString(1, departures_.get(i));
       }
     }
 
@@ -2759,10 +2269,6 @@ public final class Ng {
       if (size != -1) return size;
 
       size = 0;
-      if (siteId_ != 0L) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeInt64Size(1, siteId_);
-      }
       {
         int dataSize = 0;
         for (int i = 0; i < departures_.size(); i++) {
@@ -2859,30 +2365,7 @@ public final class Ng {
 
 
       /**
-       * <code>optional int64 site_id = 1;</code>
-       */
-      public long getSiteId() {
-        return instance.getSiteId();
-      }
-      /**
-       * <code>optional int64 site_id = 1;</code>
-       */
-      public Builder setSiteId(long value) {
-        copyOnWrite();
-        instance.setSiteId(value);
-        return this;
-      }
-      /**
-       * <code>optional int64 site_id = 1;</code>
-       */
-      public Builder clearSiteId() {
-        copyOnWrite();
-        instance.clearSiteId();
-        return this;
-      }
-
-      /**
-       * <code>repeated string departures = 2;</code>
+       * <code>repeated string departures = 1;</code>
        */
       public java.util.List<String>
           getDeparturesList() {
@@ -2890,26 +2373,26 @@ public final class Ng {
             instance.getDeparturesList());
       }
       /**
-       * <code>repeated string departures = 2;</code>
+       * <code>repeated string departures = 1;</code>
        */
       public int getDeparturesCount() {
         return instance.getDeparturesCount();
       }
       /**
-       * <code>repeated string departures = 2;</code>
+       * <code>repeated string departures = 1;</code>
        */
       public java.lang.String getDepartures(int index) {
         return instance.getDepartures(index);
       }
       /**
-       * <code>repeated string departures = 2;</code>
+       * <code>repeated string departures = 1;</code>
        */
       public com.google.protobuf.ByteString
           getDeparturesBytes(int index) {
         return instance.getDeparturesBytes(index);
       }
       /**
-       * <code>repeated string departures = 2;</code>
+       * <code>repeated string departures = 1;</code>
        */
       public Builder setDepartures(
           int index, java.lang.String value) {
@@ -2918,7 +2401,7 @@ public final class Ng {
         return this;
       }
       /**
-       * <code>repeated string departures = 2;</code>
+       * <code>repeated string departures = 1;</code>
        */
       public Builder addDepartures(
           java.lang.String value) {
@@ -2927,7 +2410,7 @@ public final class Ng {
         return this;
       }
       /**
-       * <code>repeated string departures = 2;</code>
+       * <code>repeated string departures = 1;</code>
        */
       public Builder addAllDepartures(
           java.lang.Iterable<java.lang.String> values) {
@@ -2936,7 +2419,7 @@ public final class Ng {
         return this;
       }
       /**
-       * <code>repeated string departures = 2;</code>
+       * <code>repeated string departures = 1;</code>
        */
       public Builder clearDepartures() {
         copyOnWrite();
@@ -2944,7 +2427,7 @@ public final class Ng {
         return this;
       }
       /**
-       * <code>repeated string departures = 2;</code>
+       * <code>repeated string departures = 1;</code>
        */
       public Builder addDeparturesBytes(
           com.google.protobuf.ByteString value) {
@@ -2975,12 +2458,9 @@ public final class Ng {
         case VISIT: {
           Visitor visitor = (Visitor) arg0;
           se.locutus.proto.Ng.DeparturesRequest other = (se.locutus.proto.Ng.DeparturesRequest) arg1;
-          siteId_ = visitor.visitLong(siteId_ != 0L, siteId_,
-              other.siteId_ != 0L, other.siteId_);
           departures_= visitor.visitList(departures_, other.departures_);
           if (visitor == com.google.protobuf.GeneratedMessageLite.MergeFromVisitor
               .INSTANCE) {
-            bitField0_ |= other.bitField0_;
           }
           return this;
         }
@@ -3003,12 +2483,7 @@ public final class Ng {
                   }
                   break;
                 }
-                case 8: {
-
-                  siteId_ = input.readInt64();
-                  break;
-                }
-                case 18: {
+                case 10: {
                   String s = input.readStringRequireUtf8();
                   if (!departures_.isModifiable()) {
                     departures_ =
@@ -3845,56 +3320,701 @@ public final class Ng {
     }
   }
 
-  public interface StopConfigurationOrBuilder extends
-      // @@protoc_insertion_point(interface_extends:se.locutus.proto.StopConfiguration)
+  public interface StopDataOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:se.locutus.proto.StopData)
       com.google.protobuf.MessageLiteOrBuilder {
 
     /**
-     * <code>optional .se.locutus.proto.DeparturesRequest departures_request = 1;</code>
+     * <code>optional int64 site_id = 1;</code>
+     */
+    long getSiteId();
+
+    /**
+     * <code>optional string canonical_name = 2;</code>
+     */
+    java.lang.String getCanonicalName();
+    /**
+     * <code>optional string canonical_name = 2;</code>
+     */
+    com.google.protobuf.ByteString
+        getCanonicalNameBytes();
+
+    /**
+     * <code>optional string display_name = 3;</code>
+     */
+    java.lang.String getDisplayName();
+    /**
+     * <code>optional string display_name = 3;</code>
+     */
+    com.google.protobuf.ByteString
+        getDisplayNameBytes();
+
+    /**
+     * <code>optional double lat = 4;</code>
+     */
+    double getLat();
+
+    /**
+     * <code>optional double lng = 5;</code>
+     */
+    double getLng();
+  }
+  /**
+   * Protobuf type {@code se.locutus.proto.StopData}
+   */
+  public  static final class StopData extends
+      com.google.protobuf.GeneratedMessageLite<
+          StopData, StopData.Builder> implements
+      // @@protoc_insertion_point(message_implements:se.locutus.proto.StopData)
+      StopDataOrBuilder {
+    private StopData() {
+      canonicalName_ = "";
+      displayName_ = "";
+    }
+    public static final int SITE_ID_FIELD_NUMBER = 1;
+    private long siteId_;
+    /**
+     * <code>optional int64 site_id = 1;</code>
+     */
+    public long getSiteId() {
+      return siteId_;
+    }
+    /**
+     * <code>optional int64 site_id = 1;</code>
+     */
+    private void setSiteId(long value) {
+      
+      siteId_ = value;
+    }
+    /**
+     * <code>optional int64 site_id = 1;</code>
+     */
+    private void clearSiteId() {
+      
+      siteId_ = 0L;
+    }
+
+    public static final int CANONICAL_NAME_FIELD_NUMBER = 2;
+    private java.lang.String canonicalName_;
+    /**
+     * <code>optional string canonical_name = 2;</code>
+     */
+    public java.lang.String getCanonicalName() {
+      return canonicalName_;
+    }
+    /**
+     * <code>optional string canonical_name = 2;</code>
+     */
+    public com.google.protobuf.ByteString
+        getCanonicalNameBytes() {
+      return com.google.protobuf.ByteString.copyFromUtf8(canonicalName_);
+    }
+    /**
+     * <code>optional string canonical_name = 2;</code>
+     */
+    private void setCanonicalName(
+        java.lang.String value) {
+      if (value == null) {
+    throw new NullPointerException();
+  }
+  
+      canonicalName_ = value;
+    }
+    /**
+     * <code>optional string canonical_name = 2;</code>
+     */
+    private void clearCanonicalName() {
+      
+      canonicalName_ = getDefaultInstance().getCanonicalName();
+    }
+    /**
+     * <code>optional string canonical_name = 2;</code>
+     */
+    private void setCanonicalNameBytes(
+        com.google.protobuf.ByteString value) {
+      if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+      
+      canonicalName_ = value.toStringUtf8();
+    }
+
+    public static final int DISPLAY_NAME_FIELD_NUMBER = 3;
+    private java.lang.String displayName_;
+    /**
+     * <code>optional string display_name = 3;</code>
+     */
+    public java.lang.String getDisplayName() {
+      return displayName_;
+    }
+    /**
+     * <code>optional string display_name = 3;</code>
+     */
+    public com.google.protobuf.ByteString
+        getDisplayNameBytes() {
+      return com.google.protobuf.ByteString.copyFromUtf8(displayName_);
+    }
+    /**
+     * <code>optional string display_name = 3;</code>
+     */
+    private void setDisplayName(
+        java.lang.String value) {
+      if (value == null) {
+    throw new NullPointerException();
+  }
+  
+      displayName_ = value;
+    }
+    /**
+     * <code>optional string display_name = 3;</code>
+     */
+    private void clearDisplayName() {
+      
+      displayName_ = getDefaultInstance().getDisplayName();
+    }
+    /**
+     * <code>optional string display_name = 3;</code>
+     */
+    private void setDisplayNameBytes(
+        com.google.protobuf.ByteString value) {
+      if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+      
+      displayName_ = value.toStringUtf8();
+    }
+
+    public static final int LAT_FIELD_NUMBER = 4;
+    private double lat_;
+    /**
+     * <code>optional double lat = 4;</code>
+     */
+    public double getLat() {
+      return lat_;
+    }
+    /**
+     * <code>optional double lat = 4;</code>
+     */
+    private void setLat(double value) {
+      
+      lat_ = value;
+    }
+    /**
+     * <code>optional double lat = 4;</code>
+     */
+    private void clearLat() {
+      
+      lat_ = 0D;
+    }
+
+    public static final int LNG_FIELD_NUMBER = 5;
+    private double lng_;
+    /**
+     * <code>optional double lng = 5;</code>
+     */
+    public double getLng() {
+      return lng_;
+    }
+    /**
+     * <code>optional double lng = 5;</code>
+     */
+    private void setLng(double value) {
+      
+      lng_ = value;
+    }
+    /**
+     * <code>optional double lng = 5;</code>
+     */
+    private void clearLng() {
+      
+      lng_ = 0D;
+    }
+
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      if (siteId_ != 0L) {
+        output.writeInt64(1, siteId_);
+      }
+      if (!canonicalName_.isEmpty()) {
+        output.writeString(2, getCanonicalName());
+      }
+      if (!displayName_.isEmpty()) {
+        output.writeString(3, getDisplayName());
+      }
+      if (lat_ != 0D) {
+        output.writeDouble(4, lat_);
+      }
+      if (lng_ != 0D) {
+        output.writeDouble(5, lng_);
+      }
+    }
+
+    public int getSerializedSize() {
+      int size = memoizedSerializedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      if (siteId_ != 0L) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt64Size(1, siteId_);
+      }
+      if (!canonicalName_.isEmpty()) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeStringSize(2, getCanonicalName());
+      }
+      if (!displayName_.isEmpty()) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeStringSize(3, getDisplayName());
+      }
+      if (lat_ != 0D) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeDoubleSize(4, lat_);
+      }
+      if (lng_ != 0D) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeDoubleSize(5, lng_);
+      }
+      memoizedSerializedSize = size;
+      return size;
+    }
+
+    public static se.locutus.proto.Ng.StopData parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data);
+    }
+    public static se.locutus.proto.Ng.StopData parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data, extensionRegistry);
+    }
+    public static se.locutus.proto.Ng.StopData parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data);
+    }
+    public static se.locutus.proto.Ng.StopData parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data, extensionRegistry);
+    }
+    public static se.locutus.proto.Ng.StopData parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, input);
+    }
+    public static se.locutus.proto.Ng.StopData parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, input, extensionRegistry);
+    }
+    public static se.locutus.proto.Ng.StopData parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return parseDelimitedFrom(DEFAULT_INSTANCE, input);
+    }
+    public static se.locutus.proto.Ng.StopData parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return parseDelimitedFrom(DEFAULT_INSTANCE, input, extensionRegistry);
+    }
+    public static se.locutus.proto.Ng.StopData parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, input);
+    }
+    public static se.locutus.proto.Ng.StopData parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, input, extensionRegistry);
+    }
+
+    public static Builder newBuilder() {
+      return DEFAULT_INSTANCE.toBuilder();
+    }
+    public static Builder newBuilder(se.locutus.proto.Ng.StopData prototype) {
+      return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
+    }
+
+    /**
+     * Protobuf type {@code se.locutus.proto.StopData}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessageLite.Builder<
+          se.locutus.proto.Ng.StopData, Builder> implements
+        // @@protoc_insertion_point(builder_implements:se.locutus.proto.StopData)
+        se.locutus.proto.Ng.StopDataOrBuilder {
+      // Construct using se.locutus.proto.Ng.StopData.newBuilder()
+      private Builder() {
+        super(DEFAULT_INSTANCE);
+      }
+
+
+      /**
+       * <code>optional int64 site_id = 1;</code>
+       */
+      public long getSiteId() {
+        return instance.getSiteId();
+      }
+      /**
+       * <code>optional int64 site_id = 1;</code>
+       */
+      public Builder setSiteId(long value) {
+        copyOnWrite();
+        instance.setSiteId(value);
+        return this;
+      }
+      /**
+       * <code>optional int64 site_id = 1;</code>
+       */
+      public Builder clearSiteId() {
+        copyOnWrite();
+        instance.clearSiteId();
+        return this;
+      }
+
+      /**
+       * <code>optional string canonical_name = 2;</code>
+       */
+      public java.lang.String getCanonicalName() {
+        return instance.getCanonicalName();
+      }
+      /**
+       * <code>optional string canonical_name = 2;</code>
+       */
+      public com.google.protobuf.ByteString
+          getCanonicalNameBytes() {
+        return instance.getCanonicalNameBytes();
+      }
+      /**
+       * <code>optional string canonical_name = 2;</code>
+       */
+      public Builder setCanonicalName(
+          java.lang.String value) {
+        copyOnWrite();
+        instance.setCanonicalName(value);
+        return this;
+      }
+      /**
+       * <code>optional string canonical_name = 2;</code>
+       */
+      public Builder clearCanonicalName() {
+        copyOnWrite();
+        instance.clearCanonicalName();
+        return this;
+      }
+      /**
+       * <code>optional string canonical_name = 2;</code>
+       */
+      public Builder setCanonicalNameBytes(
+          com.google.protobuf.ByteString value) {
+        copyOnWrite();
+        instance.setCanonicalNameBytes(value);
+        return this;
+      }
+
+      /**
+       * <code>optional string display_name = 3;</code>
+       */
+      public java.lang.String getDisplayName() {
+        return instance.getDisplayName();
+      }
+      /**
+       * <code>optional string display_name = 3;</code>
+       */
+      public com.google.protobuf.ByteString
+          getDisplayNameBytes() {
+        return instance.getDisplayNameBytes();
+      }
+      /**
+       * <code>optional string display_name = 3;</code>
+       */
+      public Builder setDisplayName(
+          java.lang.String value) {
+        copyOnWrite();
+        instance.setDisplayName(value);
+        return this;
+      }
+      /**
+       * <code>optional string display_name = 3;</code>
+       */
+      public Builder clearDisplayName() {
+        copyOnWrite();
+        instance.clearDisplayName();
+        return this;
+      }
+      /**
+       * <code>optional string display_name = 3;</code>
+       */
+      public Builder setDisplayNameBytes(
+          com.google.protobuf.ByteString value) {
+        copyOnWrite();
+        instance.setDisplayNameBytes(value);
+        return this;
+      }
+
+      /**
+       * <code>optional double lat = 4;</code>
+       */
+      public double getLat() {
+        return instance.getLat();
+      }
+      /**
+       * <code>optional double lat = 4;</code>
+       */
+      public Builder setLat(double value) {
+        copyOnWrite();
+        instance.setLat(value);
+        return this;
+      }
+      /**
+       * <code>optional double lat = 4;</code>
+       */
+      public Builder clearLat() {
+        copyOnWrite();
+        instance.clearLat();
+        return this;
+      }
+
+      /**
+       * <code>optional double lng = 5;</code>
+       */
+      public double getLng() {
+        return instance.getLng();
+      }
+      /**
+       * <code>optional double lng = 5;</code>
+       */
+      public Builder setLng(double value) {
+        copyOnWrite();
+        instance.setLng(value);
+        return this;
+      }
+      /**
+       * <code>optional double lng = 5;</code>
+       */
+      public Builder clearLng() {
+        copyOnWrite();
+        instance.clearLng();
+        return this;
+      }
+
+      // @@protoc_insertion_point(builder_scope:se.locutus.proto.StopData)
+    }
+    protected final Object dynamicMethod(
+        com.google.protobuf.GeneratedMessageLite.MethodToInvoke method,
+        Object arg0, Object arg1) {
+      switch (method) {
+        case NEW_MUTABLE_INSTANCE: {
+          return new se.locutus.proto.Ng.StopData();
+        }
+        case IS_INITIALIZED: {
+          return DEFAULT_INSTANCE;
+        }
+        case MAKE_IMMUTABLE: {
+          return null;
+        }
+        case NEW_BUILDER: {
+          return new Builder();
+        }
+        case VISIT: {
+          Visitor visitor = (Visitor) arg0;
+          se.locutus.proto.Ng.StopData other = (se.locutus.proto.Ng.StopData) arg1;
+          siteId_ = visitor.visitLong(siteId_ != 0L, siteId_,
+              other.siteId_ != 0L, other.siteId_);
+          canonicalName_ = visitor.visitString(!canonicalName_.isEmpty(), canonicalName_,
+              !other.canonicalName_.isEmpty(), other.canonicalName_);
+          displayName_ = visitor.visitString(!displayName_.isEmpty(), displayName_,
+              !other.displayName_.isEmpty(), other.displayName_);
+          lat_ = visitor.visitDouble(lat_ != 0D, lat_,
+              other.lat_ != 0D, other.lat_);
+          lng_ = visitor.visitDouble(lng_ != 0D, lng_,
+              other.lng_ != 0D, other.lng_);
+          if (visitor == com.google.protobuf.GeneratedMessageLite.MergeFromVisitor
+              .INSTANCE) {
+          }
+          return this;
+        }
+        case MERGE_FROM_STREAM: {
+          com.google.protobuf.CodedInputStream input =
+              (com.google.protobuf.CodedInputStream) arg0;
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry =
+              (com.google.protobuf.ExtensionRegistryLite) arg1;
+          try {
+            boolean done = false;
+            while (!done) {
+              int tag = input.readTag();
+              switch (tag) {
+                case 0:
+                  done = true;
+                  break;
+                default: {
+                  if (!input.skipField(tag)) {
+                    done = true;
+                  }
+                  break;
+                }
+                case 8: {
+
+                  siteId_ = input.readInt64();
+                  break;
+                }
+                case 18: {
+                  String s = input.readStringRequireUtf8();
+
+                  canonicalName_ = s;
+                  break;
+                }
+                case 26: {
+                  String s = input.readStringRequireUtf8();
+
+                  displayName_ = s;
+                  break;
+                }
+                case 33: {
+
+                  lat_ = input.readDouble();
+                  break;
+                }
+                case 41: {
+
+                  lng_ = input.readDouble();
+                  break;
+                }
+              }
+            }
+          } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+            throw new RuntimeException(e.setUnfinishedMessage(this));
+          } catch (java.io.IOException e) {
+            throw new RuntimeException(
+                new com.google.protobuf.InvalidProtocolBufferException(
+                    e.getMessage()).setUnfinishedMessage(this));
+          } finally {
+          }
+        }
+        case GET_DEFAULT_INSTANCE: {
+          return DEFAULT_INSTANCE;
+        }
+        case GET_PARSER: {
+          if (PARSER == null) {    synchronized (se.locutus.proto.Ng.StopData.class) {
+              if (PARSER == null) {
+                PARSER = new DefaultInstanceBasedParser(DEFAULT_INSTANCE);
+              }
+            }
+          }
+          return PARSER;
+        }
+      }
+      throw new UnsupportedOperationException();
+    }
+
+
+    // @@protoc_insertion_point(class_scope:se.locutus.proto.StopData)
+    private static final se.locutus.proto.Ng.StopData DEFAULT_INSTANCE;
+    static {
+      DEFAULT_INSTANCE = new StopData();
+      DEFAULT_INSTANCE.makeImmutable();
+    }
+
+    public static se.locutus.proto.Ng.StopData getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    private static volatile com.google.protobuf.Parser<StopData> PARSER;
+
+    public static com.google.protobuf.Parser<StopData> parser() {
+      return DEFAULT_INSTANCE.getParserForType();
+    }
+  }
+
+  public interface StopDataRequestOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:se.locutus.proto.StopDataRequest)
+      com.google.protobuf.MessageLiteOrBuilder {
+
+    /**
+     * <code>optional int64 site_id = 1;</code>
+     */
+    long getSiteId();
+
+    /**
+     * <code>optional .se.locutus.proto.DeparturesRequest departures_request = 2;</code>
      */
     boolean hasDeparturesRequest();
     /**
-     * <code>optional .se.locutus.proto.DeparturesRequest departures_request = 1;</code>
+     * <code>optional .se.locutus.proto.DeparturesRequest departures_request = 2;</code>
      */
     se.locutus.proto.Ng.DeparturesRequest getDeparturesRequest();
 
     /**
-     * <code>optional string display_name = 2;</code>
+     * <code>optional .se.locutus.proto.LineBasedRequest line_based_request = 3;</code>
      */
-    java.lang.String getDisplayName();
+    boolean hasLineBasedRequest();
     /**
-     * <code>optional string display_name = 2;</code>
+     * <code>optional .se.locutus.proto.LineBasedRequest line_based_request = 3;</code>
      */
-    com.google.protobuf.ByteString
-        getDisplayNameBytes();
+    se.locutus.proto.Ng.LineBasedRequest getLineBasedRequest();
   }
   /**
-   * Protobuf type {@code se.locutus.proto.StopConfiguration}
+   * Protobuf type {@code se.locutus.proto.StopDataRequest}
    */
-  public  static final class StopConfiguration extends
+  public  static final class StopDataRequest extends
       com.google.protobuf.GeneratedMessageLite<
-          StopConfiguration, StopConfiguration.Builder> implements
-      // @@protoc_insertion_point(message_implements:se.locutus.proto.StopConfiguration)
-      StopConfigurationOrBuilder {
-    private StopConfiguration() {
-      displayName_ = "";
+          StopDataRequest, StopDataRequest.Builder> implements
+      // @@protoc_insertion_point(message_implements:se.locutus.proto.StopDataRequest)
+      StopDataRequestOrBuilder {
+    private StopDataRequest() {
     }
-    public static final int DEPARTURES_REQUEST_FIELD_NUMBER = 1;
+    public static final int SITE_ID_FIELD_NUMBER = 1;
+    private long siteId_;
+    /**
+     * <code>optional int64 site_id = 1;</code>
+     */
+    public long getSiteId() {
+      return siteId_;
+    }
+    /**
+     * <code>optional int64 site_id = 1;</code>
+     */
+    private void setSiteId(long value) {
+      
+      siteId_ = value;
+    }
+    /**
+     * <code>optional int64 site_id = 1;</code>
+     */
+    private void clearSiteId() {
+      
+      siteId_ = 0L;
+    }
+
+    public static final int DEPARTURES_REQUEST_FIELD_NUMBER = 2;
     private se.locutus.proto.Ng.DeparturesRequest departuresRequest_;
     /**
-     * <code>optional .se.locutus.proto.DeparturesRequest departures_request = 1;</code>
+     * <code>optional .se.locutus.proto.DeparturesRequest departures_request = 2;</code>
      */
     public boolean hasDeparturesRequest() {
       return departuresRequest_ != null;
     }
     /**
-     * <code>optional .se.locutus.proto.DeparturesRequest departures_request = 1;</code>
+     * <code>optional .se.locutus.proto.DeparturesRequest departures_request = 2;</code>
      */
     public se.locutus.proto.Ng.DeparturesRequest getDeparturesRequest() {
       return departuresRequest_ == null ? se.locutus.proto.Ng.DeparturesRequest.getDefaultInstance() : departuresRequest_;
     }
     /**
-     * <code>optional .se.locutus.proto.DeparturesRequest departures_request = 1;</code>
+     * <code>optional .se.locutus.proto.DeparturesRequest departures_request = 2;</code>
      */
     private void setDeparturesRequest(se.locutus.proto.Ng.DeparturesRequest value) {
       if (value == null) {
@@ -3904,7 +4024,7 @@ public final class Ng {
       
       }
     /**
-     * <code>optional .se.locutus.proto.DeparturesRequest departures_request = 1;</code>
+     * <code>optional .se.locutus.proto.DeparturesRequest departures_request = 2;</code>
      */
     private void setDeparturesRequest(
         se.locutus.proto.Ng.DeparturesRequest.Builder builderForValue) {
@@ -3912,7 +4032,7 @@ public final class Ng {
       
     }
     /**
-     * <code>optional .se.locutus.proto.DeparturesRequest departures_request = 1;</code>
+     * <code>optional .se.locutus.proto.DeparturesRequest departures_request = 2;</code>
      */
     private void mergeDeparturesRequest(se.locutus.proto.Ng.DeparturesRequest value) {
       if (departuresRequest_ != null &&
@@ -3925,65 +4045,74 @@ public final class Ng {
       
     }
     /**
-     * <code>optional .se.locutus.proto.DeparturesRequest departures_request = 1;</code>
+     * <code>optional .se.locutus.proto.DeparturesRequest departures_request = 2;</code>
      */
     private void clearDeparturesRequest() {  departuresRequest_ = null;
       
     }
 
-    public static final int DISPLAY_NAME_FIELD_NUMBER = 2;
-    private java.lang.String displayName_;
+    public static final int LINE_BASED_REQUEST_FIELD_NUMBER = 3;
+    private se.locutus.proto.Ng.LineBasedRequest lineBasedRequest_;
     /**
-     * <code>optional string display_name = 2;</code>
+     * <code>optional .se.locutus.proto.LineBasedRequest line_based_request = 3;</code>
      */
-    public java.lang.String getDisplayName() {
-      return displayName_;
+    public boolean hasLineBasedRequest() {
+      return lineBasedRequest_ != null;
     }
     /**
-     * <code>optional string display_name = 2;</code>
+     * <code>optional .se.locutus.proto.LineBasedRequest line_based_request = 3;</code>
      */
-    public com.google.protobuf.ByteString
-        getDisplayNameBytes() {
-      return com.google.protobuf.ByteString.copyFromUtf8(displayName_);
+    public se.locutus.proto.Ng.LineBasedRequest getLineBasedRequest() {
+      return lineBasedRequest_ == null ? se.locutus.proto.Ng.LineBasedRequest.getDefaultInstance() : lineBasedRequest_;
     }
     /**
-     * <code>optional string display_name = 2;</code>
+     * <code>optional .se.locutus.proto.LineBasedRequest line_based_request = 3;</code>
      */
-    private void setDisplayName(
-        java.lang.String value) {
+    private void setLineBasedRequest(se.locutus.proto.Ng.LineBasedRequest value) {
       if (value == null) {
-    throw new NullPointerException();
-  }
-  
-      displayName_ = value;
+        throw new NullPointerException();
+      }
+      lineBasedRequest_ = value;
+      
+      }
+    /**
+     * <code>optional .se.locutus.proto.LineBasedRequest line_based_request = 3;</code>
+     */
+    private void setLineBasedRequest(
+        se.locutus.proto.Ng.LineBasedRequest.Builder builderForValue) {
+      lineBasedRequest_ = builderForValue.build();
+      
     }
     /**
-     * <code>optional string display_name = 2;</code>
+     * <code>optional .se.locutus.proto.LineBasedRequest line_based_request = 3;</code>
      */
-    private void clearDisplayName() {
+    private void mergeLineBasedRequest(se.locutus.proto.Ng.LineBasedRequest value) {
+      if (lineBasedRequest_ != null &&
+          lineBasedRequest_ != se.locutus.proto.Ng.LineBasedRequest.getDefaultInstance()) {
+        lineBasedRequest_ =
+          se.locutus.proto.Ng.LineBasedRequest.newBuilder(lineBasedRequest_).mergeFrom(value).buildPartial();
+      } else {
+        lineBasedRequest_ = value;
+      }
       
-      displayName_ = getDefaultInstance().getDisplayName();
     }
     /**
-     * <code>optional string display_name = 2;</code>
+     * <code>optional .se.locutus.proto.LineBasedRequest line_based_request = 3;</code>
      */
-    private void setDisplayNameBytes(
-        com.google.protobuf.ByteString value) {
-      if (value == null) {
-    throw new NullPointerException();
-  }
-  checkByteStringIsUtf8(value);
+    private void clearLineBasedRequest() {  lineBasedRequest_ = null;
       
-      displayName_ = value.toStringUtf8();
     }
 
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
-      if (departuresRequest_ != null) {
-        output.writeMessage(1, getDeparturesRequest());
+      if (siteId_ != 0L) {
+        output.writeInt64(1, siteId_);
       }
-      if (!displayName_.isEmpty()) {
-        output.writeString(2, getDisplayName());
+      if (departuresRequest_ != null) {
+        output.writeMessage(2, getDeparturesRequest());
+      }
+      if (lineBasedRequest_ != null) {
+        output.writeMessage(3, getLineBasedRequest());
       }
     }
 
@@ -3992,13 +4121,569 @@ public final class Ng {
       if (size != -1) return size;
 
       size = 0;
+      if (siteId_ != 0L) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt64Size(1, siteId_);
+      }
       if (departuresRequest_ != null) {
         size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(1, getDeparturesRequest());
+          .computeMessageSize(2, getDeparturesRequest());
       }
-      if (!displayName_.isEmpty()) {
+      if (lineBasedRequest_ != null) {
         size += com.google.protobuf.CodedOutputStream
-          .computeStringSize(2, getDisplayName());
+          .computeMessageSize(3, getLineBasedRequest());
+      }
+      memoizedSerializedSize = size;
+      return size;
+    }
+
+    public static se.locutus.proto.Ng.StopDataRequest parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data);
+    }
+    public static se.locutus.proto.Ng.StopDataRequest parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data, extensionRegistry);
+    }
+    public static se.locutus.proto.Ng.StopDataRequest parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data);
+    }
+    public static se.locutus.proto.Ng.StopDataRequest parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data, extensionRegistry);
+    }
+    public static se.locutus.proto.Ng.StopDataRequest parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, input);
+    }
+    public static se.locutus.proto.Ng.StopDataRequest parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, input, extensionRegistry);
+    }
+    public static se.locutus.proto.Ng.StopDataRequest parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return parseDelimitedFrom(DEFAULT_INSTANCE, input);
+    }
+    public static se.locutus.proto.Ng.StopDataRequest parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return parseDelimitedFrom(DEFAULT_INSTANCE, input, extensionRegistry);
+    }
+    public static se.locutus.proto.Ng.StopDataRequest parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, input);
+    }
+    public static se.locutus.proto.Ng.StopDataRequest parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, input, extensionRegistry);
+    }
+
+    public static Builder newBuilder() {
+      return DEFAULT_INSTANCE.toBuilder();
+    }
+    public static Builder newBuilder(se.locutus.proto.Ng.StopDataRequest prototype) {
+      return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
+    }
+
+    /**
+     * Protobuf type {@code se.locutus.proto.StopDataRequest}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessageLite.Builder<
+          se.locutus.proto.Ng.StopDataRequest, Builder> implements
+        // @@protoc_insertion_point(builder_implements:se.locutus.proto.StopDataRequest)
+        se.locutus.proto.Ng.StopDataRequestOrBuilder {
+      // Construct using se.locutus.proto.Ng.StopDataRequest.newBuilder()
+      private Builder() {
+        super(DEFAULT_INSTANCE);
+      }
+
+
+      /**
+       * <code>optional int64 site_id = 1;</code>
+       */
+      public long getSiteId() {
+        return instance.getSiteId();
+      }
+      /**
+       * <code>optional int64 site_id = 1;</code>
+       */
+      public Builder setSiteId(long value) {
+        copyOnWrite();
+        instance.setSiteId(value);
+        return this;
+      }
+      /**
+       * <code>optional int64 site_id = 1;</code>
+       */
+      public Builder clearSiteId() {
+        copyOnWrite();
+        instance.clearSiteId();
+        return this;
+      }
+
+      /**
+       * <code>optional .se.locutus.proto.DeparturesRequest departures_request = 2;</code>
+       */
+      public boolean hasDeparturesRequest() {
+        return instance.hasDeparturesRequest();
+      }
+      /**
+       * <code>optional .se.locutus.proto.DeparturesRequest departures_request = 2;</code>
+       */
+      public se.locutus.proto.Ng.DeparturesRequest getDeparturesRequest() {
+        return instance.getDeparturesRequest();
+      }
+      /**
+       * <code>optional .se.locutus.proto.DeparturesRequest departures_request = 2;</code>
+       */
+      public Builder setDeparturesRequest(se.locutus.proto.Ng.DeparturesRequest value) {
+        copyOnWrite();
+        instance.setDeparturesRequest(value);
+        return this;
+        }
+      /**
+       * <code>optional .se.locutus.proto.DeparturesRequest departures_request = 2;</code>
+       */
+      public Builder setDeparturesRequest(
+          se.locutus.proto.Ng.DeparturesRequest.Builder builderForValue) {
+        copyOnWrite();
+        instance.setDeparturesRequest(builderForValue);
+        return this;
+      }
+      /**
+       * <code>optional .se.locutus.proto.DeparturesRequest departures_request = 2;</code>
+       */
+      public Builder mergeDeparturesRequest(se.locutus.proto.Ng.DeparturesRequest value) {
+        copyOnWrite();
+        instance.mergeDeparturesRequest(value);
+        return this;
+      }
+      /**
+       * <code>optional .se.locutus.proto.DeparturesRequest departures_request = 2;</code>
+       */
+      public Builder clearDeparturesRequest() {  copyOnWrite();
+        instance.clearDeparturesRequest();
+        return this;
+      }
+
+      /**
+       * <code>optional .se.locutus.proto.LineBasedRequest line_based_request = 3;</code>
+       */
+      public boolean hasLineBasedRequest() {
+        return instance.hasLineBasedRequest();
+      }
+      /**
+       * <code>optional .se.locutus.proto.LineBasedRequest line_based_request = 3;</code>
+       */
+      public se.locutus.proto.Ng.LineBasedRequest getLineBasedRequest() {
+        return instance.getLineBasedRequest();
+      }
+      /**
+       * <code>optional .se.locutus.proto.LineBasedRequest line_based_request = 3;</code>
+       */
+      public Builder setLineBasedRequest(se.locutus.proto.Ng.LineBasedRequest value) {
+        copyOnWrite();
+        instance.setLineBasedRequest(value);
+        return this;
+        }
+      /**
+       * <code>optional .se.locutus.proto.LineBasedRequest line_based_request = 3;</code>
+       */
+      public Builder setLineBasedRequest(
+          se.locutus.proto.Ng.LineBasedRequest.Builder builderForValue) {
+        copyOnWrite();
+        instance.setLineBasedRequest(builderForValue);
+        return this;
+      }
+      /**
+       * <code>optional .se.locutus.proto.LineBasedRequest line_based_request = 3;</code>
+       */
+      public Builder mergeLineBasedRequest(se.locutus.proto.Ng.LineBasedRequest value) {
+        copyOnWrite();
+        instance.mergeLineBasedRequest(value);
+        return this;
+      }
+      /**
+       * <code>optional .se.locutus.proto.LineBasedRequest line_based_request = 3;</code>
+       */
+      public Builder clearLineBasedRequest() {  copyOnWrite();
+        instance.clearLineBasedRequest();
+        return this;
+      }
+
+      // @@protoc_insertion_point(builder_scope:se.locutus.proto.StopDataRequest)
+    }
+    protected final Object dynamicMethod(
+        com.google.protobuf.GeneratedMessageLite.MethodToInvoke method,
+        Object arg0, Object arg1) {
+      switch (method) {
+        case NEW_MUTABLE_INSTANCE: {
+          return new se.locutus.proto.Ng.StopDataRequest();
+        }
+        case IS_INITIALIZED: {
+          return DEFAULT_INSTANCE;
+        }
+        case MAKE_IMMUTABLE: {
+          return null;
+        }
+        case NEW_BUILDER: {
+          return new Builder();
+        }
+        case VISIT: {
+          Visitor visitor = (Visitor) arg0;
+          se.locutus.proto.Ng.StopDataRequest other = (se.locutus.proto.Ng.StopDataRequest) arg1;
+          siteId_ = visitor.visitLong(siteId_ != 0L, siteId_,
+              other.siteId_ != 0L, other.siteId_);
+          departuresRequest_ = visitor.visitMessage(departuresRequest_, other.departuresRequest_);
+          lineBasedRequest_ = visitor.visitMessage(lineBasedRequest_, other.lineBasedRequest_);
+          if (visitor == com.google.protobuf.GeneratedMessageLite.MergeFromVisitor
+              .INSTANCE) {
+          }
+          return this;
+        }
+        case MERGE_FROM_STREAM: {
+          com.google.protobuf.CodedInputStream input =
+              (com.google.protobuf.CodedInputStream) arg0;
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry =
+              (com.google.protobuf.ExtensionRegistryLite) arg1;
+          try {
+            boolean done = false;
+            while (!done) {
+              int tag = input.readTag();
+              switch (tag) {
+                case 0:
+                  done = true;
+                  break;
+                default: {
+                  if (!input.skipField(tag)) {
+                    done = true;
+                  }
+                  break;
+                }
+                case 8: {
+
+                  siteId_ = input.readInt64();
+                  break;
+                }
+                case 18: {
+                  se.locutus.proto.Ng.DeparturesRequest.Builder subBuilder = null;
+                  if (departuresRequest_ != null) {
+                    subBuilder = departuresRequest_.toBuilder();
+                  }
+                  departuresRequest_ = input.readMessage(se.locutus.proto.Ng.DeparturesRequest.parser(), extensionRegistry);
+                  if (subBuilder != null) {
+                    subBuilder.mergeFrom(departuresRequest_);
+                    departuresRequest_ = subBuilder.buildPartial();
+                  }
+
+                  break;
+                }
+                case 26: {
+                  se.locutus.proto.Ng.LineBasedRequest.Builder subBuilder = null;
+                  if (lineBasedRequest_ != null) {
+                    subBuilder = lineBasedRequest_.toBuilder();
+                  }
+                  lineBasedRequest_ = input.readMessage(se.locutus.proto.Ng.LineBasedRequest.parser(), extensionRegistry);
+                  if (subBuilder != null) {
+                    subBuilder.mergeFrom(lineBasedRequest_);
+                    lineBasedRequest_ = subBuilder.buildPartial();
+                  }
+
+                  break;
+                }
+              }
+            }
+          } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+            throw new RuntimeException(e.setUnfinishedMessage(this));
+          } catch (java.io.IOException e) {
+            throw new RuntimeException(
+                new com.google.protobuf.InvalidProtocolBufferException(
+                    e.getMessage()).setUnfinishedMessage(this));
+          } finally {
+          }
+        }
+        case GET_DEFAULT_INSTANCE: {
+          return DEFAULT_INSTANCE;
+        }
+        case GET_PARSER: {
+          if (PARSER == null) {    synchronized (se.locutus.proto.Ng.StopDataRequest.class) {
+              if (PARSER == null) {
+                PARSER = new DefaultInstanceBasedParser(DEFAULT_INSTANCE);
+              }
+            }
+          }
+          return PARSER;
+        }
+      }
+      throw new UnsupportedOperationException();
+    }
+
+
+    // @@protoc_insertion_point(class_scope:se.locutus.proto.StopDataRequest)
+    private static final se.locutus.proto.Ng.StopDataRequest DEFAULT_INSTANCE;
+    static {
+      DEFAULT_INSTANCE = new StopDataRequest();
+      DEFAULT_INSTANCE.makeImmutable();
+    }
+
+    public static se.locutus.proto.Ng.StopDataRequest getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    private static volatile com.google.protobuf.Parser<StopDataRequest> PARSER;
+
+    public static com.google.protobuf.Parser<StopDataRequest> parser() {
+      return DEFAULT_INSTANCE.getParserForType();
+    }
+  }
+
+  public interface StopConfigurationOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:se.locutus.proto.StopConfiguration)
+      com.google.protobuf.MessageLiteOrBuilder {
+
+    /**
+     * <code>optional .se.locutus.proto.StopData stop_data = 1;</code>
+     */
+    boolean hasStopData();
+    /**
+     * <code>optional .se.locutus.proto.StopData stop_data = 1;</code>
+     */
+    se.locutus.proto.Ng.StopData getStopData();
+
+    /**
+     * <code>optional .se.locutus.proto.DeparturesRequest departures_request = 2;</code>
+     */
+    boolean hasDeparturesRequest();
+    /**
+     * <code>optional .se.locutus.proto.DeparturesRequest departures_request = 2;</code>
+     */
+    se.locutus.proto.Ng.DeparturesRequest getDeparturesRequest();
+
+    /**
+     * <code>optional .se.locutus.proto.LineBasedRequest line_based_request = 3;</code>
+     */
+    boolean hasLineBasedRequest();
+    /**
+     * <code>optional .se.locutus.proto.LineBasedRequest line_based_request = 3;</code>
+     */
+    se.locutus.proto.Ng.LineBasedRequest getLineBasedRequest();
+  }
+  /**
+   * Protobuf type {@code se.locutus.proto.StopConfiguration}
+   */
+  public  static final class StopConfiguration extends
+      com.google.protobuf.GeneratedMessageLite<
+          StopConfiguration, StopConfiguration.Builder> implements
+      // @@protoc_insertion_point(message_implements:se.locutus.proto.StopConfiguration)
+      StopConfigurationOrBuilder {
+    private StopConfiguration() {
+    }
+    public static final int STOP_DATA_FIELD_NUMBER = 1;
+    private se.locutus.proto.Ng.StopData stopData_;
+    /**
+     * <code>optional .se.locutus.proto.StopData stop_data = 1;</code>
+     */
+    public boolean hasStopData() {
+      return stopData_ != null;
+    }
+    /**
+     * <code>optional .se.locutus.proto.StopData stop_data = 1;</code>
+     */
+    public se.locutus.proto.Ng.StopData getStopData() {
+      return stopData_ == null ? se.locutus.proto.Ng.StopData.getDefaultInstance() : stopData_;
+    }
+    /**
+     * <code>optional .se.locutus.proto.StopData stop_data = 1;</code>
+     */
+    private void setStopData(se.locutus.proto.Ng.StopData value) {
+      if (value == null) {
+        throw new NullPointerException();
+      }
+      stopData_ = value;
+      
+      }
+    /**
+     * <code>optional .se.locutus.proto.StopData stop_data = 1;</code>
+     */
+    private void setStopData(
+        se.locutus.proto.Ng.StopData.Builder builderForValue) {
+      stopData_ = builderForValue.build();
+      
+    }
+    /**
+     * <code>optional .se.locutus.proto.StopData stop_data = 1;</code>
+     */
+    private void mergeStopData(se.locutus.proto.Ng.StopData value) {
+      if (stopData_ != null &&
+          stopData_ != se.locutus.proto.Ng.StopData.getDefaultInstance()) {
+        stopData_ =
+          se.locutus.proto.Ng.StopData.newBuilder(stopData_).mergeFrom(value).buildPartial();
+      } else {
+        stopData_ = value;
+      }
+      
+    }
+    /**
+     * <code>optional .se.locutus.proto.StopData stop_data = 1;</code>
+     */
+    private void clearStopData() {  stopData_ = null;
+      
+    }
+
+    public static final int DEPARTURES_REQUEST_FIELD_NUMBER = 2;
+    private se.locutus.proto.Ng.DeparturesRequest departuresRequest_;
+    /**
+     * <code>optional .se.locutus.proto.DeparturesRequest departures_request = 2;</code>
+     */
+    public boolean hasDeparturesRequest() {
+      return departuresRequest_ != null;
+    }
+    /**
+     * <code>optional .se.locutus.proto.DeparturesRequest departures_request = 2;</code>
+     */
+    public se.locutus.proto.Ng.DeparturesRequest getDeparturesRequest() {
+      return departuresRequest_ == null ? se.locutus.proto.Ng.DeparturesRequest.getDefaultInstance() : departuresRequest_;
+    }
+    /**
+     * <code>optional .se.locutus.proto.DeparturesRequest departures_request = 2;</code>
+     */
+    private void setDeparturesRequest(se.locutus.proto.Ng.DeparturesRequest value) {
+      if (value == null) {
+        throw new NullPointerException();
+      }
+      departuresRequest_ = value;
+      
+      }
+    /**
+     * <code>optional .se.locutus.proto.DeparturesRequest departures_request = 2;</code>
+     */
+    private void setDeparturesRequest(
+        se.locutus.proto.Ng.DeparturesRequest.Builder builderForValue) {
+      departuresRequest_ = builderForValue.build();
+      
+    }
+    /**
+     * <code>optional .se.locutus.proto.DeparturesRequest departures_request = 2;</code>
+     */
+    private void mergeDeparturesRequest(se.locutus.proto.Ng.DeparturesRequest value) {
+      if (departuresRequest_ != null &&
+          departuresRequest_ != se.locutus.proto.Ng.DeparturesRequest.getDefaultInstance()) {
+        departuresRequest_ =
+          se.locutus.proto.Ng.DeparturesRequest.newBuilder(departuresRequest_).mergeFrom(value).buildPartial();
+      } else {
+        departuresRequest_ = value;
+      }
+      
+    }
+    /**
+     * <code>optional .se.locutus.proto.DeparturesRequest departures_request = 2;</code>
+     */
+    private void clearDeparturesRequest() {  departuresRequest_ = null;
+      
+    }
+
+    public static final int LINE_BASED_REQUEST_FIELD_NUMBER = 3;
+    private se.locutus.proto.Ng.LineBasedRequest lineBasedRequest_;
+    /**
+     * <code>optional .se.locutus.proto.LineBasedRequest line_based_request = 3;</code>
+     */
+    public boolean hasLineBasedRequest() {
+      return lineBasedRequest_ != null;
+    }
+    /**
+     * <code>optional .se.locutus.proto.LineBasedRequest line_based_request = 3;</code>
+     */
+    public se.locutus.proto.Ng.LineBasedRequest getLineBasedRequest() {
+      return lineBasedRequest_ == null ? se.locutus.proto.Ng.LineBasedRequest.getDefaultInstance() : lineBasedRequest_;
+    }
+    /**
+     * <code>optional .se.locutus.proto.LineBasedRequest line_based_request = 3;</code>
+     */
+    private void setLineBasedRequest(se.locutus.proto.Ng.LineBasedRequest value) {
+      if (value == null) {
+        throw new NullPointerException();
+      }
+      lineBasedRequest_ = value;
+      
+      }
+    /**
+     * <code>optional .se.locutus.proto.LineBasedRequest line_based_request = 3;</code>
+     */
+    private void setLineBasedRequest(
+        se.locutus.proto.Ng.LineBasedRequest.Builder builderForValue) {
+      lineBasedRequest_ = builderForValue.build();
+      
+    }
+    /**
+     * <code>optional .se.locutus.proto.LineBasedRequest line_based_request = 3;</code>
+     */
+    private void mergeLineBasedRequest(se.locutus.proto.Ng.LineBasedRequest value) {
+      if (lineBasedRequest_ != null &&
+          lineBasedRequest_ != se.locutus.proto.Ng.LineBasedRequest.getDefaultInstance()) {
+        lineBasedRequest_ =
+          se.locutus.proto.Ng.LineBasedRequest.newBuilder(lineBasedRequest_).mergeFrom(value).buildPartial();
+      } else {
+        lineBasedRequest_ = value;
+      }
+      
+    }
+    /**
+     * <code>optional .se.locutus.proto.LineBasedRequest line_based_request = 3;</code>
+     */
+    private void clearLineBasedRequest() {  lineBasedRequest_ = null;
+      
+    }
+
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      if (stopData_ != null) {
+        output.writeMessage(1, getStopData());
+      }
+      if (departuresRequest_ != null) {
+        output.writeMessage(2, getDeparturesRequest());
+      }
+      if (lineBasedRequest_ != null) {
+        output.writeMessage(3, getLineBasedRequest());
+      }
+    }
+
+    public int getSerializedSize() {
+      int size = memoizedSerializedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      if (stopData_ != null) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(1, getStopData());
+      }
+      if (departuresRequest_ != null) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(2, getDeparturesRequest());
+      }
+      if (lineBasedRequest_ != null) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(3, getLineBasedRequest());
       }
       memoizedSerializedSize = size;
       return size;
@@ -4087,19 +4772,64 @@ public final class Ng {
 
 
       /**
-       * <code>optional .se.locutus.proto.DeparturesRequest departures_request = 1;</code>
+       * <code>optional .se.locutus.proto.StopData stop_data = 1;</code>
+       */
+      public boolean hasStopData() {
+        return instance.hasStopData();
+      }
+      /**
+       * <code>optional .se.locutus.proto.StopData stop_data = 1;</code>
+       */
+      public se.locutus.proto.Ng.StopData getStopData() {
+        return instance.getStopData();
+      }
+      /**
+       * <code>optional .se.locutus.proto.StopData stop_data = 1;</code>
+       */
+      public Builder setStopData(se.locutus.proto.Ng.StopData value) {
+        copyOnWrite();
+        instance.setStopData(value);
+        return this;
+        }
+      /**
+       * <code>optional .se.locutus.proto.StopData stop_data = 1;</code>
+       */
+      public Builder setStopData(
+          se.locutus.proto.Ng.StopData.Builder builderForValue) {
+        copyOnWrite();
+        instance.setStopData(builderForValue);
+        return this;
+      }
+      /**
+       * <code>optional .se.locutus.proto.StopData stop_data = 1;</code>
+       */
+      public Builder mergeStopData(se.locutus.proto.Ng.StopData value) {
+        copyOnWrite();
+        instance.mergeStopData(value);
+        return this;
+      }
+      /**
+       * <code>optional .se.locutus.proto.StopData stop_data = 1;</code>
+       */
+      public Builder clearStopData() {  copyOnWrite();
+        instance.clearStopData();
+        return this;
+      }
+
+      /**
+       * <code>optional .se.locutus.proto.DeparturesRequest departures_request = 2;</code>
        */
       public boolean hasDeparturesRequest() {
         return instance.hasDeparturesRequest();
       }
       /**
-       * <code>optional .se.locutus.proto.DeparturesRequest departures_request = 1;</code>
+       * <code>optional .se.locutus.proto.DeparturesRequest departures_request = 2;</code>
        */
       public se.locutus.proto.Ng.DeparturesRequest getDeparturesRequest() {
         return instance.getDeparturesRequest();
       }
       /**
-       * <code>optional .se.locutus.proto.DeparturesRequest departures_request = 1;</code>
+       * <code>optional .se.locutus.proto.DeparturesRequest departures_request = 2;</code>
        */
       public Builder setDeparturesRequest(se.locutus.proto.Ng.DeparturesRequest value) {
         copyOnWrite();
@@ -4107,7 +4837,7 @@ public final class Ng {
         return this;
         }
       /**
-       * <code>optional .se.locutus.proto.DeparturesRequest departures_request = 1;</code>
+       * <code>optional .se.locutus.proto.DeparturesRequest departures_request = 2;</code>
        */
       public Builder setDeparturesRequest(
           se.locutus.proto.Ng.DeparturesRequest.Builder builderForValue) {
@@ -4116,7 +4846,7 @@ public final class Ng {
         return this;
       }
       /**
-       * <code>optional .se.locutus.proto.DeparturesRequest departures_request = 1;</code>
+       * <code>optional .se.locutus.proto.DeparturesRequest departures_request = 2;</code>
        */
       public Builder mergeDeparturesRequest(se.locutus.proto.Ng.DeparturesRequest value) {
         copyOnWrite();
@@ -4124,7 +4854,7 @@ public final class Ng {
         return this;
       }
       /**
-       * <code>optional .se.locutus.proto.DeparturesRequest departures_request = 1;</code>
+       * <code>optional .se.locutus.proto.DeparturesRequest departures_request = 2;</code>
        */
       public Builder clearDeparturesRequest() {  copyOnWrite();
         instance.clearDeparturesRequest();
@@ -4132,42 +4862,47 @@ public final class Ng {
       }
 
       /**
-       * <code>optional string display_name = 2;</code>
+       * <code>optional .se.locutus.proto.LineBasedRequest line_based_request = 3;</code>
        */
-      public java.lang.String getDisplayName() {
-        return instance.getDisplayName();
+      public boolean hasLineBasedRequest() {
+        return instance.hasLineBasedRequest();
       }
       /**
-       * <code>optional string display_name = 2;</code>
+       * <code>optional .se.locutus.proto.LineBasedRequest line_based_request = 3;</code>
        */
-      public com.google.protobuf.ByteString
-          getDisplayNameBytes() {
-        return instance.getDisplayNameBytes();
+      public se.locutus.proto.Ng.LineBasedRequest getLineBasedRequest() {
+        return instance.getLineBasedRequest();
       }
       /**
-       * <code>optional string display_name = 2;</code>
+       * <code>optional .se.locutus.proto.LineBasedRequest line_based_request = 3;</code>
        */
-      public Builder setDisplayName(
-          java.lang.String value) {
+      public Builder setLineBasedRequest(se.locutus.proto.Ng.LineBasedRequest value) {
         copyOnWrite();
-        instance.setDisplayName(value);
+        instance.setLineBasedRequest(value);
+        return this;
+        }
+      /**
+       * <code>optional .se.locutus.proto.LineBasedRequest line_based_request = 3;</code>
+       */
+      public Builder setLineBasedRequest(
+          se.locutus.proto.Ng.LineBasedRequest.Builder builderForValue) {
+        copyOnWrite();
+        instance.setLineBasedRequest(builderForValue);
         return this;
       }
       /**
-       * <code>optional string display_name = 2;</code>
+       * <code>optional .se.locutus.proto.LineBasedRequest line_based_request = 3;</code>
        */
-      public Builder clearDisplayName() {
+      public Builder mergeLineBasedRequest(se.locutus.proto.Ng.LineBasedRequest value) {
         copyOnWrite();
-        instance.clearDisplayName();
+        instance.mergeLineBasedRequest(value);
         return this;
       }
       /**
-       * <code>optional string display_name = 2;</code>
+       * <code>optional .se.locutus.proto.LineBasedRequest line_based_request = 3;</code>
        */
-      public Builder setDisplayNameBytes(
-          com.google.protobuf.ByteString value) {
-        copyOnWrite();
-        instance.setDisplayNameBytes(value);
+      public Builder clearLineBasedRequest() {  copyOnWrite();
+        instance.clearLineBasedRequest();
         return this;
       }
 
@@ -4192,9 +4927,9 @@ public final class Ng {
         case VISIT: {
           Visitor visitor = (Visitor) arg0;
           se.locutus.proto.Ng.StopConfiguration other = (se.locutus.proto.Ng.StopConfiguration) arg1;
+          stopData_ = visitor.visitMessage(stopData_, other.stopData_);
           departuresRequest_ = visitor.visitMessage(departuresRequest_, other.departuresRequest_);
-          displayName_ = visitor.visitString(!displayName_.isEmpty(), displayName_,
-              !other.displayName_.isEmpty(), other.displayName_);
+          lineBasedRequest_ = visitor.visitMessage(lineBasedRequest_, other.lineBasedRequest_);
           if (visitor == com.google.protobuf.GeneratedMessageLite.MergeFromVisitor
               .INSTANCE) {
           }
@@ -4220,6 +4955,19 @@ public final class Ng {
                   break;
                 }
                 case 10: {
+                  se.locutus.proto.Ng.StopData.Builder subBuilder = null;
+                  if (stopData_ != null) {
+                    subBuilder = stopData_.toBuilder();
+                  }
+                  stopData_ = input.readMessage(se.locutus.proto.Ng.StopData.parser(), extensionRegistry);
+                  if (subBuilder != null) {
+                    subBuilder.mergeFrom(stopData_);
+                    stopData_ = subBuilder.buildPartial();
+                  }
+
+                  break;
+                }
+                case 18: {
                   se.locutus.proto.Ng.DeparturesRequest.Builder subBuilder = null;
                   if (departuresRequest_ != null) {
                     subBuilder = departuresRequest_.toBuilder();
@@ -4232,10 +4980,17 @@ public final class Ng {
 
                   break;
                 }
-                case 18: {
-                  String s = input.readStringRequireUtf8();
+                case 26: {
+                  se.locutus.proto.Ng.LineBasedRequest.Builder subBuilder = null;
+                  if (lineBasedRequest_ != null) {
+                    subBuilder = lineBasedRequest_.toBuilder();
+                  }
+                  lineBasedRequest_ = input.readMessage(se.locutus.proto.Ng.LineBasedRequest.parser(), extensionRegistry);
+                  if (subBuilder != null) {
+                    subBuilder.mergeFrom(lineBasedRequest_);
+                    lineBasedRequest_ = subBuilder.buildPartial();
+                  }
 
-                  displayName_ = s;
                   break;
                 }
               }

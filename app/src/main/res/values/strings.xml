@@ -86,4 +86,6 @@
     <string name="no_stop_selected">Please select a stop</string>
     <string name="select_departures">Select departures</string>
     <string name="add_stop_title">Add stop to widget</string>
+    <string name="save_widget">Save widget config</string>
+    <string name="configure_widget_title">Configure widget</string>
 </resources>

@@ -8,6 +8,7 @@ import se.locutus.sl.realtidhem.R
 import java.util.logging.Logger
 import android.app.PendingIntent
 import android.content.Intent
+import se.locutus.proto.Ng
 import se.locutus.sl.realtidhem.events.WidgetBroadcastReceiver
 import se.locutus.sl.realtidhem.service.BackgroundUpdaterService
 
@@ -22,13 +23,23 @@ class StandardWidgetProvider : AppWidgetProvider() {
     }
     override fun onUpdate(context: Context, appWidgetManager: AppWidgetManager, appWidgetIds: IntArray) {
         LOG.info("OnUpdate $appWidgetIds")
+        val prefs = context.getSharedPreferences(WIDGET_CONFIG_PREFS, 0)
         for (id in appWidgetIds) {
-            updateAppWidget(context, appWidgetManager, id)
+            LOG.info("Updating $id")
+            val config = loadWidgetConfigOrDefault(prefs, id)
+            if (config.stopConfigurationCount <= 0) {
+                LOG.warning("Detected corrupt widget config for $config")
+            }
+            updateAppWidget(context, appWidgetManager, config, id)
         }
     }
 
     override fun onDeleted(context: Context, appWidgetIds: IntArray) {
-        LOG.info("onDeleted $appWidgetIds")
+        val prefs = context.getSharedPreferences(WIDGET_CONFIG_PREFS, 0)
+        for (id in appWidgetIds) {
+            LOG.info("onDeleted $id")
+            deleteWidget(prefs, id)
+        }
     }
 
     override fun onEnabled(context: Context) {
@@ -38,18 +49,17 @@ class StandardWidgetProvider : AppWidgetProvider() {
     override fun onDisabled(context: Context) {
         // Enter relevant functionality for when the last widget is disabled
     }
-
-
         internal fun updateAppWidget(
             context: Context, appWidgetManager: AppWidgetManager,
+            widgetConfig: Ng.WidgetConfiguration,
             appWidgetId: Int
         ) {
             val intent = Intent(context, WidgetBroadcastReceiver::class.java)
             intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
             val pendingIntent = PendingIntent.getBroadcast(context, appWidgetId, intent, PendingIntent.FLAG_UPDATE_CURRENT)
-            val widgetText = "oooga $appWidgetId"
+            val widgetText = if (widgetConfig.stopConfigurationCount > 0) widgetConfig.getStopConfiguration(0).stopData.canonicalName else "Corrupt!"
             // Construct the RemoteViews object
-            val views = RemoteViews(context.packageName, R.layout.widgetlayout_t1)
+            val views = RemoteViews(context.packageName, R.layout.widgetlayout_base)
             views.setTextViewText(R.id.widgettag, widgetText)
             LOG.info("Creating pending intent for widget ${intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, 0)}")
             views.setOnClickPendingIntent(R.id.widgetmain, pendingIntent)

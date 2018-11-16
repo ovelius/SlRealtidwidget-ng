@@ -2,21 +2,16 @@ package se.locutus.sl.realtidhem.widget
 
 import android.app.Activity
 import android.content.Intent
-import android.os.AsyncTask
 import android.os.Bundle
 import android.support.design.widget.Snackbar
-import android.support.v7.app.AppCompatActivity;
+import android.support.v7.app.AppCompatActivity
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.Menu
-import android.view.View
-import android.view.Window
-import android.widget.AdapterView
+import android.view.inputmethod.InputMethodManager
 import android.widget.AutoCompleteTextView
 import android.widget.ListView
 import se.locutus.sl.realtidhem.R
-
 import kotlinx.android.synthetic.main.activity_add_stop.*
 import android.widget.ArrayAdapter
 import com.android.volley.Request
@@ -26,6 +21,7 @@ import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import org.json.JSONArray
 import org.json.JSONObject
+import se.locutus.proto.Ng
 import se.locutus.proto.Ng.StopConfiguration
 import se.locutus.proto.Ng.DeparturesRequest
 import java.util.ArrayList
@@ -40,15 +36,15 @@ class AddStopActivity : AppCompatActivity() {
     internal lateinit var mAutoCompleteTextView : AutoCompleteTextView
     internal lateinit var mDepartureList : ListView
     internal var nameToSiteIDs : HashMap<String, Int> = HashMap()
-    internal var selectedSiteId : Int? = null
+    internal var stopData : Ng.StopData.Builder = Ng.StopData.newBuilder()
     internal lateinit var departureAdapter : DepartureListAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_stop)
         setSupportActionBar(toolbar)
-        getSupportActionBar()?.setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar()?.setDisplayShowHomeEnabled(true);
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayShowHomeEnabled(true)
         requestQueue = Volley.newRequestQueue(this)
         val adapter = ArrayAdapter<String>(
             this,
@@ -72,9 +68,11 @@ class AddStopActivity : AppCompatActivity() {
                 val siteId : Int? = nameToSiteIDs[p.toString()]
                 if (siteId != null) {
                     LOG.info("Selected $p $siteId")
+                    val imm = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+                    imm.hideSoftInputFromWindow(mAutoCompleteTextView.windowToken, 0)
                     loadDepsFor(siteId)
                 } else {
-                    selectedSiteId = null
+                    stopData.clearSiteId()
                     LOG.info("Searching for $p")
                     val url = "http://anka.locutus.se/P?q=$p"
                     val stringRequest = StringRequest(Request.Method.GET, url,
@@ -90,6 +88,7 @@ class AddStopActivity : AppCompatActivity() {
                                 adapter.add(name)
                                 nameToSiteIDs.put(name, siteId)
                             }
+                            mAutoCompleteTextView.showDropDown()
                         },
                         Response.ErrorListener { error -> LOG.severe("Failure to autocomplete $error!") })
                     requestQueue.add(stringRequest)
@@ -100,7 +99,7 @@ class AddStopActivity : AppCompatActivity() {
     }
 
     fun loadDepsFor (siteId : Int) {
-        selectedSiteId = siteId
+        stopData.setSiteId(siteId.toLong())
         departureAdapter.clear()
         LOG.info("Loading depatures for $siteId")
         val url = "http://anka.locutus.se/F?a=49&sid=$siteId&t=3"
@@ -109,6 +108,10 @@ class AddStopActivity : AppCompatActivity() {
                 LOG.warning("got $response")
                 var json: JSONObject = JSONObject(response)
                 var list: JSONArray = json.getJSONArray("allDep")
+                var nameSplit: JSONArray = json.getJSONArray("nameSplit")
+                stopData.lat = json.getDouble("lat")
+                stopData.lng = json.getDouble("lng")
+                stopData.canonicalName = nameSplit.getString(1)
                 for (i in 0 until list.length() - 1) {
                     var name: String = list.getString(i)
                     departureAdapter.add(name)
@@ -119,13 +122,13 @@ class AddStopActivity : AppCompatActivity() {
     }
 
     fun getConfigErrorMessage() : Int? {
-        if (selectedSiteId == null) {
+        if (stopData.siteId == 0L) {
             return R.string.no_stop_selected
         }
         if (departureAdapter.getCheckedItems().isEmpty()) {
             return R.string.no_departures_selected
         }
-        return null;
+        return null
     }
 
     override fun onSupportNavigateUp(): Boolean {
@@ -151,8 +154,8 @@ class AddStopActivity : AppCompatActivity() {
 
     fun finishSuccessfully() {
         var config = StopConfiguration.newBuilder()
+            .setStopData(stopData)
             .setDeparturesRequest(DeparturesRequest.newBuilder()
-                .setSiteId(selectedSiteId!!.toLong())
                 .addAllDepartures(departureAdapter.getCheckedItems()))
             .build()
         val resultIntent = Intent()

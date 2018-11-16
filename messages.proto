@@ -8,39 +8,42 @@ message RequestHeader {
   int32 api = 1;
   int32 id = 2;
 }
+message ResponseHeader {
+ int32 id = 1;
+}
 message RequestData {
   RequestHeader request_header = 1;
-
-  bool short_format = 2;
-  bool realtime_departures_only = 3;
-
-  PingRequest ping_request = 4;
-  MetroRequest metro_request = 5;
-  DeparturesRequest departures_request = 6;
+  PingRequest ping_request = 2;
+  StopDataRequest stop_data_request = 3;
+  
 }
 
-message ResponseData {
-  int32 id = 1;
+message WidgetLoadResponseData {
+  ResponseHeader response_header = 1;
 
   string line1 = 2;
   string line2 = 3;
   string minutes = 4;
   int32 seconds = 5;
+  int32 color = 6;
   
-  string idle_message = 6;
-  string url = 7;
-
-  repeated string departures = 8;
+  string idle_message = 7;
+  string url = 8;
 }
 
-message MetroRequest {
-  int64 site_id = 1;
-  int32 metro_index = 2;
+message AllDepaturesResponseData {
+  ResponseHeader response_header = 1;
+  
+  StopData stop_data {
+}
+
+message LineBasedRequest {
+  int32 group_of_line_id = 1;
+  int32 direction_id = 2;
 }
 
 message DeparturesRequest {
-  int64 site_id = 1;
-  repeated string departures = 2;
+  repeated string departures = 1;
 }
 
 message PingRequest {
@@ -52,7 +55,22 @@ message WidgetConfiguration {
   repeated StopConfiguration stop_configuration = 2;
 }
 
+message StoredStopData {
+  int64 site_id = 1;
+  string canonical_name = 2;
+  string display_name = 3;
+  double lat = 4;
+  double lng = 5;
+}
+
+message StopDataRequest {
+  int64 site_id = 1;
+  DeparturesRequest departures_request = 2;
+  LineBasedRequest line_based_request = 3;
+}
+
 message StopConfiguration {
-  DeparturesRequest departures_request = 1;
-  string display_name = 2;
+  StopData stop_data = 1;
+  DeparturesRequest departures_request = 2;
+  LineBasedRequest line_based_request = 3;
 }
