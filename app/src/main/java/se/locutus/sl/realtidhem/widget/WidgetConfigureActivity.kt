@@ -10,7 +10,8 @@ import android.util.Base64
 import android.view.Menu
 import android.widget.ListView
 import kotlinx.android.synthetic.main.widget_configure_activty.*
-import se.locutus.proto.Ng
+import se.locutus.proto.Ng.WidgetConfiguration
+import se.locutus.proto.Ng.StopConfiguration
 import se.locutus.sl.realtidhem.R
 import java.util.logging.Logger
 
@@ -22,13 +23,13 @@ fun widgetKey(widgetId : Int) : String {
     return "widget_$widgetId"
 }
 
-fun loadWidgetConfigOrDefault(prefs : SharedPreferences, widgetId : Int) : Ng.WidgetConfiguration {
+fun loadWidgetConfigOrDefault(prefs : SharedPreferences, widgetId : Int) : WidgetConfiguration {
     val widgetKey = widgetKey(widgetId)
     if (prefs.contains(widgetKey)) {
         val bytes = Base64.decode(prefs.getString(widgetKey, ""), 0)
-        return Ng.WidgetConfiguration.parseFrom(bytes)
+        return WidgetConfiguration.parseFrom(bytes)
     }
-    return Ng.WidgetConfiguration.newBuilder().setWidgetId(widgetId.toLong()).build()
+    return WidgetConfiguration.newBuilder().setWidgetId(widgetId.toLong()).build()
 }
 fun deleteWidget(prefs : SharedPreferences, widgetId : Int) {
     val widgetKey = widgetKey(widgetId.toInt())
@@ -36,7 +37,7 @@ fun deleteWidget(prefs : SharedPreferences, widgetId : Int) {
     edit.remove(widgetKey).apply()
 }
 
-fun storeWidgetConfig(prefs : SharedPreferences, config : Ng.WidgetConfiguration) {
+fun storeWidgetConfig(prefs : SharedPreferences, config : WidgetConfiguration) {
     val widgetKey = widgetKey(config.widgetId.toInt())
     val edit = prefs.edit()
     val data = Base64.encodeToString(config.toByteArray(), 0)
@@ -51,7 +52,7 @@ class WidgetConfigureActivity : AppCompatActivity() {
     internal lateinit var mWidgetPrefs : SharedPreferences
     internal lateinit var mListView : ListView
     internal lateinit var mStopListAdapter : StopListAdapter
-    internal lateinit var widgetConfig : Ng.WidgetConfiguration
+    internal lateinit var widgetConfig : WidgetConfiguration
 
     public override fun onCreate(icicle: Bundle?) {
         super.onCreate(icicle)
@@ -96,7 +97,7 @@ class WidgetConfigureActivity : AppCompatActivity() {
         if (data?.hasExtra(STOP_CONFIG_DATA_KEY) != true) {
             finish()
         }
-        val config = Ng.StopConfiguration.parseFrom(data!!.getByteArrayExtra(STOP_CONFIG_DATA_KEY))
+        val config = StopConfiguration.parseFrom(data!!.getByteArrayExtra(STOP_CONFIG_DATA_KEY))
         LOG.info("Got StopConfiguration $config")
         widgetConfig = widgetConfig.toBuilder().addStopConfiguration(config).build()
         mStopListAdapter.update(widgetConfig)

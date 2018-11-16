@@ -23,7 +23,7 @@ import org.json.JSONArray
 import org.json.JSONObject
 import se.locutus.proto.Ng
 import se.locutus.proto.Ng.StopConfiguration
-import se.locutus.proto.Ng.DeparturesRequest
+import se.locutus.proto.Ng.DeparturesFilter
 import java.util.ArrayList
 import java.util.logging.Logger
 
@@ -36,7 +36,7 @@ class AddStopActivity : AppCompatActivity() {
     internal lateinit var mAutoCompleteTextView : AutoCompleteTextView
     internal lateinit var mDepartureList : ListView
     internal var nameToSiteIDs : HashMap<String, Int> = HashMap()
-    internal var stopData : Ng.StopData.Builder = Ng.StopData.newBuilder()
+    internal var stopData : Ng.StoredStopData.Builder = Ng.StoredStopData.newBuilder()
     internal lateinit var departureAdapter : DepartureListAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -155,7 +155,7 @@ class AddStopActivity : AppCompatActivity() {
     fun finishSuccessfully() {
         var config = StopConfiguration.newBuilder()
             .setStopData(stopData)
-            .setDeparturesRequest(DeparturesRequest.newBuilder()
+            .setDeparturesFilter(DeparturesFilter.newBuilder()
                 .addAllDepartures(departureAdapter.getCheckedItems()))
             .build()
         val resultIntent = Intent()

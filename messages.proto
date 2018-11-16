@@ -13,40 +13,69 @@ message ResponseHeader {
 }
 message RequestData {
   RequestHeader request_header = 1;
-  PingRequest ping_request = 2;
+  PingRequestResponse ping_request = 2;
   StopDataRequest stop_data_request = 3;
-  
+}
+
+message ResponseData {
+  ResponseHeader response_header = 1;
+  WidgetLoadResponseData load_response = 2;
+  AllDepaturesResponseData all_depatures_response = 3;
+  PingRequestResponse ping_response = 4;
 }
 
 message WidgetLoadResponseData {
-  ResponseHeader response_header = 1;
-
-  string line1 = 2;
-  string line2 = 3;
-  string minutes = 4;
-  int32 seconds = 5;
-  int32 color = 6;
+  string line1 = 1;
+  string line2 = 2;
+  string minutes = 3;
+  int32 seconds = 4;
+  int32 color = 5;
   
-  string idle_message = 7;
-  string url = 8;
+  string idle_message = 6;
+  string url = 7;
 }
 
 message AllDepaturesResponseData {
-  ResponseHeader response_header = 1;
-  
-  StopData stop_data {
+  StopData stop_data = 1;
+  repeated DepatureData depature_data = 2;
 }
 
-message LineBasedRequest {
+enum NgTrafficType {
+  UNKNOWN = 0;
+  METRO = 1;
+  BUS = 2;
+  TRAIN = 3;
+  TRAM = 4;
+  BOAT = 5;
+}
+
+message DepatureData {
+  string canonical_name = 1;
+  int32 color = 2;
+  // Same as color if null.
+  int32 group_of_line_id = 3;
+  int32 direction_id = 4;
+  NgTrafficType traffic_type = 5;
+}
+
+message StopData {
+  int64 site_id = 1;
+  string canonical_name = 2;
+  string display_name = 3;
+  double lat = 4;
+  double lng = 5;
+}
+
+message LineFilter {
   int32 group_of_line_id = 1;
   int32 direction_id = 2;
 }
 
-message DeparturesRequest {
+message DeparturesFilter {
   repeated string departures = 1;
 }
 
-message PingRequest {
+message PingRequestResponse {
   int64 local_timestamp_millis = 1;
 }
 
@@ -65,12 +94,13 @@ message StoredStopData {
 
 message StopDataRequest {
   int64 site_id = 1;
-  DeparturesRequest departures_request = 2;
-  LineBasedRequest line_based_request = 3;
+  DeparturesFilter departures_filter = 2;
+  LineFilter line_filter = 3;
+  // Give all the data for the step if empty.
 }
 
 message StopConfiguration {
-  StopData stop_data = 1;
-  DeparturesRequest departures_request = 2;
-  LineBasedRequest line_based_request = 3;
+  StoredStopData stop_data = 1;
+  DeparturesFilter departures_filter = 2;
+  LineFilter line_filter = 3;
 }
