@@ -3,11 +3,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/widgetmain"
     android:layout_width="fill_parent"
-    android:layout_height="72dip"
+    android:layout_height="70dip"
     android:layout_gravity="center"
     android:clickable="true"
-    android:maxHeight="72dip"
-    android:minHeight="72dip"
+    android:maxHeight="70dip"
+    android:minHeight="70dip"
     android:maxWidth="294dip"
     android:translationZ="8dp"
     android:minWidth="294dip" >
@@ -17,7 +17,10 @@
         android:layout_width="wrap_content"
         android:layout_height="fill_parent"
         android:layout_gravity="left"
+        android:maxWidth="82dip"
+        android:minWidth="82dip"
         android:clickable="true"
+        android:translationZ="20dp"
         android:src="@drawable/larrow"
         tools:ignore="ContentDescription" >
     </ImageView>
@@ -28,6 +31,7 @@
         android:layout_height="fill_parent"
         android:layout_gravity="right"
         android:clickable="true"
+        android:translationZ="20dp"
         android:maxWidth="82dip"
         android:minWidth="82dip"
         android:src="@drawable/rarrow"
