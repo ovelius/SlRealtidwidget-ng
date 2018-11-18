@@ -4,40 +4,67 @@ package se.locutus.proto;
 
 option java_outer_classname = "Ng";
 
+// Should be there in each request to the server.
 message RequestHeader {
+  // Version ID from client.
   int32 api = 1;
+  // ID of this request, so the response can be identified.
   int32 id = 2;
 }
+
+// Present in each response.
 message ResponseHeader {
+ // ID from the incoming request.
  int32 id = 1;
 }
+
+// Base request message.
 message RequestData {
   RequestHeader request_header = 1;
+  // Ping to see server is reachable.
   PingRequestResponse ping_request = 2;
+  // Request to load data from a particular stop.
   StopDataRequest stop_data_request = 3;
 }
 
+// Base response message.
 message ResponseData {
   ResponseHeader response_header = 1;
+  // Response with data suitable to display in widget.
   WidgetLoadResponseData load_response = 2;
+  // Returns all departures for a stop.
   AllDepaturesResponseData all_depatures_response = 3;
+  // A response to a ping.
   PingRequestResponse ping_response = 4;
 }
 
+// Response message suitable to put in the widget.
 message WidgetLoadResponseData {
+  // What to put in line1.
   string line1 = 1;
+  // What to put in line2.
   string line2 = 2;
+  // Minutes in the form of "x min", might have a "." indicating data isn't realtime.
   string minutes = 3;
+  // If realtime we include seconds to departure.
   int32 seconds = 4;
+  // Color representing this departure.
   int32 color = 5;
+  // Traffic type for the line1 departure.
+  NgTrafficType traffic_type = 6;
   
-  string idle_message = 6;
-  string url = 7;
+  // What the widget should show when idle, at line 2.
+  string idle_message = 7;
+  // URL with information that opens when line2 is touched.
+  string url = 8;
 }
 
+// A response that contains all the data we have about a stop.
 message AllDepaturesResponseData {
+  // Details about this stop.
   StopData stop_data = 1;
-  repeated DepatureData depature_data = 2;
+  // Details about all the known departure from this stop.
+  repeated DepartureData depature_data = 2;
 }
 
 enum NgTrafficType {
@@ -49,38 +76,59 @@ enum NgTrafficType {
   BOAT = 5;
 }
 
-message DepatureData {
+// Data about depature from a stop.
+message DepartureData {
+  // String representing this unique departure, such as "11 Akalla".
   string canonical_name = 1;
+  // The color we think this depature has.
   int32 color = 2;
   // Same as color if null.
   int32 group_of_line_id = 3;
+  // Direction, subway usually have two directions per stop.
   int32 direction_id = 4;
   NgTrafficType traffic_type = 5;
 }
 
+// Data about a stop.
 message StopData {
+  // Unique siteId.
   int64 site_id = 1;
+  // Unique canonical name, such as "Kista (Stockholm)".
   string canonical_name = 2;
+  // Short display name, such as "Kista".
   string display_name = 3;
+  // Latitude of the stop.
   double lat = 4;
+  // Longitude of the stop.
   double lng = 5;
 }
 
+// Message for both request and response of a ping.
+message PingRequestResponse {
+  // Client should send us a local timestamp.
+  int64 local_timestamp_millis = 1;
+}
+
+// ******Below a messages stored in the client as configuration ******
+
+// A filter based on line and direction.
 message LineFilter {
+  // Group of line, such as the red subway line.
   int32 group_of_line_id = 1;
+  // Direction of this line we're interested in.
   int32 direction_id = 2;
 }
 
+// Specific departures filter.
 message DeparturesFilter {
   repeated string departures = 1;
 }
 
-message PingRequestResponse {
-  int64 local_timestamp_millis = 1;
-}
-
+// Configuration for a single widget.
 message WidgetConfiguration {
+  // Android widgetId.
   int64 widget_id = 1;
+  // The stops we've configured at this widget.
   repeated StopConfiguration stop_configuration = 2;
 }
 
