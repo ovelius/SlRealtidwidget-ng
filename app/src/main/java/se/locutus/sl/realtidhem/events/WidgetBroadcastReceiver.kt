@@ -14,12 +14,20 @@ import android.widget.RemoteViews
 import se.locutus.sl.realtidhem.R
 import android.content.ComponentName
 import android.app.job.JobInfo
+import android.graphics.Color
 import android.os.PersistableBundle
+import se.locutus.proto.Ng
+import se.locutus.sl.realtidhem.net.NetworkManager
 import se.locutus.sl.realtidhem.widget.WIDGET_CONFIG_PREFS
 import se.locutus.sl.realtidhem.widget.loadWidgetConfigOrDefault
+import java.lang.Exception
+import java.util.concurrent.ConcurrentHashMap
 
 
 class WidgetBroadcastReceiver  : BroadcastReceiver() {
+
+    internal var scrollMap = ConcurrentHashMap<Int, ScrollThread>()
+
     companion object {
         val LOG = Logger.getLogger(WidgetBroadcastReceiver::class.java.name)
     }
@@ -33,7 +41,44 @@ class WidgetBroadcastReceiver  : BroadcastReceiver() {
         val widgetConfig = loadWidgetConfigOrDefault(prefs, widgetId)
         val line = if (widgetConfig.stopConfigurationCount > 0) widgetConfig.getStopConfiguration(0).stopData.canonicalName else  "faiiiiiiil"
 
-        ScrollThread(widgetId, line, context!!).start()
+        if (widgetConfig.stopConfigurationCount > 0) {
+            val stopConfig = widgetConfig.getStopConfiguration(0)
+            val networkManager = NetworkManager(context)
+            val stopDataRequest = Ng.StopDataRequest.newBuilder()
+                .setSiteId(stopConfig.stopData.siteId)
+                .setDeparturesFilter(stopConfig.departuresFilter)
+                .build()
+          networkManager.doStopDataRequest(stopDataRequest) {
+              responseData: Ng.ResponseData, e: Exception? ->
+              if (e != null) {
+                  LOG.severe("Error loading data $e")
+              } else {
+                  LOG.warning("Got data $responseData")
+                  val manager = context.getSystemService(Context.APPWIDGET_SERVICE) as AppWidgetManager
+                  val views = RemoteViews(context.packageName, R.layout.widgetlayout_base)
+                  views.setTextViewText(R.id.widgetline1, responseData.loadResponse.line1)
+                  views.setTextViewText(R.id.widgetmin, responseData.loadResponse.minutes)
+                  views.setTextViewText(R.id.widgetline2, responseData.loadResponse.line2)
+                  views.setInt(R.id.widgetcolor, "setBackgroundColor", responseData.loadResponse.color)
+
+
+                  var currentThread = scrollMap[widgetId]
+                  if (currentThread != null) {
+                      currentThread.setRunning(false)
+                  }
+                  scrollMap[widgetId] = ScrollThread(widgetId, responseData.loadResponse.line2, context!!).apply {  start() }
+                  manager.updateAppWidget(widgetId, views)
+              }
+          }
+        }
+
+        var currentThread = scrollMap[widgetId]
+        if (currentThread != null) {
+            currentThread.setRunning(false)
+        }
+        scrollMap[widgetId] = ScrollThread(widgetId, line, context!!).apply {  start() }
+
+
         scheduleSingleUpdate(context, widgetId)
     }
 
@@ -83,7 +128,7 @@ class WidgetBroadcastReceiver  : BroadcastReceiver() {
             while (i < length && running) {
                 s = set[i]!!
 
-                views.setTextViewText(R.id.widgettext, s)
+                views.setTextViewText(R.id.widgetline2, s)
                 manager.updateAppWidget(widgetId, views)
                 i++
 
@@ -93,8 +138,8 @@ class WidgetBroadcastReceiver  : BroadcastReceiver() {
                 }
 
             }
-            views.setTextViewText(R.id.widgettext, line2)
-            manager.updateAppWidget(widgetId, views)
+            views.setTextViewText(R.id.widgetline2, line2)
+            manager.partiallyUpdateAppWidget(widgetId, views)
         }
     }
 }
@@ -111,7 +156,9 @@ class ResetWidget : JobService() {
         WidgetBroadcastReceiver.LOG.info("job started, clearing widget $widgetId!")
         val manager = getSystemService(Context.APPWIDGET_SERVICE) as AppWidgetManager
         val views = RemoteViews(packageName, R.layout.widgetlayout_base)
-        views.setTextViewText(R.id.widgettext, "done")
+        views.setTextViewText(R.id.widgetline2, "done")
+        views.setTextViewText(R.id.widgetline1, "done")
+        views.setTextViewText(R.id.widgetmin, "done")
         manager.updateAppWidget(widgetId, views)
         stopSelf()
         return true

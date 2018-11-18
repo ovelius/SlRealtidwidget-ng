@@ -94,7 +94,7 @@
         </LinearLayout>
 
         <TextView
-            android:id="@+id/widgettext"
+            android:id="@+id/widgetline2"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
