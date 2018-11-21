@@ -10,6 +10,7 @@ import android.util.Base64
 import android.view.Menu
 import android.widget.ListView
 import kotlinx.android.synthetic.main.widget_configure_activty.*
+import se.locutus.proto.Ng
 import se.locutus.proto.Ng.WidgetConfiguration
 import se.locutus.proto.Ng.StopConfiguration
 import se.locutus.sl.realtidhem.R
@@ -22,6 +23,12 @@ const val WIDGET_CONFIG_PREFS = "widget_configs"
 fun widgetKey(widgetId : Int) : String {
     return "widget_$widgetId"
 }
+fun widgetKeyLastData(widgetId : Int) : String {
+    return "widget_last_load$widgetId"
+}
+fun widgetKeySelectedStop(widgetId : Int) : String {
+    return "widget_selected_stop$widgetId"
+}
 
 fun loadWidgetConfigOrDefault(prefs : SharedPreferences, widgetId : Int) : WidgetConfiguration {
     val widgetKey = widgetKey(widgetId)
@@ -31,10 +38,29 @@ fun loadWidgetConfigOrDefault(prefs : SharedPreferences, widgetId : Int) : Widge
     }
     return WidgetConfiguration.newBuilder().setWidgetId(widgetId.toLong()).build()
 }
+
 fun deleteWidget(prefs : SharedPreferences, widgetId : Int) {
-    val widgetKey = widgetKey(widgetId.toInt())
     val edit = prefs.edit()
-    edit.remove(widgetKey).apply()
+    edit.remove(widgetKey(widgetId))
+        .remove(widgetKeyLastData(widgetId))
+        .remove(widgetKeySelectedStop(widgetId))
+        .apply()
+}
+
+fun putLastLoadData(prefs : SharedPreferences, widgetId: Int, response : Ng.WidgetLoadResponseData) {
+    val widgetKey = widgetKeyLastData(widgetId)
+    val edit = prefs.edit()
+    val data = Base64.encodeToString(response.toByteArray(), 0)
+    edit.putString(widgetKey, data).apply()
+}
+
+fun getLastLoadData(prefs : SharedPreferences, widgetId: Int) : Ng.WidgetLoadResponseData? {
+    val widgetKey = widgetKeyLastData(widgetId)
+    if (prefs.contains(widgetKey)) {
+        val bytes = Base64.decode(prefs.getString(widgetKey, ""), 0)
+        return Ng.WidgetLoadResponseData.parseFrom(bytes)
+    }
+    return null
 }
 
 fun storeWidgetConfig(prefs : SharedPreferences, config : WidgetConfiguration) {
@@ -90,17 +116,22 @@ class WidgetConfigureActivity : AppCompatActivity() {
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (requestCode != ADD_STOP_REQUEST_CODE || resultCode != Activity.RESULT_OK) {
-            LOG.severe("Got activity result with unexpected requestCode $requestCode and resultCode $resultCode")
-            finish()
+        if (widgetConfig.stopConfigurationCount <= 0) {
+            if (requestCode != ADD_STOP_REQUEST_CODE || resultCode != Activity.RESULT_OK) {
+                LOG.severe("Got activity result with unexpected requestCode $requestCode and resultCode $resultCode")
+                finish()
+            }
+            if (data?.hasExtra(STOP_CONFIG_DATA_KEY) != true) {
+                finish()
+                return
+            }
         }
-        if (data?.hasExtra(STOP_CONFIG_DATA_KEY) != true) {
-            finish()
+        if (data?.hasExtra(STOP_CONFIG_DATA_KEY) == true) {
+            val config = StopConfiguration.parseFrom(data!!.getByteArrayExtra(STOP_CONFIG_DATA_KEY))
+            LOG.info("Got StopConfiguration $config")
+            widgetConfig = widgetConfig.toBuilder().addStopConfiguration(config).build()
+            mStopListAdapter.update(widgetConfig)
         }
-        val config = StopConfiguration.parseFrom(data!!.getByteArrayExtra(STOP_CONFIG_DATA_KEY))
-        LOG.info("Got StopConfiguration $config")
-        widgetConfig = widgetConfig.toBuilder().addStopConfiguration(config).build()
-        mStopListAdapter.update(widgetConfig)
     }
 
     fun finishOk() {

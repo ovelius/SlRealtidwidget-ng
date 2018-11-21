@@ -88,4 +88,9 @@
     <string name="add_stop_title">Add stop to widget</string>
     <string name="save_widget">Save widget config</string>
     <string name="configure_widget_title">Configure widget</string>
+    <string name="updating">Updating</string>
+
+    <string name="error">Error loading data</string>
+    <string name="error_timeout">Timeout loading data</string>
+    <string name="error_details_try_again">Check your connectivity and try again</string>
 </resources>

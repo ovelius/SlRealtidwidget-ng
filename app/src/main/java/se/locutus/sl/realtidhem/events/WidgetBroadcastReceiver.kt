@@ -23,63 +23,26 @@ import se.locutus.sl.realtidhem.widget.loadWidgetConfigOrDefault
 import java.lang.Exception
 import java.util.concurrent.ConcurrentHashMap
 
-
 class WidgetBroadcastReceiver  : BroadcastReceiver() {
 
-    internal var scrollMap = ConcurrentHashMap<Int, ScrollThread>()
-
     companion object {
+        var widgetTouchHandler : WidgetTouchHandler? = null
         val LOG = Logger.getLogger(WidgetBroadcastReceiver::class.java.name)
     }
     override fun onReceive(context: Context?, incomingIntent: Intent?) {
+        if (context == null) {
+            LOG.warning("Broadcast without context :(")
+        }
+        if (widgetTouchHandler == null) {
+            LOG.info("Creating main widget handler")
+            widgetTouchHandler = WidgetTouchHandler(context!!)
+        }
         val widgetId = incomingIntent!!.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, 0)
         LOG.info("Received intent $incomingIntent with extra $widgetId")
-        val intent = Intent(context, BackgroundUpdaterService::class.java)
-        intent.putExtras(incomingIntent)
 
-        val prefs = context!!.getSharedPreferences(WIDGET_CONFIG_PREFS, 0)
-        val widgetConfig = loadWidgetConfigOrDefault(prefs, widgetId)
-        val line = if (widgetConfig.stopConfigurationCount > 0) widgetConfig.getStopConfiguration(0).stopData.canonicalName else  "faiiiiiiil"
+        widgetTouchHandler!!.widgetTouched(widgetId)
 
-        if (widgetConfig.stopConfigurationCount > 0) {
-            val stopConfig = widgetConfig.getStopConfiguration(0)
-            val networkManager = NetworkManager(context)
-            val stopDataRequest = Ng.StopDataRequest.newBuilder()
-                .setSiteId(stopConfig.stopData.siteId)
-                .setDeparturesFilter(stopConfig.departuresFilter)
-                .build()
-          networkManager.doStopDataRequest(stopDataRequest) {
-              responseData: Ng.ResponseData, e: Exception? ->
-              if (e != null) {
-                  LOG.severe("Error loading data $e")
-              } else {
-                  LOG.warning("Got data $responseData")
-                  val manager = context.getSystemService(Context.APPWIDGET_SERVICE) as AppWidgetManager
-                  val views = RemoteViews(context.packageName, R.layout.widgetlayout_base)
-                  views.setTextViewText(R.id.widgetline1, responseData.loadResponse.line1)
-                  views.setTextViewText(R.id.widgetmin, responseData.loadResponse.minutes)
-                  views.setTextViewText(R.id.widgetline2, responseData.loadResponse.line2)
-                  views.setInt(R.id.widgetcolor, "setBackgroundColor", responseData.loadResponse.color)
-
-
-                  var currentThread = scrollMap[widgetId]
-                  if (currentThread != null) {
-                      currentThread.setRunning(false)
-                  }
-                  scrollMap[widgetId] = ScrollThread(widgetId, responseData.loadResponse.line2, context!!).apply {  start() }
-                  manager.updateAppWidget(widgetId, views)
-              }
-          }
-        }
-
-        var currentThread = scrollMap[widgetId]
-        if (currentThread != null) {
-            currentThread.setRunning(false)
-        }
-        scrollMap[widgetId] = ScrollThread(widgetId, line, context!!).apply {  start() }
-
-
-        scheduleSingleUpdate(context, widgetId)
+        scheduleSingleUpdate(context!!, widgetId)
     }
 
     @SuppressLint("NewApi")
@@ -98,53 +61,8 @@ class WidgetBroadcastReceiver  : BroadcastReceiver() {
     }
 
 
-
-    internal class ScrollThread(
-        private val widgetId: Int,
-        private val theLine: String,
-        private val context: Context
-    ) : Thread() {
-        private var running = true
-
-        fun setRunning(r: Boolean) {
-            running = r
-        }
-
-        override fun run() {
-            val manager = context.getSystemService(Context.APPWIDGET_SERVICE) as AppWidgetManager
-            val views = RemoteViews(context.packageName, R.layout.widgetlayout_base)
-            var line2 = theLine
-
-            var s = line2 + "     " + line2
-            val set = arrayOfNulls<String>(line2.length + 5)
-            for (i in set.indices) {
-                set[i] = s.substring(i)
-            }
-
-            val scrollSpeed = 100
-            val length = line2.length + 5
-            var i = 0
-
-            while (i < length && running) {
-                s = set[i]!!
-
-                views.setTextViewText(R.id.widgetline2, s)
-                manager.updateAppWidget(widgetId, views)
-                i++
-
-                try {
-                    Thread.sleep(scrollSpeed.toLong()) //sakta = 150, snabbt = 70
-                } catch (e: InterruptedException) {
-                }
-
-            }
-            views.setTextViewText(R.id.widgetline2, line2)
-            manager.partiallyUpdateAppWidget(widgetId, views)
-        }
-    }
 }
 
-@SuppressLint("NewApi")
 class ResetWidget : JobService() {
     override fun onStopJob(params: JobParameters?): Boolean {
         WidgetBroadcastReceiver.LOG.info("job stopped!")
@@ -158,10 +76,9 @@ class ResetWidget : JobService() {
         val views = RemoteViews(packageName, R.layout.widgetlayout_base)
         views.setTextViewText(R.id.widgetline2, "done")
         views.setTextViewText(R.id.widgetline1, "done")
-        views.setTextViewText(R.id.widgetmin, "done")
+        views.setTextViewText(R.id.widgetmin, "")
         manager.updateAppWidget(widgetId, views)
-        stopSelf()
-        return true
+        return false
     }
 
 }

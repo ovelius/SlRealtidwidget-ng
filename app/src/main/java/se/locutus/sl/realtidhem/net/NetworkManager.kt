@@ -11,27 +11,35 @@ import com.android.volley.toolbox.Volley
 import se.locutus.proto.Ng
 import se.locutus.proto.Ng.ResponseData
 import se.locutus.proto.Ng.RequestData
+import se.locutus.sl.realtidhem.events.WidgetBroadcastReceiver
+import se.locutus.sl.realtidhem.events.WidgetTouchHandler
 import java.lang.Exception
+import java.util.logging.Logger
 
 
 const val URL = "http://anka.locutus.se/NG"
 
 class NetworkManager(var context : Context) {
+    companion object {
+        val LOG = Logger.getLogger(NetworkManager::class.java.name)
+    }
     val requestQueue = Volley.newRequestQueue(context)
-    private var requestId = 0
+    private var requestId = 1
 
     fun doStopDataRequest(request : Ng.StopDataRequest, callBack : (ResponseData, Exception?) -> Unit) {
         val api = context.packageManager.getPackageInfo(context.packageName, 0).versionCode
-        val requestId = (this.requestId++);
         doRequest(RequestData.newBuilder().setStopDataRequest(request)
             .setRequestHeader(Ng.RequestHeader.newBuilder()
                 .setApi(api)
-                .setId(requestId)).build(),  callBack);
+                .setId(requestId)).build(),  callBack)
+        this.requestId++
     }
 
     fun doRequest(request : RequestData, callBack : (ResponseData, Exception?) -> Unit) {
+        LOG.fine("Sending request $request")
         val protoRequest = ProtoRequest(request,
             Response.Listener { response ->
+                LOG.fine("Got data $response")
                 callBack(response, null)
             },
             Response.ErrorListener { error ->
