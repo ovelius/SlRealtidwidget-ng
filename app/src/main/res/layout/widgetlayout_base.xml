@@ -52,13 +52,14 @@
             android:layout_height="0dp"
             android:layout_weight="30"
             android:background="@color/baseWidgetBg"
-            android:translationZ="12dp"
+            android:translationZ="8dp"
             android:orientation="vertical" >
         <TextView
             android:id="@+id/widgettag"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:paddingTop="2dp"
             android:maxLines="1"
             android:text="Information"
             android:textColor="#F5F5F5"
@@ -66,7 +67,7 @@
             android:textStyle="bold"
             android:typeface="monospace" />
     </LinearLayout>
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="fill_parent"
             android:layout_height="0dp"
             android:layout_weight="33"
@@ -74,27 +75,30 @@
 
             <TextView
                 android:id="@+id/widgetline1"
-                android:layout_width="wrap_content"
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
+                android:layout_gravity="left"
                 android:maxLines="1"
                 android:paddingLeft="10dip"
                 android:text="@string/wait"
                 android:textColor="#ff9900"
+                android:layout_alignParentLeft="true"
                 android:textSize="14dip"
+                android:translationZ="0dp"
                 android:typeface="monospace" />
-
             <TextView
                 android:id="@+id/widgetmin"
-                android:layout_width="fill_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="right"
+                android:layout_alignParentRight="true"
                 android:maxLines="1"
+                android:translationZ="1dp"
                 android:paddingRight="10dip"
                 android:text="min"
                 android:textColor="#ff9900"
                 android:textSize="14dip"
                 android:typeface="monospace" />
-        </LinearLayout>
+        </RelativeLayout>
 
         <ImageView
                 android:layout_width="fill_parent"
@@ -114,11 +118,11 @@
             android:gravity="left"
             android:singleLine="true"
             android:ellipsize="none"
-                        android:paddingLeft="10dip"
+            android:paddingLeft="10dip"
             android:paddingRight="10dip"
             android:text="@string/nothing_happens"
             android:textColor="#ff9900"
-            android:textSize="12dip"
+            android:textSize="14dip"
             android:typeface="monospace" >
         </TextView>
     </LinearLayout>

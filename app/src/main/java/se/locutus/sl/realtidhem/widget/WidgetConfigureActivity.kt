@@ -14,10 +14,14 @@ import se.locutus.proto.Ng
 import se.locutus.proto.Ng.WidgetConfiguration
 import se.locutus.proto.Ng.StopConfiguration
 import se.locutus.sl.realtidhem.R
+import se.locutus.sl.realtidhem.events.WIDGET_CONFIG_UPDATED
+import se.locutus.sl.realtidhem.events.WidgetBroadcastReceiver
 import java.util.logging.Logger
 
 const val ADD_STOP_REQUEST_CODE: Int = 1
+const val MODIFY_STOP_REQUEST_CODE: Int = 2
 const val STOP_CONFIG_DATA_KEY = "stop_config_data_key"
+const val STOP_INDEX_DATA_KEY = "stop_config_index_data_key"
 const val WIDGET_CONFIG_PREFS = "widget_configs"
 
 fun widgetKey(widgetId : Int) : String {
@@ -63,11 +67,15 @@ fun getLastLoadData(prefs : SharedPreferences, widgetId: Int) : Ng.WidgetLoadRes
     return null
 }
 
+fun setSelectedStopIndex(prefs : SharedPreferences, widgetId: Int, selected : Int) {
+    prefs.edit().putInt(widgetKeySelectedStop(widgetId),selected).apply()
+}
+
 fun storeWidgetConfig(prefs : SharedPreferences, config : WidgetConfiguration) {
     val widgetKey = widgetKey(config.widgetId.toInt())
     val edit = prefs.edit()
     val data = Base64.encodeToString(config.toByteArray(), 0)
-    edit.putString(widgetKey, data).apply()
+    edit.putString(widgetKey, data).commit()
 }
 
 class WidgetConfigureActivity : AppCompatActivity() {
@@ -129,7 +137,13 @@ class WidgetConfigureActivity : AppCompatActivity() {
         if (data?.hasExtra(STOP_CONFIG_DATA_KEY) == true) {
             val config = StopConfiguration.parseFrom(data!!.getByteArrayExtra(STOP_CONFIG_DATA_KEY))
             LOG.info("Got StopConfiguration $config")
-            widgetConfig = widgetConfig.toBuilder().addStopConfiguration(config).build()
+
+            if (data?.hasExtra(STOP_INDEX_DATA_KEY)) {
+                val index = data.getIntExtra(STOP_INDEX_DATA_KEY, 0)
+                widgetConfig = widgetConfig.toBuilder().setStopConfiguration(index, config).build()
+            } else {
+                widgetConfig = widgetConfig.toBuilder().addStopConfiguration(config).build()
+            }
             mStopListAdapter.update(widgetConfig)
         }
     }
@@ -150,6 +164,11 @@ class WidgetConfigureActivity : AppCompatActivity() {
         menuInflater.inflate(R.menu.widget_config_action_bar_menu, menu)
         menu.findItem(R.id.save_widget_action).setOnMenuItemClickListener {item ->
             storeWidgetConfig(mWidgetPrefs, widgetConfig)
+            val intentUpdate = Intent(this, WidgetBroadcastReceiver::class.java).apply {
+                action = WIDGET_CONFIG_UPDATED
+                putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, mAppWidgetId)
+            }
+            sendBroadcast(intentUpdate)
             finishOk()
             true
         }

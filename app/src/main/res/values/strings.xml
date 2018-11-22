@@ -91,6 +91,7 @@
     <string name="updating">Updating</string>
 
     <string name="error">Error loading data</string>
+    <string name="error_corrupt">Corrupt widget</string>
     <string name="error_timeout">Timeout loading data</string>
     <string name="error_details_try_again">Check your connectivity and try again</string>
 </resources>

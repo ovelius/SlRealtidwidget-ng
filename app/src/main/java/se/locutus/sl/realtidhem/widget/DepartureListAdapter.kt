@@ -6,11 +6,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.CheckBox
-import android.widget.TextView
 import se.locutus.sl.realtidhem.R
 
 class DepartureListAdapter(private val context: Context, private val departureList : ArrayList<String>) : BaseAdapter() {
-    private val checks : HashSet<Int> = HashSet()
+    private val checks : HashSet<String> = HashSet()
     private val inflater: LayoutInflater
             = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
     override fun getItemId(position: Int): Long {
@@ -22,21 +21,22 @@ class DepartureListAdapter(private val context: Context, private val departureLi
     }
 
     override fun getItem(position: Int): String {
-        return departureList.get(position)
+        return departureList[position]
     }
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
         val root : View = convertView ?: inflater.inflate(R.layout.depature_list_item, parent, false)
         val nameText : CheckBox = root.findViewById(R.id.departure_name_check)
+        val departureName = departureList[position]
         nameText.setOnClickListener {
             if (nameText.isChecked) {
-                checks.add(position)
+                checks.add(departureName)
             } else {
-                checks.remove(position)
+                checks.remove(departureName)
             }
         }
-        nameText.text = departureList.get(position)
-        nameText.isChecked = checks.contains(position)
+        nameText.text = departureName
+        nameText.isChecked = checks.contains(departureName)
         return root
     }
 
@@ -44,11 +44,14 @@ class DepartureListAdapter(private val context: Context, private val departureLi
         departureList.clear()
     }
 
-    fun add(departure: String) {
+    fun add(departure: String, checked: Boolean) {
         departureList.add(departure)
+        if (checked) {
+            checks.add(departure)
+        }
     }
 
     fun getCheckedItems() : List<String>  {
-        return checks.map { departureList[it] }.toMutableList()
+        return checks.toMutableList()
     }
 }

@@ -10,6 +10,8 @@ import android.app.PendingIntent
 import android.content.Intent
 import android.content.SharedPreferences
 import se.locutus.proto.Ng
+import se.locutus.sl.realtidhem.events.CYCLE_STOP_LEFT
+import se.locutus.sl.realtidhem.events.CYCLE_STOP_RIGHT
 import se.locutus.sl.realtidhem.events.WidgetBroadcastReceiver
 import se.locutus.sl.realtidhem.service.BackgroundUpdaterService
 
@@ -43,6 +45,16 @@ class StandardWidgetProvider : AppWidgetProvider() {
         LOG.info("onEnabled")
     }
 
+    fun basePendingIntent(context: Context, widgetId : Int, action : String? = null) : PendingIntent {
+        val intent = Intent(context, WidgetBroadcastReceiver::class.java).apply {
+            putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId)
+        }
+        if (action != null) {
+            intent.action = action
+        }
+        return PendingIntent.getBroadcast(context, widgetId, intent, PendingIntent.FLAG_UPDATE_CURRENT)
+    }
+
     override fun onDisabled(context: Context) {
         // Enter relevant functionality for when the last widget is disabled
     }
@@ -55,18 +67,27 @@ class StandardWidgetProvider : AppWidgetProvider() {
             val widgetConfig = loadWidgetConfigOrDefault(prefs, appWidgetId)
             val lastData = getLastLoadData(prefs, appWidgetId)
             val selectedStopIndex = prefs.getInt(widgetKeySelectedStop(appWidgetId), 0)
-            val intent = Intent(context, WidgetBroadcastReceiver::class.java)
-            intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
-            val pendingIntent = PendingIntent.getBroadcast(context, appWidgetId, intent, PendingIntent.FLAG_UPDATE_CURRENT)
-            val widgetText = if (widgetConfig.stopConfigurationCount > 0) widgetConfig.getStopConfiguration(0).stopData.canonicalName else "Corrupt!"
+            val pendingIntent = basePendingIntent(context, appWidgetId)
+            val leftPendingIntent = basePendingIntent(context, appWidgetId, CYCLE_STOP_LEFT)
+            val rightPendingIntent = basePendingIntent(context, appWidgetId, CYCLE_STOP_RIGHT)
+
+            val validConfig = widgetConfig.stopConfigurationCount > 0
+            var widgetText =
+                when (validConfig) {
+                    false -> context.getString(R.string.error_corrupt)
+                    true -> widgetConfig.getStopConfiguration(selectedStopIndex).stopData.canonicalName
+                }
             // Construct the RemoteViews object
             val views = RemoteViews(context.packageName, R.layout.widgetlayout_base)
             if (lastData != null) {
                 views.setInt(R.id.widgetcolor, "setBackgroundColor", lastData.color)
             }
             views.setTextViewText(R.id.widgettag, widgetText)
-            LOG.info("Creating pending intent for widget ${intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, 0)}")
-            views.setOnClickPendingIntent(R.id.widgetmain, pendingIntent)
+            if (validConfig) {
+                views.setOnClickPendingIntent(R.id.widgetmain, pendingIntent)
+                views.setOnClickPendingIntent(R.id.larrow, leftPendingIntent)
+                views.setOnClickPendingIntent(R.id.rarrow, rightPendingIntent)
+            }
             // Instruct the widget manager to update the widget
             appWidgetManager.updateAppWidget(appWidgetId, views)
         }

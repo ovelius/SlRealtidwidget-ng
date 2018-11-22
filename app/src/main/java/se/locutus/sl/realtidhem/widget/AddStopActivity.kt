@@ -36,7 +36,8 @@ class AddStopActivity : AppCompatActivity() {
     internal lateinit var mAutoCompleteTextView : AutoCompleteTextView
     internal lateinit var mDepartureList : ListView
     internal var nameToSiteIDs : HashMap<String, Int> = HashMap()
-    internal var stopData : Ng.StoredStopData.Builder = Ng.StoredStopData.newBuilder()
+    internal var config : Ng.StopConfiguration.Builder = Ng.StopConfiguration.newBuilder()
+    internal var stopIndex : Int = -1
     internal lateinit var departureAdapter : DepartureListAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -45,6 +46,12 @@ class AddStopActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
+        if (intent.hasExtra(STOP_CONFIG_DATA_KEY)) {
+            config = Ng.StopConfiguration.parseFrom(intent.getByteArrayExtra(STOP_CONFIG_DATA_KEY)).toBuilder()
+        }
+        if (intent.hasExtra(STOP_INDEX_DATA_KEY)) {
+            stopIndex = intent.getIntExtra(STOP_INDEX_DATA_KEY, -1)
+        }
         requestQueue = Volley.newRequestQueue(this)
         val adapter = ArrayAdapter<String>(
             this,
@@ -57,6 +64,7 @@ class AddStopActivity : AppCompatActivity() {
         mDepartureList = findViewById(R.id.departure_list_view)
         mDepartureList.adapter = departureAdapter
         mAutoCompleteTextView = findViewById(R.id.stop_auto_complete)
+        mAutoCompleteTextView.setText(config.stopData.canonicalName, false)
         mAutoCompleteTextView.setAdapter(adapter)
         mAutoCompleteTextView.threshold = 1
         mAutoCompleteTextView.addTextChangedListener(object : TextWatcher {
@@ -72,7 +80,7 @@ class AddStopActivity : AppCompatActivity() {
                     imm.hideSoftInputFromWindow(mAutoCompleteTextView.windowToken, 0)
                     loadDepsFor(siteId)
                 } else {
-                    stopData.clearSiteId()
+                    config.clearStopData()
                     LOG.info("Searching for $p")
                     val url = "http://anka.locutus.se/P?q=$p"
                     val stringRequest = StringRequest(Request.Method.GET, url,
@@ -95,11 +103,14 @@ class AddStopActivity : AppCompatActivity() {
                 }
             }
         })
-
+        if (config.stopData.siteId != 0L) {
+            loadDepsFor(config.stopData.siteId.toInt())
+        }
     }
 
     fun loadDepsFor (siteId : Int) {
-        stopData.setSiteId(siteId.toLong())
+        val stopData = Ng.StoredStopData.newBuilder()
+        val existing = config.departuresFilter.departuresList.toSet()
         departureAdapter.clear()
         LOG.info("Loading depatures for $siteId")
         val url = "http://anka.locutus.se/F?a=49&sid=$siteId&t=3"
@@ -109,20 +120,28 @@ class AddStopActivity : AppCompatActivity() {
                 var json: JSONObject = JSONObject(response)
                 var list: JSONArray = json.getJSONArray("allDep")
                 var nameSplit: JSONArray = json.getJSONArray("nameSplit")
+                stopData.siteId = siteId.toLong()
                 stopData.lat = json.getDouble("lat")
                 stopData.lng = json.getDouble("lng")
                 stopData.canonicalName = nameSplit.getString(1)
+                for (existingDep in existing) {
+                    departureAdapter.add(existingDep, true)
+                }
                 for (i in 0 until list.length() - 1) {
                     var name: String = list.getString(i)
-                    departureAdapter.add(name)
+                    if (!existing.contains(name)) {
+                        departureAdapter.add(name, false)
+                    }
                 }
+                departureAdapter.notifyDataSetChanged()
+                config.stopData = stopData.build()
             },
             Response.ErrorListener { error -> LOG.severe("Failure to autocomplete $error!") })
         requestQueue.add(stringRequest)
     }
 
     fun getConfigErrorMessage() : Int? {
-        if (stopData.siteId == 0L) {
+        if (config.stopData.siteId == 0L) {
             return R.string.no_stop_selected
         }
         if (departureAdapter.getCheckedItems().isEmpty()) {
@@ -153,13 +172,15 @@ class AddStopActivity : AppCompatActivity() {
     }
 
     fun finishSuccessfully() {
-        var config = StopConfiguration.newBuilder()
-            .setStopData(stopData)
+        val builtConfig = config
             .setDeparturesFilter(DeparturesFilter.newBuilder()
                 .addAllDepartures(departureAdapter.getCheckedItems()))
             .build()
         val resultIntent = Intent()
-        resultIntent.putExtra(STOP_CONFIG_DATA_KEY, config.toByteArray())
+        resultIntent.putExtra(STOP_CONFIG_DATA_KEY, builtConfig.toByteArray())
+        if (stopIndex >= 0) {
+            resultIntent.putExtra(STOP_INDEX_DATA_KEY, stopIndex)
+        }
         setResult(Activity.RESULT_OK, resultIntent)
         finish()
     }
