@@ -19,7 +19,7 @@ class BackgroundUpdaterService : Service() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         LOG.fine("Received intent $intent")
         if (intent?.hasExtra(AppWidgetManager.EXTRA_APPWIDGET_ID) == true) {
-            handleWidgetTouched(intent!!.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, 0))
+            handleWidgetTouched(intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, 0))
         }
         return START_STICKY
     }

@@ -157,12 +157,11 @@ class AddStopActivity : AppCompatActivity() {
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.add_stop_action_bar_menu, menu)
-        menu.findItem(R.id.save_stop_action).setOnMenuItemClickListener {item ->
+        menu.findItem(R.id.save_stop_action).setOnMenuItemClickListener {_ ->
             val message = getConfigErrorMessage()
             if (message != null) {
                 Snackbar.make(mDepartureList, message, Snackbar.LENGTH_SHORT)
                     .setAction("Action", null).show()
-                false
             } else {
                 finishSuccessfully()
             }

@@ -1,12 +1,20 @@
 package se.locutus.sl.realtidhem.widget
 
+import android.Manifest
 import android.app.Activity
 import android.appwidget.AppWidgetManager
 import android.content.Intent
 import android.content.SharedPreferences
+import android.content.pm.PackageManager
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
+import android.support.design.widget.Snackbar
+import android.support.v4.app.ActivityCompat
+import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
 import android.util.Base64
+import android.util.Log
 import android.view.Menu
 import android.widget.ListView
 import kotlinx.android.synthetic.main.widget_configure_activty.*
@@ -20,63 +28,10 @@ import java.util.logging.Logger
 
 const val ADD_STOP_REQUEST_CODE: Int = 1
 const val MODIFY_STOP_REQUEST_CODE: Int = 2
+const val LOCATION_ACCESS_REQUEST_CODE = 99
 const val STOP_CONFIG_DATA_KEY = "stop_config_data_key"
 const val STOP_INDEX_DATA_KEY = "stop_config_index_data_key"
 const val WIDGET_CONFIG_PREFS = "widget_configs"
-
-fun widgetKey(widgetId : Int) : String {
-    return "widget_$widgetId"
-}
-fun widgetKeyLastData(widgetId : Int) : String {
-    return "widget_last_load$widgetId"
-}
-fun widgetKeySelectedStop(widgetId : Int) : String {
-    return "widget_selected_stop$widgetId"
-}
-
-fun loadWidgetConfigOrDefault(prefs : SharedPreferences, widgetId : Int) : WidgetConfiguration {
-    val widgetKey = widgetKey(widgetId)
-    if (prefs.contains(widgetKey)) {
-        val bytes = Base64.decode(prefs.getString(widgetKey, ""), 0)
-        return WidgetConfiguration.parseFrom(bytes)
-    }
-    return WidgetConfiguration.newBuilder().setWidgetId(widgetId.toLong()).build()
-}
-
-fun deleteWidget(prefs : SharedPreferences, widgetId : Int) {
-    val edit = prefs.edit()
-    edit.remove(widgetKey(widgetId))
-        .remove(widgetKeyLastData(widgetId))
-        .remove(widgetKeySelectedStop(widgetId))
-        .apply()
-}
-
-fun putLastLoadData(prefs : SharedPreferences, widgetId: Int, response : Ng.WidgetLoadResponseData) {
-    val widgetKey = widgetKeyLastData(widgetId)
-    val edit = prefs.edit()
-    val data = Base64.encodeToString(response.toByteArray(), 0)
-    edit.putString(widgetKey, data).apply()
-}
-
-fun getLastLoadData(prefs : SharedPreferences, widgetId: Int) : Ng.WidgetLoadResponseData? {
-    val widgetKey = widgetKeyLastData(widgetId)
-    if (prefs.contains(widgetKey)) {
-        val bytes = Base64.decode(prefs.getString(widgetKey, ""), 0)
-        return Ng.WidgetLoadResponseData.parseFrom(bytes)
-    }
-    return null
-}
-
-fun setSelectedStopIndex(prefs : SharedPreferences, widgetId: Int, selected : Int) {
-    prefs.edit().putInt(widgetKeySelectedStop(widgetId),selected).apply()
-}
-
-fun storeWidgetConfig(prefs : SharedPreferences, config : WidgetConfiguration) {
-    val widgetKey = widgetKey(config.widgetId.toInt())
-    val edit = prefs.edit()
-    val data = Base64.encodeToString(config.toByteArray(), 0)
-    edit.putString(widgetKey, data).commit()
-}
 
 class WidgetConfigureActivity : AppCompatActivity() {
     companion object {
@@ -87,6 +42,7 @@ class WidgetConfigureActivity : AppCompatActivity() {
     internal lateinit var mListView : ListView
     internal lateinit var mStopListAdapter : StopListAdapter
     internal lateinit var widgetConfig : WidgetConfiguration
+    private val mHandler: Handler = Handler(Looper.getMainLooper())
 
     public override fun onCreate(icicle: Bundle?) {
         super.onCreate(icicle)
@@ -118,8 +74,27 @@ class WidgetConfigureActivity : AppCompatActivity() {
         mStopListAdapter = StopListAdapter(this, widgetConfig)
         mListView.adapter = mStopListAdapter
 
-        add_stop_button.setOnClickListener { view ->
+        add_stop_button.setOnClickListener { _ ->
             startActivityForResult(Intent(this, AddStopActivity::class.java), ADD_STOP_REQUEST_CODE)
+        }
+
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_COARSE_LOCATION)
+            != PackageManager.PERMISSION_GRANTED) {
+
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                    Manifest.permission.ACCESS_COARSE_LOCATION)) {
+                Snackbar.make(mListView, getString(R.string.location_access_rationale), Snackbar.LENGTH_LONG)
+                    .setAction(R.string.location_access_give) {
+                        ActivityCompat.requestPermissions(this,
+                            arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION),
+                            LOCATION_ACCESS_REQUEST_CODE)
+                    }.show()
+            } else {
+                ActivityCompat.requestPermissions(this,
+                    arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION),
+                    LOCATION_ACCESS_REQUEST_CODE)
+            }
         }
     }
 
@@ -135,10 +110,10 @@ class WidgetConfigureActivity : AppCompatActivity() {
             }
         }
         if (data?.hasExtra(STOP_CONFIG_DATA_KEY) == true) {
-            val config = StopConfiguration.parseFrom(data!!.getByteArrayExtra(STOP_CONFIG_DATA_KEY))
+            val config = StopConfiguration.parseFrom(data.getByteArrayExtra(STOP_CONFIG_DATA_KEY))
             LOG.info("Got StopConfiguration $config")
 
-            if (data?.hasExtra(STOP_INDEX_DATA_KEY)) {
+            if (data.hasExtra(STOP_INDEX_DATA_KEY)) {
                 val index = data.getIntExtra(STOP_INDEX_DATA_KEY, 0)
                 widgetConfig = widgetConfig.toBuilder().setStopConfiguration(index, config).build()
             } else {
@@ -160,16 +135,31 @@ class WidgetConfigureActivity : AppCompatActivity() {
         finish()
         return true
     }
+
+    fun getConfigErrorMessage() : Int? {
+        if (widgetConfig.stopConfigurationCount <= 0) {
+            return R.string.missing_configuration
+        }
+        return null
+    }
+
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.widget_config_action_bar_menu, menu)
-        menu.findItem(R.id.save_widget_action).setOnMenuItemClickListener {item ->
-            storeWidgetConfig(mWidgetPrefs, widgetConfig)
+        menu.findItem(R.id.save_widget_action).setOnMenuItemClickListener {_ ->
             val intentUpdate = Intent(this, WidgetBroadcastReceiver::class.java).apply {
                 action = WIDGET_CONFIG_UPDATED
                 putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, mAppWidgetId)
             }
-            sendBroadcast(intentUpdate)
-            finishOk()
+            val message = getConfigErrorMessage()
+            if (message != null) {
+                Snackbar.make(mListView, message, Snackbar.LENGTH_SHORT)
+                    .setAction("Action", null).show()
+            } else {
+                LOG.info("Storing config for $mAppWidgetId")
+                storeWidgetConfig(mWidgetPrefs, widgetConfig)
+                sendBroadcast(intentUpdate)
+                finishOk()
+            }
             true
         }
         return true

@@ -26,24 +26,24 @@ class NetworkManager(var context : Context) {
     val requestQueue = Volley.newRequestQueue(context)
     private var requestId = 1
 
-    fun doStopDataRequest(request : Ng.StopDataRequest, callBack : (ResponseData, Exception?) -> Unit) {
+    fun doStopDataRequest(request : Ng.StopDataRequest, callBack : (Int, ResponseData, Exception?) -> Unit) : Int {
         val api = context.packageManager.getPackageInfo(context.packageName, 0).versionCode
         doRequest(RequestData.newBuilder().setStopDataRequest(request)
             .setRequestHeader(Ng.RequestHeader.newBuilder()
                 .setApi(api)
                 .setId(requestId)).build(),  callBack)
-        this.requestId++
+        return requestId++
     }
 
-    fun doRequest(request : RequestData, callBack : (ResponseData, Exception?) -> Unit) {
+    fun doRequest(request : RequestData, callBack : (Int, ResponseData, Exception?) -> Unit) {
         LOG.fine("Sending request $request")
         val protoRequest = ProtoRequest(request,
             Response.Listener { response ->
                 LOG.fine("Got data $response")
-                callBack(response, null)
+                callBack(request.requestHeader.id, response, null)
             },
             Response.ErrorListener { error ->
-                callBack(ResponseData.getDefaultInstance(), error)
+                callBack(request.requestHeader.id, ResponseData.getDefaultInstance(), error)
             })
         requestQueue.add(protoRequest)
     }

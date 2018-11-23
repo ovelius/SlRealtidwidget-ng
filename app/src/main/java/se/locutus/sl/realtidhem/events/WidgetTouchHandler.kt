@@ -8,6 +8,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.PersistableBundle
+import android.view.View
 import android.widget.RemoteViews
 import se.locutus.proto.Ng
 import se.locutus.sl.realtidhem.R
@@ -23,6 +24,7 @@ const val CYCLE_STOP_RIGHT = "CYCLE_STOP_RIGHT"
 class WidgetTouchHandler(val context: Context) {
     companion object {
         const val STALE_MILLIS = 30000
+        const val UPDATE_RETRY_MILLIS = 10000
         const val UPDATE_FAIL_STALE = STALE_MILLIS - 10000
         const val RETOUCH_MILLIS = 1000
         const val TOUCH_TO_CONFIG = 3
@@ -35,41 +37,41 @@ class WidgetTouchHandler(val context: Context) {
     internal val inMemoryState = InMemoryState()
 
     fun widgetTouched(widgetId :  Int, action : String?) {
-        if (!inMemoryState.widgetConfigs.containsKey(widgetId)) {
-            LOG.info("Loading config for widget $widgetId")
-            inMemoryState.widgetConfigs[widgetId] = loadWidgetConfigOrDefault(prefs, widgetId)
-        }
-        val widgetConfig = inMemoryState.widgetConfigs[widgetId]
+        val widgetConfig = inMemoryState.getWidgetConfig(widgetId, prefs)
         var selectedStopIndex = prefs.getInt(widgetKeySelectedStop(widgetId), 0)
 
         if (CYCLE_STOP_LEFT.equals(action)) {
             selectedStopIndex--
             if (selectedStopIndex < 0) {
-                selectedStopIndex += widgetConfig!!.stopConfigurationCount
+                selectedStopIndex += widgetConfig.stopConfigurationCount
             }
             setSelectedStopIndex(prefs, widgetId, selectedStopIndex)
-            configUpdated(widgetId)
+            configUpdated(widgetId, false)
         }
         if (CYCLE_STOP_RIGHT.equals(action)) {
             selectedStopIndex++
-            if (selectedStopIndex >= widgetConfig!!.stopConfigurationCount) {
-                selectedStopIndex -= widgetConfig!!.stopConfigurationCount
+            if (selectedStopIndex >= widgetConfig.stopConfigurationCount) {
+                selectedStopIndex -= widgetConfig.stopConfigurationCount
             }
             setSelectedStopIndex(prefs, widgetId, selectedStopIndex)
-            configUpdated(widgetId)
+            configUpdated(widgetId, false)
         }
         LOG.info("Selected stop index is $selectedStopIndex")
 
         if (inMemoryState.sinceLastUpdate(widgetId) > STALE_MILLIS) {
-            LOG.info("Triggering update for config for widget $widgetId")
-            loadWidgetData(widgetId, widgetConfig!!.getStopConfiguration(selectedStopIndex))
-            scheduleWidgetClearing(context!!, widgetId)
+            if (inMemoryState.sinceUpdateStarted(widgetId) > UPDATE_RETRY_MILLIS) {
+                LOG.info("Triggering update for config for widget $widgetId")
+                loadWidgetData(widgetId, widgetConfig.getStopConfiguration(selectedStopIndex))
+                scheduleWidgetClearing(context, widgetId)
+            } else {
+                // Be pesky...
+            }
         } else if (!inMemoryState.hasRunningThread(widgetId)) {
             val lastLoadedData = inMemoryState.lastLoadedData[widgetId]
             if (lastLoadedData != null) {
                 inMemoryState.scrollMap[widgetId] = ScrollThread(
                     inMemoryState.remoteViews[widgetId]!!,
-                    widgetId, lastLoadedData.line2, context!!
+                    widgetId, lastLoadedData.line2, context
                 ).apply { start() }
             }
         }
@@ -85,11 +87,27 @@ class WidgetTouchHandler(val context: Context) {
         inMemoryState.lastTouch[widgetId] = System.currentTimeMillis()
     }
 
-    fun configUpdated(widgetId: Int) {
+    fun configUpdated(widgetId: Int, selectNewFromLocation : Boolean) {
         inMemoryState.widgetConfigs.remove(widgetId)
         inMemoryState.lastTouch.remove(widgetId)
         inMemoryState.lastLoadedData.remove(widgetId)
         inMemoryState.updatedAt.remove(widgetId)
+        inMemoryState.updateStartedAt.remove(widgetId)
+
+        val appWidgetManager = context.getSystemService(Context.APPWIDGET_SERVICE) as AppWidgetManager
+        val config = inMemoryState.getWidgetConfig(widgetId, prefs)
+        StandardWidgetProvider().apply {
+            updateAppWidget(context, config, appWidgetManager, prefs,  widgetId)
+            if (config.stopConfigurationCount > 1 && selectNewFromLocation) {
+                requestSingleLocationUpdate(
+                    context,
+                    mapOf(widgetId to config),
+                    prefs,
+                    appWidgetManager
+                )
+            }
+        }
+
     }
 
     fun loadWidgetData(widgetId :  Int, stopConfig : Ng.StopConfiguration) {
@@ -97,43 +115,56 @@ class WidgetTouchHandler(val context: Context) {
         if (scroller != null) {
             scroller.running = false
         }
+        inMemoryState.updateStartedAt[widgetId] = System.currentTimeMillis()
         val manager = context.getSystemService(Context.APPWIDGET_SERVICE) as AppWidgetManager
         val views = inMemoryState.getRemoveViews(widgetId, context)
 
-        views.setTextViewText(R.id.widgetline2, context.getString(R.string.updating))
-        views.setTextViewText(R.id.widgettag, stopConfig.stopData.canonicalName)
+        setWidgetTextViews(views, context.getString(R.string.updating), "", context.getString(R.string.updating), stopConfig.stopData.canonicalName)
         manager.updateAppWidget(widgetId, views)
 
         val stopDataRequest = Ng.StopDataRequest.newBuilder()
             .setSiteId(stopConfig.stopData.siteId)
             .setDeparturesFilter(stopConfig.departuresFilter)
             .build()
-        networkManager.doStopDataRequest(stopDataRequest) {
-                responseData: Ng.ResponseData, e: Exception? ->
-            if (e != null) {
-                e.printStackTrace()
-                WidgetBroadcastReceiver.LOG.severe("Error loading data $e")
-                val errorDetailString = context.getString(R.string.error_details_try_again)
-                if (e is com.android.volley.TimeoutError) {
-                    setWidgetTextViews(views, context.getString(R.string.error_timeout), "", errorDetailString)
-                } else {
-                    setWidgetTextViews(views, context.getString(R.string.error), "", errorDetailString)
-                }
-                inMemoryState.putLastLoadDataInMemory(prefs, widgetId, Ng.WidgetLoadResponseData.newBuilder()
-                    .setLine2(errorDetailString).build())
-                inMemoryState.updatedAt[widgetId] = System.currentTimeMillis() - UPDATE_FAIL_STALE
-            } else {
-                val loadResponse = responseData.loadResponse
-                setWidgetTextViews(views, loadResponse.line1, loadResponse.minutes, loadResponse.line2)
-                views.setInt(R.id.widgetcolor, "setBackgroundColor", responseData.loadResponse.color)
-
-                inMemoryState.clearRunningThread(widgetId)
-                inMemoryState.putLastLoadDataInMemory(prefs, widgetId, loadResponse)
-                inMemoryState.updatedAt[widgetId] = System.currentTimeMillis()
-                inMemoryState.scrollMap[widgetId] = ScrollThread(views, widgetId, responseData.loadResponse.line2, context!!).apply {  start() }
-            }
-            manager.updateAppWidget(widgetId, views)
+        val requestId = networkManager.doStopDataRequest(stopDataRequest) {
+                incomingRequestId : Int, responseData: Ng.ResponseData, e: Exception? ->
+            handleLoadResponse(views, widgetId, incomingRequestId, responseData, e)
         }
+        inMemoryState.currentRequestId[widgetId] = requestId
+    }
+
+    fun handleLoadResponse(views : RemoteViews, widgetId : Int, incomingRequestId : Int, responseData: Ng.ResponseData, e: Exception?) {
+        val currentRequestId = inMemoryState.currentRequestId[widgetId]
+        if (currentRequestId != null && incomingRequestId != currentRequestId) {
+            LOG.info("Not handling network response due to requestId mismatch got $incomingRequestId wanted $currentRequestId")
+            return
+        }
+        inMemoryState.updateStartedAt.remove(widgetId)
+        val manager = context.getSystemService(Context.APPWIDGET_SERVICE) as AppWidgetManager
+        if (e != null) {
+            e.printStackTrace()
+            WidgetBroadcastReceiver.LOG.severe("Error loading data $e")
+            val errorDetailString = context.getString(R.string.error_details_try_again)
+            if (e is com.android.volley.TimeoutError) {
+                setWidgetTextViews(views, context.getString(R.string.error_timeout), "", errorDetailString)
+            } else {
+                setWidgetTextViews(views, context.getString(R.string.error), "", errorDetailString)
+            }
+            inMemoryState.putLastLoadDataInMemory(prefs, widgetId, Ng.WidgetLoadResponseData.newBuilder()
+                .setLine2(errorDetailString).build())
+            inMemoryState.updatedAt[widgetId] = System.currentTimeMillis() - UPDATE_FAIL_STALE
+        } else {
+            val loadResponse = responseData.loadResponse
+            setWidgetTextViews(views, loadResponse.line1, loadResponse.minutes, loadResponse.line2)
+            views.setInt(R.id.widgetcolor, "setBackgroundColor", responseData.loadResponse.color)
+
+            inMemoryState.clearRunningThread(widgetId)
+            inMemoryState.putLastLoadDataInMemory(prefs, widgetId, loadResponse)
+            inMemoryState.updatedAt[widgetId] = System.currentTimeMillis()
+            inMemoryState.scrollMap[widgetId] = ScrollThread(views, widgetId, responseData.loadResponse.line2, context).apply {  start() }
+        }
+        manager.updateAppWidget(widgetId, views)
+        scheduleWidgetClearing(context, widgetId)
     }
 
     fun scheduleWidgetClearing(context: Context, widgetId: Int) {
@@ -170,6 +201,8 @@ class WidgetTouchHandler(val context: Context) {
         var scrollMap = ConcurrentHashMap<Int, ScrollThread>()
         var lastTouch = ConcurrentHashMap<Int, Long>()
         var updatedAt = ConcurrentHashMap<Int, Long>()
+        var updateStartedAt = ConcurrentHashMap<Int, Long>()
+        var currentRequestId = ConcurrentHashMap<Int, Int>()
         var touchCount = ConcurrentHashMap<Int, Int>()
         var remoteViews = ConcurrentHashMap<Int, RemoteViews>()
         var widgetConfigs = ConcurrentHashMap<Int, Ng.WidgetConfiguration>()
@@ -212,6 +245,13 @@ class WidgetTouchHandler(val context: Context) {
             return System.currentTimeMillis() - updatedAt[widgetId]!!
         }
 
+        fun sinceUpdateStarted(widgetId : Int) : Long {
+            if (!updateStartedAt.containsKey(widgetId)) {
+                return Long.MAX_VALUE
+            }
+            return System.currentTimeMillis() - updateStartedAt[widgetId]!!
+        }
+
         fun maybeIncrementTouchCountAndOpenConfig(widgetId : Int) : Boolean {
             val lastTouch = sinceLastTouch(widgetId)
             if (lastTouch > RETOUCH_MILLIS ||  !touchCount.containsKey(widgetId)) {
@@ -220,6 +260,14 @@ class WidgetTouchHandler(val context: Context) {
                 touchCount[widgetId] = touchCount[widgetId]!! + 1
             }
             return touchCount[widgetId]!! >= TOUCH_TO_CONFIG
+        }
+
+        fun getWidgetConfig(widgetId : Int, prefs : SharedPreferences) : Ng.WidgetConfiguration {
+            if (!widgetConfigs.containsKey(widgetId)) {
+                LOG.info("Loading config for widget $widgetId")
+                widgetConfigs[widgetId] = loadWidgetConfigOrDefault(prefs, widgetId)
+            }
+            return widgetConfigs[widgetId]!!
         }
 
         override fun toString() : String {
@@ -245,7 +293,7 @@ class WidgetTouchHandler(val context: Context) {
                 set[i] = s.substring(i)
             }
 
-            val scrollSpeed = 100L
+            val scrollSpeed = 70L
             val length = line2.length + 5
             var i = 0
 
@@ -253,6 +301,11 @@ class WidgetTouchHandler(val context: Context) {
                 s = set[i]!!
 
                 views.setTextViewText(R.id.widgetline2, s)
+                /*
+                31436-10465/? E/AndroidRuntime: FATAL EXCEPTION: ScrollerThread-19
+                Process: se.locutus.sl.realtidhem, PID: 31436
+                java.lang.RuntimeException: android.os.TransactionTooLargeException: data parcel size 543860 bytes */
+
                 manager.updateAppWidget(widgetId, views)
                 i++
 

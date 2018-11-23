@@ -31,7 +31,7 @@ class WidgetBroadcastReceiver  : BroadcastReceiver() {
 
         if (WIDGET_CONFIG_UPDATED.equals(incomingIntent.action)) {
             LOG.info("Received broadcast about updated config for $widgetId")
-            widgetTouchHandler!!.configUpdated(widgetId)
+            widgetTouchHandler!!.configUpdated(widgetId, true)
         } else {
             widgetTouchHandler!!.widgetTouched(widgetId, incomingIntent.action)
         }
@@ -58,8 +58,8 @@ class ResetWidget : JobService() {
         WidgetBroadcastReceiver.LOG.info("job started, clearing widget $widgetId!")
         val manager = getSystemService(Context.APPWIDGET_SERVICE) as AppWidgetManager
         val views = getRemoveViews(widgetId)
-        views.setTextViewText(R.id.widgetline2, "done")
-        views.setTextViewText(R.id.widgetline1, "done")
+        views.setTextViewText(R.id.widgetline2,  getString(R.string.idle_line2))
+        views.setTextViewText(R.id.widgetline1, getString(R.string.idle_line1))
         views.setTextViewText(R.id.widgetmin, "")
         manager.updateAppWidget(widgetId, views)
         return false

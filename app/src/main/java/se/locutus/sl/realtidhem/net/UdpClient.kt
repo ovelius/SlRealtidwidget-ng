@@ -9,7 +9,7 @@ class UpdClient {
     companion object {
         val LOG = Logger.getLogger(BackgroundUpdaterService::class.java.name)
     }
-    val PORT = 1196
+    val PORT = 1199
     val BUFFER = 8096
     // Nothing should take longer than 5000 millis, right?
     val READ_TIMEOUT_MILLIS = 5000
