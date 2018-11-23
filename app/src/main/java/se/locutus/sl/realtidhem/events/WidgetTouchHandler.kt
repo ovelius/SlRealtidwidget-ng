@@ -20,16 +20,16 @@ import java.util.logging.Logger
 
 const val CYCLE_STOP_LEFT = "CYCLE_STOP_LEFT"
 const val CYCLE_STOP_RIGHT = "CYCLE_STOP_RIGHT"
+const val STALE_MILLIS = 30000
+const val UPDATE_RETRY_MILLIS = 10000
+const val UPDATE_FAIL_STALE = STALE_MILLIS - 6000
+const val RETOUCH_MILLIS = 1000
+const val TOUCH_TO_CONFIG = 3
+const val CLEAR_TIME_MIN_MILLIS = 60 * 1000L
+const val CLEAR_TIME_MAX_MILLIS = 80 * 1000L
 
 class WidgetTouchHandler(val context: Context) {
     companion object {
-        const val STALE_MILLIS = 30000
-        const val UPDATE_RETRY_MILLIS = 10000
-        const val UPDATE_FAIL_STALE = STALE_MILLIS - 10000
-        const val RETOUCH_MILLIS = 1000
-        const val TOUCH_TO_CONFIG = 3
-        const val CLEAR_TIME_MIN_MILLIS = 60 * 1000L
-        const val CLEAR_TIME_MAX_MILLIS = 80 * 1000L
         val LOG = Logger.getLogger(WidgetTouchHandler::class.java.name)
     }
     internal val prefs = context.getSharedPreferences(WIDGET_CONFIG_PREFS, 0)
@@ -69,10 +69,11 @@ class WidgetTouchHandler(val context: Context) {
         } else if (!inMemoryState.hasRunningThread(widgetId)) {
             val lastLoadedData = inMemoryState.lastLoadedData[widgetId]
             if (lastLoadedData != null) {
-                inMemoryState.scrollMap[widgetId] = ScrollThread(
+                inMemoryState.replaceThread(ScrollThread(
+                    widgetId,
                     inMemoryState.remoteViews[widgetId]!!,
-                    widgetId, lastLoadedData.line2, context
-                ).apply { start() }
+                    lastLoadedData.line2, context
+                ).apply { start() })
             }
         }
 
@@ -111,10 +112,7 @@ class WidgetTouchHandler(val context: Context) {
     }
 
     fun loadWidgetData(widgetId :  Int, stopConfig : Ng.StopConfiguration) {
-        val scroller = inMemoryState.scrollMap[widgetId]
-        if (scroller != null) {
-            scroller.running = false
-        }
+        inMemoryState.disposeScroller(widgetId)
         inMemoryState.updateStartedAt[widgetId] = System.currentTimeMillis()
         val manager = context.getSystemService(Context.APPWIDGET_SERVICE) as AppWidgetManager
         val views = inMemoryState.getRemoveViews(widgetId, context)
@@ -158,10 +156,10 @@ class WidgetTouchHandler(val context: Context) {
             setWidgetTextViews(views, loadResponse.line1, loadResponse.minutes, loadResponse.line2)
             views.setInt(R.id.widgetcolor, "setBackgroundColor", responseData.loadResponse.color)
 
-            inMemoryState.clearRunningThread(widgetId)
             inMemoryState.putLastLoadDataInMemory(prefs, widgetId, loadResponse)
             inMemoryState.updatedAt[widgetId] = System.currentTimeMillis()
-            inMemoryState.scrollMap[widgetId] = ScrollThread(views, widgetId, responseData.loadResponse.line2, context).apply {  start() }
+            inMemoryState.replaceThread(ScrollThread(
+                widgetId, views, responseData.loadResponse.line2, context).apply {  start() })
         }
         manager.updateAppWidget(widgetId, views)
         scheduleWidgetClearing(context, widgetId)
@@ -198,7 +196,7 @@ class WidgetTouchHandler(val context: Context) {
     }
 
     internal class InMemoryState {
-        var scrollMap = ConcurrentHashMap<Int, ScrollThread>()
+        private var scrollThread : ScrollThread? = null
         var lastTouch = ConcurrentHashMap<Int, Long>()
         var updatedAt = ConcurrentHashMap<Int, Long>()
         var updateStartedAt = ConcurrentHashMap<Int, Long>()
@@ -207,6 +205,26 @@ class WidgetTouchHandler(val context: Context) {
         var remoteViews = ConcurrentHashMap<Int, RemoteViews>()
         var widgetConfigs = ConcurrentHashMap<Int, Ng.WidgetConfiguration>()
         var lastLoadedData = ConcurrentHashMap<Int, Ng.WidgetLoadResponseData>()
+
+        fun replaceThread(thread : ScrollThread) {
+            if (scrollThread != null) {
+                scrollThread!!.running = false
+            }
+            scrollThread = thread
+        }
+
+        fun disposeScroller(widgetId : Int) {
+            if (scrollThread?.widgetId == widgetId) {
+                scrollThread!!.running = false
+            }
+        }
+
+        fun threadWidgetId() : Int {
+            if (scrollThread != null) {
+                return scrollThread!!.widgetId
+            }
+            return Int.MIN_VALUE
+        }
 
         fun putLastLoadDataInMemory(prefs : SharedPreferences, widgetId : Int, response : Ng.WidgetLoadResponseData) {
             lastLoadedData[widgetId] = response
@@ -221,14 +239,7 @@ class WidgetTouchHandler(val context: Context) {
         }
 
         fun hasRunningThread(widgetId: Int) : Boolean {
-            return scrollMap[widgetId] != null && scrollMap[widgetId]!!.running
-        }
-
-        fun clearRunningThread(widgetId: Int) {
-            val thread = scrollMap[widgetId]
-            if (thread != null) {
-                thread.running = false
-            }
+            return threadWidgetId() == widgetId
         }
 
         fun sinceLastTouch(widgetId : Int) : Long {
@@ -276,8 +287,8 @@ class WidgetTouchHandler(val context: Context) {
     }
 
     internal class ScrollThread(
+        val widgetId: Int,
         private val views : RemoteViews,
-        private val widgetId: Int,
         private val theLine: String,
         private val context: Context
     ) : Thread("ScrollerThread-$widgetId") {

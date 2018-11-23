@@ -1,6 +1,8 @@
 package se.locutus.sl.realtidhem.net
 
 import android.content.Context
+import android.os.Handler
+import android.os.Looper
 import android.support.annotation.GuardedBy
 import com.android.volley.NetworkResponse
 import com.android.volley.Request
@@ -24,6 +26,7 @@ class NetworkManager(var context : Context) {
         val LOG = Logger.getLogger(NetworkManager::class.java.name)
     }
     val requestQueue = Volley.newRequestQueue(context)
+    val udpSocket = UpdClient(context).apply { start() }
     private var requestId = 1
 
     fun doStopDataRequest(request : Ng.StopDataRequest, callBack : (Int, ResponseData, Exception?) -> Unit) : Int {
@@ -35,15 +38,29 @@ class NetworkManager(var context : Context) {
         return requestId++
     }
 
-    fun doRequest(request : RequestData, callBack : (Int, ResponseData, Exception?) -> Unit) {
-        LOG.fine("Sending request $request")
+    fun doRequest(request : RequestData, callback : (Int, ResponseData, Exception?) -> Unit) {
+        if (udpSocket.ready() && udpSocket.responsive) {
+            LOG.warning("Sending request using UDP")
+            sendRequestWithUDP(request, callback)
+        } else {
+            LOG.warning("Sending request using HTTP")
+            sendRequestWithHTTP(request, callback)
+            udpSocket.schedulePing()
+        }
+    }
+
+    fun sendRequestWithUDP(request : RequestData, callback : (Int, ResponseData, Exception?) -> Unit) {
+       udpSocket.sendRequest(request, callback)
+    }
+
+    fun sendRequestWithHTTP(request : RequestData, callback : (Int, ResponseData, Exception?) -> Unit) {
         val protoRequest = ProtoRequest(request,
             Response.Listener { response ->
                 LOG.fine("Got data $response")
-                callBack(request.requestHeader.id, response, null)
+                callback(request.requestHeader.id, response, null)
             },
             Response.ErrorListener { error ->
-                callBack(request.requestHeader.id, ResponseData.getDefaultInstance(), error)
+                callback(request.requestHeader.id, ResponseData.getDefaultInstance(), error)
             })
         requestQueue.add(protoRequest)
     }
