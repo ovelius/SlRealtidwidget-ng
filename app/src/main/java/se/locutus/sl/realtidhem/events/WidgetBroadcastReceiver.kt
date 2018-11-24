@@ -9,6 +9,7 @@ import android.content.Intent
 import java.util.logging.Logger
 import android.widget.RemoteViews
 import se.locutus.sl.realtidhem.R
+import se.locutus.sl.realtidhem.net.NetworkManager
 
 const val WIDGET_CONFIG_UPDATED = "widget_config_updated"
 
@@ -24,7 +25,7 @@ class WidgetBroadcastReceiver  : BroadcastReceiver() {
         }
         if (widgetTouchHandler == null) {
             LOG.info("Creating main widget handler")
-            widgetTouchHandler = WidgetTouchHandler(context!!)
+            widgetTouchHandler = WidgetTouchHandler(context!!, NetworkManager(context))
         }
         val widgetId = incomingIntent!!.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, 0)
         LOG.info("Received intent $incomingIntent with extra $widgetId action ${incomingIntent.action}")

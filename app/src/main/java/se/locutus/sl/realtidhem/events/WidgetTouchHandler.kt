@@ -12,9 +12,11 @@ import android.view.View
 import android.widget.RemoteViews
 import se.locutus.proto.Ng
 import se.locutus.sl.realtidhem.R
+import se.locutus.sl.realtidhem.net.NetworkInterface
 import se.locutus.sl.realtidhem.net.NetworkManager
 import se.locutus.sl.realtidhem.widget.*
 import java.lang.Exception
+import java.net.SocketTimeoutException
 import java.util.concurrent.ConcurrentHashMap
 import java.util.logging.Logger
 
@@ -28,12 +30,11 @@ const val TOUCH_TO_CONFIG = 3
 const val CLEAR_TIME_MIN_MILLIS = 60 * 1000L
 const val CLEAR_TIME_MAX_MILLIS = 80 * 1000L
 
-class WidgetTouchHandler(val context: Context) {
+class WidgetTouchHandler(val context: Context, val networkManager : NetworkInterface) {
     companion object {
         val LOG = Logger.getLogger(WidgetTouchHandler::class.java.name)
     }
     internal val prefs = context.getSharedPreferences(WIDGET_CONFIG_PREFS, 0)
-    internal val networkManager = NetworkManager(context)
     internal val inMemoryState = InMemoryState()
 
     fun widgetTouched(widgetId :  Int, action : String?) {
@@ -75,6 +76,8 @@ class WidgetTouchHandler(val context: Context) {
                     lastLoadedData.line2, context
                 ).apply { start() })
             }
+        } else {
+            LOG.info("Updated and has running thread, not doing anything $widgetId")
         }
 
         if (inMemoryState.maybeIncrementTouchCountAndOpenConfig(widgetId)) {
@@ -114,7 +117,7 @@ class WidgetTouchHandler(val context: Context) {
     fun loadWidgetData(widgetId :  Int, stopConfig : Ng.StopConfiguration) {
         inMemoryState.disposeScroller(widgetId)
         inMemoryState.updateStartedAt[widgetId] = System.currentTimeMillis()
-        val manager = context.getSystemService(Context.APPWIDGET_SERVICE) as AppWidgetManager
+        val manager = AppWidgetManager.getInstance(context)
         val views = inMemoryState.getRemoveViews(widgetId, context)
 
         setWidgetTextViews(views, context.getString(R.string.updating), "", context.getString(R.string.updating), stopConfig.stopData.canonicalName)
@@ -124,8 +127,10 @@ class WidgetTouchHandler(val context: Context) {
             .setSiteId(stopConfig.stopData.siteId)
             .setDeparturesFilter(stopConfig.departuresFilter)
             .build()
+        val time = System.currentTimeMillis()
         val requestId = networkManager.doStopDataRequest(stopDataRequest) {
                 incomingRequestId : Int, responseData: Ng.ResponseData, e: Exception? ->
+            LOG.info("Got response in ${System.currentTimeMillis() - time} ms")
             handleLoadResponse(views, widgetId, incomingRequestId, responseData, e)
         }
         inMemoryState.currentRequestId[widgetId] = requestId
@@ -138,12 +143,12 @@ class WidgetTouchHandler(val context: Context) {
             return
         }
         inMemoryState.updateStartedAt.remove(widgetId)
-        val manager = context.getSystemService(Context.APPWIDGET_SERVICE) as AppWidgetManager
+        val manager = AppWidgetManager.getInstance(context)
         if (e != null) {
             e.printStackTrace()
             WidgetBroadcastReceiver.LOG.severe("Error loading data $e")
             val errorDetailString = context.getString(R.string.error_details_try_again)
-            if (e is com.android.volley.TimeoutError) {
+            if (e is com.android.volley.TimeoutError || e is SocketTimeoutException) {
                 setWidgetTextViews(views, context.getString(R.string.error_timeout), "", errorDetailString)
             } else {
                 setWidgetTextViews(views, context.getString(R.string.error), "", errorDetailString)
@@ -206,11 +211,13 @@ class WidgetTouchHandler(val context: Context) {
         var widgetConfigs = ConcurrentHashMap<Int, Ng.WidgetConfiguration>()
         var lastLoadedData = ConcurrentHashMap<Int, Ng.WidgetLoadResponseData>()
 
-        fun replaceThread(thread : ScrollThread) {
+        fun replaceThread(thread : ScrollThread?) : ScrollThread? {
+            val replaced = scrollThread
             if (scrollThread != null) {
                 scrollThread!!.running = false
             }
             scrollThread = thread
+            return replaced
         }
 
         fun disposeScroller(widgetId : Int) {
@@ -239,7 +246,7 @@ class WidgetTouchHandler(val context: Context) {
         }
 
         fun hasRunningThread(widgetId: Int) : Boolean {
-            return threadWidgetId() == widgetId
+            return threadWidgetId() == widgetId && scrollThread?.running == true
         }
 
         fun sinceLastTouch(widgetId : Int) : Long {
@@ -295,7 +302,7 @@ class WidgetTouchHandler(val context: Context) {
         var running = true
 
         override fun run() {
-            val manager = context.getSystemService(Context.APPWIDGET_SERVICE) as AppWidgetManager
+            val manager = AppWidgetManager.getInstance(context)
             var line2 = theLine
 
             var s = "$line2     $line2"
@@ -312,11 +319,6 @@ class WidgetTouchHandler(val context: Context) {
                 s = set[i]!!
 
                 views.setTextViewText(R.id.widgetline2, s)
-                /*
-                31436-10465/? E/AndroidRuntime: FATAL EXCEPTION: ScrollerThread-19
-                Process: se.locutus.sl.realtidhem, PID: 31436
-                java.lang.RuntimeException: android.os.TransactionTooLargeException: data parcel size 543860 bytes */
-
                 manager.updateAppWidget(widgetId, views)
                 i++
 

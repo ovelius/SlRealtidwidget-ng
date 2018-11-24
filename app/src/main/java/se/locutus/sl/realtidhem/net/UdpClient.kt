@@ -60,12 +60,16 @@ class UpdClient(var context : Context) : HandlerThread("UdpHandler") {
                 while (running) {
                     val response = udpClient.receive(isPing)
                     if (response != null && response.responseHeader.id == message.requestHeader.id) {
-                        callBack(message.requestHeader.id, response, null)
+                        udpClient.mainHandler.post {
+                            callBack(message.requestHeader.id, response, null)
+                        }
                         running = false
                     }
                 }
             } catch (e : Exception) {
-                callBack(message.requestHeader.id, Ng.ResponseData.getDefaultInstance(), e)
+                udpClient.mainHandler.post {
+                    callBack(message.requestHeader.id, Ng.ResponseData.getDefaultInstance(), e)
+                }
             }
 
         }

@@ -21,7 +21,11 @@ import java.util.logging.Logger
 
 const val URL = "http://anka.locutus.se/NG"
 
-class NetworkManager(var context : Context) {
+interface NetworkInterface {
+    fun doStopDataRequest(request : Ng.StopDataRequest, callBack : (Int, ResponseData, Exception?) -> Unit) : Int
+}
+
+class NetworkManager(var context : Context) : NetworkInterface {
     companion object {
         val LOG = Logger.getLogger(NetworkManager::class.java.name)
     }
@@ -29,7 +33,7 @@ class NetworkManager(var context : Context) {
     val udpSocket = UpdClient(context).apply { start() }
     private var requestId = 1
 
-    fun doStopDataRequest(request : Ng.StopDataRequest, callBack : (Int, ResponseData, Exception?) -> Unit) : Int {
+    override fun doStopDataRequest(request : Ng.StopDataRequest, callBack : (Int, ResponseData, Exception?) -> Unit) : Int {
         val api = context.packageManager.getPackageInfo(context.packageName, 0).versionCode
         doRequest(RequestData.newBuilder().setStopDataRequest(request)
             .setRequestHeader(Ng.RequestHeader.newBuilder()
@@ -38,22 +42,24 @@ class NetworkManager(var context : Context) {
         return requestId++
     }
 
-    fun doRequest(request : RequestData, callback : (Int, ResponseData, Exception?) -> Unit) {
+    private fun doRequest(request : RequestData, callback : (Int, ResponseData, Exception?) -> Unit) {
         if (udpSocket.ready() && udpSocket.responsive) {
             LOG.warning("Sending request using UDP")
             sendRequestWithUDP(request, callback)
         } else {
             LOG.warning("Sending request using HTTP")
             sendRequestWithHTTP(request, callback)
-            udpSocket.schedulePing()
+            if (udpSocket.ready()) {
+                udpSocket.schedulePing()
+            }
         }
     }
 
-    fun sendRequestWithUDP(request : RequestData, callback : (Int, ResponseData, Exception?) -> Unit) {
+    private fun sendRequestWithUDP(request : RequestData, callback : (Int, ResponseData, Exception?) -> Unit) {
        udpSocket.sendRequest(request, callback)
     }
 
-    fun sendRequestWithHTTP(request : RequestData, callback : (Int, ResponseData, Exception?) -> Unit) {
+    private fun sendRequestWithHTTP(request : RequestData, callback : (Int, ResponseData, Exception?) -> Unit) {
         val protoRequest = ProtoRequest(request,
             Response.Listener { response ->
                 LOG.fine("Got data $response")
