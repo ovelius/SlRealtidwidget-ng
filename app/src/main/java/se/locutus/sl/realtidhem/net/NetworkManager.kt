@@ -44,10 +44,10 @@ class NetworkManager(var context : Context) : NetworkInterface {
 
     private fun doRequest(request : RequestData, callback : (Int, ResponseData, Exception?) -> Unit) {
         if (udpSocket.ready() && udpSocket.responsive) {
-            LOG.warning("Sending request using UDP")
+            LOG.info("Sending request using UDP")
             sendRequestWithUDP(request, callback)
         } else {
-            LOG.warning("Sending request using HTTP")
+            LOG.info("Sending request using HTTP")
             sendRequestWithHTTP(request, callback)
             if (udpSocket.ready()) {
                 udpSocket.schedulePing()

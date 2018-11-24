@@ -4,6 +4,8 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.Snackbar
+import android.support.design.widget.TabLayout
+import android.support.v4.view.ViewPager
 import android.support.v7.app.AppCompatActivity
 import android.text.Editable
 import android.text.TextWatcher
@@ -32,13 +34,10 @@ class AddStopActivity : AppCompatActivity() {
     companion object {
         val LOG = Logger.getLogger(AddStopActivity::class.java.name)
     }
-    internal lateinit var requestQueue : RequestQueue
-    internal lateinit var mAutoCompleteTextView : AutoCompleteTextView
-    internal lateinit var mDepartureList : ListView
-    internal var nameToSiteIDs : HashMap<String, Int> = HashMap()
     internal var config : Ng.StopConfiguration.Builder = Ng.StopConfiguration.newBuilder()
     internal var stopIndex : Int = -1
-    internal lateinit var departureAdapter : DepartureListAdapter
+    internal lateinit var requestQueue : RequestQueue
+    internal lateinit var stopConfigureTabAdapter : StopConfigureTabAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,105 +45,44 @@ class AddStopActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
+
+        requestQueue = Volley.newRequestQueue(this)
+
+        val tabLayout: TabLayout = findViewById(R.id.tab_layout)
+        val viewPager: ViewPager = findViewById(R.id.view_pager)
+        stopConfigureTabAdapter = StopConfigureTabAdapter(supportFragmentManager)
+        viewPager.adapter = stopConfigureTabAdapter
+        tabLayout.setupWithViewPager(viewPager)
+
+
+        tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+            override fun onTabSelected(tab: TabLayout.Tab) {
+                System.err.println("item ${viewPager.currentItem}")
+            }
+
+            override fun onTabUnselected(tab: TabLayout.Tab) {
+
+            }
+
+            override fun onTabReselected(tab: TabLayout.Tab) {
+
+            }
+        })
+
         if (intent.hasExtra(STOP_CONFIG_DATA_KEY)) {
             config = Ng.StopConfiguration.parseFrom(intent.getByteArrayExtra(STOP_CONFIG_DATA_KEY)).toBuilder()
         }
         if (intent.hasExtra(STOP_INDEX_DATA_KEY)) {
             stopIndex = intent.getIntExtra(STOP_INDEX_DATA_KEY, -1)
         }
-        requestQueue = Volley.newRequestQueue(this)
-        val adapter = ArrayAdapter<String>(
-            this,
-            android.R.layout.simple_dropdown_item_1line, arrayOf()
-        )
-        departureAdapter = DepartureListAdapter(
-            this,
-            ArrayList()
-        )
-        mDepartureList = findViewById(R.id.departure_list_view)
-        mDepartureList.adapter = departureAdapter
-        mAutoCompleteTextView = findViewById(R.id.stop_auto_complete)
-        mAutoCompleteTextView.setText(config.stopData.canonicalName, false)
-        mAutoCompleteTextView.setAdapter(adapter)
-        mAutoCompleteTextView.threshold = 1
-        mAutoCompleteTextView.addTextChangedListener(object : TextWatcher {
-            override fun afterTextChanged(p0: Editable?) {
-            }
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-            }
-            override fun onTextChanged(p: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                val siteId : Int? = nameToSiteIDs[p.toString()]
-                if (siteId != null) {
-                    LOG.info("Selected $p $siteId")
-                    val imm = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
-                    imm.hideSoftInputFromWindow(mAutoCompleteTextView.windowToken, 0)
-                    loadDepsFor(siteId)
-                } else {
-                    config.clearStopData()
-                    LOG.info("Searching for $p")
-                    val url = "http://anka.locutus.se/P?q=$p"
-                    val stringRequest = StringRequest(Request.Method.GET, url,
-                        Response.Listener<String> { response ->
-                            LOG.warning("got $response")
-                            adapter.clear()
-                            var json: JSONObject = JSONObject(response)
-                            var list: JSONArray = json.getJSONArray("suggestions")
-                            for (i in 0 until list.length() - 1) {
-                                var item: JSONObject = list.getJSONObject(i)
-                                var name: String = item.getString("name")
-                                var siteId: Int = item.getInt("sid")
-                                adapter.add(name)
-                                nameToSiteIDs.put(name, siteId)
-                            }
-                            mAutoCompleteTextView.showDropDown()
-                        },
-                        Response.ErrorListener { error -> LOG.severe("Failure to autocomplete $error!") })
-                    requestQueue.add(stringRequest)
-                }
-            }
-        })
-        if (config.stopData.siteId != 0L) {
-            loadDepsFor(config.stopData.siteId.toInt())
-        }
     }
 
-    fun loadDepsFor (siteId : Int) {
-        val stopData = Ng.StoredStopData.newBuilder()
-        val existing = config.departuresFilter.departuresList.toSet()
-        departureAdapter.clear()
-        LOG.info("Loading depatures for $siteId")
-        val url = "http://anka.locutus.se/F?a=49&sid=$siteId&t=3"
-        val stringRequest = StringRequest(Request.Method.GET, url,
-            Response.Listener<String> { response ->
-                LOG.warning("got $response")
-                var json: JSONObject = JSONObject(response)
-                var list: JSONArray = json.getJSONArray("allDep")
-                var nameSplit: JSONArray = json.getJSONArray("nameSplit")
-                stopData.siteId = siteId.toLong()
-                stopData.lat = json.getDouble("lat")
-                stopData.lng = json.getDouble("lng")
-                stopData.canonicalName = nameSplit.getString(1)
-                for (existingDep in existing) {
-                    departureAdapter.add(existingDep, true)
-                }
-                for (i in 0 until list.length() - 1) {
-                    var name: String = list.getString(i)
-                    if (!existing.contains(name)) {
-                        departureAdapter.add(name, false)
-                    }
-                }
-                departureAdapter.notifyDataSetChanged()
-                config.stopData = stopData.build()
-            },
-            Response.ErrorListener { error -> LOG.severe("Failure to autocomplete $error!") })
-        requestQueue.add(stringRequest)
-    }
 
     fun getConfigErrorMessage() : Int? {
         if (config.stopData.siteId == 0L) {
             return R.string.no_stop_selected
         }
-        if (departureAdapter.getCheckedItems().isEmpty()) {
+        if (stopConfigureTabAdapter.selectDeparturesFragment.departureAdapter.getCheckedItems().isEmpty()) {
             return R.string.no_departures_selected
         }
         return null
@@ -160,7 +98,7 @@ class AddStopActivity : AppCompatActivity() {
         menu.findItem(R.id.save_stop_action).setOnMenuItemClickListener {_ ->
             val message = getConfigErrorMessage()
             if (message != null) {
-                Snackbar.make(mDepartureList, message, Snackbar.LENGTH_SHORT)
+                Snackbar.make(findViewById(R.id.tab_layout), message, Snackbar.LENGTH_SHORT)
                     .setAction("Action", null).show()
             } else {
                 finishSuccessfully()
@@ -173,7 +111,7 @@ class AddStopActivity : AppCompatActivity() {
     fun finishSuccessfully() {
         val builtConfig = config
             .setDeparturesFilter(DeparturesFilter.newBuilder()
-                .addAllDepartures(departureAdapter.getCheckedItems()))
+                .addAllDepartures(stopConfigureTabAdapter.selectDeparturesFragment.departureAdapter.getCheckedItems()))
             .build()
         val resultIntent = Intent()
         resultIntent.putExtra(STOP_CONFIG_DATA_KEY, builtConfig.toByteArray())

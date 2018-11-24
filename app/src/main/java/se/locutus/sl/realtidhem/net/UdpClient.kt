@@ -112,9 +112,9 @@ class UpdClient(var context : Context) : HandlerThread("UdpHandler") {
         selfHandler!!.post(RequestRunnable(this, pingMessage) {
             _, response : Ng.ResponseData, e : Exception? ->
             if (e == null) {
-                val newTime = response.pingResponse.localTimestampMillis - System.currentTimeMillis()
+                val newTime = System.currentTimeMillis() - response.pingResponse.localTimestampMillis
                 responsive = true
-                LOG.info("UDP socket alive with response time $newTime")
+                LOG.info("UDP socket alive with response time $newTime ms")
             }
         })
     }

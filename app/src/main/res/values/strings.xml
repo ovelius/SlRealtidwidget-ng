@@ -21,6 +21,7 @@
     <string name="success_storing_departures">Saving configuration with %1$d stops...</string>
     <string name="location_access_rationale">Access to location allows widget to automatically display the nearest stop</string>
     <string name="location_access_give">Give access</string>
+    <string name="stop_display_name">Display stop as</string>
     <string name="select_departures">Select departures</string>
     <string name="add_stop_title">Add stop to widget</string>
     <string name="save_widget">Save widget config</string>
