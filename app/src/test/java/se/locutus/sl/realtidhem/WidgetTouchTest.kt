@@ -20,6 +20,7 @@ import se.locutus.sl.realtidhem.widget.storeWidgetConfig
 import java.lang.Exception
 import org.robolectric.shadows.ShadowAppWidgetManager
 import se.locutus.sl.realtidhem.widget.StandardWidgetProvider
+import java.net.SocketTimeoutException
 
 
 /**
@@ -74,6 +75,20 @@ class WidgetTouchTest {
 
         // No additional network requests.
         assertThat(testNetwork.dataRequestCounts, `is`(1))
+    }
+
+    @Test
+    fun testTouchWidgetAndErrorLoadingData() {
+        val widgetId = createWidgetAndConfigFor()
+        val touchHandler = WidgetTouchHandler(context, testNetwork)
+
+        // Touch the widget.
+        touchHandler.widgetTouched(widgetId, null)
+
+        // It failed!
+        testNetwork.sendResponse(Ng.ResponseData.getDefaultInstance(), SocketTimeoutException())
+
+        assertViewText(widgetId, R.id.widgetline1, R.string.error_timeout)
     }
 
     fun assertViewText(widgetId : Int, viewId : Int, expectedText : String) {

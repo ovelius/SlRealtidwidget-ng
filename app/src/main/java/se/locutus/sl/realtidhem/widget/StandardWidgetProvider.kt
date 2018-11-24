@@ -134,6 +134,9 @@ class StandardWidgetProvider : AppWidgetProvider() {
                 views.setInt(R.id.widgetcolor, "setBackgroundColor", lastData.color)
             }
             views.setTextViewText(R.id.widgettag, widgetText)
+            views.setTextViewText(R.id.widgetline1, context.getString(R.string.idle_line1))
+            views.setTextViewText(R.id.widgetmin, "")
+            views.setTextViewText(R.id.widgetline2, context.getString(R.string.idle_line2))
             if (validConfig) {
                 views.setOnClickPendingIntent(R.id.widgetmain, pendingIntent)
                 views.setOnClickPendingIntent(R.id.larrow, leftPendingIntent)

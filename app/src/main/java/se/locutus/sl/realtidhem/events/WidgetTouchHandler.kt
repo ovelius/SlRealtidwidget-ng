@@ -97,8 +97,9 @@ class WidgetTouchHandler(val context: Context, val networkManager : NetworkInter
         inMemoryState.lastLoadedData.remove(widgetId)
         inMemoryState.updatedAt.remove(widgetId)
         inMemoryState.updateStartedAt.remove(widgetId)
+        inMemoryState.replaceThread(null)
 
-        val appWidgetManager = context.getSystemService(Context.APPWIDGET_SERVICE) as AppWidgetManager
+        val appWidgetManager = AppWidgetManager.getInstance(context)
         val config = inMemoryState.getWidgetConfig(widgetId, prefs)
         StandardWidgetProvider().apply {
             updateAppWidget(context, config, appWidgetManager, prefs,  widgetId)
