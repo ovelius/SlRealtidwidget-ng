@@ -8,12 +8,12 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.PersistableBundle
-import android.view.View
 import android.widget.RemoteViews
 import se.locutus.proto.Ng
 import se.locutus.sl.realtidhem.R
+import se.locutus.sl.realtidhem.activity.WIDGET_CONFIG_PREFS
+import se.locutus.sl.realtidhem.activity.WidgetConfigureActivity
 import se.locutus.sl.realtidhem.net.NetworkInterface
-import se.locutus.sl.realtidhem.net.NetworkManager
 import se.locutus.sl.realtidhem.widget.*
 import java.lang.Exception
 import java.net.SocketTimeoutException

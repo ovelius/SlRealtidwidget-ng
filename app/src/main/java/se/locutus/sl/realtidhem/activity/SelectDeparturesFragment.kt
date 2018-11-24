@@ -1,27 +1,19 @@
-package se.locutus.sl.realtidhem.widget
+package se.locutus.sl.realtidhem.activity
 
-import android.app.Activity
 import android.os.Bundle
 import android.support.v4.app.Fragment
-import android.text.Editable
-import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.inputmethod.InputMethodManager
-import android.widget.ArrayAdapter
-import android.widget.AutoCompleteTextView
 import android.widget.ListView
 import com.android.volley.Request
-import com.android.volley.RequestQueue
 import com.android.volley.Response
 import com.android.volley.toolbox.StringRequest
-import com.android.volley.toolbox.Volley
 import org.json.JSONArray
 import org.json.JSONObject
 import se.locutus.proto.Ng
 import se.locutus.sl.realtidhem.R
-import se.locutus.sl.realtidhem.widget.AddStopActivity.Companion.LOG
+import se.locutus.sl.realtidhem.activity.AddStopActivity.Companion.LOG
 import java.util.ArrayList
 
 class SelectDeparturesFragment : Fragment() {
@@ -79,6 +71,7 @@ class SelectDeparturesFragment : Fragment() {
     }
 
     companion object {
-        fun newInstance(): SelectDeparturesFragment = SelectDeparturesFragment()
+        fun newInstance(): SelectDeparturesFragment =
+            SelectDeparturesFragment()
     }
 }

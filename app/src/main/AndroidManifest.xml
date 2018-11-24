@@ -38,13 +38,14 @@
                     android:resource="@xml/standardwidget_info"/>
         </receiver>
 
-        <activity android:name=".widget.WidgetConfigureActivity"
+        <activity android:name=".activity.WidgetConfigureActivity"
                   android:label="@string/configure_widget_title"
                   android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.APPWIDGET_CONFIGURE"/>
+                <!--
                 <action android:name="android.intent.action.MAIN"/>
-                <category android:name="android.intent.category.LAUNCHER"/>
+                <category android:name="android.intent.category.LAUNCHER"/> -->
             </intent-filter>
         </activity>
 
@@ -60,10 +61,13 @@
         </receiver>
 
         <activity
-                android:name=".widget.AddStopActivity"
+                android:name=".activity.AddStopActivity"
                 android:label="@string/add_stop_title"
                 android:theme="@style/AppTheme.NoActionBar">
-
+            <intent-filter>
+              <action android:name="android.intent.action.MAIN"/>
+              <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
         </activity>
     </application>
 

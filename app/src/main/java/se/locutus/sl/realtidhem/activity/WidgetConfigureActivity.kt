@@ -1,4 +1,4 @@
-package se.locutus.sl.realtidhem.widget
+package se.locutus.sl.realtidhem.activity
 
 import android.Manifest
 import android.app.Activity
@@ -13,17 +13,16 @@ import android.support.design.widget.Snackbar
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
-import android.util.Base64
-import android.util.Log
 import android.view.Menu
 import android.widget.ListView
 import kotlinx.android.synthetic.main.widget_configure_activty.*
-import se.locutus.proto.Ng
 import se.locutus.proto.Ng.WidgetConfiguration
 import se.locutus.proto.Ng.StopConfiguration
 import se.locutus.sl.realtidhem.R
 import se.locutus.sl.realtidhem.events.WIDGET_CONFIG_UPDATED
 import se.locutus.sl.realtidhem.events.WidgetBroadcastReceiver
+import se.locutus.sl.realtidhem.widget.loadWidgetConfigOrDefault
+import se.locutus.sl.realtidhem.widget.storeWidgetConfig
 import java.util.logging.Logger
 
 const val ADD_STOP_REQUEST_CODE: Int = 1
@@ -75,7 +74,9 @@ class WidgetConfigureActivity : AppCompatActivity() {
         mListView.adapter = mStopListAdapter
 
         add_stop_button.setOnClickListener { _ ->
-            startActivityForResult(Intent(this, AddStopActivity::class.java), ADD_STOP_REQUEST_CODE)
+            startActivityForResult(Intent(this, AddStopActivity::class.java),
+                ADD_STOP_REQUEST_CODE
+            )
         }
 
         if (ContextCompat.checkSelfPermission(this,
@@ -88,12 +89,14 @@ class WidgetConfigureActivity : AppCompatActivity() {
                     .setAction(R.string.location_access_give) {
                         ActivityCompat.requestPermissions(this,
                             arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION),
-                            LOCATION_ACCESS_REQUEST_CODE)
+                            LOCATION_ACCESS_REQUEST_CODE
+                        )
                     }.show()
             } else {
                 ActivityCompat.requestPermissions(this,
                     arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION),
-                    LOCATION_ACCESS_REQUEST_CODE)
+                    LOCATION_ACCESS_REQUEST_CODE
+                )
             }
         }
     }

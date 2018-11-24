@@ -1,4 +1,4 @@
-package se.locutus.sl.realtidhem.widget
+package se.locutus.sl.realtidhem.activity
 
 import android.app.Activity
 import android.os.Bundle
@@ -11,17 +11,13 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
-import android.widget.ListView
 import com.android.volley.Request
-import com.android.volley.RequestQueue
 import com.android.volley.Response
 import com.android.volley.toolbox.StringRequest
-import com.android.volley.toolbox.Volley
 import org.json.JSONArray
 import org.json.JSONObject
 import se.locutus.sl.realtidhem.R
-import se.locutus.sl.realtidhem.widget.AddStopActivity.Companion.LOG
-import java.util.ArrayList
+import se.locutus.sl.realtidhem.activity.AddStopActivity.Companion.LOG
 
 class SelectStopFragment : Fragment() {
     internal lateinit var mAutoCompleteTextView : AutoCompleteTextView
@@ -82,6 +78,7 @@ class SelectStopFragment : Fragment() {
     }
 
     companion object {
-        fun newInstance(): SelectStopFragment = SelectStopFragment()
+        fun newInstance(): SelectStopFragment =
+            SelectStopFragment()
     }
 }

@@ -1,4 +1,4 @@
-package se.locutus.sl.realtidhem.widget
+package se.locutus.sl.realtidhem.activity
 
 import android.app.Activity
 import android.content.Intent
@@ -7,26 +7,13 @@ import android.support.design.widget.Snackbar
 import android.support.design.widget.TabLayout
 import android.support.v4.view.ViewPager
 import android.support.v7.app.AppCompatActivity
-import android.text.Editable
-import android.text.TextWatcher
 import android.view.Menu
-import android.view.inputmethod.InputMethodManager
-import android.widget.AutoCompleteTextView
-import android.widget.ListView
 import se.locutus.sl.realtidhem.R
 import kotlinx.android.synthetic.main.activity_add_stop.*
-import android.widget.ArrayAdapter
-import com.android.volley.Request
 import com.android.volley.RequestQueue
-import com.android.volley.Response
-import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
-import org.json.JSONArray
-import org.json.JSONObject
 import se.locutus.proto.Ng
-import se.locutus.proto.Ng.StopConfiguration
 import se.locutus.proto.Ng.DeparturesFilter
-import java.util.ArrayList
 import java.util.logging.Logger
 
 

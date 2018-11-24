@@ -1,4 +1,4 @@
-package se.locutus.sl.realtidhem.widget
+package se.locutus.sl.realtidhem.activity
 
 import android.app.Activity
 import android.content.Context
@@ -7,7 +7,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
-import android.widget.CheckBox
 import android.widget.TextView
 import se.locutus.proto.Ng
 import se.locutus.sl.realtidhem.R

@@ -9,13 +9,11 @@ import se.locutus.sl.realtidhem.events.WidgetTouchHandler
 import android.appwidget.AppWidgetManager
 import androidx.test.core.app.ApplicationProvider
 import android.widget.TextView
-import org.apache.tools.ant.taskdefs.condition.IsTrue
 import org.hamcrest.CoreMatchers.`is`
-import org.hamcrest.core.Is
 import org.robolectric.Shadows.shadowOf
 import se.locutus.proto.Ng
 import se.locutus.sl.realtidhem.net.NetworkInterface
-import se.locutus.sl.realtidhem.widget.WIDGET_CONFIG_PREFS
+import se.locutus.sl.realtidhem.activity.WIDGET_CONFIG_PREFS
 import se.locutus.sl.realtidhem.widget.storeWidgetConfig
 import java.lang.Exception
 import org.robolectric.shadows.ShadowAppWidgetManager

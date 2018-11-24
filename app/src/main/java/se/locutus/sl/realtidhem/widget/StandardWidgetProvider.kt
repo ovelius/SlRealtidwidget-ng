@@ -15,8 +15,8 @@ import android.content.pm.PackageManager
 import android.location.Location
 import android.support.v4.content.ContextCompat
 import android.view.View
-import android.widget.Toast
 import se.locutus.proto.Ng
+import se.locutus.sl.realtidhem.activity.WIDGET_CONFIG_PREFS
 import se.locutus.sl.realtidhem.events.CYCLE_STOP_LEFT
 import se.locutus.sl.realtidhem.events.CYCLE_STOP_RIGHT
 import se.locutus.sl.realtidhem.events.WidgetBroadcastReceiver

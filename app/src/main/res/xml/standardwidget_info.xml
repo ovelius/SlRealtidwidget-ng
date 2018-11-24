@@ -5,7 +5,7 @@
                     android:updatePeriodMillis="1800000"
                     android:previewImage="@drawable/example_appwidget_preview"
                     android:initialLayout="@layout/widgetlayout_base"
-                    android:configure="se.locutus.sl.realtidhem.widget.WidgetConfigureActivity"
+                    android:configure="se.locutus.sl.realtidhem.activity.WidgetConfigureActivity"
                     android:resizeMode="horizontal"
                     android:widgetCategory="home_screen|keyguard"
                     android:initialKeyguardLayout="@layout/widgetlayout_base">

@@ -1,4 +1,4 @@
-package se.locutus.sl.realtidhem.widget
+package se.locutus.sl.realtidhem.activity
 
 import android.content.Context
 import android.view.LayoutInflater

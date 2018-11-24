@@ -1,4 +1,4 @@
-package se.locutus.sl.realtidhem.widget
+package se.locutus.sl.realtidhem.activity
 
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
