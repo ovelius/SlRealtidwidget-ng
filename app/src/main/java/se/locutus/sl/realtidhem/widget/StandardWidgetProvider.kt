@@ -20,6 +20,7 @@ import se.locutus.sl.realtidhem.activity.WIDGET_CONFIG_PREFS
 import se.locutus.sl.realtidhem.events.CYCLE_STOP_LEFT
 import se.locutus.sl.realtidhem.events.CYCLE_STOP_RIGHT
 import se.locutus.sl.realtidhem.events.WidgetBroadcastReceiver
+import se.locutus.sl.realtidhem.service.TimeTracker
 
 
 /**
@@ -30,9 +31,13 @@ class StandardWidgetProvider : AppWidgetProvider() {
     companion object {
         val LOG = Logger.getLogger(StandardWidgetProvider::class.java.name)
     }
+
+    lateinit var timeTracker : TimeTracker
+
     override fun onUpdate(context: Context, appWidgetManager: AppWidgetManager, appWidgetIds: IntArray) {
         LOG.info("OnUpdate ${appWidgetIds.size} widgets")
         val prefs = context.getSharedPreferences(WIDGET_CONFIG_PREFS, 0)
+        timeTracker = TimeTracker(context)
         val widgetsNeedingLocation = HashMap<Int, Ng.WidgetConfiguration>()
         for (id in appWidgetIds) {
             val widgetConfig = loadWidgetConfigOrDefault(prefs, id)
@@ -41,6 +46,7 @@ class StandardWidgetProvider : AppWidgetProvider() {
             }
             LOG.info("Updating $id")
             updateAppWidget(context, widgetConfig, appWidgetManager, prefs, id)
+            LOG.info("Time records for widget are ${timeTracker.buildRecords(id)}")
         }
 
         if (widgetsNeedingLocation.isNotEmpty()) {

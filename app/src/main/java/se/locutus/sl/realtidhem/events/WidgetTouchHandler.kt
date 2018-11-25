@@ -14,6 +14,7 @@ import se.locutus.sl.realtidhem.R
 import se.locutus.sl.realtidhem.activity.WIDGET_CONFIG_PREFS
 import se.locutus.sl.realtidhem.activity.WidgetConfigureActivity
 import se.locutus.sl.realtidhem.net.NetworkInterface
+import se.locutus.sl.realtidhem.service.TimeTracker
 import se.locutus.sl.realtidhem.widget.*
 import java.lang.Exception
 import java.net.SocketTimeoutException
@@ -35,6 +36,7 @@ class WidgetTouchHandler(val context: Context, val networkManager : NetworkInter
         val LOG = Logger.getLogger(WidgetTouchHandler::class.java.name)
     }
     internal val prefs = context.getSharedPreferences(WIDGET_CONFIG_PREFS, 0)
+    internal val timeTracker = TimeTracker(context)
     internal val inMemoryState = InMemoryState()
 
     fun widgetTouched(widgetId :  Int, action : String?) {
@@ -63,6 +65,7 @@ class WidgetTouchHandler(val context: Context, val networkManager : NetworkInter
             if (inMemoryState.sinceUpdateStarted(widgetId) > UPDATE_RETRY_MILLIS) {
                 LOG.info("Triggering update for config for widget $widgetId")
                 loadWidgetData(widgetId, widgetConfig.getStopConfiguration(selectedStopIndex))
+                timeTracker.record(widgetId)
                 scheduleWidgetClearing(context, widgetId)
             } else {
                 // Be pesky...
