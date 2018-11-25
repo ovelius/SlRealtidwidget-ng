@@ -85,8 +85,10 @@ class AddStopActivity : AppCompatActivity() {
         LOG.info("Loading depatures for $siteId")
         network.doStopDataRequest(request, true) { incomingRequestId: Int, responseData: Ng.ResponseData, e: Exception? ->
             if (e != null) {
-                Snackbar.make(tabLayout, R.string.error , Snackbar.LENGTH_SHORT)
-                    .setAction("Action", null).show()
+                Snackbar.make(tabLayout, R.string.error , Snackbar.LENGTH_INDEFINITE)
+                    .setAction(R.string.retry_load) {
+                        loadDepsFor(siteId)
+                    }.show()
             } else {
                 LOG.info("Got response with ${responseData} departures")
                 handleLoadResonse(responseData)

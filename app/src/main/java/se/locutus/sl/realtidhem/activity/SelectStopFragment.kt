@@ -86,8 +86,8 @@ class SelectStopFragment : Fragment() {
                     LOG.info("Configured name in autocomplete. Not doing anything.")
                     return
                 }
-
                 if (p?.length == 0) {
+                    displayNameText.setText("", TextView.BufferType.EDITABLE)
                     return
                 }
                 if (siteId != null) {
@@ -95,9 +95,7 @@ class SelectStopFragment : Fragment() {
                     val imm = addStopActivity.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
                     imm.hideSoftInputFromWindow(mAutoCompleteTextView.windowToken, 0)
                     mAutoCompleteTextView.setBackgroundColor((0x3300FF00).toInt())
-                    if (displayNameText.text.isEmpty()) {
-                        displayNameText.setText(p, TextView.BufferType.EDITABLE)
-                    }
+                    displayNameText.setText(p, TextView.BufferType.EDITABLE)
                     addStopActivity.loadDepsFor(siteId)
                 } else {
                     mAutoCompleteTextView.setBackgroundColor((0x00000000).toInt())

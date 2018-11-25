@@ -119,6 +119,7 @@ class WidgetTouchTest {
         var callback : ((Int, Ng.ResponseData, Exception?) -> Unit) = {_, _, _ -> }
         override fun doStopDataRequest(
             request: Ng.StopDataRequest,
+            forceHttp : Boolean,
             callback: (Int, Ng.ResponseData, Exception?) -> Unit
         ): Int {
             this.request = request

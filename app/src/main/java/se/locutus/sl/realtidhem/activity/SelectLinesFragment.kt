@@ -33,12 +33,14 @@ class SelectLinesFragment : Fragment() {
         LOG.info("Indexing departures ${data.depatureDataCount}")
         addStopActivity.linesAdapter.clear()
         val map = HashMap<String, MutableList<Ng.DepartureData>>()
+        val colorMap = HashMap<Int, Int>()
         for (departure in data.depatureDataList) {
             val key = "${departure.groupOfLineId}_${departure.directionId}"
             if (!map.containsKey(key)) {
                 map[key] = ArrayList<Ng.DepartureData>()
             }
             map[key]!!.add(departure)
+            colorMap[departure.color] = if (colorMap.containsKey(departure.color)) colorMap[departure.color]!! + 1 else 1
         }
         for (key in map.keys) {
             addStopActivity.linesAdapter.add(map[key]!!, false)
@@ -51,6 +53,7 @@ class SelectLinesFragment : Fragment() {
                 addStopActivity.linesAdapter.selected = map[selectedKey]!![0]
             }
         }
+        addStopActivity.linesAdapter.sort(colorMap)
         addStopActivity.linesAdapter.notifyDataSetChanged()
     }
 
