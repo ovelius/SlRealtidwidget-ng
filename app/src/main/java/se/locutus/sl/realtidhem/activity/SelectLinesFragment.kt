@@ -11,6 +11,17 @@ import se.locutus.sl.realtidhem.R
 import java.util.ArrayList
 import java.util.logging.Logger
 
+/**
+ * Map unique colors to a low value for sorting.
+ */
+fun createColorMap(data : Ng.AllDepaturesResponseData) : Map<Int, Int> {
+    val colorMap = HashMap<Int, Int>()
+    for (departure in data.depatureDataList) {
+        colorMap[departure.color] = if (colorMap.containsKey(departure.color)) colorMap[departure.color]!! + 1 else 1
+    }
+    return colorMap
+}
+
 class SelectLinesFragment : Fragment() {
     companion object {
         val LOG = Logger.getLogger(SelectLinesFragment::class.java.name)
@@ -29,18 +40,16 @@ class SelectLinesFragment : Fragment() {
         return mainView
     }
 
-    fun indexDepartures(data : Ng.AllDepaturesResponseData) {
+    fun indexDepartures(colorMap : Map<Int, Int>, data : Ng.AllDepaturesResponseData) {
         LOG.info("Indexing departures ${data.depatureDataCount}")
         addStopActivity.linesAdapter.clear()
         val map = HashMap<String, MutableList<Ng.DepartureData>>()
-        val colorMap = HashMap<Int, Int>()
         for (departure in data.depatureDataList) {
             val key = "${departure.groupOfLineId}_${departure.directionId}"
             if (!map.containsKey(key)) {
                 map[key] = ArrayList<Ng.DepartureData>()
             }
             map[key]!!.add(departure)
-            colorMap[departure.color] = if (colorMap.containsKey(departure.color)) colorMap[departure.color]!! + 1 else 1
         }
         for (key in map.keys) {
             addStopActivity.linesAdapter.add(map[key]!!, false)

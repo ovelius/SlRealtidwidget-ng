@@ -106,18 +106,29 @@ class AddStopActivity : AppCompatActivity() {
             .setLng(stopDataResponse.lng)
             .setDisplayName(getDisplayText())
             .setSiteId(stopDataResponse.siteId)
+        config.stopData = stopData.build()
+
+        if (departures.isEmpty()) {
+            Snackbar.make(tabLayout, R.string.error_no_departures , Snackbar.LENGTH_LONG)
+                .setAction("none", null).show()
+            tabLayout.getTabAt(0)!!.select()
+            return
+        }
+
         for (existingDep in existing) {
-            departureAdapter.add(existingDep, true)
+            LOG.warning("FIXME!!! CAN't add $existingDep")
+            ///departureAdapter.add(existingDep, true)
         }
         for (i in 0 until departures.size - 1) {
             var name: String = departures[i].canonicalName
             if (!existing.contains(name)) {
-                departureAdapter.add(name, false)
+                departureAdapter.add(departures[i], false)
             }
         }
-        stopConfigureTabAdapter.selectLinesFragment.indexDepartures(response.allDepaturesResponse)
+        val colorMap = createColorMap(response.allDepaturesResponse)
+        stopConfigureTabAdapter.selectLinesFragment.indexDepartures(colorMap, response.allDepaturesResponse)
+        departureAdapter.sort(colorMap)
         departureAdapter.notifyDataSetChanged()
-        config.stopData = stopData.build()
     }
 
     fun getConfigErrorMessage() : Int? {

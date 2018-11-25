@@ -23,6 +23,10 @@ import se.locutus.sl.realtidhem.R
 import java.util.ArrayList
 import java.util.logging.Logger
 
+fun setGreenBg(view : View) {
+    view.setBackgroundColor((0x3300FF00).toInt())
+}
+
 class SelectStopFragment : Fragment() {
     companion object {
         val LOG = Logger.getLogger(SelectStopFragment::class.java.name)
@@ -65,7 +69,7 @@ class SelectStopFragment : Fragment() {
         })
 
         if (config.siteId != 0L && !config.canonicalName.isEmpty()) {
-            mAutoCompleteTextView.setBackgroundColor((0x3300FF00).toInt())
+            setGreenBg(mAutoCompleteTextView)
         }
 
         val adapter = ArrayAdapter<String>(
@@ -94,7 +98,7 @@ class SelectStopFragment : Fragment() {
                     LOG.info("Selected $p $siteId")
                     val imm = addStopActivity.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
                     imm.hideSoftInputFromWindow(mAutoCompleteTextView.windowToken, 0)
-                    mAutoCompleteTextView.setBackgroundColor((0x3300FF00).toInt())
+                    setGreenBg(mAutoCompleteTextView)
                     displayNameText.setText(p, TextView.BufferType.EDITABLE)
                     addStopActivity.loadDepsFor(siteId)
                 } else {

@@ -2,7 +2,11 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:orientation="horizontal" android:layout_width="match_parent"
               android:layout_height="match_parent">
-
+    <ImageView
+            android:id="@+id/line_list_color"
+            android:layout_width="10dp"
+            android:layout_gravity="center_vertical"
+            android:layout_height="fill_parent"/>
     <ImageView
             android:id="@+id/line_list_icon"
             android:layout_width="wrap_content"
@@ -17,12 +21,27 @@
             android:src="@android:drawable/arrow_up_float"
             android:layout_height="wrap_content"/>
 
-
-    <CheckBox
-            android:layout_width="wrap_content"
+    <LinearLayout
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="Departure"
-            android:textSize="26dip"
-            android:id="@+id/departure_name_check"/>
+            android:orientation="vertical"
+            android:layout_weight="3"
+            android:weightSum="3">
+        <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Departure"
+                android:textSize="22dip"
+                android:id="@+id/line_list_text"/>
+        <TextView
+                android:id="@+id/line_list_text_sub"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:layout_gravity="center"
+                android:text=""
+                android:textSize="14dp" />
+    </LinearLayout>
 
 </LinearLayout>
