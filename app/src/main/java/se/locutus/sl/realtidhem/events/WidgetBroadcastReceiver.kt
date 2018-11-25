@@ -49,7 +49,7 @@ class ResetWidget : JobService() {
     fun getRemoveViews(widgetId : Int) : RemoteViews {
         val handler = WidgetBroadcastReceiver.widgetTouchHandler
         if (handler != null) {
-            return handler.inMemoryState.getRemoveViews(widgetId, this)
+            return handler.inMemoryState.getRemoveViews(widgetId, this, false)
         }
         return RemoteViews(packageName, R.layout.widgetlayout_base)
     }

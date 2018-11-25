@@ -126,7 +126,7 @@ class StandardWidgetProvider : AppWidgetProvider() {
             var widgetText =
                 when (validConfig) {
                     false -> context.getString(R.string.error_corrupt)
-                    true -> widgetConfig.getStopConfiguration(selectedStopIndex).stopData.canonicalName
+                    true -> widgetConfig.getStopConfiguration(selectedStopIndex).stopData.displayName
                 }
             // Construct the RemoteViews object
             val views = RemoteViews(context.packageName, R.layout.widgetlayout_base)

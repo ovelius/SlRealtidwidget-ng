@@ -29,14 +29,14 @@ class StopListAdapter(private val activity: Activity, private var widgetConfig :
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
         val root : View = convertView ?: inflater.inflate(R.layout.stop_list_item, parent, false)
         val nameText : TextView = root.findViewById(R.id.stop_name)
-        nameText.setOnClickListener {
+        root.setOnClickListener {
             val intent = Intent(activity, AddStopActivity::class.java).apply {
                putExtra(STOP_CONFIG_DATA_KEY, widgetConfig.getStopConfiguration(position).toByteArray())
                putExtra(STOP_INDEX_DATA_KEY, position)
             }
             activity.startActivityForResult(intent, MODIFY_STOP_REQUEST_CODE)
         }
-        nameText.text = widgetConfig.getStopConfiguration(position).stopData.canonicalName
+        nameText.text = widgetConfig.getStopConfiguration(position).stopData.displayName
         return root
     }
 

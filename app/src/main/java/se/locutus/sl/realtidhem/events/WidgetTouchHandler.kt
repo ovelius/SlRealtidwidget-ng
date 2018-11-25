@@ -119,14 +119,16 @@ class WidgetTouchHandler(val context: Context, val networkManager : NetworkInter
         inMemoryState.disposeScroller(widgetId)
         inMemoryState.updateStartedAt[widgetId] = System.currentTimeMillis()
         val manager = AppWidgetManager.getInstance(context)
-        val views = inMemoryState.getRemoveViews(widgetId, context)
+        // Create new views here to make sure we don't overfill the previous views with actions.
+        val views = inMemoryState.getRemoveViews(widgetId, context, true)
 
-        setWidgetTextViews(views, context.getString(R.string.updating), "", context.getString(R.string.updating), stopConfig.stopData.canonicalName)
+        setWidgetTextViews(views, context.getString(R.string.updating), "", context.getString(R.string.updating), stopConfig.stopData.displayName)
         manager.updateAppWidget(widgetId, views)
 
         val stopDataRequest = Ng.StopDataRequest.newBuilder()
             .setSiteId(stopConfig.stopData.siteId)
             .setDeparturesFilter(stopConfig.departuresFilter)
+            .setLineFilter(stopConfig.lineFilter)
             .build()
         val time = System.currentTimeMillis()
         val requestId = networkManager.doStopDataRequest(stopDataRequest) {
@@ -239,8 +241,10 @@ class WidgetTouchHandler(val context: Context, val networkManager : NetworkInter
             putLastLoadData(prefs, widgetId, response)
         }
 
-        fun getRemoveViews(widgetId: Int, context : Context) : RemoteViews {
-            if (remoteViews[widgetId] == null) {
+        fun getRemoveViews(widgetId: Int, context : Context, forceNewViews : Boolean) : RemoteViews {
+            if (remoteViews[widgetId] == null || forceNewViews) {
+                // RemoteViews will fill with actions over time, so maybe create new views to
+                // avoid TransactionTooLargeException and slowdowns.
                 remoteViews[widgetId] = RemoteViews(context.packageName, R.layout.widgetlayout_base)
             }
             return remoteViews[widgetId]!!
@@ -320,6 +324,7 @@ class WidgetTouchHandler(val context: Context, val networkManager : NetworkInter
                 s = set[i]!!
 
                 views.setTextViewText(R.id.widgetline2, s)
+                // java.lang.RuntimeException: android.os.TransactionTooLargeException: data parcel size 558860 bytes
                 manager.updateAppWidget(widgetId, views)
                 i++
 

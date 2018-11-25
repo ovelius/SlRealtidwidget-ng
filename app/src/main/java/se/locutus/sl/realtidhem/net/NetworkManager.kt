@@ -22,7 +22,7 @@ import java.util.logging.Logger
 const val URL = "http://anka.locutus.se/NG"
 
 interface NetworkInterface {
-    fun doStopDataRequest(request : Ng.StopDataRequest, callBack : (Int, ResponseData, Exception?) -> Unit) : Int
+    fun doStopDataRequest(request : Ng.StopDataRequest, forceHttp : Boolean = false, callBack : (Int, ResponseData, Exception?) -> Unit) : Int
 }
 
 class NetworkManager(var context : Context) : NetworkInterface {
@@ -33,23 +33,23 @@ class NetworkManager(var context : Context) : NetworkInterface {
     val udpSocket = UpdClient(context).apply { start() }
     private var requestId = 1
 
-    override fun doStopDataRequest(request : Ng.StopDataRequest, callBack : (Int, ResponseData, Exception?) -> Unit) : Int {
+    override fun doStopDataRequest(request : Ng.StopDataRequest, forceHttp : Boolean, callBack : (Int, ResponseData, Exception?) -> Unit) : Int {
         val api = context.packageManager.getPackageInfo(context.packageName, 0).versionCode
         doRequest(RequestData.newBuilder().setStopDataRequest(request)
             .setRequestHeader(Ng.RequestHeader.newBuilder()
                 .setApi(api)
-                .setId(requestId)).build(),  callBack)
+                .setId(requestId)).build(),  forceHttp, callBack)
         return requestId++
     }
 
-    private fun doRequest(request : RequestData, callback : (Int, ResponseData, Exception?) -> Unit) {
-        if (udpSocket.ready() && udpSocket.responsive) {
+    private fun doRequest(request : RequestData, forceHttp : Boolean, callback : (Int, ResponseData, Exception?) -> Unit) {
+        if (udpSocket.ready() && udpSocket.responsive && !forceHttp) {
             LOG.info("Sending request using UDP")
             sendRequestWithUDP(request, callback)
         } else {
             LOG.info("Sending request using HTTP")
             sendRequestWithHTTP(request, callback)
-            if (udpSocket.ready()) {
+            if (udpSocket.ready() && !forceHttp) {
                 udpSocket.schedulePing()
             }
         }

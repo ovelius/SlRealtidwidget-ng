@@ -15,13 +15,18 @@
     <string name="stop_name">Search stop</string>
     <string name="save_stop_title">Save stop</string>
 
-    <string name="no_departures_selected">Please select at least one departure</string>
+    <string name="no_departures_selected">Please select at least one departure or line</string>
     <string name="no_stop_selected">Please select a stop</string>
     <string name="missing_configuration">Need at least one stop configured</string>
     <string name="success_storing_departures">Saving configuration with %1$d stops...</string>
     <string name="location_access_rationale">Access to location allows widget to automatically display the nearest stop</string>
     <string name="location_access_give">Give access</string>
     <string name="stop_display_name">Display stop as</string>
+
+    <string name="select_departures_tab">Select specific departures</string>
+    <string name="select_lines_tab">Select line</string>
+    <string name="select_stop_tab">Select stop</string>
+
     <string name="select_departures">Select departures</string>
     <string name="add_stop_title">Add stop to widget</string>
     <string name="save_widget">Save widget config</string>
