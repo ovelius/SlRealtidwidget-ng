@@ -7,11 +7,16 @@ import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.CheckBox
 import android.widget.ImageView
+import android.widget.TextView
 import se.locutus.proto.Ng
 import se.locutus.sl.realtidhem.R
 import java.util.*
+import java.util.logging.Logger
 
 class DepartureListAdapter(private val context: Context, private val departureList : ArrayList<Ng.DepartureData>) : BaseAdapter() {
+    companion object {
+        val LOG = Logger.getLogger(DepartureListAdapter::class.java.name)
+    }
     private val checks : HashSet<String> = HashSet()
     private val inflater: LayoutInflater
             = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
@@ -29,21 +34,27 @@ class DepartureListAdapter(private val context: Context, private val departureLi
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
         val root : View = convertView ?: inflater.inflate(R.layout.depature_list_item, parent, false)
-        val nameText : CheckBox = root.findViewById(R.id.departure_name_check)
+        val nameText = root.findViewById<TextView>(R.id.departure_name_text)
         val departureName = departureList[position].canonicalName
         val colorView = root.findViewById<ImageView>(R.id.line_list_color)
         val iconView = root.findViewById<ImageView>(R.id.line_list_icon)
 
         setImageViewIconAndColor(departureList[position], colorView, iconView, root, null)
-        nameText.setOnClickListener {
-            if (nameText.isChecked) {
-                checks.add(departureName)
-            } else {
+        root.setOnClickListener {
+            if (checks.contains(departureName)) {
                 checks.remove(departureName)
+                root.setBackgroundColor(0)
+            } else {
+                setGreenBg(root)
+                checks.add(departureName)
             }
         }
         nameText.text = departureName
-        nameText.isChecked = checks.contains(departureName)
+        if  (checks.contains(departureName)) {
+            setGreenBg(root)
+        } else {
+            root.setBackgroundColor(0)
+        }
         return root
     }
 
@@ -58,6 +69,7 @@ class DepartureListAdapter(private val context: Context, private val departureLi
             }
             total
         })
+        LOG.info("Sorted ${departureList.size} for display")
     }
 
     fun clear() {

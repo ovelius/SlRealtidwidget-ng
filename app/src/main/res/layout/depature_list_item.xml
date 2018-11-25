@@ -13,11 +13,13 @@
             android:layout_gravity="center_vertical"
             android:src="@drawable/ic_icon_transportation_bus"
             android:layout_height="wrap_content"/>
-    <CheckBox
+    <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:paddingTop="6dp"
+            android:paddingBottom="6dp"
             android:text="Departure"
-            android:textSize="26dip"
-            android:id="@+id/departure_name_check"/>
+            android:textSize="22dip"
+            android:id="@+id/departure_name_text"/>
 
 </LinearLayout>

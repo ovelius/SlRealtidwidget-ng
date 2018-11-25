@@ -5,10 +5,12 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.design.widget.TabLayout
+import android.support.v4.app.Fragment
 import android.support.v4.view.ViewPager
 import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.widget.EditText
+import android.widget.ProgressBar
 import se.locutus.sl.realtidhem.R
 import kotlinx.android.synthetic.main.activity_add_stop.*
 import com.android.volley.RequestQueue
@@ -19,6 +21,9 @@ import se.locutus.sl.realtidhem.net.NetworkInterface
 import se.locutus.sl.realtidhem.net.NetworkManager
 import java.util.ArrayList
 import java.util.logging.Logger
+import android.view.ViewGroup
+
+
 
 
 class AddStopActivity : AppCompatActivity() {
@@ -33,6 +38,7 @@ class AddStopActivity : AppCompatActivity() {
     internal lateinit var linesAdapter : LineListAdapter
     internal lateinit var network : NetworkInterface
     internal lateinit var tabLayout: TabLayout
+    internal lateinit var viewPager: ViewPager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -61,19 +67,29 @@ class AddStopActivity : AppCompatActivity() {
             ArrayList()
         )
         tabLayout = findViewById(R.id.tab_layout)
-        val viewPager: ViewPager = findViewById(R.id.view_pager)
+        viewPager = findViewById(R.id.view_pager)
         stopConfigureTabAdapter = StopConfigureTabAdapter(this, supportFragmentManager)
         viewPager.adapter = stopConfigureTabAdapter
         tabLayout.setupWithViewPager(viewPager)
 
         if (config.stopData.siteId != 0L) {
             loadDepsFor(config.stopData.siteId.toInt())
-        } else {
-
         }
+
+        viewPager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
+            override fun onPageScrollStateChanged(state: Int) {
+            }
+            override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
+            }
+            override fun onPageSelected(position: Int) {
+                if (config.stopData.siteId == 0L && position != 0) {
+                    viewPager.setCurrentItem(0, true)
+                }
+            }
+        })
     }
 
-    fun getDisplayText() : String {
+    private fun getDisplayText() : String {
         return stopConfigureTabAdapter.selectStopFragment.displayNameText.text.toString()
     }
 
@@ -115,16 +131,12 @@ class AddStopActivity : AppCompatActivity() {
             return
         }
 
-        for (existingDep in existing) {
-            LOG.warning("FIXME!!! CAN't add $existingDep")
-            ///departureAdapter.add(existingDep, true)
+        departureAdapter.clear()
+        for (departure in departures) {
+            var name: String = departure.canonicalName
+            departureAdapter.add(departure, existing.contains(name))
         }
-        for (i in 0 until departures.size - 1) {
-            var name: String = departures[i].canonicalName
-            if (!existing.contains(name)) {
-                departureAdapter.add(departures[i], false)
-            }
-        }
+
         val colorMap = createColorMap(response.allDepaturesResponse)
         stopConfigureTabAdapter.selectLinesFragment.indexDepartures(colorMap, response.allDepaturesResponse)
         departureAdapter.sort(colorMap)
