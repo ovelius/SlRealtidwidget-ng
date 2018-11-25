@@ -99,7 +99,11 @@ class SelectStopFragment : Fragment() {
                     val imm = addStopActivity.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
                     imm.hideSoftInputFromWindow(mAutoCompleteTextView.windowToken, 0)
                     setGreenBg(mAutoCompleteTextView)
-                    displayNameText.setText(p, TextView.BufferType.EDITABLE)
+                    if (p!!.contains("(")) {
+                        displayNameText.setText(p.substring(0, p.indexOf("(") - 1), TextView.BufferType.EDITABLE)
+                    } else {
+                        displayNameText.setText(p, TextView.BufferType.EDITABLE)
+                    }
                     addStopActivity.loadDepsFor(siteId)
                 } else {
                     mAutoCompleteTextView.setBackgroundColor((0x00000000).toInt())

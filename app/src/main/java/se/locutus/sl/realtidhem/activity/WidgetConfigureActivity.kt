@@ -14,7 +14,9 @@ import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
 import android.view.Menu
+import android.view.View
 import android.widget.ListView
+import android.widget.TextView
 import kotlinx.android.synthetic.main.widget_configure_activty.*
 import se.locutus.proto.Ng.WidgetConfiguration
 import se.locutus.proto.Ng.StopConfiguration
@@ -39,9 +41,21 @@ class WidgetConfigureActivity : AppCompatActivity() {
     internal var mAppWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID
     internal lateinit var mWidgetPrefs : SharedPreferences
     internal lateinit var mListView : ListView
+    internal lateinit var mAddStopHelperText : TextView
     internal lateinit var mStopListAdapter : StopListAdapter
     internal lateinit var widgetConfig : WidgetConfiguration
     private val mHandler: Handler = Handler(Looper.getMainLooper())
+
+    public override fun onResume() {
+        super.onResume()
+        if (widgetConfig.stopConfigurationCount == 0) {
+            mAddStopHelperText.visibility = View.VISIBLE
+            mListView.visibility = View.GONE
+        } else {
+            mListView.visibility = View.VISIBLE
+            mAddStopHelperText.visibility = View.GONE
+        }
+    }
 
     public override fun onCreate(icicle: Bundle?) {
         super.onCreate(icicle)
@@ -51,6 +65,7 @@ class WidgetConfigureActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
         mListView = findViewById(R.id.stop_list_view)
+        mAddStopHelperText = findViewById(R.id.no_stops_help_text)
         if (intent.extras != null) {
             mAppWidgetId = intent.extras.getInt(
                 AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID

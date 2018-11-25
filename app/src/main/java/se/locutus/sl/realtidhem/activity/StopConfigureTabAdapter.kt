@@ -24,13 +24,27 @@ class StopConfigureTabAdapter(var context : Context, fm : FragmentManager) : Fra
         put(selectDeparturesFragment, R.string.select_departures_tab)
     }
 
-    fun removeFragment(fragment : Fragment) {
-        fragmentList.remove(fragment)
-        notifyDataSetChanged()
+    fun removeLinesFragment() {
+        if (fragmentList.size == 3) {
+            fragmentList.removeAt(1)
+            notifyDataSetChanged()
+        }
     }
 
-    fun addFragment(fragment : Fragment, position : Int) {
-        fragmentList.set(position, fragment)
+    fun removeDeparturesFragment() {
+        if (fragmentList.size == 3) {
+            fragmentList.removeAt(2)
+            notifyDataSetChanged()
+        }
+    }
+
+    fun resetFragments() {
+        if (fragmentList.size == 3) {
+            return
+        }
+        fragmentList.removeAt(1)
+        fragmentList.add(selectLinesFragment)
+        fragmentList.add(selectDeparturesFragment)
         notifyDataSetChanged()
     }
 

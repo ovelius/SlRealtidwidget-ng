@@ -5,13 +5,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
-import android.widget.CheckBox
 import android.widget.ImageView
 import android.widget.TextView
 import se.locutus.proto.Ng
 import se.locutus.sl.realtidhem.R
 import java.lang.StringBuilder
-import java.util.Collections.sort
 
 fun setImageViewIconAndColor(item : Ng.DepartureData, colorView : ImageView,  iconView : ImageView, root : View, directionView : ImageView?) {
     val trafficType = item.trafficType
@@ -43,13 +41,10 @@ val trafficToWeight = HashMap<Ng.NgTrafficType, Int>().apply{
     put(Ng.NgTrafficType.UNKNOWN, 0)
 }
 
-class LineListAdapter(private val context: Context, private val lineList : ArrayList<List<Ng.DepartureData>>) : BaseAdapter() {
-
-
-
+class LineListAdapter(private val activity: AddStopActivity, private val lineList : ArrayList<List<Ng.DepartureData>>) : BaseAdapter() {
     internal var selected : Ng.DepartureData = Ng.DepartureData.getDefaultInstance()
     private val inflater: LayoutInflater
-            = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+            = activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
     override fun getItemId(position: Int): Long {
         return position.toLong()
     }

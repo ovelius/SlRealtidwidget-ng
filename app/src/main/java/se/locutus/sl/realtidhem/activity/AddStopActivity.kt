@@ -85,6 +85,14 @@ class AddStopActivity : AppCompatActivity() {
                 if (config.stopData.siteId == 0L && position != 0) {
                     viewPager.setCurrentItem(0, true)
                 }
+                if (departureAdapter.getCheckedItems().isNotEmpty() && position == 1) {
+                    Snackbar.make(tabLayout, R.string.select_just_one_dep , Snackbar.LENGTH_LONG).show()
+                    viewPager.setCurrentItem(2, true)
+                }
+                if (linesAdapter.isSelected() && position == 2) {
+                    Snackbar.make(tabLayout, R.string.select_just_one_line , Snackbar.LENGTH_LONG).show()
+                    viewPager.setCurrentItem(1, true)
+                }
             }
         })
     }

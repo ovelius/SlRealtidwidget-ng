@@ -39,4 +39,7 @@
     <string name="error_details_try_again">Check your connectivity and try again</string>
     <string name="retry_load">Retry</string>
     <string name="error_no_departures">No departures found for this stop!</string>
+    <string name="no_stop_added">Press the button below to add a stop</string>
+    <string name="select_just_one_dep">Un-select all departures to select a line instead</string>
+    <string name="select_just_one_line">Un-select the line to pick specific departures instead</string>
 </resources>

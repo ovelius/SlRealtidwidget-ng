@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
-import android.widget.CheckBox
 import android.widget.ImageView
 import android.widget.TextView
 import se.locutus.proto.Ng
@@ -13,13 +12,13 @@ import se.locutus.sl.realtidhem.R
 import java.util.*
 import java.util.logging.Logger
 
-class DepartureListAdapter(private val context: Context, private val departureList : ArrayList<Ng.DepartureData>) : BaseAdapter() {
+class DepartureListAdapter(private val activity: AddStopActivity, private val departureList : ArrayList<Ng.DepartureData>) : BaseAdapter() {
     companion object {
         val LOG = Logger.getLogger(DepartureListAdapter::class.java.name)
     }
     private val checks : HashSet<String> = HashSet()
     private val inflater: LayoutInflater
-            = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+            = activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
     override fun getItemId(position: Int): Long {
         return position.toLong()
     }
