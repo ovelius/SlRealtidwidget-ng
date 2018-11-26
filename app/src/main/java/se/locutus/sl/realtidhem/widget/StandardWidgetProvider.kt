@@ -46,7 +46,7 @@ class StandardWidgetProvider : AppWidgetProvider() {
             }
             LOG.info("Updating $id")
             updateAppWidget(context, widgetConfig, appWidgetManager, prefs, id)
-            LOG.info("Time records for widget are ${timeTracker.buildRecords(id)}")
+            LOG.info("Compacting widget touch records to ${timeTracker.compactRecords(id)}")
         }
 
         if (widgetsNeedingLocation.isNotEmpty()) {

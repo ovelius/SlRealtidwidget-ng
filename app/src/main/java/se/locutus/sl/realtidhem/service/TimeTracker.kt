@@ -1,8 +1,8 @@
 package se.locutus.sl.realtidhem.service
 
 import android.content.Context
-import java.sql.Time
 import java.util.*
+import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 
 const val TIME_PREFS = "time_prefs"
@@ -48,25 +48,52 @@ class TimeTracker(var context : Context) {
         }
     }
 
-    fun buildRecords(widgetId : Int) : List<TimeRecord> {
+    fun compactRecords(widgetId: Int) : List<TimeRecord> {
+        val records = buildRecords(widgetId, true)
+        return remapRecords(records)
+    }
+
+    fun remapRecords(records : Map<String, TimeRecord>) : List<TimeRecord> {
+        val result = ArrayList<TimeRecord>()
+        val edit = prefs.edit()
+        for (key in records.keys) {
+            val existing = prefs.getInt(key, 0)
+            val record = records[key]!!
+            record.count += existing
+            result.add(record)
+            edit.putInt(key, record.count)
+        }
+        edit.apply()
+        return result
+    }
+
+    fun buildRecords(widgetId : Int, delete : Boolean = false) : Map<String, TimeRecord> {
         val recordsMap = HashMap<String, TimeRecord>()
         val widgetStart = "$widgetId:"
         val allPrefs = prefs.all
+        val edit = prefs.edit()
         for (key in allPrefs.keys) {
             if (key.startsWith(widgetStart)) {
                 val split = key.split(":")
-                val weekDay = split[2].toBoolean()
-                val hour = split[3].toInt()
-                val min = split[4].toInt()
-                val recordKey = createAlarmKey(widgetId, hour, min, weekDay)
-                if (recordsMap.containsKey(recordKey)) {
-                    recordsMap[recordKey]!!.count++
-                } else {
-                    recordsMap[recordKey] = TimeRecord(hour, min, weekDay)
+                // Right type of record.
+                if (split.size == 6) {
+                    val weekDay = split[2].toBoolean()
+                    val hour = split[3].toInt()
+                    val min = split[4].toInt()
+                    val recordKey = createAlarmKey(widgetId, hour, min, weekDay)
+                    if (recordsMap.containsKey(recordKey)) {
+                        recordsMap[recordKey]!!.count++
+                    } else {
+                        recordsMap[recordKey] = TimeRecord(hour, min, weekDay)
+                    }
+                    if (delete) {
+                        edit.remove(key)
+                    }
                 }
             }
         }
-        return recordsMap.values.toList()
+        edit.apply()
+        return recordsMap
     }
 
     class TimeRecord(val hour : Int, val minute : Int, val weekday : Boolean,  var count : Int = 1){

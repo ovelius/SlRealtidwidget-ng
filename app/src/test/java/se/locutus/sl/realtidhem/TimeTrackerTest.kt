@@ -2,6 +2,7 @@ package se.locutus.sl.realtidhem
 
 import androidx.test.core.app.ApplicationProvider
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertTrue
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
@@ -37,7 +38,7 @@ class TimeTrackerTest {
             "123:wd:true:22:10:26" to 1,
             "123:wd:true:21:10:26" to 1),  prefs.all)
 
-        var records = tracker.buildRecords(widgetId)
+        var records = tracker.buildRecords(widgetId).values.toList()
         assertEquals(3, records.size)
         assertEquals(TimeTracker.TimeRecord(22, 10, true, 1), records[0])
         assertEquals(TimeTracker.TimeRecord(21, 10, true, 1), records[1])
@@ -53,13 +54,21 @@ class TimeTrackerTest {
         c.add(Calendar.HOUR, 24)
         tracker.recordUpdate(widgetId, c)
 
-        records = tracker.buildRecords(widgetId)
+        records = tracker.buildRecords(widgetId).values.toList()
         assertEquals(3, records.size)
 
         // The record at 22:10 on a weekday was incremented to 5.
         assertEquals(TimeTracker.TimeRecord(22, 10, true, 5), records[0])
         assertEquals(TimeTracker.TimeRecord(21, 10, true, 1), records[1])
         assertEquals(TimeTracker.TimeRecord(21, 10, false, 1), records[2])
+
+        val recordsMap = tracker.buildRecords(widgetId, true)
+        assertTrue(prefs.all.isEmpty())
+        prefs.edit().putInt("123:wd:true:22:10", 3).apply()
+        val remapped = tracker.remapRecords(recordsMap)
+        assertEquals(mapOf("123:wd:false:21:10" to 1,
+            "123:wd:true:22:10" to 8, "123:wd:true:21:10" to 1),  prefs.all)
+        assertEquals(TimeTracker.TimeRecord(22, 10, true, 8), remapped[0])
     }
 
     @Test
