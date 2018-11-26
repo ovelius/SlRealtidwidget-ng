@@ -44,7 +44,7 @@
     <string name="select_just_one_dep">Un-select all departures to select a line instead</string>
     <string name="select_just_one_line">Un-select the line to pick specific departures instead</string>
     <string name="no_data">No departures</string>
-    <string name="no_data_detail">No realtime data available at this time</string>
+    <string name="no_data_detail">No data available at this time</string>
     <string name="deleted">Deleted stop</string>
     <string name="undo">Undo</string>
 </resources>

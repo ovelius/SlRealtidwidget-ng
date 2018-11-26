@@ -30,14 +30,7 @@ class ConfigurationActivty : AppCompatActivity() {
         }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.add_stop_action_bar_menu, menu)
-        menu.findItem(R.id.save_stop_action).setOnMenuItemClickListener {_ ->
-            finish()
-            true
-        }
-        return true
-    }
+
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         // Handle action bar item clicks here. The action bar will

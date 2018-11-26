@@ -22,8 +22,8 @@ import se.locutus.sl.realtidhem.net.NetworkManager
 import java.util.ArrayList
 import java.util.logging.Logger
 import android.view.ViewGroup
-
-
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.MapFragment
 
 
 class AddStopActivity : AppCompatActivity() {
@@ -132,6 +132,8 @@ class AddStopActivity : AppCompatActivity() {
             .setSiteId(stopDataResponse.siteId)
         config.stopData = stopData.build()
 
+        stopConfigureTabAdapter.selectStopFragment.mapTo(stopDataResponse.lat, stopDataResponse.lng)
+
         if (departures.isEmpty()) {
             Snackbar.make(tabLayout, R.string.error_no_departures , Snackbar.LENGTH_LONG)
                 .setAction("none", null).show()
@@ -162,21 +164,13 @@ class AddStopActivity : AppCompatActivity() {
     }
 
     override fun onSupportNavigateUp(): Boolean {
-        finish()
-        return true
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.add_stop_action_bar_menu, menu)
-        menu.findItem(R.id.save_stop_action).setOnMenuItemClickListener {_ ->
-            val message = getConfigErrorMessage()
-            if (message != null) {
-                Snackbar.make(findViewById(R.id.tab_layout), message, Snackbar.LENGTH_SHORT)
-                    .setAction("Action", null).show()
-            } else {
-                finishSuccessfully()
-            }
-            true
+        val message = getConfigErrorMessage()
+        if (message != null) {
+            Snackbar.make(findViewById(R.id.tab_layout), message, Snackbar.LENGTH_SHORT)
+                .setAction("Action", null).show()
+            return false
+        } else {
+            finishSuccessfully()
         }
         return true
     }

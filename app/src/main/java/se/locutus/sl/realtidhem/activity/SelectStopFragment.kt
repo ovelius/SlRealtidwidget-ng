@@ -17,6 +17,13 @@ import android.widget.TextView
 import com.android.volley.Request
 import com.android.volley.Response
 import com.android.volley.toolbox.StringRequest
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.MapFragment
+import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MarkerOptions
 import org.json.JSONArray
 import org.json.JSONObject
 import se.locutus.sl.realtidhem.R
@@ -36,6 +43,8 @@ class SelectStopFragment : Fragment() {
     internal lateinit var mAutoCompleteTextView : AutoCompleteTextView
     internal lateinit var displayNameText : EditText
     internal lateinit var addStopActivity : AddStopActivity
+    internal lateinit var mapContainer : View
+    internal var map : GoogleMap? = null
     internal var nameToSiteIDs : HashMap<String, Int> = HashMap()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -44,20 +53,47 @@ class SelectStopFragment : Fragment() {
 
         displayNameText = mainView.findViewById(R.id.stop_display_name_text)
         mAutoCompleteTextView = mainView.findViewById(R.id.stop_auto_complete)
+        mapContainer = mainView.findViewById(R.id.map_container)
+        mapContainer.visibility = View.GONE
         mAutoCompleteTextView.threshold = 1
-
-
         return mainView
     }
 
+    fun mapTo(lat : Double, lng : Double) {
+        if (map != null) {
+            mapContainer.visibility = View.VISIBLE
+            val latLng = LatLng(lat, lng)
+            val mapMarker =  BitmapDescriptorFactory.fromResource(android.R.drawable.ic_menu_info_details)
+            val marker = MarkerOptions().apply {
+                position(latLng)
+                icon(mapMarker)
+            }
+            map!!.clear()
+            map!!.addMarker(marker)
+            map!!.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 11.0f))
+        }
+    }
+
+    private fun hideKeyboard() {
+        val imm = addStopActivity.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(mAutoCompleteTextView.windowToken, 0)
+    }
 
     override fun onStart() {
         super.onStart()
         val config = addStopActivity.config.stopData
         LOG.info("OnStart, set stuff from ${config}")
         mAutoCompleteTextView.setText(config.canonicalName, false)
-        displayNameText.setText(config.displayName, TextView.BufferType.EDITABLE)
 
+
+        val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
+              mapFragment.getMapAsync{it ->
+                  map = it
+                  if (config.siteId != 0L) {
+                      mapTo(config.lat, config.lng)
+                  }
+         }
+        displayNameText.setText(config.displayName, TextView.BufferType.EDITABLE)
         displayNameText.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(p0: Editable?) {
             }
@@ -96,14 +132,19 @@ class SelectStopFragment : Fragment() {
                 }
                 if (siteId != null) {
                     LOG.info("Selected $p $siteId")
-                    val imm = addStopActivity.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
-                    imm.hideSoftInputFromWindow(mAutoCompleteTextView.windowToken, 0)
+                    hideKeyboard()
                     setGreenBg(mAutoCompleteTextView)
                     if (p!!.contains("(")) {
                         displayNameText.setText(p.substring(0, p.indexOf("(") - 1), TextView.BufferType.EDITABLE)
                     } else {
                         displayNameText.setText(p, TextView.BufferType.EDITABLE)
                     }
+                    addStopActivity.departureAdapter.clear()
+                    addStopActivity.departureAdapter.notifyDataSetChanged()
+                    addStopActivity.config.clearDeparturesFilter()
+                    addStopActivity.linesAdapter.clear()
+                    addStopActivity.linesAdapter.notifyDataSetChanged()
+                    addStopActivity.config.clearLineFilter()
                     addStopActivity.loadDepsFor(siteId)
                 } else {
                     mAutoCompleteTextView.setBackgroundColor((0x00000000).toInt())

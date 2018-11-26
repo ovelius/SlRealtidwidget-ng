@@ -102,6 +102,7 @@ class LineListAdapter(private val activity: AddStopActivity, private val lineLis
     }
 
     fun clear() {
+        selected = Ng.DepartureData.getDefaultInstance()
         lineList.clear()
     }
 

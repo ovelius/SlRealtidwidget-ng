@@ -123,7 +123,10 @@ class StandardWidgetProvider : AppWidgetProvider() {
             appWidgetId: Int
         ) {
             val lastData = getLastLoadData(prefs, appWidgetId)
-            val selectedStopIndex = prefs.getInt(widgetKeySelectedStop(appWidgetId), 0)
+            var selectedStopIndex = prefs.getInt(widgetKeySelectedStop(appWidgetId), 0)
+            if (selectedStopIndex >= widgetConfig.stopConfigurationCount) {
+                selectedStopIndex = 0
+            }
             val pendingIntent = basePendingIntent(context, appWidgetId)
             val leftPendingIntent = basePendingIntent(context, appWidgetId, CYCLE_STOP_LEFT)
             val rightPendingIntent = basePendingIntent(context, appWidgetId, CYCLE_STOP_RIGHT)

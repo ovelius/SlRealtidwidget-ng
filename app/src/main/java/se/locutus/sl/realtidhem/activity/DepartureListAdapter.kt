@@ -73,6 +73,7 @@ class DepartureListAdapter(private val activity: AddStopActivity, private val de
     }
 
     fun clear() {
+        checks.clear()
         departureList.clear()
     }
 

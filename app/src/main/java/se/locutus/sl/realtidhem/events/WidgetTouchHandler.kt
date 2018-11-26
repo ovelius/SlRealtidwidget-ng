@@ -59,6 +59,9 @@ class WidgetTouchHandler(val context: Context, val networkManager : NetworkInter
             setSelectedStopIndex(prefs, widgetId, selectedStopIndex)
             configUpdated(widgetId, false)
         }
+        if (selectedStopIndex >= widgetConfig.stopConfigurationCount) {
+            selectedStopIndex = 0
+        }
         LOG.info("Selected stop index is $selectedStopIndex")
 
         if (inMemoryState.sinceLastUpdate(widgetId) > STALE_MILLIS) {

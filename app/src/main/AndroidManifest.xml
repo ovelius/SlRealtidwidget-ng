@@ -11,7 +11,11 @@
             android:roundIcon="@mipmap/ic_launcher_round"
             android:supportsRtl="true"
             android:theme="@style/AppTheme">
-
+        <meta-data
+                android:name="com.google.android.maps.v2.API_KEY"
+                android:value="AIzaSyCjpthlyIgCrmKgs0XCjS6znNyV8O-Y83Y"/>
+        <!-- https://stackoverflow.com/questions/50461881/java-lang-noclassdeffounderrorfailed-resolution-of-lorg-apache-http-protocolve -->
+        <uses-library android:name="org.apache.http.legacy" android:required="false" />
         <activity
                 android:name=".ConfigurationActivty"
                 android:label="@string/app_name"
