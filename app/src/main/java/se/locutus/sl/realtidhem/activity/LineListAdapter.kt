@@ -61,7 +61,7 @@ class LineListAdapter(private val activity: AddStopActivity, private val lineLis
         return lineList[position]
     }
 
-    private fun clickItem(position: Int) {
+    fun clickItem(position: Int) {
         val clicked = getItem(position)[0]
         selected = if (selected == clicked) Ng.DepartureData.getDefaultInstance() else getItem(position)[0]
         notifyDataSetChanged()
@@ -86,12 +86,6 @@ class LineListAdapter(private val activity: AddStopActivity, private val lineLis
         val iconView = root.findViewById<ImageView>(R.id.line_list_icon)
         val directionView = root.findViewById<ImageView>(R.id.line_list_direction_icon)
         setImageViewIconAndColor(getItem(position)[0], colorView, iconView, root, directionView)
-        root.setOnClickListener {
-            clickItem(position)
-        }
-        nameText.setOnClickListener {
-            clickItem(position)
-        }
         val items = getItem(position)
         nameText.text = items[0].canonicalName
         if (items.size > 1) {

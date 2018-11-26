@@ -1,5 +1,6 @@
 package se.locutus.sl.realtidhem.activity
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.view.LayoutInflater
@@ -37,6 +38,11 @@ class SelectLinesFragment : Fragment() {
 
         mLineList = mainView.findViewById(R.id.lines_list_view)
         mLineList.adapter = addStopActivity.linesAdapter
+
+        mLineList.setOnItemClickListener { _, _, position, _ ->
+            addStopActivity.linesAdapter.clickItem(position)
+        }
+
         return mainView
     }
 

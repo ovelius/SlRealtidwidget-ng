@@ -31,23 +31,24 @@ class DepartureListAdapter(private val activity: AddStopActivity, private val de
         return departureList[position].canonicalName
     }
 
+    fun clickItem(position: Int) {
+        val departureName = departureList[position].canonicalName
+        if (checks.contains(departureName)) {
+            checks.remove(departureName)
+        } else {
+            checks.add(departureName)
+        }
+        notifyDataSetChanged()
+    }
+
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
         val root : View = convertView ?: inflater.inflate(R.layout.depature_list_item, parent, false)
         val nameText = root.findViewById<TextView>(R.id.departure_name_text)
-        val departureName = departureList[position].canonicalName
         val colorView = root.findViewById<ImageView>(R.id.line_list_color)
+        val departureName = departureList[position].canonicalName
         val iconView = root.findViewById<ImageView>(R.id.line_list_icon)
 
         setImageViewIconAndColor(departureList[position], colorView, iconView, root, null)
-        root.setOnClickListener {
-            if (checks.contains(departureName)) {
-                checks.remove(departureName)
-                root.setBackgroundColor(0)
-            } else {
-                setGreenBg(root)
-                checks.add(departureName)
-            }
-        }
         nameText.text = departureName
         if  (checks.contains(departureName)) {
             setGreenBg(root)

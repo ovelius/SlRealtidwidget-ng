@@ -17,6 +17,11 @@ class SelectDeparturesFragment : Fragment() {
         addStopActivity = activity as AddStopActivity
         mDepartureList = mainView.findViewById(R.id.departure_list_view)
         mDepartureList.adapter = addStopActivity.departureAdapter
+
+        mDepartureList.setOnItemClickListener { _, _, position, _ ->
+            addStopActivity.departureAdapter.clickItem(position)
+        }
+
         return mainView
     }
 

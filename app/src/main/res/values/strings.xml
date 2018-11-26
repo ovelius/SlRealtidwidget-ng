@@ -38,8 +38,13 @@
     <string name="error_timeout">Timeout loading data</string>
     <string name="error_details_try_again">Check your connectivity and try again</string>
     <string name="retry_load">Retry</string>
+    <string name="delete_stop">Remove</string>
     <string name="error_no_departures">No departures found for this stop!</string>
     <string name="no_stop_added">Press the button below to add a stop</string>
     <string name="select_just_one_dep">Un-select all departures to select a line instead</string>
     <string name="select_just_one_line">Un-select the line to pick specific departures instead</string>
+    <string name="no_data">No departures</string>
+    <string name="no_data_detail">No realtime data available at this time</string>
+    <string name="deleted">Deleted stop</string>
+    <string name="undo">Undo</string>
 </resources>

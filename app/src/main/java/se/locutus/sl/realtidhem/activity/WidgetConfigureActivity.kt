@@ -65,6 +65,13 @@ class WidgetConfigureActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
         mListView = findViewById(R.id.stop_list_view)
+        mListView.setOnItemClickListener { _, _, position, _ ->
+            val intent = Intent(this, AddStopActivity::class.java).apply {
+                putExtra(STOP_CONFIG_DATA_KEY, widgetConfig.getStopConfiguration(position).toByteArray())
+                putExtra(STOP_INDEX_DATA_KEY, position)
+            }
+            startActivityForResult(intent, MODIFY_STOP_REQUEST_CODE)
+        }
         mAddStopHelperText = findViewById(R.id.no_stops_help_text)
         if (intent.extras != null) {
             mAppWidgetId = intent.extras.getInt(

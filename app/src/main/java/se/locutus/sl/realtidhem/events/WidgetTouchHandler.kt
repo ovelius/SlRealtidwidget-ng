@@ -164,11 +164,16 @@ class WidgetTouchHandler(val context: Context, val networkManager : NetworkInter
             inMemoryState.updatedAt[widgetId] = System.currentTimeMillis() - UPDATE_FAIL_STALE
         } else {
             val loadResponse = responseData.loadResponse
-            setWidgetTextViews(views, loadResponse.line1, loadResponse.minutes, loadResponse.line2)
-            views.setInt(R.id.widgetcolor, "setBackgroundColor", responseData.loadResponse.color)
+            var time = System.currentTimeMillis()
+            if (loadResponse.line1.isNotEmpty()) {
+                setWidgetTextViews(views, loadResponse.line1, loadResponse.minutes, loadResponse.line2)
+                views.setInt(R.id.widgetcolor, "setBackgroundColor", responseData.loadResponse.color)
+            } else {
+                setWidgetTextViews(views, context.getString(R.string.no_data), "", context.getString(R.string.no_data_detail))
+            }
 
             inMemoryState.putLastLoadDataInMemory(prefs, widgetId, loadResponse)
-            inMemoryState.updatedAt[widgetId] = System.currentTimeMillis()
+            inMemoryState.updatedAt[widgetId] = time
             inMemoryState.replaceThread(ScrollThread(
                 widgetId, views, responseData.loadResponse.line2, context).apply {  start() })
         }
