@@ -54,10 +54,7 @@ class AddStopActivity : AppCompatActivity() {
             stopIndex = intent.getIntExtra(STOP_INDEX_DATA_KEY, -1)
         }
         setSupportActionBar(toolbar)
-        if (intent.hasExtra(EXTRA_COLOR_THEME)) {
-            val color = intent.getIntExtra(EXTRA_COLOR_THEME, 0)
-            supportActionBar!!.setBackgroundDrawable(ColorDrawable(color!!))
-        }
+
         requestQueue = Volley.newRequestQueue(this)
         network = NetworkManager(this)
 
@@ -70,6 +67,12 @@ class AddStopActivity : AppCompatActivity() {
             ArrayList()
         )
         tabLayout = findViewById(R.id.tab_layout)
+        if (intent.hasExtra(EXTRA_COLOR_THEME)) {
+            val color = intent.getIntExtra(EXTRA_COLOR_THEME, 0)
+            val drawable = ColorDrawable(color!!)
+            supportActionBar!!.setBackgroundDrawable(drawable)
+            tabLayout.background = drawable
+        }
         viewPager = findViewById(R.id.view_pager)
         stopConfigureTabAdapter = StopConfigureTabAdapter(this, supportFragmentManager)
         viewPager.adapter = stopConfigureTabAdapter

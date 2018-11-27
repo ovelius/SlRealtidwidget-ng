@@ -18,6 +18,7 @@ import android.view.Menu
 import android.view.View
 import android.widget.ListView
 import android.widget.TextView
+import android.widget.Toast
 import kotlinx.android.synthetic.main.widget_configure_activty.*
 import se.locutus.proto.Ng.WidgetConfiguration
 import se.locutus.proto.Ng.StopConfiguration
@@ -45,7 +46,7 @@ class WidgetConfigureActivity : AppCompatActivity() {
     internal lateinit var mListView : ListView
     internal lateinit var mAddStopHelperText : TextView
     internal lateinit var mStopListAdapter : StopListAdapter
-    internal lateinit var widgetConfig : WidgetConfiguration
+    internal var widgetConfig : WidgetConfiguration = WidgetConfiguration.getDefaultInstance()
     internal var color : Int? = null
 
     public override fun onResume() {
@@ -75,8 +76,9 @@ class WidgetConfigureActivity : AppCompatActivity() {
 
         if (mAppWidgetId == AppWidgetManager.INVALID_APPWIDGET_ID) {
             val pickIntent = Intent(AppWidgetManager.ACTION_APPWIDGET_PICK)
-            startActivity(pickIntent)
-            finish()
+            pickIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, 78)
+            Toast.makeText(this, R.string.select_widget, Toast.LENGTH_LONG).show()
+            startActivityForResult(pickIntent, 123)
             return
         }
         if (intent.hasExtra(EXTRA_COLOR_THEME)) {
