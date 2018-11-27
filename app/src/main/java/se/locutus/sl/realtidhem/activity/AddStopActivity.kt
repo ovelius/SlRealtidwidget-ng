@@ -2,6 +2,7 @@ package se.locutus.sl.realtidhem.activity
 
 import android.app.Activity
 import android.content.Intent
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.design.widget.TabLayout
@@ -24,6 +25,7 @@ import java.util.logging.Logger
 import android.view.ViewGroup
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.MapFragment
+import se.locutus.sl.realtidhem.events.EXTRA_COLOR_THEME
 
 
 class AddStopActivity : AppCompatActivity() {
@@ -52,9 +54,10 @@ class AddStopActivity : AppCompatActivity() {
             stopIndex = intent.getIntExtra(STOP_INDEX_DATA_KEY, -1)
         }
         setSupportActionBar(toolbar)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.setDisplayShowHomeEnabled(true)
-
+        if (intent.hasExtra(EXTRA_COLOR_THEME)) {
+            val color = intent.getIntExtra(EXTRA_COLOR_THEME, 0)
+            supportActionBar!!.setBackgroundDrawable(ColorDrawable(color!!))
+        }
         requestQueue = Volley.newRequestQueue(this)
         network = NetworkManager(this)
 
@@ -163,14 +166,18 @@ class AddStopActivity : AppCompatActivity() {
         return null
     }
 
-    override fun onSupportNavigateUp(): Boolean {
-        val message = getConfigErrorMessage()
-        if (message != null) {
-            Snackbar.make(findViewById(R.id.tab_layout), message, Snackbar.LENGTH_SHORT)
-                .setAction("Action", null).show()
-            return false
-        } else {
-            finishSuccessfully()
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.widget_config_action_bar_menu, menu)
+        menu.findItem(R.id.save_widget_action).setOnMenuItemClickListener { _ ->
+            val message = getConfigErrorMessage()
+            if (message != null) {
+                Snackbar.make(findViewById(R.id.tab_layout), message, Snackbar.LENGTH_SHORT)
+                    .setAction("Action", null).show()
+                false
+            } else {
+                finishSuccessfully()
+                true
+            }
         }
         return true
     }

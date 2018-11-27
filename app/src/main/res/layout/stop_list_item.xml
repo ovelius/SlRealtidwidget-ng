@@ -16,6 +16,7 @@
     <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
             android:orientation="vertical" >
 
         <ImageView
@@ -23,9 +24,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="right"
+                android:paddingRight="4dp"
                 android:clickable="true"
                 android:focusable="false"
                 android:src="@drawable/ic_three_dots"
-       />
+        />
     </LinearLayout>
 </LinearLayout>

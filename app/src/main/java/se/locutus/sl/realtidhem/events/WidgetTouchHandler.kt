@@ -23,6 +23,7 @@ import java.util.logging.Logger
 
 const val CYCLE_STOP_LEFT = "CYCLE_STOP_LEFT"
 const val CYCLE_STOP_RIGHT = "CYCLE_STOP_RIGHT"
+const val EXTRA_COLOR_THEME = "EXTRA_COLOR_THEME"
 const val STALE_MILLIS = 30000
 const val UPDATE_RETRY_MILLIS = 10000
 const val UPDATE_FAIL_STALE = STALE_MILLIS - 5000
@@ -87,9 +88,13 @@ class WidgetTouchHandler(val context: Context, val networkManager : NetworkInter
         }
 
         if (inMemoryState.maybeIncrementTouchCountAndOpenConfig(widgetId)) {
+            val lastLoadedData = inMemoryState.lastLoadedData[widgetId]
             val intent = Intent(context, WidgetConfigureActivity::class.java).apply {
                 flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                 putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId)
+                if (lastLoadedData != null) {
+                    putExtra(EXTRA_COLOR_THEME, lastLoadedData.color)
+                }
             }
             context.startActivity(intent)
             return
@@ -344,8 +349,10 @@ class WidgetTouchHandler(val context: Context, val networkManager : NetworkInter
                 } catch (e: InterruptedException) {
                 }
             }
-            views.setTextViewText(R.id.widgetline2, line2)
-            manager.updateAppWidget(widgetId, views)
+            if (running) {
+                views.setTextViewText(R.id.widgetline2, line2)
+                manager.updateAppWidget(widgetId, views)
+            }
             running = false
         }
     }

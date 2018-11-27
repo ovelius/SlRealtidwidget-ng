@@ -6,6 +6,7 @@ import android.appwidget.AppWidgetManager
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -21,6 +22,7 @@ import kotlinx.android.synthetic.main.widget_configure_activty.*
 import se.locutus.proto.Ng.WidgetConfiguration
 import se.locutus.proto.Ng.StopConfiguration
 import se.locutus.sl.realtidhem.R
+import se.locutus.sl.realtidhem.events.EXTRA_COLOR_THEME
 import se.locutus.sl.realtidhem.events.WIDGET_CONFIG_UPDATED
 import se.locutus.sl.realtidhem.events.WidgetBroadcastReceiver
 import se.locutus.sl.realtidhem.widget.loadWidgetConfigOrDefault
@@ -44,6 +46,7 @@ class WidgetConfigureActivity : AppCompatActivity() {
     internal lateinit var mAddStopHelperText : TextView
     internal lateinit var mStopListAdapter : StopListAdapter
     internal lateinit var widgetConfig : WidgetConfiguration
+    internal var color : Int? = null
 
     public override fun onResume() {
         super.onResume()
@@ -61,8 +64,6 @@ class WidgetConfigureActivity : AppCompatActivity() {
         setResult(Activity.RESULT_CANCELED)
         setContentView(R.layout.widget_configure_activty)
         setSupportActionBar(config_toolbar)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.setDisplayShowHomeEnabled(true)
         mListView = findViewById(R.id.stop_list_view)
 
         mAddStopHelperText = findViewById(R.id.no_stops_help_text)
@@ -73,16 +74,16 @@ class WidgetConfigureActivity : AppCompatActivity() {
         }
 
         if (mAppWidgetId == AppWidgetManager.INVALID_APPWIDGET_ID) {
-
-            // https://developer.android.com/reference/android/appwidget/AppWidgetManager#isRequestPinAppWidgetSupported() ?
-            /*
             val pickIntent = Intent(AppWidgetManager.ACTION_APPWIDGET_PICK)
-            pickIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetID)
-            startActivityForResult(pickIntent, KEY_CODE)
-            */
+            startActivity(pickIntent)
             finish()
             return
         }
+        if (intent.hasExtra(EXTRA_COLOR_THEME)) {
+            color = intent.getIntExtra(EXTRA_COLOR_THEME, 0)
+            supportActionBar!!.setBackgroundDrawable(ColorDrawable(color!!))
+        }
+
         mWidgetPrefs = getSharedPreferences(WIDGET_CONFIG_PREFS, 0)
         widgetConfig = loadWidgetConfigOrDefault(mWidgetPrefs, mAppWidgetId)
         mStopListAdapter = StopListAdapter(this)
@@ -91,14 +92,20 @@ class WidgetConfigureActivity : AppCompatActivity() {
             val intent = Intent(this, AddStopActivity::class.java).apply {
                 putExtra(STOP_CONFIG_DATA_KEY, widgetConfig.getStopConfiguration(position).toByteArray())
                 putExtra(STOP_INDEX_DATA_KEY, position)
+                if (color != null) {
+                    putExtra(EXTRA_COLOR_THEME, color!!)
+                }
             }
             startActivityForResult(intent, MODIFY_STOP_REQUEST_CODE)
         }
 
         add_stop_button.setOnClickListener { _ ->
-            startActivityForResult(Intent(this, AddStopActivity::class.java),
-                ADD_STOP_REQUEST_CODE
-            )
+            val addIntent = Intent(this, AddStopActivity::class.java).apply {
+                if (color != null) {
+                    putExtra(EXTRA_COLOR_THEME, color!!)
+                }
+            }
+            startActivityForResult(addIntent, ADD_STOP_REQUEST_CODE)
         }
 
         if (ContextCompat.checkSelfPermission(this,
@@ -156,21 +163,24 @@ class WidgetConfigureActivity : AppCompatActivity() {
         finish()
     }
 
-    override fun onSupportNavigateUp(): Boolean {
-        val intentUpdate = Intent(this, WidgetBroadcastReceiver::class.java).apply {
-            action = WIDGET_CONFIG_UPDATED
-            putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, mAppWidgetId)
-        }
-        val message = getConfigErrorMessage()
-        if (message != null) {
-            Snackbar.make(mListView, message, Snackbar.LENGTH_SHORT)
-                .setAction("Action", null).show()
-            return false
-        } else {
-            LOG.info("Storing config for $mAppWidgetId")
-            storeWidgetConfig(mWidgetPrefs, widgetConfig)
-            sendBroadcast(intentUpdate)
-            finishOk()
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.widget_config_action_bar_menu, menu)
+        menu.findItem(R.id.save_widget_action).setOnMenuItemClickListener {_ ->
+            val intentUpdate = Intent(this, WidgetBroadcastReceiver::class.java).apply {
+                action = WIDGET_CONFIG_UPDATED
+                putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, mAppWidgetId)
+            }
+            val message = getConfigErrorMessage()
+            if (message != null) {
+                Snackbar.make(mListView, message, Snackbar.LENGTH_SHORT)
+                    .setAction("Action", null).show()
+            } else {
+                LOG.info("Storing config for $mAppWidgetId")
+                storeWidgetConfig(mWidgetPrefs, widgetConfig)
+                sendBroadcast(intentUpdate)
+                finishOk()
+            }
+            true
         }
         return true
     }

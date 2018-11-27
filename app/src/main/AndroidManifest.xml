@@ -47,9 +47,8 @@
                   android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.APPWIDGET_CONFIGURE"/>
-                <!--
                 <action android:name="android.intent.action.MAIN"/>
-                <category android:name="android.intent.category.LAUNCHER"/> -->
+                <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
 
@@ -68,10 +67,6 @@
                 android:name=".activity.AddStopActivity"
                 android:label="@string/add_stop_title"
                 android:theme="@style/AppTheme.NoActionBar">
-            <intent-filter>
-              <action android:name="android.intent.action.MAIN"/>
-              <category android:name="android.intent.category.LAUNCHER"/>
-            </intent-filter>
         </activity>
     </application>
 

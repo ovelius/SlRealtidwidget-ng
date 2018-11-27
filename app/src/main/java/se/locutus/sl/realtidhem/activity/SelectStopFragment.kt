@@ -1,8 +1,13 @@
 package se.locutus.sl.realtidhem.activity
 
 import android.app.Activity
+import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v4.content.ContextCompat
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
@@ -21,6 +26,7 @@ import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.MapFragment
 import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.BitmapDescriptor
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
@@ -59,11 +65,20 @@ class SelectStopFragment : Fragment() {
         return mainView
     }
 
+    private fun bitmapDescriptorFromVector(context : Context, vectorResId : Int) : BitmapDescriptor {
+        val vectorDrawable = ContextCompat.getDrawable(context, vectorResId)!!
+        vectorDrawable.setBounds(0, 0, vectorDrawable.intrinsicWidth, vectorDrawable.intrinsicHeight)
+        val bitmap = Bitmap.createBitmap(vectorDrawable.intrinsicWidth, vectorDrawable.intrinsicHeight, Bitmap.Config.ARGB_8888)
+        val canvas = Canvas(bitmap)
+        vectorDrawable.draw(canvas)
+        return BitmapDescriptorFactory.fromBitmap(bitmap)
+}
+
     fun mapTo(lat : Double, lng : Double) {
         if (map != null) {
             mapContainer.visibility = View.VISIBLE
             val latLng = LatLng(lat, lng)
-            val mapMarker =  BitmapDescriptorFactory.fromResource(android.R.drawable.ic_menu_info_details)
+            val mapMarker =  bitmapDescriptorFromVector(addStopActivity, R.drawable.ic_location_on_24px)
             val marker = MarkerOptions().apply {
                 position(latLng)
                 icon(mapMarker)

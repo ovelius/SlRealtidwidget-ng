@@ -4,7 +4,7 @@
       tools:context="se.locutus.sl.realtidhem.slrealtidwidget.se.locutus.sl.realtidhem.ConfigurationActivty">
     <item android:id="@+id/save_widget_action"
           android:title="@string/save_widget"
-          android:icon="@android:drawable/ic_menu_save"
+          android:icon="@drawable/ic_done_24px"
           android:orderInCategory="100"
           app:showAsAction="always"/>
 </menu>
