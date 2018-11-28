@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.design.widget.TabLayout
 import android.support.v4.app.Fragment
+import android.support.v4.content.ContextCompat
 import android.support.v4.view.ViewPager
 import android.support.v7.app.AppCompatActivity
 import android.view.Menu
@@ -23,6 +24,7 @@ import se.locutus.sl.realtidhem.net.NetworkManager
 import java.util.ArrayList
 import java.util.logging.Logger
 import android.view.ViewGroup
+import android.view.WindowManager
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.MapFragment
 import se.locutus.sl.realtidhem.events.EXTRA_COLOR_THEME
@@ -68,10 +70,7 @@ class AddStopActivity : AppCompatActivity() {
         )
         tabLayout = findViewById(R.id.tab_layout)
         if (intent.hasExtra(EXTRA_COLOR_THEME)) {
-            val color = intent.getIntExtra(EXTRA_COLOR_THEME, 0)
-            val drawable = ColorDrawable(color!!)
-            supportActionBar!!.setBackgroundDrawable(drawable)
-            tabLayout.background = drawable
+            setColor(this, tabLayout ,intent.getIntExtra(EXTRA_COLOR_THEME, 0))
         }
         viewPager = findViewById(R.id.view_pager)
         stopConfigureTabAdapter = StopConfigureTabAdapter(this, supportFragmentManager)

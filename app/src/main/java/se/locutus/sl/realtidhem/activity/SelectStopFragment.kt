@@ -6,6 +6,7 @@ import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.drawable.Drawable
 import android.os.Bundle
+import android.support.design.widget.Snackbar
 import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
 import android.text.Editable
@@ -33,7 +34,7 @@ import com.google.android.gms.maps.model.MarkerOptions
 import org.json.JSONArray
 import org.json.JSONObject
 import se.locutus.sl.realtidhem.R
-import java.util.ArrayList
+import java.util.*
 import java.util.logging.Logger
 
 fun setGreenBg(view : View) {
@@ -46,6 +47,7 @@ class SelectStopFragment : Fragment() {
         fun newInstance(): SelectStopFragment =
             SelectStopFragment()
     }
+    val autoCompleteSet = HashSet<String>()
     internal lateinit var mAutoCompleteTextView : AutoCompleteTextView
     internal lateinit var displayNameText : EditText
     internal lateinit var addStopActivity : AddStopActivity
@@ -168,19 +170,24 @@ class SelectStopFragment : Fragment() {
                     val stringRequest = StringRequest(Request.Method.GET, url,
                         Response.Listener<String> { response ->
                             LOG.warning("got $response")
-                            adapter.clear()
                             var json: JSONObject = JSONObject(response)
                             var list: JSONArray = json.getJSONArray("suggestions")
                             for (i in 0 until list.length() - 1) {
                                 var item: JSONObject = list.getJSONObject(i)
                                 var name: String = item.getString("name")
                                 var siteId: Int = item.getInt("sid")
-                                adapter.add(name)
+                                if (!autoCompleteSet.contains(name)) {
+                                    adapter.add(name)
+                                    autoCompleteSet.add(name)
+                                }
                                 nameToSiteIDs[name] = siteId
                             }
                             mAutoCompleteTextView.performCompletion()
                         },
-                        Response.ErrorListener { error -> LOG.severe("Failure to autocomplete $error!") })
+                        Response.ErrorListener {
+                            LOG.severe("Error autocompleting $it")
+                            Snackbar.make(mAutoCompleteTextView, R.string.error_loading_autocomplete , Snackbar.LENGTH_SHORT)
+                                .show()})
                     addStopActivity.requestQueue.add(stringRequest)
                 }
             }

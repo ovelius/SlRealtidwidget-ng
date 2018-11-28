@@ -2,20 +2,25 @@ package se.locutus.sl.realtidhem.activity
 
 import android.Manifest
 import android.app.Activity
+import android.appwidget.AppWidgetHost
 import android.appwidget.AppWidgetManager
+import android.content.ComponentName
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.graphics.drawable.ColorDrawable
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.support.design.widget.Snackbar
+import android.support.design.widget.TabLayout
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.View
+import android.view.WindowManager
 import android.widget.ListView
 import android.widget.TextView
 import android.widget.Toast
@@ -26,16 +31,30 @@ import se.locutus.sl.realtidhem.R
 import se.locutus.sl.realtidhem.events.EXTRA_COLOR_THEME
 import se.locutus.sl.realtidhem.events.WIDGET_CONFIG_UPDATED
 import se.locutus.sl.realtidhem.events.WidgetBroadcastReceiver
+import se.locutus.sl.realtidhem.widget.StandardWidgetProvider
 import se.locutus.sl.realtidhem.widget.loadWidgetConfigOrDefault
 import se.locutus.sl.realtidhem.widget.storeWidgetConfig
 import java.util.logging.Logger
 
 const val ADD_STOP_REQUEST_CODE: Int = 1
 const val MODIFY_STOP_REQUEST_CODE: Int = 2
+const val ADD_WIDGET_REQUEST_CODE: Int = 3
 const val LOCATION_ACCESS_REQUEST_CODE = 99
 const val STOP_CONFIG_DATA_KEY = "stop_config_data_key"
 const val STOP_INDEX_DATA_KEY = "stop_config_index_data_key"
 const val WIDGET_CONFIG_PREFS = "widget_configs"
+
+fun setColor(activity : AppCompatActivity, tabLayout : TabLayout?, color : Int) {
+    val drawable = ColorDrawable(color!!)
+    activity.supportActionBar!!.setBackgroundDrawable(drawable)
+    val window = activity.window
+    window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
+    window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+    window.statusBarColor = color!!
+    if(tabLayout != null) {
+        tabLayout.background = drawable
+    }
+}
 
 class WidgetConfigureActivity : AppCompatActivity() {
     companion object {
@@ -75,15 +94,17 @@ class WidgetConfigureActivity : AppCompatActivity() {
         }
 
         if (mAppWidgetId == AppWidgetManager.INVALID_APPWIDGET_ID) {
-            val pickIntent = Intent(AppWidgetManager.ACTION_APPWIDGET_PICK)
-            pickIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, 78)
-            Toast.makeText(this, R.string.select_widget, Toast.LENGTH_LONG).show()
-            startActivityForResult(pickIntent, 123)
+            // TODO(implement this):
+            // if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            // appWidgetManager.isRequestPinAppWidgetSupported()
+            // appWidgetManager.requestPinAppWidget(component, null, null)
+            finish()
             return
         }
+
         if (intent.hasExtra(EXTRA_COLOR_THEME)) {
             color = intent.getIntExtra(EXTRA_COLOR_THEME, 0)
-            supportActionBar!!.setBackgroundDrawable(ColorDrawable(color!!))
+           setColor(this, null, color!!)
         }
 
         mWidgetPrefs = getSharedPreferences(WIDGET_CONFIG_PREFS, 0)
@@ -133,6 +154,19 @@ class WidgetConfigureActivity : AppCompatActivity() {
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        LOG.info("Activity result with request code $requestCode and data keys ${data!!.extras.keySet().toList()}")
+        if (requestCode == ADD_WIDGET_REQUEST_CODE) {
+            mAppWidgetId = data.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID)
+            LOG.info("Found add widget callback with id $mAppWidgetId")
+            if (mAppWidgetId == AppWidgetManager.INVALID_APPWIDGET_ID) {
+                LOG.severe("Got activity result with unexpected appWidgetId $mAppWidgetId")
+                finish()
+            } else {
+                // Continue as normal.
+                widgetConfig = loadWidgetConfigOrDefault(mWidgetPrefs, mAppWidgetId)
+                return
+            }
+        }
         if (widgetConfig.stopConfigurationCount <= 0) {
             if (requestCode != ADD_STOP_REQUEST_CODE || resultCode != Activity.RESULT_OK) {
                 LOG.severe("Got activity result with unexpected requestCode $requestCode and resultCode $resultCode")

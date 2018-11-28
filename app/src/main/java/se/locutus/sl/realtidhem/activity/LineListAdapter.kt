@@ -63,7 +63,14 @@ class LineListAdapter(private val activity: AddStopActivity, private val lineLis
 
     fun clickItem(position: Int) {
         val clicked = getItem(position)[0]
-        selected = if (selected == clicked) Ng.DepartureData.getDefaultInstance() else getItem(position)[0]
+        if (selected == clicked) {
+            selected = Ng.DepartureData.getDefaultInstance()
+        } else {
+            val item = getItem(position)[0]
+            selected = item
+            setColor(activity, activity.tabLayout, item.color)
+        }
+
         notifyDataSetChanged()
     }
 

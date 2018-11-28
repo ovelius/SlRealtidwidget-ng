@@ -79,7 +79,12 @@ class UpdClient(var context : Context) : HandlerThread("UdpHandler") {
         var bytes = message.toByteArray()
         var p = DatagramPacket(bytes, bytes.size, address, PORT)
         LOG.fine("Sending UDP message of $message size ${bytes.size}")
-        udpSocket.send(p)
+        try {
+            udpSocket.send(p)
+        } catch (e : java.io.IOException) {
+            LOG.severe("Caught $e , marking as not responsive")
+            responsive = false
+        }
     }
 
     fun receive(isPing : Boolean) : Ng.ResponseData? {

@@ -7,6 +7,8 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.os.Handler
+import android.os.Looper
 import android.os.PersistableBundle
 import android.widget.RemoteViews
 import se.locutus.proto.Ng
@@ -26,9 +28,11 @@ const val CYCLE_STOP_RIGHT = "CYCLE_STOP_RIGHT"
 const val EXTRA_COLOR_THEME = "EXTRA_COLOR_THEME"
 const val STALE_MILLIS = 30000
 const val UPDATE_RETRY_MILLIS = 10000
+const val UPDATE_AUTO_RETRY_MILLIS = 3000L
 const val UPDATE_FAIL_STALE = STALE_MILLIS - 5000
 const val RETOUCH_MILLIS = 1000
 const val TOUCH_TO_CONFIG = 3
+const val MAX_ATTEMPTS = 3
 const val CLEAR_TIME_MIN_MILLIS = 60 * 1000L
 const val CLEAR_TIME_MAX_MILLIS = 80 * 1000L
 
@@ -39,6 +43,7 @@ class WidgetTouchHandler(val context: Context, val networkManager : NetworkInter
     internal val prefs = context.getSharedPreferences(WIDGET_CONFIG_PREFS, 0)
     internal val timeTracker = TimeTracker(context)
     internal val inMemoryState = InMemoryState()
+    val mainHandler = Handler(Looper.getMainLooper())
 
     fun widgetTouched(widgetId :  Int, action : String?) {
         val widgetConfig = inMemoryState.getWidgetConfig(widgetId, prefs)
@@ -68,7 +73,7 @@ class WidgetTouchHandler(val context: Context, val networkManager : NetworkInter
         if (inMemoryState.sinceLastUpdate(widgetId) > STALE_MILLIS) {
             if (inMemoryState.sinceUpdateStarted(widgetId) > UPDATE_RETRY_MILLIS) {
                 LOG.info("Triggering update for config for widget $widgetId")
-                loadWidgetData(widgetId, widgetConfig.getStopConfiguration(selectedStopIndex))
+                loadWidgetData(widgetId, widgetConfig.getStopConfiguration(selectedStopIndex), 1)
                 timeTracker.record(widgetId)
                 scheduleWidgetClearing(context, widgetId)
             } else {
@@ -126,14 +131,15 @@ class WidgetTouchHandler(val context: Context, val networkManager : NetworkInter
 
     }
 
-    fun loadWidgetData(widgetId :  Int, stopConfig : Ng.StopConfiguration) {
+    fun loadWidgetData(widgetId :  Int, stopConfig : Ng.StopConfiguration, attempt : Int) {
         inMemoryState.disposeScroller(widgetId)
         inMemoryState.updateStartedAt[widgetId] = System.currentTimeMillis()
         val manager = AppWidgetManager.getInstance(context)
         // Create new views here to make sure we don't overfill the previous views with actions.
         val views = inMemoryState.getRemoveViews(widgetId, context, true)
 
-        setWidgetTextViews(views, context.getString(R.string.updating), "", context.getString(R.string.updating), stopConfig.stopData.displayName)
+        val line1 = if (attempt > 1) context.getString(R.string.updating_attempt, attempt) else context.getString(R.string.updating)
+        setWidgetTextViews(views, line1, "", context.getString(R.string.updating), stopConfig.stopData.displayName)
         manager.updateAppWidget(widgetId, views)
 
         val stopDataRequest = Ng.StopDataRequest.newBuilder()
@@ -148,6 +154,15 @@ class WidgetTouchHandler(val context: Context, val networkManager : NetworkInter
             handleLoadResponse(views, widgetId, incomingRequestId, responseData, e)
         }
         inMemoryState.currentRequestId[widgetId] = requestId
+
+        if (attempt < MAX_ATTEMPTS) {
+            mainHandler.postDelayed({
+                if (inMemoryState.sinceLastUpdate(widgetId) > UPDATE_AUTO_RETRY_MILLIS) {
+                    LOG.info("retrying update...")
+                    loadWidgetData(widgetId, stopConfig , attempt + 1)
+                }
+            }, UPDATE_AUTO_RETRY_MILLIS)
+        }
     }
 
     fun handleLoadResponse(views : RemoteViews, widgetId : Int, incomingRequestId : Int, responseData: Ng.ResponseData, e: Exception?) {

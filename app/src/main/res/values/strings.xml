@@ -51,4 +51,6 @@
     <string name="no_data_detail">No data available at this time</string>
     <string name="deleted">Deleted stop</string>
     <string name="undo">Undo</string>
+    <string name="error_loading_autocomplete">Failed to search stops</string>
+    <string name="updating_attempt">Updating, attempt %1$d</string>
 </resources>
