@@ -28,10 +28,10 @@ const val CYCLE_STOP_RIGHT = "CYCLE_STOP_RIGHT"
 const val EXTRA_COLOR_THEME = "EXTRA_COLOR_THEME"
 const val STALE_MILLIS = 30000
 const val UPDATE_RETRY_MILLIS = 10000
-const val UPDATE_AUTO_RETRY_MILLIS = 3000L
+const val UPDATE_AUTO_RETRY_MILLIS = 2000L
 const val UPDATE_FAIL_STALE = STALE_MILLIS - 5000
-const val RETOUCH_MILLIS = 1000
-const val TOUCH_TO_CONFIG = 3
+const val RETOUCH_MILLIS = 1200
+const val TOUCH_TO_CONFIG = 4
 const val MAX_ATTEMPTS = 3
 const val CLEAR_TIME_MIN_MILLIS = 60 * 1000L
 const val CLEAR_TIME_MAX_MILLIS = 80 * 1000L
@@ -71,13 +71,14 @@ class WidgetTouchHandler(val context: Context, val networkManager : NetworkInter
         LOG.info("Selected stop index is $selectedStopIndex")
 
         if (inMemoryState.sinceLastUpdate(widgetId) > STALE_MILLIS) {
+            val manager = AppWidgetManager.getInstance(context)
             if (inMemoryState.sinceUpdateStarted(widgetId) > UPDATE_RETRY_MILLIS) {
                 LOG.info("Triggering update for config for widget $widgetId")
-                loadWidgetData(widgetId, widgetConfig.getStopConfiguration(selectedStopIndex), 1)
+                loadWidgetData(widgetId, manager, widgetConfig.getStopConfiguration(selectedStopIndex), 1)
                 timeTracker.record(widgetId)
                 scheduleWidgetClearing(context, widgetId)
             } else {
-                // Be pesky...
+                stopTouchingMe(manager, widgetId)
             }
         } else if (!inMemoryState.hasRunningThread(widgetId)) {
             val lastLoadedData = inMemoryState.lastLoadedData[widgetId]
@@ -107,13 +108,24 @@ class WidgetTouchHandler(val context: Context, val networkManager : NetworkInter
         inMemoryState.lastTouch[widgetId] = System.currentTimeMillis()
     }
 
+    fun stopTouchingMe(manager : AppWidgetManager, widgetId : Int) {
+        val views = inMemoryState.getRemoveViews(widgetId, context, false)
+        val touchCount = inMemoryState.touchCount[widgetId]
+        if (touchCount == 2) {
+            views.setTextViewText(R.id.widgetline2, context.getString(R.string.message_again))
+        } else if (touchCount == 3) {
+            views.setTextViewText(R.id.widgetline2, context.getString(R.string.one_more_time_config))
+        }
+        manager.updateAppWidget(widgetId, views)
+    }
+
     fun configUpdated(widgetId: Int, selectNewFromLocation : Boolean) {
         inMemoryState.widgetConfigs.remove(widgetId)
         inMemoryState.lastTouch.remove(widgetId)
         inMemoryState.lastLoadedData.remove(widgetId)
         inMemoryState.updatedAt.remove(widgetId)
         inMemoryState.updateStartedAt.remove(widgetId)
-        inMemoryState.replaceThread(null)
+        inMemoryState.replaceThread(null, true)
 
         val appWidgetManager = AppWidgetManager.getInstance(context)
         val config = inMemoryState.getWidgetConfig(widgetId, prefs)
@@ -131,10 +143,9 @@ class WidgetTouchHandler(val context: Context, val networkManager : NetworkInter
 
     }
 
-    fun loadWidgetData(widgetId :  Int, stopConfig : Ng.StopConfiguration, attempt : Int) {
+    fun loadWidgetData(widgetId :  Int, manager : AppWidgetManager, stopConfig : Ng.StopConfiguration, attempt : Int) {
         inMemoryState.disposeScroller(widgetId)
         inMemoryState.updateStartedAt[widgetId] = System.currentTimeMillis()
-        val manager = AppWidgetManager.getInstance(context)
         // Create new views here to make sure we don't overfill the previous views with actions.
         val views = inMemoryState.getRemoveViews(widgetId, context, true)
 
@@ -157,11 +168,14 @@ class WidgetTouchHandler(val context: Context, val networkManager : NetworkInter
 
         if (attempt < MAX_ATTEMPTS) {
             mainHandler.postDelayed({
-                if (inMemoryState.sinceLastUpdate(widgetId) > UPDATE_AUTO_RETRY_MILLIS) {
+                // Only retry if there wasn't a recent update.
+                if (inMemoryState.sinceLastUpdate(widgetId) > UPDATE_AUTO_RETRY_MILLIS &&
+                    // And user hasn't tried to update something else recently.
+                    inMemoryState.sinceUpdateStarted(widgetId)  > UPDATE_AUTO_RETRY_MILLIS) {
                     LOG.info("retrying update...")
-                    loadWidgetData(widgetId, stopConfig , attempt + 1)
+                    loadWidgetData(widgetId, manager, stopConfig , attempt + 1)
                 }
-            }, UPDATE_AUTO_RETRY_MILLIS)
+            }, UPDATE_AUTO_RETRY_MILLIS * attempt)
         }
     }
 
@@ -245,10 +259,11 @@ class WidgetTouchHandler(val context: Context, val networkManager : NetworkInter
         var widgetConfigs = ConcurrentHashMap<Int, Ng.WidgetConfiguration>()
         var lastLoadedData = ConcurrentHashMap<Int, Ng.WidgetLoadResponseData>()
 
-        fun replaceThread(thread : ScrollThread?) : ScrollThread? {
+        fun replaceThread(thread : ScrollThread?, agressiveOff : Boolean = false) : ScrollThread? {
             val replaced = scrollThread
             if (scrollThread != null) {
                 scrollThread!!.running = false
+                scrollThread!!.agressiveOff = agressiveOff
             }
             scrollThread = thread
             return replaced
@@ -336,6 +351,7 @@ class WidgetTouchHandler(val context: Context, val networkManager : NetworkInter
         private val context: Context
     ) : Thread("ScrollerThread-$widgetId") {
         var running = true
+        var agressiveOff = false
 
         override fun run() {
             val manager = AppWidgetManager.getInstance(context)
@@ -364,11 +380,12 @@ class WidgetTouchHandler(val context: Context, val networkManager : NetworkInter
                 } catch (e: InterruptedException) {
                 }
             }
-            if (running) {
+
+            if (!agressiveOff) {
                 views.setTextViewText(R.id.widgetline2, line2)
                 manager.updateAppWidget(widgetId, views)
+                running = false
             }
-            running = false
         }
     }
 }

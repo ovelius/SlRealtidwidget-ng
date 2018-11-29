@@ -56,6 +56,8 @@ class AddStopActivity : AppCompatActivity() {
             stopIndex = intent.getIntExtra(STOP_INDEX_DATA_KEY, -1)
         }
         setSupportActionBar(toolbar)
+        supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+        supportActionBar!!.setDisplayShowHomeEnabled(true)
 
         requestQueue = Volley.newRequestQueue(this)
         network = NetworkManager(this)
@@ -104,6 +106,11 @@ class AddStopActivity : AppCompatActivity() {
 
     private fun getDisplayText() : String {
         return stopConfigureTabAdapter.selectStopFragment.displayNameText.text.toString()
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        finish()
+        return true
     }
 
     fun loadDepsFor (siteId : Int) {

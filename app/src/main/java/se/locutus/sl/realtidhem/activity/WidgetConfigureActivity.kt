@@ -154,9 +154,9 @@ class WidgetConfigureActivity : AppCompatActivity() {
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        LOG.info("Activity result with request code $requestCode and data keys ${data!!.extras.keySet().toList()}")
+        LOG.info("Activity result with request code $requestCode and data $data")
         if (requestCode == ADD_WIDGET_REQUEST_CODE) {
-            mAppWidgetId = data.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID)
+            mAppWidgetId = data!!.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID)
             LOG.info("Found add widget callback with id $mAppWidgetId")
             if (mAppWidgetId == AppWidgetManager.INVALID_APPWIDGET_ID) {
                 LOG.severe("Got activity result with unexpected appWidgetId $mAppWidgetId")

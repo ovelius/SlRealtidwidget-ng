@@ -53,4 +53,6 @@
     <string name="undo">Undo</string>
     <string name="error_loading_autocomplete">Failed to search stops</string>
     <string name="updating_attempt">Updating, attempt %1$d</string>
+    <string name="message_again">I do the retries here buddy...</string>
+    <string name="one_more_time_config">Touch one more time for config</string>
 </resources>
