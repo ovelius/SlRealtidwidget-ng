@@ -1,8 +1,6 @@
 package se.locutus.sl.realtidhem.activity
 
-import android.content.Intent
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,6 +9,10 @@ import se.locutus.proto.Ng
 import se.locutus.sl.realtidhem.R
 import java.util.ArrayList
 import java.util.logging.Logger
+import kotlin.collections.HashMap
+import kotlin.collections.Map
+import kotlin.collections.MutableList
+import kotlin.collections.set
 
 /**
  * Map unique colors to a low value for sorting.

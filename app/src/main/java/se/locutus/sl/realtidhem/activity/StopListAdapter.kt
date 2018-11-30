@@ -1,13 +1,14 @@
 package se.locutus.sl.realtidhem.activity
 
-import android.app.Activity
 import android.content.Context
-import com.google.android.material.snackbar.Snackbar
-import androidx.appcompat.widget.PopupMenu
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
+import android.widget.BaseAdapter
+import android.widget.ImageView
+import android.widget.TextView
+import androidx.appcompat.widget.PopupMenu
+import com.google.android.material.snackbar.Snackbar
 import se.locutus.proto.Ng
 import se.locutus.sl.realtidhem.R
 

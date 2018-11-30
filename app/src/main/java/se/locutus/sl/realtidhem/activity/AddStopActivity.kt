@@ -2,32 +2,22 @@ package se.locutus.sl.realtidhem.activity
 
 import android.app.Activity
 import android.content.Intent
-import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import com.google.android.material.snackbar.Snackbar
-import com.google.android.material.tabs.TabLayout
-import androidx.fragment.app.Fragment
-import androidx.core.content.ContextCompat
-import androidx.viewpager.widget.ViewPager
-import androidx.appcompat.app.AppCompatActivity
 import android.view.Menu
-import android.widget.EditText
-import android.widget.ProgressBar
-import se.locutus.sl.realtidhem.R
-import kotlinx.android.synthetic.main.activity_add_stop.*
+import androidx.appcompat.app.AppCompatActivity
 import com.android.volley.RequestQueue
 import com.android.volley.toolbox.Volley
+import com.google.android.material.snackbar.Snackbar
+import com.google.android.material.tabs.TabLayout
+import kotlinx.android.synthetic.main.activity_add_stop.*
 import se.locutus.proto.Ng
 import se.locutus.proto.Ng.DeparturesFilter
+import se.locutus.sl.realtidhem.R
+import se.locutus.sl.realtidhem.events.EXTRA_COLOR_THEME
 import se.locutus.sl.realtidhem.net.NetworkInterface
 import se.locutus.sl.realtidhem.net.NetworkManager
-import java.util.ArrayList
+import java.util.*
 import java.util.logging.Logger
-import android.view.ViewGroup
-import android.view.WindowManager
-import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.MapFragment
-import se.locutus.sl.realtidhem.events.EXTRA_COLOR_THEME
 
 
 class AddStopActivity : AppCompatActivity() {

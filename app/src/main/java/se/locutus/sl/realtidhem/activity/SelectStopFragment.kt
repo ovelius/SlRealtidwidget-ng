@@ -38,7 +38,7 @@ import java.util.*
 import java.util.logging.Logger
 
 fun setGreenBg(view : View) {
-    view.setBackgroundColor((0x3300FF00).toInt())
+    view.setBackgroundColor((0x33484848).toInt())
 }
 
 class SelectStopFragment : androidx.fragment.app.Fragment() {
