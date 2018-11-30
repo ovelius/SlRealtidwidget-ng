@@ -55,4 +55,9 @@
     <string name="updating_attempt">Updating, attempt %1$d</string>
     <string name="message_again">I do the retries here buddy...</string>
     <string name="one_more_time_config">Touch one more time for config</string>
+    <string name="widget_help">This application is used as a widget only. Please go back to your homescreen to add
+        widgets.
+    </string>
+    <string name="widget_read_more">Read more about adding widgets</string>
+    <string name="ok" translatable="false">OK</string>
 </resources>

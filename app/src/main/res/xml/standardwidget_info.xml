@@ -3,7 +3,7 @@
                     android:minWidth="180dp"
                     android:minHeight="40dp"
                     android:updatePeriodMillis="1800000"
-                    android:previewImage="@drawable/example_appwidget_preview"
+                    android:previewImage="@drawable/appwidget_preview"
                     android:initialLayout="@layout/widgetlayout_base"
                     android:configure="se.locutus.sl.realtidhem.activity.WidgetConfigureActivity"
                     android:resizeMode="horizontal"

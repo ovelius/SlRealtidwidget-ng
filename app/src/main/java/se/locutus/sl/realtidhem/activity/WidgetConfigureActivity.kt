@@ -2,11 +2,14 @@ package se.locutus.sl.realtidhem.activity
 
 import android.Manifest
 import android.app.Activity
+import android.app.AlertDialog
 import android.appwidget.AppWidgetManager
+import android.content.DialogInterface
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.graphics.drawable.ColorDrawable
+import android.net.Uri
 import android.os.Bundle
 import android.view.Menu
 import android.view.View
@@ -27,6 +30,7 @@ import se.locutus.sl.realtidhem.events.WIDGET_CONFIG_UPDATED
 import se.locutus.sl.realtidhem.events.WidgetBroadcastReceiver
 import se.locutus.sl.realtidhem.widget.loadWidgetConfigOrDefault
 import se.locutus.sl.realtidhem.widget.storeWidgetConfig
+import java.util.*
 import java.util.logging.Logger
 
 const val ADD_STOP_REQUEST_CODE: Int = 1
@@ -72,6 +76,23 @@ class WidgetConfigureActivity : AppCompatActivity() {
         }
     }
 
+    private fun showWidgetDialog() {
+        val url = "https://support.google.com/android/answer/2781850?hl=${Locale.getDefault().displayLanguage}"
+        val builder = AlertDialog.Builder(this)
+        builder.setMessage(R.string.widget_help)
+            .setNegativeButton(R.string.ok,
+                DialogInterface.OnClickListener { dialog, id ->
+                    finish()
+                })
+            .setPositiveButton(R.string.widget_read_more,
+                DialogInterface.OnClickListener { dialog, id ->
+                    val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+                    startActivity(browserIntent)
+                    finish()
+                })
+        builder.create().show()
+    }
+
     public override fun onCreate(icicle: Bundle?) {
         super.onCreate(icicle)
         setResult(Activity.RESULT_CANCELED)
@@ -87,11 +108,7 @@ class WidgetConfigureActivity : AppCompatActivity() {
         }
 
         if (mAppWidgetId == AppWidgetManager.INVALID_APPWIDGET_ID) {
-            // TODO(implement this):
-            // if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            // appWidgetManager.isRequestPinAppWidgetSupported()
-            // appWidgetManager.requestPinAppWidget(component, null, null)
-            finish()
+            showWidgetDialog()
             return
         }
 
