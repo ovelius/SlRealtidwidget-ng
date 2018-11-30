@@ -1,14 +1,14 @@
 package se.locutus.sl.realtidhem.activity
 
 import android.os.Bundle
-import android.support.v4.app.Fragment
+import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ListView
 import se.locutus.sl.realtidhem.R
 
-class SelectDeparturesFragment : Fragment() {
+class SelectDeparturesFragment : androidx.fragment.app.Fragment() {
     internal lateinit var mDepartureList : ListView
     internal lateinit var addStopActivity : AddStopActivity
 

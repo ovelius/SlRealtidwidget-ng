@@ -2,7 +2,7 @@ package se.locutus.sl.realtidhem.activity
 
 import android.content.Intent
 import android.os.Bundle
-import android.support.v4.app.Fragment
+import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -23,7 +23,7 @@ fun createColorMap(data : Ng.AllDepaturesResponseData) : Map<Int, Int> {
     return colorMap
 }
 
-class SelectLinesFragment : Fragment() {
+class SelectLinesFragment : androidx.fragment.app.Fragment() {
     companion object {
         val LOG = Logger.getLogger(SelectLinesFragment::class.java.name)
         fun newInstance(): SelectLinesFragment =

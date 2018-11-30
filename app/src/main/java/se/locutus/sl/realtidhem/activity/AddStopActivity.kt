@@ -4,12 +4,12 @@ import android.app.Activity
 import android.content.Intent
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import android.support.design.widget.Snackbar
-import android.support.design.widget.TabLayout
-import android.support.v4.app.Fragment
-import android.support.v4.content.ContextCompat
-import android.support.v4.view.ViewPager
-import android.support.v7.app.AppCompatActivity
+import com.google.android.material.snackbar.Snackbar
+import com.google.android.material.tabs.TabLayout
+import androidx.fragment.app.Fragment
+import androidx.core.content.ContextCompat
+import androidx.viewpager.widget.ViewPager
+import androidx.appcompat.app.AppCompatActivity
 import android.view.Menu
 import android.widget.EditText
 import android.widget.ProgressBar
@@ -42,7 +42,7 @@ class AddStopActivity : AppCompatActivity() {
     internal lateinit var linesAdapter : LineListAdapter
     internal lateinit var network : NetworkInterface
     internal lateinit var tabLayout: TabLayout
-    internal lateinit var viewPager: ViewPager
+    internal lateinit var viewPager: androidx.viewpager.widget.ViewPager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -83,7 +83,7 @@ class AddStopActivity : AppCompatActivity() {
             loadDepsFor(config.stopData.siteId.toInt())
         }
 
-        viewPager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
+        viewPager.addOnPageChangeListener(object : androidx.viewpager.widget.ViewPager.OnPageChangeListener {
             override fun onPageScrollStateChanged(state: Int) {
             }
             override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {

@@ -3,7 +3,7 @@ package se.locutus.sl.realtidhem.net
 import android.content.Context
 import android.os.Handler
 import android.os.Looper
-import android.support.annotation.GuardedBy
+import androidx.annotation.GuardedBy
 import com.android.volley.NetworkResponse
 import com.android.volley.Request
 import com.android.volley.RequestQueue

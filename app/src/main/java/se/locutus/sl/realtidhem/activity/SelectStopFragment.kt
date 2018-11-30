@@ -6,9 +6,9 @@ import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.drawable.Drawable
 import android.os.Bundle
-import android.support.design.widget.Snackbar
-import android.support.v4.app.Fragment
-import android.support.v4.content.ContextCompat
+import com.google.android.material.snackbar.Snackbar
+import androidx.fragment.app.Fragment
+import androidx.core.content.ContextCompat
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
@@ -41,7 +41,7 @@ fun setGreenBg(view : View) {
     view.setBackgroundColor((0x3300FF00).toInt())
 }
 
-class SelectStopFragment : Fragment() {
+class SelectStopFragment : androidx.fragment.app.Fragment() {
     companion object {
         val LOG = Logger.getLogger(SelectStopFragment::class.java.name)
         fun newInstance(): SelectStopFragment =
