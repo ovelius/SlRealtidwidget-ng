@@ -1,25 +1,16 @@
 package se.locutus.sl.realtidhem.net
 
 import android.content.Context
-import android.os.Handler
-import android.os.Looper
-import androidx.annotation.GuardedBy
 import com.android.volley.NetworkResponse
 import com.android.volley.Request
-import com.android.volley.RequestQueue
 import com.android.volley.Response
 import com.android.volley.toolbox.HttpHeaderParser
 import com.android.volley.toolbox.Volley
 import se.locutus.proto.Ng
 import se.locutus.proto.Ng.ResponseData
 import se.locutus.proto.Ng.RequestData
-import se.locutus.sl.realtidhem.events.WidgetBroadcastReceiver
-import se.locutus.sl.realtidhem.events.WidgetTouchHandler
 import java.lang.Exception
 import java.util.logging.Logger
-
-
-const val URL = "http://anka.locutus.se/NG"
 
 interface NetworkInterface {
     fun doStopDataRequest(request : Ng.StopDataRequest, forceHttp : Boolean = false, callBack : (Int, ResponseData, Exception?) -> Unit) : Int
@@ -30,7 +21,8 @@ class NetworkManager(var context : Context) : NetworkInterface {
         val LOG = Logger.getLogger(NetworkManager::class.java.name)
     }
     val requestQueue = Volley.newRequestQueue(context)
-    val udpSocket = UpdClient(context).apply { start() }
+    val prefs = context.getSharedPreferences(null, 0)
+    val udpSocket = UpdClient(context, prefs).apply { start() }
     private var requestId = 1
 
     override fun doStopDataRequest(request : Ng.StopDataRequest, forceHttp : Boolean, callBack : (Int, ResponseData, Exception?) -> Unit) : Int {
@@ -60,6 +52,7 @@ class NetworkManager(var context : Context) : NetworkInterface {
     }
 
     private fun sendRequestWithHTTP(request : RequestData, callback : (Int, ResponseData, Exception?) -> Unit) {
+        val url = "http://${getBackendIp(prefs)}/NG"
         val protoRequest = ProtoRequest(request,
             Response.Listener { response ->
                 LOG.fine("Got data $response")
@@ -67,7 +60,7 @@ class NetworkManager(var context : Context) : NetworkInterface {
             },
             Response.ErrorListener { error ->
                 callback(request.requestHeader.id, ResponseData.getDefaultInstance(), error)
-            })
+            }, url)
         requestQueue.add(protoRequest)
     }
 }
@@ -75,8 +68,9 @@ class NetworkManager(var context : Context) : NetworkInterface {
 class ProtoRequest
     (val requestData : RequestData,
      var mListener: Response.Listener<ResponseData>?,
-    errorListener: Response.ErrorListener?
-) : Request<ResponseData>(Request.Method.POST, URL, errorListener) {
+    errorListener: Response.ErrorListener?,
+     url : String
+) : Request<ResponseData>(Request.Method.POST, url, errorListener) {
 
 
     override fun getHeaders(): MutableMap<String, String> {

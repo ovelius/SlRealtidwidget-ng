@@ -1,23 +1,22 @@
 package se.locutus.sl.realtidhem.net
 
 import android.content.Context
+import android.content.SharedPreferences
 import android.os.Handler
 import android.os.HandlerThread
 import android.os.Looper
-import android.os.Message
 import com.google.protobuf.ByteString
 import se.locutus.proto.Ng
 import se.locutus.sl.realtidhem.service.BackgroundUpdaterService
 import java.lang.Exception
 import java.net.*
-import java.nio.ByteBuffer
 import java.util.logging.Logger
 
 const val PORT = 1199
 const val BUFFER = 8096
 const val READ_TIMEOUT_MILLIS = 5000
 
-class UpdClient(var context : Context) : HandlerThread("UdpHandler") {
+class UpdClient(val context : Context, private val prefs : SharedPreferences) : HandlerThread("UdpHandler") {
     companion object {
         val LOG = Logger.getLogger(BackgroundUpdaterService::class.java.name)
     }
@@ -32,8 +31,8 @@ class UpdClient(var context : Context) : HandlerThread("UdpHandler") {
         udpSocket = DatagramSocket().apply {
             soTimeout = READ_TIMEOUT_MILLIS
         }
-        address = Inet4Address.getByName("anka.locutus.se")
-        LOG.fine("Created UPD socket on ${udpSocket.port} to $address")
+        address = Inet4Address.getByName(getBackendIp(prefs))
+        LOG.info("Created UPD socket on ${udpSocket.port} to $address")
         super.run()
     }
 
@@ -48,6 +47,11 @@ class UpdClient(var context : Context) : HandlerThread("UdpHandler") {
 
     fun sendRequest(message : Ng.RequestData, callback : (Int, Ng.ResponseData, Exception?) -> Unit) {
         selfHandler!!.post(RequestRunnable(this, message, callback))
+        if (shouldUpdateBackendIp(prefs)) {
+            selfHandler!!.post {
+                LOG.info("Refreshing backend IP record to ${ updateBackendIp(prefs)}")
+            }
+        }
     }
 
     internal class RequestRunnable(var udpClient : UpdClient, var message : Ng.RequestData, var callBack : (Int, Ng.ResponseData, Exception?) -> Unit) : Runnable {
