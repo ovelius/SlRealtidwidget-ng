@@ -118,7 +118,6 @@
             android:layout_weight="33"
             android:layout_gravity="center"
             android:paddingTop="1dp"
-            android:clickable="true"
             android:gravity="left"
             android:singleLine="true"
             android:ellipsize="none"
