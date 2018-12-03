@@ -1,4 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
+
+<ViewSwitcher
+        android:id="@+id/viewSwitcher1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:inAnimation="@android:anim/slide_in_left" xmlns:android="http://schemas.android.com/apk/res/android">
+
 <androidx.coordinatorlayout.widget.CoordinatorLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -21,21 +28,22 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <ListView
-            android:id="@+id/stop_list_view"
-            android:layout_width="match_parent"
-            android:paddingTop="?attr/actionBarSize"
-            android:visibility="gone"
-            android:layout_height="wrap_content">
-    </ListView>
-    <TextView
-            android:id="@+id/no_stops_help_text"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center_vertical|center_horizontal"
-            android:text="@string/no_stop_added"
-    />
 
+
+        <ListView
+                android:id="@+id/stop_list_view"
+                android:layout_width="match_parent"
+                android:paddingTop="?attr/actionBarSize"
+                android:visibility="gone"
+                android:layout_height="wrap_content">
+        </ListView>
+        <TextView
+                android:id="@+id/no_stops_help_text"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical|center_horizontal"
+                android:text="@string/no_stop_added"
+        />
     <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/add_stop_button"
             android:layout_width="wrap_content"
@@ -46,3 +54,60 @@
 
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:context="se.locutus.sl.realtidhem.activity.WidgetConfigureActivity">
+
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                      xmlns:app="http://schemas.android.com/apk/res-auto"
+                      android:layout_width="match_parent"
+                      android:layout_height="wrap_content"
+                      android:orientation="vertical" >
+        <TextView
+                android:layout_width="match_parent"
+                android:id="@+id/name_text_view"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="@dimen/fab_margin"
+                android:layout_marginTop="@dimen/fab_margin"
+                style="@style/TextAppearance.Widget.AppCompat.Toolbar.Title"
+                android:text="@string/app_name"
+        />
+        <TextView
+                android:id="@+id/version_text"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="@dimen/fab_margin"
+                android:gravity="left"
+                android:text="Version"
+        />
+        <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="bottom"
+                android:layout_margin="@dimen/fab_margin"
+                android:gravity="left"
+                android:text="@string/app_disclaimer"
+        />
+        </LinearLayout>
+        <Button style="@style/Widget.AppCompat.Button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|start"
+                android:text="@string/on_github"
+                android:layout_margin="@dimen/fab_margin"
+                android:id="@+id/github_btn"
+                android:enabled="true" />
+        <Button style="@style/Widget.AppCompat.Button.Colored"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|end"
+                android:text="@string/back_to_config"
+                android:layout_margin="@dimen/fab_margin"
+                android:id="@+id/ok_btn_about"
+                android:enabled="true" />
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+</ViewSwitcher>

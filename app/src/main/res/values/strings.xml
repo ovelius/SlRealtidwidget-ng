@@ -1,5 +1,5 @@
 <!DOCTYPE resources [
-        <!ENTITY appname "AA Sl Realtid widget">
+        <!ENTITY appname "SL Realtid widget">
         ]>
 <resources>
     <string name="app_name">&appname;</string>
@@ -60,4 +60,10 @@
     </string>
     <string name="widget_read_more">Read more about adding widgets</string>
     <string name="ok" translatable="false">OK</string>
+    <string name="about_info">About</string>
+    <string name="back_to_config">Back</string>
+    <string name="on_github">Project on Github</string>
+    <string name="app_disclaimer">This is an open source application, developed as a small side-project for fun without profit :)
+        \nThe app uses your location to determine what stop to show on what widget at what time.
+    </string>
 </resources>

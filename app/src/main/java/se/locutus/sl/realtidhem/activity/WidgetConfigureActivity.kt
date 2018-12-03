@@ -4,7 +4,6 @@ import android.Manifest
 import android.app.Activity
 import android.app.AlertDialog
 import android.appwidget.AppWidgetManager
-import android.content.DialogInterface
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
@@ -14,8 +13,10 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.View
 import android.view.WindowManager
+import android.widget.Button
 import android.widget.ListView
 import android.widget.TextView
+import android.widget.ViewSwitcher
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -61,7 +62,8 @@ class WidgetConfigureActivity : AppCompatActivity() {
     internal lateinit var mWidgetPrefs : SharedPreferences
     internal lateinit var mListView : ListView
     internal lateinit var mAddStopHelperText : TextView
-    internal lateinit var mStopListAdapter : StopListAdapter
+    internal lateinit var mStopListAdapter: StopListAdapter
+    internal lateinit var viewSwitcher : ViewSwitcher
     internal var widgetConfig : WidgetConfiguration = WidgetConfiguration.getDefaultInstance()
     internal var color : Int? = null
 
@@ -80,16 +82,13 @@ class WidgetConfigureActivity : AppCompatActivity() {
         val url = "https://support.google.com/android/answer/2781850?hl=${Locale.getDefault().displayLanguage}"
         val builder = AlertDialog.Builder(this)
         builder.setMessage(R.string.widget_help)
-            .setNegativeButton(R.string.ok,
-                DialogInterface.OnClickListener { dialog, id ->
-                    finish()
-                })
-            .setPositiveButton(R.string.widget_read_more,
-                DialogInterface.OnClickListener { dialog, id ->
+            .setNegativeButton(R.string.ok)
+                { _, _ -> finish() }
+            .setPositiveButton(R.string.widget_read_more) { _, _ ->
                     val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
                     startActivity(browserIntent)
                     finish()
-                })
+                }
         builder.create().show()
     }
 
@@ -99,6 +98,15 @@ class WidgetConfigureActivity : AppCompatActivity() {
         setContentView(R.layout.widget_configure_activty)
         setSupportActionBar(config_toolbar)
         mListView = findViewById(R.id.stop_list_view)
+        viewSwitcher = findViewById(R.id.viewSwitcher1)
+
+        findViewById<Button>(R.id.ok_btn_about).setOnClickListener {
+            viewSwitcher.showPrevious()
+        }
+        findViewById<Button>(R.id.github_btn).setOnClickListener {
+            val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/ovelius/SlRealtidwidget-ng"))
+            startActivity(browserIntent)
+        }
 
         mAddStopHelperText = findViewById(R.id.no_stops_help_text)
         if (intent.extras != null) {
@@ -209,8 +217,19 @@ class WidgetConfigureActivity : AppCompatActivity() {
         finish()
     }
 
+    private fun setTextVersion(tv : TextView) {
+        val pInfo = packageManager.getPackageInfo(packageName, 0)
+        val versionText = "Version ${pInfo.versionName} code ${pInfo.versionCode}"
+        tv.setText(versionText, TextView.BufferType.NORMAL)
+    }
+
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.widget_config_action_bar_menu, menu)
+        menu.findItem(R.id.about_btn).setOnMenuItemClickListener {_ ->
+            setTextVersion(findViewById(R.id.version_text))
+            viewSwitcher.showNext()
+            true
+        }
         menu.findItem(R.id.save_widget_action).setOnMenuItemClickListener {_ ->
             val intentUpdate = Intent(this, WidgetBroadcastReceiver::class.java).apply {
                 action = WIDGET_CONFIG_UPDATED
@@ -231,7 +250,7 @@ class WidgetConfigureActivity : AppCompatActivity() {
         return true
     }
 
-    fun getConfigErrorMessage() : Int? {
+    private fun getConfigErrorMessage() : Int? {
         if (widgetConfig.stopConfigurationCount <= 0) {
             return R.string.missing_configuration
         }

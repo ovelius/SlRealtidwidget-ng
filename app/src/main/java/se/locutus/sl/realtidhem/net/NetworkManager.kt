@@ -52,7 +52,6 @@ class NetworkManager(var context : Context) : NetworkInterface {
     }
 
     private fun sendRequestWithHTTP(request : RequestData, callback : (Int, ResponseData, Exception?) -> Unit) {
-        val url = "http://${getBackendIp(prefs)}/NG"
         val protoRequest = ProtoRequest(request,
             Response.Listener { response ->
                 LOG.fine("Got data $response")
@@ -60,7 +59,7 @@ class NetworkManager(var context : Context) : NetworkInterface {
             },
             Response.ErrorListener { error ->
                 callback(request.requestHeader.id, ResponseData.getDefaultInstance(), error)
-            }, url)
+            })
         requestQueue.add(protoRequest)
     }
 }
@@ -68,9 +67,8 @@ class NetworkManager(var context : Context) : NetworkInterface {
 class ProtoRequest
     (val requestData : RequestData,
      var mListener: Response.Listener<ResponseData>?,
-    errorListener: Response.ErrorListener?,
-     url : String
-) : Request<ResponseData>(Request.Method.POST, url, errorListener) {
+    errorListener: Response.ErrorListener?
+) : Request<ResponseData>(Request.Method.POST, URL, errorListener) {
 
 
     override fun getHeaders(): MutableMap<String, String> {
