@@ -7,12 +7,7 @@
             android:layout_width="10dp"
             android:layout_gravity="center_vertical"
             android:layout_height="fill_parent"/>
-    <ImageView
-            android:id="@+id/line_list_icon"
-            android:layout_width="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:src="@drawable/ic_icon_transportation_bus"
-            android:layout_height="wrap_content"/>
+
 
     <ImageView
             android:id="@+id/line_list_direction_icon"
@@ -43,5 +38,12 @@
                 android:text=""
                 android:textSize="14dp" />
     </LinearLayout>
+    <ImageView
+            android:id="@+id/line_list_icon"
+            android:layout_width="wrap_content"
+            android:paddingRight="6dp"
+            android:layout_gravity="center_vertical|end"
+            android:src="@drawable/ic_icon_transportation_bus"
+            android:layout_height="wrap_content"/>
 
 </LinearLayout>
