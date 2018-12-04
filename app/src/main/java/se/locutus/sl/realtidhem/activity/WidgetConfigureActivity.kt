@@ -219,7 +219,7 @@ class WidgetConfigureActivity : AppCompatActivity() {
 
     private fun setTextVersion(tv : TextView) {
         val pInfo = packageManager.getPackageInfo(packageName, 0)
-        val versionText = "Version ${pInfo.versionName} code ${pInfo.versionCode}"
+        val versionText = "Version ${pInfo.versionName} build ${pInfo.versionCode}"
         tv.setText(versionText, TextView.BufferType.NORMAL)
     }
 

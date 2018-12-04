@@ -166,7 +166,7 @@ class AddStopActivity : AppCompatActivity() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.widget_config_action_bar_menu, menu)
+        menuInflater.inflate(R.menu.stop_config_action_bar_menu, menu)
         menu.findItem(R.id.save_widget_action).setOnMenuItemClickListener { _ ->
             val message = getConfigErrorMessage()
             if (message != null) {

@@ -23,7 +23,7 @@
     <string name="stop_display_name">Visa stopp som</string>
 
     <string name="select_departures_tab">Välj specifika avgångar</string>
-    <string name="select_lines_tab">Välj rad</string>
+    <string name="select_lines_tab">Välj linje</string>
     <string name="select_stop_tab">Välj stopp</string>
 
     <string name="select_departures">Välj avgångar</string>
