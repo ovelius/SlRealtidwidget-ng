@@ -25,9 +25,9 @@ fun setImageViewIconAndColor(item : Ng.DepartureData, colorView : ImageView,  ic
 
     if (directionView != null) {
         if (item.directionId == 1) {
-            directionView.setImageResource(android.R.drawable.arrow_up_float)
+            directionView.setImageResource(R.drawable.ic_baseline_keyboard_arrow_left_24px)
         } else {
-            directionView.setImageResource(android.R.drawable.arrow_down_float)
+            directionView.setImageResource(R.drawable.ic_baseline_keyboard_arrow_right_24px)
         }
     }
 }
