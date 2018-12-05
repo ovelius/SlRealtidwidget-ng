@@ -1,5 +1,6 @@
 package se.locutus.sl.realtidhem.events
 
+import android.annotation.SuppressLint
 import android.app.job.JobInfo
 import android.app.job.JobScheduler
 import android.appwidget.AppWidgetManager
@@ -7,9 +8,9 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
-import android.os.Handler
-import android.os.Looper
-import android.os.PersistableBundle
+import android.net.Uri
+import android.os.*
+import android.provider.Settings
 import android.widget.RemoteViews
 import se.locutus.proto.Ng
 import se.locutus.sl.realtidhem.R
@@ -22,6 +23,7 @@ import java.lang.Exception
 import java.net.SocketTimeoutException
 import java.util.concurrent.ConcurrentHashMap
 import java.util.logging.Logger
+
 
 const val CYCLE_STOP_LEFT = "CYCLE_STOP_LEFT"
 const val CYCLE_STOP_RIGHT = "CYCLE_STOP_RIGHT"
@@ -70,8 +72,23 @@ class WidgetTouchHandler(val context: Context, val networkManager : NetworkInter
         }
         LOG.info("Selected stop index is $selectedStopIndex")
 
+        val manager = AppWidgetManager.getInstance(context)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+           val pm = context.getSystemService(Context.POWER_SERVICE) as PowerManager?
+            if (pm != null && isUnlistedPowerSaveMode(pm)) {
+                LOG.info("Power save mode detected without being whitelisted!")
+                val views = inMemoryState.getRemoveViews(widgetId, context, false)
+                val line2 = context.getString(R.string.power_save_mode_no_whitelist)
+                setWidgetTextViews(views, context.getString(R.string.power_save_mode), "", line2)
+                // https://stackoverflow.com/questions/32627342/how-to-whitelist-app-in-doze-mode-android-6-0
+                manager.updateAppWidget(widgetId, views)
+                inMemoryState.replaceThread(ScrollThread(
+                    widgetId, views, line2, context).apply {  start() })
+                return
+            }
+        }
+
         if (inMemoryState.sinceLastUpdate(widgetId) > STALE_MILLIS) {
-            val manager = AppWidgetManager.getInstance(context)
             if (inMemoryState.sinceUpdateStarted(widgetId) > UPDATE_RETRY_MILLIS) {
                 LOG.info("Triggering update for config for widget $widgetId")
                 loadWidgetData(widgetId, manager, widgetConfig.getStopConfiguration(selectedStopIndex), 1)
@@ -106,6 +123,14 @@ class WidgetTouchHandler(val context: Context, val networkManager : NetworkInter
             return
         }
         inMemoryState.lastTouch[widgetId] = System.currentTimeMillis()
+    }
+
+    @SuppressLint("NewApi")
+    fun isUnlistedPowerSaveMode(pm : PowerManager) : Boolean {
+        if (!pm.isPowerSaveMode) {
+            return false
+        }
+        return !pm.isIgnoringBatteryOptimizations(context.packageName)
     }
 
     fun stopTouchingMe(manager : AppWidgetManager, widgetId : Int) {
