@@ -34,7 +34,7 @@
     <string name="select_departures">Select departures</string>
     <string name="add_stop_title">Configure stop</string>
     <string name="save_widget">Save widget config</string>
-    <string name="configure_widget_title">Configure widget</string>
+    <string name="configure_widget_title">SL widget</string>
     <string name="updating">Updating</string>
 
     <string name="error">Error loading data</string>
