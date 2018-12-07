@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
+import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
 import com.android.volley.RequestQueue
 import com.android.volley.toolbox.Volley
@@ -46,8 +47,6 @@ class AddStopActivity : AppCompatActivity() {
             stopIndex = intent.getIntExtra(STOP_INDEX_DATA_KEY, -1)
         }
         setSupportActionBar(toolbar)
-        supportActionBar!!.setDisplayHomeAsUpEnabled(true)
-        supportActionBar!!.setDisplayShowHomeEnabled(true)
 
         requestQueue = Volley.newRequestQueue(this)
         network = NetworkManager(this)
@@ -81,14 +80,19 @@ class AddStopActivity : AppCompatActivity() {
             override fun onPageSelected(position: Int) {
                 if (config.stopData.siteId == 0L && position != 0) {
                     viewPager.setCurrentItem(0, true)
+                }  else if (position != 0) {
+                    val imm = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+                    imm.hideSoftInputFromWindow(tabLayout.windowToken, 0)
                 }
                 if (departureAdapter.getCheckedItems().isNotEmpty() && position == 1) {
-                    Snackbar.make(tabLayout, R.string.select_just_one_dep , Snackbar.LENGTH_LONG).show()
+                    Snackbar.make(tabLayout, R.string.select_just_one_dep , Snackbar.LENGTH_SHORT).show()
                     viewPager.setCurrentItem(2, true)
+                    stopConfigureTabAdapter.selectDeparturesFragment.mDepartureList.smoothScrollToPosition(departureAdapter.getCheckedPosition())
                 }
                 if (linesAdapter.isSelected() && position == 2) {
-                    Snackbar.make(tabLayout, R.string.select_just_one_line , Snackbar.LENGTH_LONG).show()
+                    Snackbar.make(tabLayout, R.string.select_just_one_line , Snackbar.LENGTH_SHORT).show()
                     viewPager.setCurrentItem(1, true)
+                    stopConfigureTabAdapter.selectLinesFragment.mLineList.smoothScrollToPosition(linesAdapter.selectedIndex)
                 }
             }
         })
@@ -116,13 +120,13 @@ class AddStopActivity : AppCompatActivity() {
                         loadDepsFor(siteId)
                     }.show()
             } else {
-                LOG.info("Got response with ${responseData} departures")
+                LOG.info("Got response with ${responseData.allDepaturesResponse.depatureDataCount} departures")
                 handleLoadResonse(responseData)
             }
         }
     }
 
-    fun handleLoadResonse(response : Ng.ResponseData) {
+    private fun handleLoadResonse(response : Ng.ResponseData) {
         val existing = config.departuresFilter.departuresList.toSet()
         val stopDataResponse = response.allDepaturesResponse.stopData
         val departures = response.allDepaturesResponse.depatureDataList
@@ -155,7 +159,7 @@ class AddStopActivity : AppCompatActivity() {
         departureAdapter.notifyDataSetChanged()
     }
 
-    fun getConfigErrorMessage() : Int? {
+    private fun getConfigErrorMessage() : Int? {
         if (config.stopData.siteId == 0L) {
             return R.string.no_stop_selected
         }
@@ -187,7 +191,7 @@ class AddStopActivity : AppCompatActivity() {
         config.setStopData(stopData)
     }
 
-    fun finishSuccessfully() {
+    private fun finishSuccessfully() {
         updateStopDataDisplayText()
 
         if (linesAdapter.isSelected()) {

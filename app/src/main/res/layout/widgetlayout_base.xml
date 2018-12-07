@@ -74,20 +74,21 @@
             android:orientation="horizontal" >
 
             <TextView
-                android:id="@+id/widgetline1"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="left"
-                android:layout_toLeftOf="@id/widgetmin"
-                android:maxLines="1"
-                android:paddingLeft="10dip"
-                android:text="@string/idle_line1"
-                android:textColor="#ff9900"
-                android:paddingTop="1dp"
-                android:layout_alignParentLeft="true"
-                android:textSize="14dip"
-                android:translationZ="0dp"
-                android:typeface="monospace" />
+                    android:id="@+id/widgetline1"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left"
+                    android:layout_toLeftOf="@id/widgetmin"
+                    android:singleLine="true"
+                    android:paddingLeft="10dip"
+                    android:text="@string/idle_line1"
+                    android:textColor="#ff9900"
+                    android:paddingTop="1dp"
+                    android:ellipsize="end"
+                    android:layout_alignParentLeft="true"
+                    android:textSize="14dip"
+                    android:translationZ="0dp"
+                    android:typeface="monospace" android:layout_marginTop="0dp" android:layout_alignParentTop="true"/>
             <TextView
                 android:id="@+id/widgetmin"
                 android:layout_width="wrap_content"

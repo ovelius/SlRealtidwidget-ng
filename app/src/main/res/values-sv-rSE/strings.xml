@@ -30,7 +30,7 @@
     <string name="add_stop_title">Konfigurera stopp</string>
     <string name="save_widget">Spara widget config</string>
     <string name="configure_widget_title">SL widget</string>
-    <string name="updating">Uppdaterande</string>
+    <string name="updating">Uppdaterar</string>
 
     <string name="error">Det gick inte att läsa in data</string>
     <string name="error_corrupt">Korrupt widget</string>

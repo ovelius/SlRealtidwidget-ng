@@ -209,7 +209,7 @@ class WidgetConfigureActivity : AppCompatActivity() {
         }
     }
 
-    fun finishOk() {
+    private fun finishOk() {
         LOG.info("Finishing with config $widgetConfig")
         val resultValue = Intent()
         resultValue.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, mAppWidgetId)

@@ -12,6 +12,7 @@ import androidx.core.content.ContextCompat
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
+import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -102,6 +103,14 @@ class SelectStopFragment : androidx.fragment.app.Fragment() {
         LOG.info("OnStart, set stuff from ${config}")
         mAutoCompleteTextView.setText(config.canonicalName, false)
 
+        mAutoCompleteTextView.setOnKeyListener{ _, keyCode : Int, _ ->
+            if(keyCode == KeyEvent.KEYCODE_DEL) {
+                if (config.siteId != 0L) {
+                    mAutoCompleteTextView.setText("", false)
+                }
+            }
+            false
+        }
 
         val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
               mapFragment.getMapAsync{it ->

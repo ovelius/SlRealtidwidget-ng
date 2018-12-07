@@ -43,6 +43,7 @@ val trafficToWeight = HashMap<Ng.NgTrafficType, Int>().apply{
 
 class LineListAdapter(private val activity: AddStopActivity, private val lineList : ArrayList<List<Ng.DepartureData>>) : BaseAdapter() {
     internal var selected : Ng.DepartureData = Ng.DepartureData.getDefaultInstance()
+    internal var selectedIndex : Int = -1
     private val inflater: LayoutInflater
             = activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
     override fun getItemId(position: Int): Long {
@@ -51,6 +52,10 @@ class LineListAdapter(private val activity: AddStopActivity, private val lineLis
 
     override fun getCount(): Int {
         return lineList.size
+    }
+
+    fun getSelectedIndex() : Int {
+        return selectedIndex
     }
 
     fun isSelected() : Boolean {
@@ -65,9 +70,11 @@ class LineListAdapter(private val activity: AddStopActivity, private val lineLis
         val clicked = getItem(position)[0]
         if (selected == clicked) {
             selected = Ng.DepartureData.getDefaultInstance()
+            selectedIndex = -1
         } else {
             val item = getItem(position)[0]
             selected = item
+            selectedIndex = position
             setColor(activity, activity.tabLayout, item.color)
         }
 

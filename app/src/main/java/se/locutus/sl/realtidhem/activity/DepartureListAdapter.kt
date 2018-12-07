@@ -9,6 +9,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import se.locutus.proto.Ng
 import se.locutus.sl.realtidhem.R
+import java.lang.IllegalArgumentException
 import java.util.*
 import java.util.logging.Logger
 
@@ -31,12 +32,25 @@ class DepartureListAdapter(private val activity: AddStopActivity, private val de
         return departureList[position].canonicalName
     }
 
+    fun getCheckedPosition() : Int {
+       for (i in departureList.indices) {
+           if (checks.contains(departureList[i].canonicalName)) {
+               return i
+           }
+       }
+        throw IllegalArgumentException("No departures selected!")
+    }
+
     fun clickItem(position: Int) {
         val departureName = departureList[position].canonicalName
         if (checks.contains(departureName)) {
             checks.remove(departureName)
         } else {
             checks.add(departureName)
+        }
+        if (checks.size == 1) {
+            val dep = departureList[getCheckedPosition()]
+            setColor(activity, activity.tabLayout, dep.color)
         }
         notifyDataSetChanged()
     }
