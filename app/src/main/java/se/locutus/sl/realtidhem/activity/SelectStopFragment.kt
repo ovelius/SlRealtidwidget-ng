@@ -195,8 +195,17 @@ class SelectStopFragment : androidx.fragment.app.Fragment() {
                         },
                         Response.ErrorListener {
                             LOG.severe("Error autocompleting $it")
-                            Snackbar.make(mAutoCompleteTextView, R.string.error_loading_autocomplete , Snackbar.LENGTH_SHORT)
-                                .show()})
+                            try {
+                                Snackbar.make(
+                                    mAutoCompleteTextView,
+                                    R.string.error_loading_autocomplete,
+                                    Snackbar.LENGTH_SHORT
+                                )
+                                    .show()
+                            } catch (e: IllegalArgumentException) {
+                                LOG.severe("Failed to create snackbar $e, activity dead?")
+                            }
+                        })
                     addStopActivity.requestQueue.add(stringRequest)
                 }
             }

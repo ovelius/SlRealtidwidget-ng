@@ -4,8 +4,8 @@
 <resources>
     <string name="app_name">&appname;</string>
     <string name="select_widget">Select the widget &appname; to get started</string>
+    <string name="help_set_battery_optimization">Make sure app &appname; is listed as not optimized</string>
     <string name="action_settings">Settings</string>
-    <string name="appwidget_text">EXAMPLE</string>
     <string name="configure">Configure</string>
     <string name="add_widget">Add widget</string>
     <string name="title_activity_add_stop">Settings</string>
@@ -66,6 +66,8 @@
     <string name="app_disclaimer">This is an open source application, developed as a small side-project for fun without profit :)
         \nThe app uses your location to determine what stop to show on what widget at what time.
     </string>
-    <string name="power_save_mode">Battery saver mode</string>
-    <string name="power_save_mode_no_whitelist">You need to disable battery optimizations for it to work</string>
+    <string name="power_save_mode">Battery saver mode - no Internet access</string>
+    <string name="power_save_mode_no_whitelist">Disable battery optimizations for this app - touch here to go to settings</string>
+    <string name="auto_updates_running">Automatic updates enabled</string>
+    <string name="disable_battery_optimization_query">android disable battery optimization for specific app</string>
 </resources>

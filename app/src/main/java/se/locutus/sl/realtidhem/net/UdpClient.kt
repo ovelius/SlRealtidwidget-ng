@@ -23,7 +23,7 @@ class UpdClient(val context : Context, private val prefs : SharedPreferences) : 
     val mainHandler = Handler(Looper.getMainLooper())
     var selfHandler : Handler? = null
     lateinit var udpSocket : DatagramSocket
-    lateinit var address : InetAddress
+    private var address : InetAddress? = null
 
     var responsive : Boolean = true
 
@@ -31,9 +31,19 @@ class UpdClient(val context : Context, private val prefs : SharedPreferences) : 
         udpSocket = DatagramSocket().apply {
             soTimeout = READ_TIMEOUT_MILLIS
         }
-        address = Inet4Address.getByName(getBackendIp(prefs))
+        tryResolveAddr()
         LOG.info("Created UPD socket on ${udpSocket.port} to $address")
         super.run()
+    }
+
+    fun tryResolveAddr() {
+        try {
+            address = Inet4Address.getByName(getBackendIp(prefs))
+            responsive = true
+        } catch (e : java.net.UnknownHostException) {
+            LOG.severe("Failed to resolve address, marking UDP socket as not responsive")
+            responsive = false
+        }
     }
 
     override fun onLooperPrepared() {
@@ -100,7 +110,7 @@ class UpdClient(val context : Context, private val prefs : SharedPreferences) : 
             LOG.warning("Got socket timeout, marking as not responsive")
             if (!isPing) {
                 responsive = false
-                schedulePing()
+                bringBackToLife()
             }
             throw e
         }
@@ -109,7 +119,14 @@ class UpdClient(val context : Context, private val prefs : SharedPreferences) : 
         return message
     }
 
-    fun schedulePing() {
+    fun bringBackToLife() {
+        // We failed to resolve address, try it again.
+        if (address == null) {
+            selfHandler!!.post {
+                tryResolveAddr()
+            }
+            return
+        }
         val time = System.currentTimeMillis()
         val api = context.packageManager.getPackageInfo(context.packageName, 0).versionCode
         val pingMessage = Ng.RequestData.newBuilder()

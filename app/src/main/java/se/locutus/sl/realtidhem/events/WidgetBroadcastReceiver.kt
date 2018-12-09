@@ -17,16 +17,20 @@ class WidgetBroadcastReceiver  : BroadcastReceiver() {
 
     companion object {
         var widgetTouchHandler : WidgetTouchHandler? = null
+        fun getTouchHandler(context : Context) : WidgetTouchHandler {
+            if (widgetTouchHandler == null) {
+                LOG.info("Creating main widget handler")
+                widgetTouchHandler = WidgetTouchHandler(context!!, NetworkManager(context))
+            }
+            return widgetTouchHandler!!
+        }
         val LOG = Logger.getLogger(WidgetBroadcastReceiver::class.java.name)
     }
     override fun onReceive(context: Context?, incomingIntent: Intent?) {
         if (context == null) {
             LOG.warning("Broadcast without context :(")
         }
-        if (widgetTouchHandler == null) {
-            LOG.info("Creating main widget handler")
-            widgetTouchHandler = WidgetTouchHandler(context!!, NetworkManager(context))
-        }
+        getTouchHandler(context!!)
         val widgetId = incomingIntent!!.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, 0)
         LOG.info("Received intent $incomingIntent with extra $widgetId action ${incomingIntent.action}")
 

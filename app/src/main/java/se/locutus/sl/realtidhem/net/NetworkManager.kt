@@ -42,7 +42,7 @@ class NetworkManager(var context : Context) : NetworkInterface {
             LOG.info("Sending request using HTTP")
             sendRequestWithHTTP(request, callback)
             if (udpSocket.ready() && !forceHttp) {
-                udpSocket.schedulePing()
+                udpSocket.bringBackToLife()
             }
         }
     }

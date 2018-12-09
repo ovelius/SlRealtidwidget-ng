@@ -79,7 +79,7 @@ class WidgetConfigureActivity : AppCompatActivity() {
     }
 
     private fun showWidgetDialog() {
-        val url = "https://support.google.com/android/answer/2781850?hl=${Locale.getDefault().displayLanguage}"
+        val url = "https://support.google.com/android/answer/2781850?hl=${Locale.getDefault().language}"
         val builder = AlertDialog.Builder(this)
         builder.setMessage(R.string.widget_help)
             .setNegativeButton(R.string.ok)

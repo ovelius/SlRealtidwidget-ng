@@ -4,10 +4,8 @@ import android.annotation.SuppressLint
 import android.app.job.JobInfo
 import android.app.job.JobScheduler
 import android.appwidget.AppWidgetManager
-import android.content.ComponentName
-import android.content.Context
-import android.content.Intent
-import android.content.SharedPreferences
+import android.content.*
+import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
 import android.net.Uri
 import android.os.*
 import android.provider.Settings
@@ -23,6 +21,11 @@ import java.lang.Exception
 import java.net.SocketTimeoutException
 import java.util.concurrent.ConcurrentHashMap
 import java.util.logging.Logger
+import androidx.core.content.ContextCompat.startActivity
+import androidx.core.content.ContextCompat.getSystemService
+import android.os.PowerManager
+import android.widget.Toast
+import java.net.URLEncoder
 
 
 const val CYCLE_STOP_LEFT = "CYCLE_STOP_LEFT"
@@ -47,7 +50,7 @@ class WidgetTouchHandler(val context: Context, val networkManager : NetworkInter
     internal val inMemoryState = InMemoryState()
     val mainHandler = Handler(Looper.getMainLooper())
 
-    fun widgetTouched(widgetId :  Int, action : String?) {
+    fun widgetTouched(widgetId :  Int, action : String?, userTouch : Boolean = true) {
         val widgetConfig = inMemoryState.getWidgetConfig(widgetId, prefs)
         var selectedStopIndex = prefs.getInt(widgetKeySelectedStop(widgetId), 0)
 
@@ -76,15 +79,23 @@ class WidgetTouchHandler(val context: Context, val networkManager : NetworkInter
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
            val pm = context.getSystemService(Context.POWER_SERVICE) as PowerManager?
             if (pm != null && isUnlistedPowerSaveMode(pm)) {
-                LOG.info("Power save mode detected without being whitelisted!")
-                val views = inMemoryState.getRemoveViews(widgetId, context, false)
-                val line2 = context.getString(R.string.power_save_mode_no_whitelist)
-                setWidgetTextViews(views, context.getString(R.string.power_save_mode), "", line2)
-                // https://stackoverflow.com/questions/32627342/how-to-whitelist-app-in-doze-mode-android-6-0
-                manager.updateAppWidget(widgetId, views)
-                inMemoryState.replaceThread(ScrollThread(
-                    widgetId, views, line2, context).apply {  start() })
-                return
+                if (inMemoryState.nextPowerSaveSettings) {
+                    tryLaunchBatteryOptimizationSettings()
+                    inMemoryState.nextPowerSaveSettings = false
+                    Toast.makeText(context, R.string.help_set_battery_optimization, Toast.LENGTH_LONG).show()
+                    return
+                } else {
+                    LOG.info("Power save mode detected without being whitelisted!")
+                    val views = inMemoryState.getRemoveViews(widgetId, context, false)
+                    val line2 = context.getString(R.string.power_save_mode_no_whitelist)
+                    setWidgetTextViews(views, context.getString(R.string.power_save_mode), "", line2)
+                    manager.updateAppWidget(widgetId, views)
+                    inMemoryState.replaceThread(ScrollThread(
+                        widgetId, views, line2, context
+                    ).apply { start() })
+                    inMemoryState.nextPowerSaveSettings = true
+                    return
+                }
             }
         }
 
@@ -92,7 +103,10 @@ class WidgetTouchHandler(val context: Context, val networkManager : NetworkInter
             if (inMemoryState.sinceUpdateStarted(widgetId) > UPDATE_RETRY_MILLIS) {
                 LOG.info("Triggering update for config for widget $widgetId")
                 loadWidgetData(widgetId, manager, widgetConfig.getStopConfiguration(selectedStopIndex), 1)
-                timeTracker.record(widgetId)
+                // Only record if this was an update from a users interaction.
+                if (userTouch) {
+                    timeTracker.record(widgetId)
+                }
                 scheduleWidgetClearing(context, widgetId)
             } else {
                 stopTouchingMe(manager, widgetId)
@@ -131,6 +145,22 @@ class WidgetTouchHandler(val context: Context, val networkManager : NetworkInter
             return false
         }
         return !pm.isIgnoringBatteryOptimizations(context.packageName)
+    }
+
+    private fun tryLaunchBatteryOptimizationSettings() {
+        val intent = Intent(Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS).apply {
+            flags = FLAG_ACTIVITY_NEW_TASK
+        }
+        try {
+            context.startActivity(intent)
+            return
+        } catch (e : ActivityNotFoundException) {
+            LOG.severe("Can't launch battery optimization settings $e using fallback")
+        }
+        val query = URLEncoder.encode(context.getString(R.string.disable_battery_optimization_query), "utf-8")
+        val url = "https://www.google.com/search?q=$query"
+        val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(url)).apply { flags = FLAG_ACTIVITY_NEW_TASK }
+        context.startActivity(browserIntent)
     }
 
     fun stopTouchingMe(manager : AppWidgetManager, widgetId : Int) {
@@ -275,6 +305,7 @@ class WidgetTouchHandler(val context: Context, val networkManager : NetworkInter
 
     internal class InMemoryState {
         private var scrollThread : ScrollThread? = null
+        var nextPowerSaveSettings = false
         var lastTouch = ConcurrentHashMap<Int, Long>()
         var updatedAt = ConcurrentHashMap<Int, Long>()
         var updateStartedAt = ConcurrentHashMap<Int, Long>()
