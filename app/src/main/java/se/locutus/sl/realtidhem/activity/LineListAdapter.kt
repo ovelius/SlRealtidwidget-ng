@@ -38,7 +38,7 @@ val trafficToWeight = HashMap<Ng.NgTrafficType, Int>().apply{
     put(Ng.NgTrafficType.TRAM, 300)
     put(Ng.NgTrafficType.BUS, 200)
     put(Ng.NgTrafficType.BOAT, 100)
-    put(Ng.NgTrafficType.UNKNOWN, 0)
+    put(Ng.NgTrafficType.UNKNOWN_TRAFFIC_TYPE, 0)
 }
 
 class LineListAdapter(private val activity: AddStopActivity, private val lineList : ArrayList<List<Ng.DepartureData>>) : BaseAdapter() {

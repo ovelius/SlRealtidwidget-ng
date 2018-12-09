@@ -9,14 +9,90 @@ public final class Ng {
       com.google.protobuf.ExtensionRegistryLite registry) {
   }
   /**
+   * Protobuf enum {@code se.locutus.proto.ErrorType}
+   */
+  public enum ErrorType
+      implements com.google.protobuf.Internal.EnumLite {
+    /**
+     * <code>UNKNOWN_ERROR = 0;</code>
+     */
+    UNKNOWN_ERROR(0),
+    /**
+     * <code>NO_DEPARTURES = 1;</code>
+     */
+    NO_DEPARTURES(1),
+    /**
+     * <code>SL_API_ERROR = 2;</code>
+     */
+    SL_API_ERROR(2),
+    UNRECOGNIZED(-1),
+    ;
+
+    /**
+     * <code>UNKNOWN_ERROR = 0;</code>
+     */
+    public static final int UNKNOWN_ERROR_VALUE = 0;
+    /**
+     * <code>NO_DEPARTURES = 1;</code>
+     */
+    public static final int NO_DEPARTURES_VALUE = 1;
+    /**
+     * <code>SL_API_ERROR = 2;</code>
+     */
+    public static final int SL_API_ERROR_VALUE = 2;
+
+
+    public final int getNumber() {
+      return value;
+    }
+
+    /**
+     * @deprecated Use {@link #forNumber(int)} instead.
+     */
+    @java.lang.Deprecated
+    public static ErrorType valueOf(int value) {
+      return forNumber(value);
+    }
+
+    public static ErrorType forNumber(int value) {
+      switch (value) {
+        case 0: return UNKNOWN_ERROR;
+        case 1: return NO_DEPARTURES;
+        case 2: return SL_API_ERROR;
+        default: return null;
+      }
+    }
+
+    public static com.google.protobuf.Internal.EnumLiteMap<ErrorType>
+        internalGetValueMap() {
+      return internalValueMap;
+    }
+    private static final com.google.protobuf.Internal.EnumLiteMap<
+        ErrorType> internalValueMap =
+          new com.google.protobuf.Internal.EnumLiteMap<ErrorType>() {
+            public ErrorType findValueByNumber(int number) {
+              return ErrorType.forNumber(number);
+            }
+          };
+
+    private final int value;
+
+    private ErrorType(int value) {
+      this.value = value;
+    }
+
+    // @@protoc_insertion_point(enum_scope:se.locutus.proto.ErrorType)
+  }
+
+  /**
    * Protobuf enum {@code se.locutus.proto.NgTrafficType}
    */
   public enum NgTrafficType
       implements com.google.protobuf.Internal.EnumLite {
     /**
-     * <code>UNKNOWN = 0;</code>
+     * <code>UNKNOWN_TRAFFIC_TYPE = 0;</code>
      */
-    UNKNOWN(0),
+    UNKNOWN_TRAFFIC_TYPE(0),
     /**
      * <code>METRO = 1;</code>
      */
@@ -41,9 +117,9 @@ public final class Ng {
     ;
 
     /**
-     * <code>UNKNOWN = 0;</code>
+     * <code>UNKNOWN_TRAFFIC_TYPE = 0;</code>
      */
-    public static final int UNKNOWN_VALUE = 0;
+    public static final int UNKNOWN_TRAFFIC_TYPE_VALUE = 0;
     /**
      * <code>METRO = 1;</code>
      */
@@ -80,7 +156,7 @@ public final class Ng {
 
     public static NgTrafficType forNumber(int value) {
       switch (value) {
-        case 0: return UNKNOWN;
+        case 0: return UNKNOWN_TRAFFIC_TYPE;
         case 1: return METRO;
         case 2: return BUS;
         case 3: return TRAIN;
@@ -1570,6 +1646,23 @@ public final class Ng {
      * <code>optional .se.locutus.proto.PingRequestResponse ping_response = 4;</code>
      */
     se.locutus.proto.Ng.PingRequestResponse getPingResponse();
+
+    /**
+     * <pre>
+     * Error response, set if we could handle the error
+     * </pre>
+     *
+     * <code>optional .se.locutus.proto.LoadErrorResponse error_response = 5;</code>
+     */
+    boolean hasErrorResponse();
+    /**
+     * <pre>
+     * Error response, set if we could handle the error
+     * </pre>
+     *
+     * <code>optional .se.locutus.proto.LoadErrorResponse error_response = 5;</code>
+     */
+    se.locutus.proto.Ng.LoadErrorResponse getErrorResponse();
   }
   /**
    * <pre>
@@ -1865,6 +1958,82 @@ public final class Ng {
       
     }
 
+    public static final int ERROR_RESPONSE_FIELD_NUMBER = 5;
+    private se.locutus.proto.Ng.LoadErrorResponse errorResponse_;
+    /**
+     * <pre>
+     * Error response, set if we could handle the error
+     * </pre>
+     *
+     * <code>optional .se.locutus.proto.LoadErrorResponse error_response = 5;</code>
+     */
+    public boolean hasErrorResponse() {
+      return errorResponse_ != null;
+    }
+    /**
+     * <pre>
+     * Error response, set if we could handle the error
+     * </pre>
+     *
+     * <code>optional .se.locutus.proto.LoadErrorResponse error_response = 5;</code>
+     */
+    public se.locutus.proto.Ng.LoadErrorResponse getErrorResponse() {
+      return errorResponse_ == null ? se.locutus.proto.Ng.LoadErrorResponse.getDefaultInstance() : errorResponse_;
+    }
+    /**
+     * <pre>
+     * Error response, set if we could handle the error
+     * </pre>
+     *
+     * <code>optional .se.locutus.proto.LoadErrorResponse error_response = 5;</code>
+     */
+    private void setErrorResponse(se.locutus.proto.Ng.LoadErrorResponse value) {
+      if (value == null) {
+        throw new NullPointerException();
+      }
+      errorResponse_ = value;
+      
+      }
+    /**
+     * <pre>
+     * Error response, set if we could handle the error
+     * </pre>
+     *
+     * <code>optional .se.locutus.proto.LoadErrorResponse error_response = 5;</code>
+     */
+    private void setErrorResponse(
+        se.locutus.proto.Ng.LoadErrorResponse.Builder builderForValue) {
+      errorResponse_ = builderForValue.build();
+      
+    }
+    /**
+     * <pre>
+     * Error response, set if we could handle the error
+     * </pre>
+     *
+     * <code>optional .se.locutus.proto.LoadErrorResponse error_response = 5;</code>
+     */
+    private void mergeErrorResponse(se.locutus.proto.Ng.LoadErrorResponse value) {
+      if (errorResponse_ != null &&
+          errorResponse_ != se.locutus.proto.Ng.LoadErrorResponse.getDefaultInstance()) {
+        errorResponse_ =
+          se.locutus.proto.Ng.LoadErrorResponse.newBuilder(errorResponse_).mergeFrom(value).buildPartial();
+      } else {
+        errorResponse_ = value;
+      }
+      
+    }
+    /**
+     * <pre>
+     * Error response, set if we could handle the error
+     * </pre>
+     *
+     * <code>optional .se.locutus.proto.LoadErrorResponse error_response = 5;</code>
+     */
+    private void clearErrorResponse() {  errorResponse_ = null;
+      
+    }
+
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
       if (responseHeader_ != null) {
@@ -1878,6 +2047,9 @@ public final class Ng {
       }
       if (pingResponse_ != null) {
         output.writeMessage(4, getPingResponse());
+      }
+      if (errorResponse_ != null) {
+        output.writeMessage(5, getErrorResponse());
       }
     }
 
@@ -1901,6 +2073,10 @@ public final class Ng {
       if (pingResponse_ != null) {
         size += com.google.protobuf.CodedOutputStream
           .computeMessageSize(4, getPingResponse());
+      }
+      if (errorResponse_ != null) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(5, getErrorResponse());
       }
       memoizedSerializedSize = size;
       return size;
@@ -2244,6 +2420,75 @@ public final class Ng {
         return this;
       }
 
+      /**
+       * <pre>
+       * Error response, set if we could handle the error
+       * </pre>
+       *
+       * <code>optional .se.locutus.proto.LoadErrorResponse error_response = 5;</code>
+       */
+      public boolean hasErrorResponse() {
+        return instance.hasErrorResponse();
+      }
+      /**
+       * <pre>
+       * Error response, set if we could handle the error
+       * </pre>
+       *
+       * <code>optional .se.locutus.proto.LoadErrorResponse error_response = 5;</code>
+       */
+      public se.locutus.proto.Ng.LoadErrorResponse getErrorResponse() {
+        return instance.getErrorResponse();
+      }
+      /**
+       * <pre>
+       * Error response, set if we could handle the error
+       * </pre>
+       *
+       * <code>optional .se.locutus.proto.LoadErrorResponse error_response = 5;</code>
+       */
+      public Builder setErrorResponse(se.locutus.proto.Ng.LoadErrorResponse value) {
+        copyOnWrite();
+        instance.setErrorResponse(value);
+        return this;
+        }
+      /**
+       * <pre>
+       * Error response, set if we could handle the error
+       * </pre>
+       *
+       * <code>optional .se.locutus.proto.LoadErrorResponse error_response = 5;</code>
+       */
+      public Builder setErrorResponse(
+          se.locutus.proto.Ng.LoadErrorResponse.Builder builderForValue) {
+        copyOnWrite();
+        instance.setErrorResponse(builderForValue);
+        return this;
+      }
+      /**
+       * <pre>
+       * Error response, set if we could handle the error
+       * </pre>
+       *
+       * <code>optional .se.locutus.proto.LoadErrorResponse error_response = 5;</code>
+       */
+      public Builder mergeErrorResponse(se.locutus.proto.Ng.LoadErrorResponse value) {
+        copyOnWrite();
+        instance.mergeErrorResponse(value);
+        return this;
+      }
+      /**
+       * <pre>
+       * Error response, set if we could handle the error
+       * </pre>
+       *
+       * <code>optional .se.locutus.proto.LoadErrorResponse error_response = 5;</code>
+       */
+      public Builder clearErrorResponse() {  copyOnWrite();
+        instance.clearErrorResponse();
+        return this;
+      }
+
       // @@protoc_insertion_point(builder_scope:se.locutus.proto.ResponseData)
     }
     protected final Object dynamicMethod(
@@ -2269,6 +2514,7 @@ public final class Ng {
           loadResponse_ = visitor.visitMessage(loadResponse_, other.loadResponse_);
           allDepaturesResponse_ = visitor.visitMessage(allDepaturesResponse_, other.allDepaturesResponse_);
           pingResponse_ = visitor.visitMessage(pingResponse_, other.pingResponse_);
+          errorResponse_ = visitor.visitMessage(errorResponse_, other.errorResponse_);
           if (visitor == com.google.protobuf.GeneratedMessageLite.MergeFromVisitor
               .INSTANCE) {
           }
@@ -2341,6 +2587,19 @@ public final class Ng {
                   if (subBuilder != null) {
                     subBuilder.mergeFrom(pingResponse_);
                     pingResponse_ = subBuilder.buildPartial();
+                  }
+
+                  break;
+                }
+                case 42: {
+                  se.locutus.proto.Ng.LoadErrorResponse.Builder subBuilder = null;
+                  if (errorResponse_ != null) {
+                    subBuilder = errorResponse_.toBuilder();
+                  }
+                  errorResponse_ = input.readMessage(se.locutus.proto.Ng.LoadErrorResponse.parser(), extensionRegistry);
+                  if (subBuilder != null) {
+                    subBuilder.mergeFrom(errorResponse_);
+                    errorResponse_ = subBuilder.buildPartial();
                   }
 
                   break;
@@ -3015,7 +3274,7 @@ public final class Ng {
       if (color_ != 0) {
         output.writeInt32(5, color_);
       }
-      if (trafficType_ != se.locutus.proto.Ng.NgTrafficType.UNKNOWN.getNumber()) {
+      if (trafficType_ != se.locutus.proto.Ng.NgTrafficType.UNKNOWN_TRAFFIC_TYPE.getNumber()) {
         output.writeEnum(6, trafficType_);
       }
       if (!idleMessage_.isEmpty()) {
@@ -3051,7 +3310,7 @@ public final class Ng {
         size += com.google.protobuf.CodedOutputStream
           .computeInt32Size(5, color_);
       }
-      if (trafficType_ != se.locutus.proto.Ng.NgTrafficType.UNKNOWN.getNumber()) {
+      if (trafficType_ != se.locutus.proto.Ng.NgTrafficType.UNKNOWN_TRAFFIC_TYPE.getNumber()) {
         size += com.google.protobuf.CodedOutputStream
           .computeEnumSize(6, trafficType_);
       }
@@ -3728,6 +3987,417 @@ public final class Ng {
     private static volatile com.google.protobuf.Parser<WidgetLoadResponseData> PARSER;
 
     public static com.google.protobuf.Parser<WidgetLoadResponseData> parser() {
+      return DEFAULT_INSTANCE.getParserForType();
+    }
+  }
+
+  public interface LoadErrorResponseOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:se.locutus.proto.LoadErrorResponse)
+      com.google.protobuf.MessageLiteOrBuilder {
+
+    /**
+     * <code>optional .se.locutus.proto.ErrorType error_type = 1;</code>
+     */
+    int getErrorTypeValue();
+    /**
+     * <code>optional .se.locutus.proto.ErrorType error_type = 1;</code>
+     */
+    se.locutus.proto.Ng.ErrorType getErrorType();
+
+    /**
+     * <code>optional string message = 2;</code>
+     */
+    java.lang.String getMessage();
+    /**
+     * <code>optional string message = 2;</code>
+     */
+    com.google.protobuf.ByteString
+        getMessageBytes();
+  }
+  /**
+   * Protobuf type {@code se.locutus.proto.LoadErrorResponse}
+   */
+  public  static final class LoadErrorResponse extends
+      com.google.protobuf.GeneratedMessageLite<
+          LoadErrorResponse, LoadErrorResponse.Builder> implements
+      // @@protoc_insertion_point(message_implements:se.locutus.proto.LoadErrorResponse)
+      LoadErrorResponseOrBuilder {
+    private LoadErrorResponse() {
+      message_ = "";
+    }
+    public static final int ERROR_TYPE_FIELD_NUMBER = 1;
+    private int errorType_;
+    /**
+     * <code>optional .se.locutus.proto.ErrorType error_type = 1;</code>
+     */
+    public int getErrorTypeValue() {
+      return errorType_;
+    }
+    /**
+     * <code>optional .se.locutus.proto.ErrorType error_type = 1;</code>
+     */
+    public se.locutus.proto.Ng.ErrorType getErrorType() {
+      se.locutus.proto.Ng.ErrorType result = se.locutus.proto.Ng.ErrorType.forNumber(errorType_);
+      return result == null ? se.locutus.proto.Ng.ErrorType.UNRECOGNIZED : result;
+    }
+    /**
+     * <code>optional .se.locutus.proto.ErrorType error_type = 1;</code>
+     */
+    private void setErrorTypeValue(int value) {
+        errorType_ = value;
+    }
+    /**
+     * <code>optional .se.locutus.proto.ErrorType error_type = 1;</code>
+     */
+    private void setErrorType(se.locutus.proto.Ng.ErrorType value) {
+      if (value == null) {
+        throw new NullPointerException();
+      }
+      
+      errorType_ = value.getNumber();
+    }
+    /**
+     * <code>optional .se.locutus.proto.ErrorType error_type = 1;</code>
+     */
+    private void clearErrorType() {
+      
+      errorType_ = 0;
+    }
+
+    public static final int MESSAGE_FIELD_NUMBER = 2;
+    private java.lang.String message_;
+    /**
+     * <code>optional string message = 2;</code>
+     */
+    public java.lang.String getMessage() {
+      return message_;
+    }
+    /**
+     * <code>optional string message = 2;</code>
+     */
+    public com.google.protobuf.ByteString
+        getMessageBytes() {
+      return com.google.protobuf.ByteString.copyFromUtf8(message_);
+    }
+    /**
+     * <code>optional string message = 2;</code>
+     */
+    private void setMessage(
+        java.lang.String value) {
+      if (value == null) {
+    throw new NullPointerException();
+  }
+  
+      message_ = value;
+    }
+    /**
+     * <code>optional string message = 2;</code>
+     */
+    private void clearMessage() {
+      
+      message_ = getDefaultInstance().getMessage();
+    }
+    /**
+     * <code>optional string message = 2;</code>
+     */
+    private void setMessageBytes(
+        com.google.protobuf.ByteString value) {
+      if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+      
+      message_ = value.toStringUtf8();
+    }
+
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      if (errorType_ != se.locutus.proto.Ng.ErrorType.UNKNOWN_ERROR.getNumber()) {
+        output.writeEnum(1, errorType_);
+      }
+      if (!message_.isEmpty()) {
+        output.writeString(2, getMessage());
+      }
+    }
+
+    public int getSerializedSize() {
+      int size = memoizedSerializedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      if (errorType_ != se.locutus.proto.Ng.ErrorType.UNKNOWN_ERROR.getNumber()) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeEnumSize(1, errorType_);
+      }
+      if (!message_.isEmpty()) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeStringSize(2, getMessage());
+      }
+      memoizedSerializedSize = size;
+      return size;
+    }
+
+    public static se.locutus.proto.Ng.LoadErrorResponse parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data);
+    }
+    public static se.locutus.proto.Ng.LoadErrorResponse parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data, extensionRegistry);
+    }
+    public static se.locutus.proto.Ng.LoadErrorResponse parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data);
+    }
+    public static se.locutus.proto.Ng.LoadErrorResponse parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data, extensionRegistry);
+    }
+    public static se.locutus.proto.Ng.LoadErrorResponse parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, input);
+    }
+    public static se.locutus.proto.Ng.LoadErrorResponse parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, input, extensionRegistry);
+    }
+    public static se.locutus.proto.Ng.LoadErrorResponse parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return parseDelimitedFrom(DEFAULT_INSTANCE, input);
+    }
+    public static se.locutus.proto.Ng.LoadErrorResponse parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return parseDelimitedFrom(DEFAULT_INSTANCE, input, extensionRegistry);
+    }
+    public static se.locutus.proto.Ng.LoadErrorResponse parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, input);
+    }
+    public static se.locutus.proto.Ng.LoadErrorResponse parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, input, extensionRegistry);
+    }
+
+    public static Builder newBuilder() {
+      return DEFAULT_INSTANCE.toBuilder();
+    }
+    public static Builder newBuilder(se.locutus.proto.Ng.LoadErrorResponse prototype) {
+      return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
+    }
+
+    /**
+     * Protobuf type {@code se.locutus.proto.LoadErrorResponse}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessageLite.Builder<
+          se.locutus.proto.Ng.LoadErrorResponse, Builder> implements
+        // @@protoc_insertion_point(builder_implements:se.locutus.proto.LoadErrorResponse)
+        se.locutus.proto.Ng.LoadErrorResponseOrBuilder {
+      // Construct using se.locutus.proto.Ng.LoadErrorResponse.newBuilder()
+      private Builder() {
+        super(DEFAULT_INSTANCE);
+      }
+
+
+      /**
+       * <code>optional .se.locutus.proto.ErrorType error_type = 1;</code>
+       */
+      public int getErrorTypeValue() {
+        return instance.getErrorTypeValue();
+      }
+      /**
+       * <code>optional .se.locutus.proto.ErrorType error_type = 1;</code>
+       */
+      public Builder setErrorTypeValue(int value) {
+        copyOnWrite();
+        instance.setErrorTypeValue(value);
+        return this;
+      }
+      /**
+       * <code>optional .se.locutus.proto.ErrorType error_type = 1;</code>
+       */
+      public se.locutus.proto.Ng.ErrorType getErrorType() {
+        return instance.getErrorType();
+      }
+      /**
+       * <code>optional .se.locutus.proto.ErrorType error_type = 1;</code>
+       */
+      public Builder setErrorType(se.locutus.proto.Ng.ErrorType value) {
+        copyOnWrite();
+        instance.setErrorType(value);
+        return this;
+      }
+      /**
+       * <code>optional .se.locutus.proto.ErrorType error_type = 1;</code>
+       */
+      public Builder clearErrorType() {
+        copyOnWrite();
+        instance.clearErrorType();
+        return this;
+      }
+
+      /**
+       * <code>optional string message = 2;</code>
+       */
+      public java.lang.String getMessage() {
+        return instance.getMessage();
+      }
+      /**
+       * <code>optional string message = 2;</code>
+       */
+      public com.google.protobuf.ByteString
+          getMessageBytes() {
+        return instance.getMessageBytes();
+      }
+      /**
+       * <code>optional string message = 2;</code>
+       */
+      public Builder setMessage(
+          java.lang.String value) {
+        copyOnWrite();
+        instance.setMessage(value);
+        return this;
+      }
+      /**
+       * <code>optional string message = 2;</code>
+       */
+      public Builder clearMessage() {
+        copyOnWrite();
+        instance.clearMessage();
+        return this;
+      }
+      /**
+       * <code>optional string message = 2;</code>
+       */
+      public Builder setMessageBytes(
+          com.google.protobuf.ByteString value) {
+        copyOnWrite();
+        instance.setMessageBytes(value);
+        return this;
+      }
+
+      // @@protoc_insertion_point(builder_scope:se.locutus.proto.LoadErrorResponse)
+    }
+    protected final Object dynamicMethod(
+        com.google.protobuf.GeneratedMessageLite.MethodToInvoke method,
+        Object arg0, Object arg1) {
+      switch (method) {
+        case NEW_MUTABLE_INSTANCE: {
+          return new se.locutus.proto.Ng.LoadErrorResponse();
+        }
+        case IS_INITIALIZED: {
+          return DEFAULT_INSTANCE;
+        }
+        case MAKE_IMMUTABLE: {
+          return null;
+        }
+        case NEW_BUILDER: {
+          return new Builder();
+        }
+        case VISIT: {
+          Visitor visitor = (Visitor) arg0;
+          se.locutus.proto.Ng.LoadErrorResponse other = (se.locutus.proto.Ng.LoadErrorResponse) arg1;
+          errorType_ = visitor.visitInt(errorType_ != 0, errorType_,    other.errorType_ != 0, other.errorType_);
+          message_ = visitor.visitString(!message_.isEmpty(), message_,
+              !other.message_.isEmpty(), other.message_);
+          if (visitor == com.google.protobuf.GeneratedMessageLite.MergeFromVisitor
+              .INSTANCE) {
+          }
+          return this;
+        }
+        case MERGE_FROM_STREAM: {
+          com.google.protobuf.CodedInputStream input =
+              (com.google.protobuf.CodedInputStream) arg0;
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry =
+              (com.google.protobuf.ExtensionRegistryLite) arg1;
+          try {
+            boolean done = false;
+            while (!done) {
+              int tag = input.readTag();
+              switch (tag) {
+                case 0:
+                  done = true;
+                  break;
+                default: {
+                  if (!input.skipField(tag)) {
+                    done = true;
+                  }
+                  break;
+                }
+                case 8: {
+                  int rawValue = input.readEnum();
+
+                  errorType_ = rawValue;
+                  break;
+                }
+                case 18: {
+                  String s = input.readStringRequireUtf8();
+
+                  message_ = s;
+                  break;
+                }
+              }
+            }
+          } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+            throw new RuntimeException(e.setUnfinishedMessage(this));
+          } catch (java.io.IOException e) {
+            throw new RuntimeException(
+                new com.google.protobuf.InvalidProtocolBufferException(
+                    e.getMessage()).setUnfinishedMessage(this));
+          } finally {
+          }
+        }
+        case GET_DEFAULT_INSTANCE: {
+          return DEFAULT_INSTANCE;
+        }
+        case GET_PARSER: {
+          if (PARSER == null) {    synchronized (se.locutus.proto.Ng.LoadErrorResponse.class) {
+              if (PARSER == null) {
+                PARSER = new DefaultInstanceBasedParser(DEFAULT_INSTANCE);
+              }
+            }
+          }
+          return PARSER;
+        }
+      }
+      throw new UnsupportedOperationException();
+    }
+
+
+    // @@protoc_insertion_point(class_scope:se.locutus.proto.LoadErrorResponse)
+    private static final se.locutus.proto.Ng.LoadErrorResponse DEFAULT_INSTANCE;
+    static {
+      DEFAULT_INSTANCE = new LoadErrorResponse();
+      DEFAULT_INSTANCE.makeImmutable();
+    }
+
+    public static se.locutus.proto.Ng.LoadErrorResponse getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    private static volatile com.google.protobuf.Parser<LoadErrorResponse> PARSER;
+
+    public static com.google.protobuf.Parser<LoadErrorResponse> parser() {
       return DEFAULT_INSTANCE.getParserForType();
     }
   }
@@ -4788,7 +5458,7 @@ public final class Ng {
       if (directionId_ != 0) {
         output.writeInt32(4, directionId_);
       }
-      if (trafficType_ != se.locutus.proto.Ng.NgTrafficType.UNKNOWN.getNumber()) {
+      if (trafficType_ != se.locutus.proto.Ng.NgTrafficType.UNKNOWN_TRAFFIC_TYPE.getNumber()) {
         output.writeEnum(5, trafficType_);
       }
     }
@@ -4814,7 +5484,7 @@ public final class Ng {
         size += com.google.protobuf.CodedOutputStream
           .computeInt32Size(4, directionId_);
       }
-      if (trafficType_ != se.locutus.proto.Ng.NgTrafficType.UNKNOWN.getNumber()) {
+      if (trafficType_ != se.locutus.proto.Ng.NgTrafficType.UNKNOWN_TRAFFIC_TYPE.getNumber()) {
         size += com.google.protobuf.CodedOutputStream
           .computeEnumSize(5, trafficType_);
       }
@@ -9009,6 +9679,1281 @@ public final class Ng {
     }
   }
 
+  public interface ColorConfigOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:se.locutus.proto.ColorConfig)
+      com.google.protobuf.MessageLiteOrBuilder {
+
+    /**
+     * <code>optional bool override_main_color = 1;</code>
+     */
+    boolean getOverrideMainColor();
+
+    /**
+     * <code>optional int32 main_color = 2;</code>
+     */
+    int getMainColor();
+
+    /**
+     * <code>optional bool override_text_color = 3;</code>
+     */
+    boolean getOverrideTextColor();
+
+    /**
+     * <code>optional int32 text_color = 4;</code>
+     */
+    int getTextColor();
+
+    /**
+     * <code>optional bool override_bg_color = 5;</code>
+     */
+    boolean getOverrideBgColor();
+
+    /**
+     * <code>optional int32 bg_color = 6;</code>
+     */
+    int getBgColor();
+  }
+  /**
+   * Protobuf type {@code se.locutus.proto.ColorConfig}
+   */
+  public  static final class ColorConfig extends
+      com.google.protobuf.GeneratedMessageLite<
+          ColorConfig, ColorConfig.Builder> implements
+      // @@protoc_insertion_point(message_implements:se.locutus.proto.ColorConfig)
+      ColorConfigOrBuilder {
+    private ColorConfig() {
+    }
+    public static final int OVERRIDE_MAIN_COLOR_FIELD_NUMBER = 1;
+    private boolean overrideMainColor_;
+    /**
+     * <code>optional bool override_main_color = 1;</code>
+     */
+    public boolean getOverrideMainColor() {
+      return overrideMainColor_;
+    }
+    /**
+     * <code>optional bool override_main_color = 1;</code>
+     */
+    private void setOverrideMainColor(boolean value) {
+      
+      overrideMainColor_ = value;
+    }
+    /**
+     * <code>optional bool override_main_color = 1;</code>
+     */
+    private void clearOverrideMainColor() {
+      
+      overrideMainColor_ = false;
+    }
+
+    public static final int MAIN_COLOR_FIELD_NUMBER = 2;
+    private int mainColor_;
+    /**
+     * <code>optional int32 main_color = 2;</code>
+     */
+    public int getMainColor() {
+      return mainColor_;
+    }
+    /**
+     * <code>optional int32 main_color = 2;</code>
+     */
+    private void setMainColor(int value) {
+      
+      mainColor_ = value;
+    }
+    /**
+     * <code>optional int32 main_color = 2;</code>
+     */
+    private void clearMainColor() {
+      
+      mainColor_ = 0;
+    }
+
+    public static final int OVERRIDE_TEXT_COLOR_FIELD_NUMBER = 3;
+    private boolean overrideTextColor_;
+    /**
+     * <code>optional bool override_text_color = 3;</code>
+     */
+    public boolean getOverrideTextColor() {
+      return overrideTextColor_;
+    }
+    /**
+     * <code>optional bool override_text_color = 3;</code>
+     */
+    private void setOverrideTextColor(boolean value) {
+      
+      overrideTextColor_ = value;
+    }
+    /**
+     * <code>optional bool override_text_color = 3;</code>
+     */
+    private void clearOverrideTextColor() {
+      
+      overrideTextColor_ = false;
+    }
+
+    public static final int TEXT_COLOR_FIELD_NUMBER = 4;
+    private int textColor_;
+    /**
+     * <code>optional int32 text_color = 4;</code>
+     */
+    public int getTextColor() {
+      return textColor_;
+    }
+    /**
+     * <code>optional int32 text_color = 4;</code>
+     */
+    private void setTextColor(int value) {
+      
+      textColor_ = value;
+    }
+    /**
+     * <code>optional int32 text_color = 4;</code>
+     */
+    private void clearTextColor() {
+      
+      textColor_ = 0;
+    }
+
+    public static final int OVERRIDE_BG_COLOR_FIELD_NUMBER = 5;
+    private boolean overrideBgColor_;
+    /**
+     * <code>optional bool override_bg_color = 5;</code>
+     */
+    public boolean getOverrideBgColor() {
+      return overrideBgColor_;
+    }
+    /**
+     * <code>optional bool override_bg_color = 5;</code>
+     */
+    private void setOverrideBgColor(boolean value) {
+      
+      overrideBgColor_ = value;
+    }
+    /**
+     * <code>optional bool override_bg_color = 5;</code>
+     */
+    private void clearOverrideBgColor() {
+      
+      overrideBgColor_ = false;
+    }
+
+    public static final int BG_COLOR_FIELD_NUMBER = 6;
+    private int bgColor_;
+    /**
+     * <code>optional int32 bg_color = 6;</code>
+     */
+    public int getBgColor() {
+      return bgColor_;
+    }
+    /**
+     * <code>optional int32 bg_color = 6;</code>
+     */
+    private void setBgColor(int value) {
+      
+      bgColor_ = value;
+    }
+    /**
+     * <code>optional int32 bg_color = 6;</code>
+     */
+    private void clearBgColor() {
+      
+      bgColor_ = 0;
+    }
+
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      if (overrideMainColor_ != false) {
+        output.writeBool(1, overrideMainColor_);
+      }
+      if (mainColor_ != 0) {
+        output.writeInt32(2, mainColor_);
+      }
+      if (overrideTextColor_ != false) {
+        output.writeBool(3, overrideTextColor_);
+      }
+      if (textColor_ != 0) {
+        output.writeInt32(4, textColor_);
+      }
+      if (overrideBgColor_ != false) {
+        output.writeBool(5, overrideBgColor_);
+      }
+      if (bgColor_ != 0) {
+        output.writeInt32(6, bgColor_);
+      }
+    }
+
+    public int getSerializedSize() {
+      int size = memoizedSerializedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      if (overrideMainColor_ != false) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBoolSize(1, overrideMainColor_);
+      }
+      if (mainColor_ != 0) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(2, mainColor_);
+      }
+      if (overrideTextColor_ != false) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBoolSize(3, overrideTextColor_);
+      }
+      if (textColor_ != 0) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(4, textColor_);
+      }
+      if (overrideBgColor_ != false) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBoolSize(5, overrideBgColor_);
+      }
+      if (bgColor_ != 0) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(6, bgColor_);
+      }
+      memoizedSerializedSize = size;
+      return size;
+    }
+
+    public static se.locutus.proto.Ng.ColorConfig parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data);
+    }
+    public static se.locutus.proto.Ng.ColorConfig parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data, extensionRegistry);
+    }
+    public static se.locutus.proto.Ng.ColorConfig parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data);
+    }
+    public static se.locutus.proto.Ng.ColorConfig parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data, extensionRegistry);
+    }
+    public static se.locutus.proto.Ng.ColorConfig parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, input);
+    }
+    public static se.locutus.proto.Ng.ColorConfig parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, input, extensionRegistry);
+    }
+    public static se.locutus.proto.Ng.ColorConfig parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return parseDelimitedFrom(DEFAULT_INSTANCE, input);
+    }
+    public static se.locutus.proto.Ng.ColorConfig parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return parseDelimitedFrom(DEFAULT_INSTANCE, input, extensionRegistry);
+    }
+    public static se.locutus.proto.Ng.ColorConfig parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, input);
+    }
+    public static se.locutus.proto.Ng.ColorConfig parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, input, extensionRegistry);
+    }
+
+    public static Builder newBuilder() {
+      return DEFAULT_INSTANCE.toBuilder();
+    }
+    public static Builder newBuilder(se.locutus.proto.Ng.ColorConfig prototype) {
+      return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
+    }
+
+    /**
+     * Protobuf type {@code se.locutus.proto.ColorConfig}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessageLite.Builder<
+          se.locutus.proto.Ng.ColorConfig, Builder> implements
+        // @@protoc_insertion_point(builder_implements:se.locutus.proto.ColorConfig)
+        se.locutus.proto.Ng.ColorConfigOrBuilder {
+      // Construct using se.locutus.proto.Ng.ColorConfig.newBuilder()
+      private Builder() {
+        super(DEFAULT_INSTANCE);
+      }
+
+
+      /**
+       * <code>optional bool override_main_color = 1;</code>
+       */
+      public boolean getOverrideMainColor() {
+        return instance.getOverrideMainColor();
+      }
+      /**
+       * <code>optional bool override_main_color = 1;</code>
+       */
+      public Builder setOverrideMainColor(boolean value) {
+        copyOnWrite();
+        instance.setOverrideMainColor(value);
+        return this;
+      }
+      /**
+       * <code>optional bool override_main_color = 1;</code>
+       */
+      public Builder clearOverrideMainColor() {
+        copyOnWrite();
+        instance.clearOverrideMainColor();
+        return this;
+      }
+
+      /**
+       * <code>optional int32 main_color = 2;</code>
+       */
+      public int getMainColor() {
+        return instance.getMainColor();
+      }
+      /**
+       * <code>optional int32 main_color = 2;</code>
+       */
+      public Builder setMainColor(int value) {
+        copyOnWrite();
+        instance.setMainColor(value);
+        return this;
+      }
+      /**
+       * <code>optional int32 main_color = 2;</code>
+       */
+      public Builder clearMainColor() {
+        copyOnWrite();
+        instance.clearMainColor();
+        return this;
+      }
+
+      /**
+       * <code>optional bool override_text_color = 3;</code>
+       */
+      public boolean getOverrideTextColor() {
+        return instance.getOverrideTextColor();
+      }
+      /**
+       * <code>optional bool override_text_color = 3;</code>
+       */
+      public Builder setOverrideTextColor(boolean value) {
+        copyOnWrite();
+        instance.setOverrideTextColor(value);
+        return this;
+      }
+      /**
+       * <code>optional bool override_text_color = 3;</code>
+       */
+      public Builder clearOverrideTextColor() {
+        copyOnWrite();
+        instance.clearOverrideTextColor();
+        return this;
+      }
+
+      /**
+       * <code>optional int32 text_color = 4;</code>
+       */
+      public int getTextColor() {
+        return instance.getTextColor();
+      }
+      /**
+       * <code>optional int32 text_color = 4;</code>
+       */
+      public Builder setTextColor(int value) {
+        copyOnWrite();
+        instance.setTextColor(value);
+        return this;
+      }
+      /**
+       * <code>optional int32 text_color = 4;</code>
+       */
+      public Builder clearTextColor() {
+        copyOnWrite();
+        instance.clearTextColor();
+        return this;
+      }
+
+      /**
+       * <code>optional bool override_bg_color = 5;</code>
+       */
+      public boolean getOverrideBgColor() {
+        return instance.getOverrideBgColor();
+      }
+      /**
+       * <code>optional bool override_bg_color = 5;</code>
+       */
+      public Builder setOverrideBgColor(boolean value) {
+        copyOnWrite();
+        instance.setOverrideBgColor(value);
+        return this;
+      }
+      /**
+       * <code>optional bool override_bg_color = 5;</code>
+       */
+      public Builder clearOverrideBgColor() {
+        copyOnWrite();
+        instance.clearOverrideBgColor();
+        return this;
+      }
+
+      /**
+       * <code>optional int32 bg_color = 6;</code>
+       */
+      public int getBgColor() {
+        return instance.getBgColor();
+      }
+      /**
+       * <code>optional int32 bg_color = 6;</code>
+       */
+      public Builder setBgColor(int value) {
+        copyOnWrite();
+        instance.setBgColor(value);
+        return this;
+      }
+      /**
+       * <code>optional int32 bg_color = 6;</code>
+       */
+      public Builder clearBgColor() {
+        copyOnWrite();
+        instance.clearBgColor();
+        return this;
+      }
+
+      // @@protoc_insertion_point(builder_scope:se.locutus.proto.ColorConfig)
+    }
+    protected final Object dynamicMethod(
+        com.google.protobuf.GeneratedMessageLite.MethodToInvoke method,
+        Object arg0, Object arg1) {
+      switch (method) {
+        case NEW_MUTABLE_INSTANCE: {
+          return new se.locutus.proto.Ng.ColorConfig();
+        }
+        case IS_INITIALIZED: {
+          return DEFAULT_INSTANCE;
+        }
+        case MAKE_IMMUTABLE: {
+          return null;
+        }
+        case NEW_BUILDER: {
+          return new Builder();
+        }
+        case VISIT: {
+          Visitor visitor = (Visitor) arg0;
+          se.locutus.proto.Ng.ColorConfig other = (se.locutus.proto.Ng.ColorConfig) arg1;
+          overrideMainColor_ = visitor.visitBoolean(overrideMainColor_ != false, overrideMainColor_,
+              other.overrideMainColor_ != false, other.overrideMainColor_);
+          mainColor_ = visitor.visitInt(mainColor_ != 0, mainColor_,
+              other.mainColor_ != 0, other.mainColor_);
+          overrideTextColor_ = visitor.visitBoolean(overrideTextColor_ != false, overrideTextColor_,
+              other.overrideTextColor_ != false, other.overrideTextColor_);
+          textColor_ = visitor.visitInt(textColor_ != 0, textColor_,
+              other.textColor_ != 0, other.textColor_);
+          overrideBgColor_ = visitor.visitBoolean(overrideBgColor_ != false, overrideBgColor_,
+              other.overrideBgColor_ != false, other.overrideBgColor_);
+          bgColor_ = visitor.visitInt(bgColor_ != 0, bgColor_,
+              other.bgColor_ != 0, other.bgColor_);
+          if (visitor == com.google.protobuf.GeneratedMessageLite.MergeFromVisitor
+              .INSTANCE) {
+          }
+          return this;
+        }
+        case MERGE_FROM_STREAM: {
+          com.google.protobuf.CodedInputStream input =
+              (com.google.protobuf.CodedInputStream) arg0;
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry =
+              (com.google.protobuf.ExtensionRegistryLite) arg1;
+          try {
+            boolean done = false;
+            while (!done) {
+              int tag = input.readTag();
+              switch (tag) {
+                case 0:
+                  done = true;
+                  break;
+                default: {
+                  if (!input.skipField(tag)) {
+                    done = true;
+                  }
+                  break;
+                }
+                case 8: {
+
+                  overrideMainColor_ = input.readBool();
+                  break;
+                }
+                case 16: {
+
+                  mainColor_ = input.readInt32();
+                  break;
+                }
+                case 24: {
+
+                  overrideTextColor_ = input.readBool();
+                  break;
+                }
+                case 32: {
+
+                  textColor_ = input.readInt32();
+                  break;
+                }
+                case 40: {
+
+                  overrideBgColor_ = input.readBool();
+                  break;
+                }
+                case 48: {
+
+                  bgColor_ = input.readInt32();
+                  break;
+                }
+              }
+            }
+          } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+            throw new RuntimeException(e.setUnfinishedMessage(this));
+          } catch (java.io.IOException e) {
+            throw new RuntimeException(
+                new com.google.protobuf.InvalidProtocolBufferException(
+                    e.getMessage()).setUnfinishedMessage(this));
+          } finally {
+          }
+        }
+        case GET_DEFAULT_INSTANCE: {
+          return DEFAULT_INSTANCE;
+        }
+        case GET_PARSER: {
+          if (PARSER == null) {    synchronized (se.locutus.proto.Ng.ColorConfig.class) {
+              if (PARSER == null) {
+                PARSER = new DefaultInstanceBasedParser(DEFAULT_INSTANCE);
+              }
+            }
+          }
+          return PARSER;
+        }
+      }
+      throw new UnsupportedOperationException();
+    }
+
+
+    // @@protoc_insertion_point(class_scope:se.locutus.proto.ColorConfig)
+    private static final se.locutus.proto.Ng.ColorConfig DEFAULT_INSTANCE;
+    static {
+      DEFAULT_INSTANCE = new ColorConfig();
+      DEFAULT_INSTANCE.makeImmutable();
+    }
+
+    public static se.locutus.proto.Ng.ColorConfig getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    private static volatile com.google.protobuf.Parser<ColorConfig> PARSER;
+
+    public static com.google.protobuf.Parser<ColorConfig> parser() {
+      return DEFAULT_INSTANCE.getParserForType();
+    }
+  }
+
+  public interface ThemeDataOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:se.locutus.proto.ThemeData)
+      com.google.protobuf.MessageLiteOrBuilder {
+
+    /**
+     * <pre>
+     * Color config.
+     * </pre>
+     *
+     * <code>optional .se.locutus.proto.ColorConfig color_config = 1;</code>
+     */
+    boolean hasColorConfig();
+    /**
+     * <pre>
+     * Color config.
+     * </pre>
+     *
+     * <code>optional .se.locutus.proto.ColorConfig color_config = 1;</code>
+     */
+    se.locutus.proto.Ng.ColorConfig getColorConfig();
+
+    /**
+     * <pre>
+     * Custom departure names.
+     * </pre>
+     *
+     * <code>map&lt;string, string&gt; departure_name_mappings = 2;</code>
+     */
+    int getDepartureNameMappingsCount();
+    /**
+     * <pre>
+     * Custom departure names.
+     * </pre>
+     *
+     * <code>map&lt;string, string&gt; departure_name_mappings = 2;</code>
+     */
+    boolean containsDepartureNameMappings(
+        java.lang.String key);
+    /**
+     * Use {@link #getDepartureNameMappingsMap()} instead.
+     */
+    @java.lang.Deprecated
+    java.util.Map<java.lang.String, java.lang.String>
+    getDepartureNameMappings();
+    /**
+     * <pre>
+     * Custom departure names.
+     * </pre>
+     *
+     * <code>map&lt;string, string&gt; departure_name_mappings = 2;</code>
+     */
+    java.util.Map<java.lang.String, java.lang.String>
+    getDepartureNameMappingsMap();
+    /**
+     * <pre>
+     * Custom departure names.
+     * </pre>
+     *
+     * <code>map&lt;string, string&gt; departure_name_mappings = 2;</code>
+     */
+
+    java.lang.String getDepartureNameMappingsOrDefault(
+        java.lang.String key,
+        java.lang.String defaultValue);
+    /**
+     * <pre>
+     * Custom departure names.
+     * </pre>
+     *
+     * <code>map&lt;string, string&gt; departure_name_mappings = 2;</code>
+     */
+
+    java.lang.String getDepartureNameMappingsOrThrow(
+        java.lang.String key);
+  }
+  /**
+   * Protobuf type {@code se.locutus.proto.ThemeData}
+   */
+  public  static final class ThemeData extends
+      com.google.protobuf.GeneratedMessageLite<
+          ThemeData, ThemeData.Builder> implements
+      // @@protoc_insertion_point(message_implements:se.locutus.proto.ThemeData)
+      ThemeDataOrBuilder {
+    private ThemeData() {
+    }
+    private int bitField0_;
+    public static final int COLOR_CONFIG_FIELD_NUMBER = 1;
+    private se.locutus.proto.Ng.ColorConfig colorConfig_;
+    /**
+     * <pre>
+     * Color config.
+     * </pre>
+     *
+     * <code>optional .se.locutus.proto.ColorConfig color_config = 1;</code>
+     */
+    public boolean hasColorConfig() {
+      return colorConfig_ != null;
+    }
+    /**
+     * <pre>
+     * Color config.
+     * </pre>
+     *
+     * <code>optional .se.locutus.proto.ColorConfig color_config = 1;</code>
+     */
+    public se.locutus.proto.Ng.ColorConfig getColorConfig() {
+      return colorConfig_ == null ? se.locutus.proto.Ng.ColorConfig.getDefaultInstance() : colorConfig_;
+    }
+    /**
+     * <pre>
+     * Color config.
+     * </pre>
+     *
+     * <code>optional .se.locutus.proto.ColorConfig color_config = 1;</code>
+     */
+    private void setColorConfig(se.locutus.proto.Ng.ColorConfig value) {
+      if (value == null) {
+        throw new NullPointerException();
+      }
+      colorConfig_ = value;
+      
+      }
+    /**
+     * <pre>
+     * Color config.
+     * </pre>
+     *
+     * <code>optional .se.locutus.proto.ColorConfig color_config = 1;</code>
+     */
+    private void setColorConfig(
+        se.locutus.proto.Ng.ColorConfig.Builder builderForValue) {
+      colorConfig_ = builderForValue.build();
+      
+    }
+    /**
+     * <pre>
+     * Color config.
+     * </pre>
+     *
+     * <code>optional .se.locutus.proto.ColorConfig color_config = 1;</code>
+     */
+    private void mergeColorConfig(se.locutus.proto.Ng.ColorConfig value) {
+      if (colorConfig_ != null &&
+          colorConfig_ != se.locutus.proto.Ng.ColorConfig.getDefaultInstance()) {
+        colorConfig_ =
+          se.locutus.proto.Ng.ColorConfig.newBuilder(colorConfig_).mergeFrom(value).buildPartial();
+      } else {
+        colorConfig_ = value;
+      }
+      
+    }
+    /**
+     * <pre>
+     * Color config.
+     * </pre>
+     *
+     * <code>optional .se.locutus.proto.ColorConfig color_config = 1;</code>
+     */
+    private void clearColorConfig() {  colorConfig_ = null;
+      
+    }
+
+    public static final int DEPARTURE_NAME_MAPPINGS_FIELD_NUMBER = 2;
+    private static final class DepartureNameMappingsDefaultEntryHolder {
+      static final com.google.protobuf.MapEntryLite<
+          java.lang.String, java.lang.String> defaultEntry =
+              com.google.protobuf.MapEntryLite
+              .<java.lang.String, java.lang.String>newDefaultInstance(
+                  com.google.protobuf.WireFormat.FieldType.STRING,
+                  "",
+                  com.google.protobuf.WireFormat.FieldType.STRING,
+                  "");
+    }
+    private com.google.protobuf.MapFieldLite<
+        java.lang.String, java.lang.String> departureNameMappings_ =
+            com.google.protobuf.MapFieldLite.emptyMapField();
+    private com.google.protobuf.MapFieldLite<java.lang.String, java.lang.String>
+    internalGetDepartureNameMappings() {
+      return departureNameMappings_;
+    }
+    private com.google.protobuf.MapFieldLite<java.lang.String, java.lang.String>
+    internalGetMutableDepartureNameMappings() {
+      if (!departureNameMappings_.isMutable()) {
+        departureNameMappings_ = departureNameMappings_.mutableCopy();
+      }
+      return departureNameMappings_;
+    }
+
+    public int getDepartureNameMappingsCount() {
+      return internalGetDepartureNameMappings().size();
+    }
+    /**
+     * <pre>
+     * Custom departure names.
+     * </pre>
+     *
+     * <code>map&lt;string, string&gt; departure_name_mappings = 2;</code>
+     */
+
+    public boolean containsDepartureNameMappings(
+        java.lang.String key) {
+      if (key == null) { throw new java.lang.NullPointerException(); }
+      return internalGetDepartureNameMappings().containsKey(key);
+    }
+    /**
+     * Use {@link #getDepartureNameMappingsMap()} instead.
+     */
+    @java.lang.Deprecated
+    public java.util.Map<java.lang.String, java.lang.String> getDepartureNameMappings() {
+      return getDepartureNameMappingsMap();
+    }
+    /**
+     * <pre>
+     * Custom departure names.
+     * </pre>
+     *
+     * <code>map&lt;string, string&gt; departure_name_mappings = 2;</code>
+     */
+
+    public java.util.Map<java.lang.String, java.lang.String> getDepartureNameMappingsMap() {
+      return java.util.Collections.unmodifiableMap(
+          internalGetDepartureNameMappings());
+    }
+    /**
+     * <pre>
+     * Custom departure names.
+     * </pre>
+     *
+     * <code>map&lt;string, string&gt; departure_name_mappings = 2;</code>
+     */
+
+    public java.lang.String getDepartureNameMappingsOrDefault(
+        java.lang.String key,
+        java.lang.String defaultValue) {
+      if (key == null) { throw new java.lang.NullPointerException(); }
+      java.util.Map<java.lang.String, java.lang.String> map =
+          internalGetDepartureNameMappings();
+      return map.containsKey(key) ? map.get(key) : defaultValue;
+    }
+    /**
+     * <pre>
+     * Custom departure names.
+     * </pre>
+     *
+     * <code>map&lt;string, string&gt; departure_name_mappings = 2;</code>
+     */
+
+    public java.lang.String getDepartureNameMappingsOrThrow(
+        java.lang.String key) {
+      if (key == null) { throw new java.lang.NullPointerException(); }
+      java.util.Map<java.lang.String, java.lang.String> map =
+          internalGetDepartureNameMappings();
+      if (!map.containsKey(key)) {
+        throw new java.lang.IllegalArgumentException();
+      }
+      return map.get(key);
+    }
+    /**
+     * <pre>
+     * Custom departure names.
+     * </pre>
+     *
+     * <code>map&lt;string, string&gt; departure_name_mappings = 2;</code>
+     */
+    private java.util.Map<java.lang.String, java.lang.String>
+    getMutableDepartureNameMappingsMap() {
+      return internalGetMutableDepartureNameMappings();
+    }
+
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      if (colorConfig_ != null) {
+        output.writeMessage(1, getColorConfig());
+      }
+      for (java.util.Map.Entry<java.lang.String, java.lang.String> entry
+           : internalGetDepartureNameMappings().entrySet()) {
+        DepartureNameMappingsDefaultEntryHolder.defaultEntry.serializeTo(
+            output, 2, entry.getKey(), entry.getValue());
+      }
+    }
+
+    public int getSerializedSize() {
+      int size = memoizedSerializedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      if (colorConfig_ != null) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(1, getColorConfig());
+      }
+      for (java.util.Map.Entry<java.lang.String, java.lang.String> entry
+           : internalGetDepartureNameMappings().entrySet()) {
+        size += DepartureNameMappingsDefaultEntryHolder.defaultEntry.computeMessageSize(
+          2, entry.getKey(), entry.getValue());
+      }
+      memoizedSerializedSize = size;
+      return size;
+    }
+
+    public static se.locutus.proto.Ng.ThemeData parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data);
+    }
+    public static se.locutus.proto.Ng.ThemeData parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data, extensionRegistry);
+    }
+    public static se.locutus.proto.Ng.ThemeData parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data);
+    }
+    public static se.locutus.proto.Ng.ThemeData parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data, extensionRegistry);
+    }
+    public static se.locutus.proto.Ng.ThemeData parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, input);
+    }
+    public static se.locutus.proto.Ng.ThemeData parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, input, extensionRegistry);
+    }
+    public static se.locutus.proto.Ng.ThemeData parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return parseDelimitedFrom(DEFAULT_INSTANCE, input);
+    }
+    public static se.locutus.proto.Ng.ThemeData parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return parseDelimitedFrom(DEFAULT_INSTANCE, input, extensionRegistry);
+    }
+    public static se.locutus.proto.Ng.ThemeData parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, input);
+    }
+    public static se.locutus.proto.Ng.ThemeData parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, input, extensionRegistry);
+    }
+
+    public static Builder newBuilder() {
+      return DEFAULT_INSTANCE.toBuilder();
+    }
+    public static Builder newBuilder(se.locutus.proto.Ng.ThemeData prototype) {
+      return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
+    }
+
+    /**
+     * Protobuf type {@code se.locutus.proto.ThemeData}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessageLite.Builder<
+          se.locutus.proto.Ng.ThemeData, Builder> implements
+        // @@protoc_insertion_point(builder_implements:se.locutus.proto.ThemeData)
+        se.locutus.proto.Ng.ThemeDataOrBuilder {
+      // Construct using se.locutus.proto.Ng.ThemeData.newBuilder()
+      private Builder() {
+        super(DEFAULT_INSTANCE);
+      }
+
+
+      /**
+       * <pre>
+       * Color config.
+       * </pre>
+       *
+       * <code>optional .se.locutus.proto.ColorConfig color_config = 1;</code>
+       */
+      public boolean hasColorConfig() {
+        return instance.hasColorConfig();
+      }
+      /**
+       * <pre>
+       * Color config.
+       * </pre>
+       *
+       * <code>optional .se.locutus.proto.ColorConfig color_config = 1;</code>
+       */
+      public se.locutus.proto.Ng.ColorConfig getColorConfig() {
+        return instance.getColorConfig();
+      }
+      /**
+       * <pre>
+       * Color config.
+       * </pre>
+       *
+       * <code>optional .se.locutus.proto.ColorConfig color_config = 1;</code>
+       */
+      public Builder setColorConfig(se.locutus.proto.Ng.ColorConfig value) {
+        copyOnWrite();
+        instance.setColorConfig(value);
+        return this;
+        }
+      /**
+       * <pre>
+       * Color config.
+       * </pre>
+       *
+       * <code>optional .se.locutus.proto.ColorConfig color_config = 1;</code>
+       */
+      public Builder setColorConfig(
+          se.locutus.proto.Ng.ColorConfig.Builder builderForValue) {
+        copyOnWrite();
+        instance.setColorConfig(builderForValue);
+        return this;
+      }
+      /**
+       * <pre>
+       * Color config.
+       * </pre>
+       *
+       * <code>optional .se.locutus.proto.ColorConfig color_config = 1;</code>
+       */
+      public Builder mergeColorConfig(se.locutus.proto.Ng.ColorConfig value) {
+        copyOnWrite();
+        instance.mergeColorConfig(value);
+        return this;
+      }
+      /**
+       * <pre>
+       * Color config.
+       * </pre>
+       *
+       * <code>optional .se.locutus.proto.ColorConfig color_config = 1;</code>
+       */
+      public Builder clearColorConfig() {  copyOnWrite();
+        instance.clearColorConfig();
+        return this;
+      }
+
+
+      public int getDepartureNameMappingsCount() {
+        return instance.getDepartureNameMappingsMap().size();
+      }
+      /**
+       * <pre>
+       * Custom departure names.
+       * </pre>
+       *
+       * <code>map&lt;string, string&gt; departure_name_mappings = 2;</code>
+       */
+
+      public boolean containsDepartureNameMappings(
+          java.lang.String key) {
+        if (key == null) { throw new java.lang.NullPointerException(); }
+        return instance.getDepartureNameMappingsMap().containsKey(key);
+      }
+
+      public Builder clearDepartureNameMappings() {
+        copyOnWrite();
+        instance.getMutableDepartureNameMappingsMap().clear();
+        return this;
+      }
+      /**
+       * <pre>
+       * Custom departure names.
+       * </pre>
+       *
+       * <code>map&lt;string, string&gt; departure_name_mappings = 2;</code>
+       */
+
+      public Builder removeDepartureNameMappings(
+          java.lang.String key) {
+        if (key == null) { throw new java.lang.NullPointerException(); }
+        copyOnWrite();
+        instance.getMutableDepartureNameMappingsMap().remove(key);
+        return this;
+      }
+      /**
+       * Use {@link #getDepartureNameMappingsMap()} instead.
+       */
+      @java.lang.Deprecated
+      public java.util.Map<java.lang.String, java.lang.String> getDepartureNameMappings() {
+        return getDepartureNameMappingsMap();
+      }
+      /**
+       * <pre>
+       * Custom departure names.
+       * </pre>
+       *
+       * <code>map&lt;string, string&gt; departure_name_mappings = 2;</code>
+       */
+      public java.util.Map<java.lang.String, java.lang.String> getDepartureNameMappingsMap() {
+        return java.util.Collections.unmodifiableMap(
+            instance.getDepartureNameMappingsMap());
+      }
+      /**
+       * <pre>
+       * Custom departure names.
+       * </pre>
+       *
+       * <code>map&lt;string, string&gt; departure_name_mappings = 2;</code>
+       */
+
+      public java.lang.String getDepartureNameMappingsOrDefault(
+          java.lang.String key,
+          java.lang.String defaultValue) {
+        if (key == null) { throw new java.lang.NullPointerException(); }
+        java.util.Map<java.lang.String, java.lang.String> map =
+            instance.getDepartureNameMappingsMap();
+        return map.containsKey(key) ? map.get(key) : defaultValue;
+      }
+      /**
+       * <pre>
+       * Custom departure names.
+       * </pre>
+       *
+       * <code>map&lt;string, string&gt; departure_name_mappings = 2;</code>
+       */
+
+      public java.lang.String getDepartureNameMappingsOrThrow(
+          java.lang.String key) {
+        if (key == null) { throw new java.lang.NullPointerException(); }
+        java.util.Map<java.lang.String, java.lang.String> map =
+            instance.getDepartureNameMappingsMap();
+        if (!map.containsKey(key)) {
+          throw new java.lang.IllegalArgumentException();
+        }
+        return map.get(key);
+      }
+      /**
+       * <pre>
+       * Custom departure names.
+       * </pre>
+       *
+       * <code>map&lt;string, string&gt; departure_name_mappings = 2;</code>
+       */
+      public Builder putDepartureNameMappings(
+          java.lang.String key,
+          java.lang.String value) {
+        if (key == null) { throw new java.lang.NullPointerException(); }
+        if (value == null) { throw new java.lang.NullPointerException(); }
+        copyOnWrite();
+        instance.getMutableDepartureNameMappingsMap().put(key, value);
+        return this;
+      }
+      /**
+       * <pre>
+       * Custom departure names.
+       * </pre>
+       *
+       * <code>map&lt;string, string&gt; departure_name_mappings = 2;</code>
+       */
+      public Builder putAllDepartureNameMappings(
+          java.util.Map<java.lang.String, java.lang.String> values) {
+        copyOnWrite();
+        instance.getMutableDepartureNameMappingsMap().putAll(values);
+        return this;
+      }
+
+      // @@protoc_insertion_point(builder_scope:se.locutus.proto.ThemeData)
+    }
+    protected final Object dynamicMethod(
+        com.google.protobuf.GeneratedMessageLite.MethodToInvoke method,
+        Object arg0, Object arg1) {
+      switch (method) {
+        case NEW_MUTABLE_INSTANCE: {
+          return new se.locutus.proto.Ng.ThemeData();
+        }
+        case IS_INITIALIZED: {
+          return DEFAULT_INSTANCE;
+        }
+        case MAKE_IMMUTABLE: {
+          departureNameMappings_.makeImmutable();
+          return null;
+        }
+        case NEW_BUILDER: {
+          return new Builder();
+        }
+        case VISIT: {
+          Visitor visitor = (Visitor) arg0;
+          se.locutus.proto.Ng.ThemeData other = (se.locutus.proto.Ng.ThemeData) arg1;
+          colorConfig_ = visitor.visitMessage(colorConfig_, other.colorConfig_);
+          departureNameMappings_ = visitor.visitMap(
+              departureNameMappings_, other.internalGetDepartureNameMappings());
+          if (visitor == com.google.protobuf.GeneratedMessageLite.MergeFromVisitor
+              .INSTANCE) {
+            bitField0_ |= other.bitField0_;
+          }
+          return this;
+        }
+        case MERGE_FROM_STREAM: {
+          com.google.protobuf.CodedInputStream input =
+              (com.google.protobuf.CodedInputStream) arg0;
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry =
+              (com.google.protobuf.ExtensionRegistryLite) arg1;
+          try {
+            boolean done = false;
+            while (!done) {
+              int tag = input.readTag();
+              switch (tag) {
+                case 0:
+                  done = true;
+                  break;
+                default: {
+                  if (!input.skipField(tag)) {
+                    done = true;
+                  }
+                  break;
+                }
+                case 10: {
+                  se.locutus.proto.Ng.ColorConfig.Builder subBuilder = null;
+                  if (colorConfig_ != null) {
+                    subBuilder = colorConfig_.toBuilder();
+                  }
+                  colorConfig_ = input.readMessage(se.locutus.proto.Ng.ColorConfig.parser(), extensionRegistry);
+                  if (subBuilder != null) {
+                    subBuilder.mergeFrom(colorConfig_);
+                    colorConfig_ = subBuilder.buildPartial();
+                  }
+
+                  break;
+                }
+                case 18: {
+                  if (!departureNameMappings_.isMutable()) {
+                    departureNameMappings_ = departureNameMappings_.mutableCopy();
+                  }
+                  DepartureNameMappingsDefaultEntryHolder.defaultEntry.parseInto(departureNameMappings_, input, extensionRegistry);  break;
+                }
+              }
+            }
+          } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+            throw new RuntimeException(e.setUnfinishedMessage(this));
+          } catch (java.io.IOException e) {
+            throw new RuntimeException(
+                new com.google.protobuf.InvalidProtocolBufferException(
+                    e.getMessage()).setUnfinishedMessage(this));
+          } finally {
+          }
+        }
+        case GET_DEFAULT_INSTANCE: {
+          return DEFAULT_INSTANCE;
+        }
+        case GET_PARSER: {
+          if (PARSER == null) {    synchronized (se.locutus.proto.Ng.ThemeData.class) {
+              if (PARSER == null) {
+                PARSER = new DefaultInstanceBasedParser(DEFAULT_INSTANCE);
+              }
+            }
+          }
+          return PARSER;
+        }
+      }
+      throw new UnsupportedOperationException();
+    }
+
+
+    // @@protoc_insertion_point(class_scope:se.locutus.proto.ThemeData)
+    private static final se.locutus.proto.Ng.ThemeData DEFAULT_INSTANCE;
+    static {
+      DEFAULT_INSTANCE = new ThemeData();
+      DEFAULT_INSTANCE.makeImmutable();
+    }
+
+    public static se.locutus.proto.Ng.ThemeData getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    private static volatile com.google.protobuf.Parser<ThemeData> PARSER;
+
+    public static com.google.protobuf.Parser<ThemeData> parser() {
+      return DEFAULT_INSTANCE.getParserForType();
+    }
+  }
+
   public interface StopConfigurationOrBuilder extends
       // @@protoc_insertion_point(interface_extends:se.locutus.proto.StopConfiguration)
       com.google.protobuf.MessageLiteOrBuilder {
@@ -9039,6 +10984,15 @@ public final class Ng {
      * <code>optional .se.locutus.proto.LineFilter line_filter = 3;</code>
      */
     se.locutus.proto.Ng.LineFilter getLineFilter();
+
+    /**
+     * <code>optional .se.locutus.proto.ThemeData theme_data = 4;</code>
+     */
+    boolean hasThemeData();
+    /**
+     * <code>optional .se.locutus.proto.ThemeData theme_data = 4;</code>
+     */
+    se.locutus.proto.Ng.ThemeData getThemeData();
   }
   /**
    * Protobuf type {@code se.locutus.proto.StopConfiguration}
@@ -9206,6 +11160,58 @@ public final class Ng {
       
     }
 
+    public static final int THEME_DATA_FIELD_NUMBER = 4;
+    private se.locutus.proto.Ng.ThemeData themeData_;
+    /**
+     * <code>optional .se.locutus.proto.ThemeData theme_data = 4;</code>
+     */
+    public boolean hasThemeData() {
+      return themeData_ != null;
+    }
+    /**
+     * <code>optional .se.locutus.proto.ThemeData theme_data = 4;</code>
+     */
+    public se.locutus.proto.Ng.ThemeData getThemeData() {
+      return themeData_ == null ? se.locutus.proto.Ng.ThemeData.getDefaultInstance() : themeData_;
+    }
+    /**
+     * <code>optional .se.locutus.proto.ThemeData theme_data = 4;</code>
+     */
+    private void setThemeData(se.locutus.proto.Ng.ThemeData value) {
+      if (value == null) {
+        throw new NullPointerException();
+      }
+      themeData_ = value;
+      
+      }
+    /**
+     * <code>optional .se.locutus.proto.ThemeData theme_data = 4;</code>
+     */
+    private void setThemeData(
+        se.locutus.proto.Ng.ThemeData.Builder builderForValue) {
+      themeData_ = builderForValue.build();
+      
+    }
+    /**
+     * <code>optional .se.locutus.proto.ThemeData theme_data = 4;</code>
+     */
+    private void mergeThemeData(se.locutus.proto.Ng.ThemeData value) {
+      if (themeData_ != null &&
+          themeData_ != se.locutus.proto.Ng.ThemeData.getDefaultInstance()) {
+        themeData_ =
+          se.locutus.proto.Ng.ThemeData.newBuilder(themeData_).mergeFrom(value).buildPartial();
+      } else {
+        themeData_ = value;
+      }
+      
+    }
+    /**
+     * <code>optional .se.locutus.proto.ThemeData theme_data = 4;</code>
+     */
+    private void clearThemeData() {  themeData_ = null;
+      
+    }
+
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
       if (stopData_ != null) {
@@ -9216,6 +11222,9 @@ public final class Ng {
       }
       if (lineFilter_ != null) {
         output.writeMessage(3, getLineFilter());
+      }
+      if (themeData_ != null) {
+        output.writeMessage(4, getThemeData());
       }
     }
 
@@ -9235,6 +11244,10 @@ public final class Ng {
       if (lineFilter_ != null) {
         size += com.google.protobuf.CodedOutputStream
           .computeMessageSize(3, getLineFilter());
+      }
+      if (themeData_ != null) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(4, getThemeData());
       }
       memoizedSerializedSize = size;
       return size;
@@ -9457,6 +11470,51 @@ public final class Ng {
         return this;
       }
 
+      /**
+       * <code>optional .se.locutus.proto.ThemeData theme_data = 4;</code>
+       */
+      public boolean hasThemeData() {
+        return instance.hasThemeData();
+      }
+      /**
+       * <code>optional .se.locutus.proto.ThemeData theme_data = 4;</code>
+       */
+      public se.locutus.proto.Ng.ThemeData getThemeData() {
+        return instance.getThemeData();
+      }
+      /**
+       * <code>optional .se.locutus.proto.ThemeData theme_data = 4;</code>
+       */
+      public Builder setThemeData(se.locutus.proto.Ng.ThemeData value) {
+        copyOnWrite();
+        instance.setThemeData(value);
+        return this;
+        }
+      /**
+       * <code>optional .se.locutus.proto.ThemeData theme_data = 4;</code>
+       */
+      public Builder setThemeData(
+          se.locutus.proto.Ng.ThemeData.Builder builderForValue) {
+        copyOnWrite();
+        instance.setThemeData(builderForValue);
+        return this;
+      }
+      /**
+       * <code>optional .se.locutus.proto.ThemeData theme_data = 4;</code>
+       */
+      public Builder mergeThemeData(se.locutus.proto.Ng.ThemeData value) {
+        copyOnWrite();
+        instance.mergeThemeData(value);
+        return this;
+      }
+      /**
+       * <code>optional .se.locutus.proto.ThemeData theme_data = 4;</code>
+       */
+      public Builder clearThemeData() {  copyOnWrite();
+        instance.clearThemeData();
+        return this;
+      }
+
       // @@protoc_insertion_point(builder_scope:se.locutus.proto.StopConfiguration)
     }
     protected final Object dynamicMethod(
@@ -9481,6 +11539,7 @@ public final class Ng {
           stopData_ = visitor.visitMessage(stopData_, other.stopData_);
           departuresFilter_ = visitor.visitMessage(departuresFilter_, other.departuresFilter_);
           lineFilter_ = visitor.visitMessage(lineFilter_, other.lineFilter_);
+          themeData_ = visitor.visitMessage(themeData_, other.themeData_);
           if (visitor == com.google.protobuf.GeneratedMessageLite.MergeFromVisitor
               .INSTANCE) {
           }
@@ -9540,6 +11599,19 @@ public final class Ng {
                   if (subBuilder != null) {
                     subBuilder.mergeFrom(lineFilter_);
                     lineFilter_ = subBuilder.buildPartial();
+                  }
+
+                  break;
+                }
+                case 34: {
+                  se.locutus.proto.Ng.ThemeData.Builder subBuilder = null;
+                  if (themeData_ != null) {
+                    subBuilder = themeData_.toBuilder();
+                  }
+                  themeData_ = input.readMessage(se.locutus.proto.Ng.ThemeData.parser(), extensionRegistry);
+                  if (subBuilder != null) {
+                    subBuilder.mergeFrom(themeData_);
+                    themeData_ = subBuilder.buildPartial();
                   }
 
                   break;

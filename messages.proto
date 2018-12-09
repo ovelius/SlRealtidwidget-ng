@@ -36,6 +36,8 @@ message ResponseData {
   AllDepaturesResponseData all_depatures_response = 3;
   // A response to a ping.
   PingRequestResponse ping_response = 4;
+  // Error response, set if we could handle the error
+  LoadErrorResponse error_response = 5;
 }
 
 // Response message suitable to put in the widget.
@@ -59,6 +61,17 @@ message WidgetLoadResponseData {
   string url = 8;
 }
 
+enum ErrorType {
+  UNKNOWN_ERROR = 0;
+  NO_DEPARTURES = 1;
+  SL_API_ERROR = 2;
+}
+
+message LoadErrorResponse {
+  ErrorType error_type = 1;
+  string message = 2;
+}
+
 // A response that contains all the data we have about a stop.
 message AllDepaturesResponseData {
   // Details about this stop.
@@ -68,7 +81,7 @@ message AllDepaturesResponseData {
 }
 
 enum NgTrafficType {
-  UNKNOWN = 0;
+  UNKNOWN_TRAFFIC_TYPE = 0;
   METRO = 1;
   BUS = 2;
   TRAIN = 3;
@@ -147,8 +160,25 @@ message StopDataRequest {
   // Give all the data for the step if empty.
 }
 
+message ColorConfig {
+  bool override_main_color = 1;
+  int32 main_color = 2;
+  bool override_text_color = 3;
+  int32 text_color = 4;
+  bool override_bg_color = 5;
+  int32 bg_color = 6;
+}
+
+message ThemeData {
+  // Color config.
+  ColorConfig color_config = 1;
+  // Custom departure names.
+  map<string, string> departure_name_mappings = 2;
+}
+
 message StopConfiguration {
   StoredStopData stop_data = 1;
   DeparturesFilter departures_filter = 2;
   LineFilter line_filter = 3;
+  ThemeData theme_data = 4;
 }
