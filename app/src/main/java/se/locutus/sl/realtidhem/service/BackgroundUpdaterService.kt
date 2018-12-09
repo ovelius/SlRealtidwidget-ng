@@ -17,6 +17,7 @@ import se.locutus.sl.realtidhem.R
 import se.locutus.sl.realtidhem.events.STALE_MILLIS
 import se.locutus.sl.realtidhem.events.WidgetBroadcastReceiver
 import se.locutus.sl.realtidhem.widget.StandardWidgetProvider
+import se.locutus.sl.realtidhem.widget.getAllWidgetIds
 import java.util.*
 import kotlin.concurrent.timerTask
 
@@ -35,15 +36,9 @@ class BackgroundUpdaterService : Service() {
         return START_STICKY
     }
 
-    private fun loadWidgetIds() : IntArray {
-        val manager = AppWidgetManager.getInstance(this)
-        val component = ComponentName(this, StandardWidgetProvider::class.java)
-        return manager.getAppWidgetIds(component)
-    }
-
     private fun updateOnce() {
         val touchHandler = WidgetBroadcastReceiver.getTouchHandler(this)
-        for (i in loadWidgetIds()) {
+        for (i in getAllWidgetIds(this)) {
             touchHandler.widgetTouched(i, "", false)
         }
     }

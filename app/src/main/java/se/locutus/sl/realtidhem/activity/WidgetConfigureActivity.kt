@@ -29,6 +29,7 @@ import se.locutus.sl.realtidhem.R
 import se.locutus.sl.realtidhem.events.EXTRA_COLOR_THEME
 import se.locutus.sl.realtidhem.events.WIDGET_CONFIG_UPDATED
 import se.locutus.sl.realtidhem.events.WidgetBroadcastReceiver
+import se.locutus.sl.realtidhem.widget.getAllWidgetIds
 import se.locutus.sl.realtidhem.widget.loadWidgetConfigOrDefault
 import se.locutus.sl.realtidhem.widget.storeWidgetConfig
 import java.util.*
@@ -79,6 +80,9 @@ class WidgetConfigureActivity : AppCompatActivity() {
     }
 
     private fun showWidgetDialog() {
+        for (widgetId in getAllWidgetIds(this)) {
+            sendWidgetUpdateBroadcast(widgetId)
+        }
         val url = "https://support.google.com/android/answer/2781850?hl=${Locale.getDefault().language}"
         val builder = AlertDialog.Builder(this)
         builder.setMessage(R.string.widget_help)
@@ -231,10 +235,7 @@ class WidgetConfigureActivity : AppCompatActivity() {
             true
         }
         menu.findItem(R.id.save_widget_action).setOnMenuItemClickListener {_ ->
-            val intentUpdate = Intent(this, WidgetBroadcastReceiver::class.java).apply {
-                action = WIDGET_CONFIG_UPDATED
-                putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, mAppWidgetId)
-            }
+
             val message = getConfigErrorMessage()
             if (message != null) {
                 Snackbar.make(mListView, message, Snackbar.LENGTH_SHORT)
@@ -242,12 +243,20 @@ class WidgetConfigureActivity : AppCompatActivity() {
             } else {
                 LOG.info("Storing config for $mAppWidgetId")
                 storeWidgetConfig(mWidgetPrefs, widgetConfig)
-                sendBroadcast(intentUpdate)
+                sendWidgetUpdateBroadcast(mAppWidgetId)
                 finishOk()
             }
             true
         }
         return true
+    }
+
+    private fun sendWidgetUpdateBroadcast(widgetId : Int) {
+        val intentUpdate = Intent(this, WidgetBroadcastReceiver::class.java).apply {
+            action = WIDGET_CONFIG_UPDATED
+            putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId)
+        }
+        sendBroadcast(intentUpdate)
     }
 
     private fun getConfigErrorMessage() : Int? {

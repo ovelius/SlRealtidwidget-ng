@@ -1,5 +1,8 @@
 package se.locutus.sl.realtidhem.widget
 
+import android.appwidget.AppWidgetManager
+import android.content.ComponentName
+import android.content.Context
 import android.content.SharedPreferences
 import android.location.Location
 import android.util.Base64
@@ -81,4 +84,10 @@ fun getStopClosestToLocation(config : Ng.WidgetConfiguration, location : Locatio
         }
     }
     return closestLocationIndex
+}
+
+fun getAllWidgetIds(context : Context) : IntArray {
+    val manager = AppWidgetManager.getInstance(context)
+    val component = ComponentName(context, StandardWidgetProvider::class.java)
+    return manager.getAppWidgetIds(component)
 }
