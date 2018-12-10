@@ -163,7 +163,7 @@ class WidgetTouchHandler(val context: Context, val networkManager : NetworkInter
         context.startActivity(browserIntent)
     }
 
-    fun stopTouchingMe(manager : AppWidgetManager, widgetId : Int) {
+    private fun stopTouchingMe(manager : AppWidgetManager, widgetId : Int) {
         val views = inMemoryState.getRemoveViews(widgetId, context, false)
         val touchCount = inMemoryState.touchCount[widgetId]
         if (touchCount == 2) {
@@ -243,34 +243,59 @@ class WidgetTouchHandler(val context: Context, val networkManager : NetworkInter
         inMemoryState.updateStartedAt.remove(widgetId)
         val manager = AppWidgetManager.getInstance(context)
         if (e != null) {
-            e.printStackTrace()
-            WidgetBroadcastReceiver.LOG.severe("Error loading data $e")
-            val errorDetailString = context.getString(R.string.error_details_try_again)
-            if (e is com.android.volley.TimeoutError || e is SocketTimeoutException) {
-                setWidgetTextViews(views, context.getString(R.string.error_timeout), "", errorDetailString)
-            } else {
-                setWidgetTextViews(views, context.getString(R.string.error), "", errorDetailString)
-            }
-            inMemoryState.putLastLoadDataInMemory(prefs, widgetId, Ng.WidgetLoadResponseData.newBuilder()
-                .setLine2(errorDetailString).build())
-            inMemoryState.updatedAt[widgetId] = System.currentTimeMillis() - UPDATE_FAIL_STALE
+            handleException(views, widgetId, e)
         } else {
-            val loadResponse = responseData.loadResponse
-            var time = System.currentTimeMillis()
-            if (loadResponse.line1.isNotEmpty()) {
-                setWidgetTextViews(views, loadResponse.line1, loadResponse.minutes, loadResponse.line2)
-                views.setInt(R.id.widgetcolor, "setBackgroundColor", responseData.loadResponse.color)
+            if (responseData.hasErrorResponse() && responseData.errorResponse.errorType != Ng.ErrorType.UNKNOWN_ERROR) {
+                handleError(views, widgetId, responseData.errorResponse)
             } else {
-                setWidgetTextViews(views, context.getString(R.string.no_data), "", context.getString(R.string.no_data_detail))
+                val loadResponse = responseData.loadResponse
+                val time = System.currentTimeMillis()
+                if (loadResponse.line1.isNotEmpty()) {
+                    setWidgetTextViews(views, loadResponse.line1, loadResponse.minutes, loadResponse.line2)
+                    views.setInt(R.id.widgetcolor, "setBackgroundColor", responseData.loadResponse.color)
+                } else {
+                    setWidgetTextViews(
+                        views,
+                        context.getString(R.string.no_data),
+                        "",
+                        context.getString(R.string.no_data_detail)
+                    )
+                }
+                inMemoryState.putLastLoadDataInMemory(prefs, widgetId, loadResponse)
+                inMemoryState.updatedAt[widgetId] = time
+                inMemoryState.replaceThread(ScrollThread(
+                    widgetId, views, responseData.loadResponse.line2, context
+                ).apply { start() })
             }
-
-            inMemoryState.putLastLoadDataInMemory(prefs, widgetId, loadResponse)
-            inMemoryState.updatedAt[widgetId] = time
-            inMemoryState.replaceThread(ScrollThread(
-                widgetId, views, responseData.loadResponse.line2, context).apply {  start() })
         }
         manager.updateAppWidget(widgetId, views)
         scheduleWidgetClearing(context, widgetId)
+    }
+
+    private fun handleError(views : RemoteViews, widgetId: Int, e : Ng.LoadErrorResponse) {
+        LOG.warning("Error loading data $e")
+
+        if (e.errorType == Ng.ErrorType.SL_API_ERROR) {
+            setWidgetTextViews(views, context.getString(R.string.sl_api_error), "", context.getString(R.string.sl_api_error_detail, e.message))
+        } else {
+            setWidgetTextViews(views, context.getString(R.string.error), "", context.getString(R.string.error_details_try_again))
+        }
+        inMemoryState.putLastLoadDataInMemory(prefs, widgetId, Ng.WidgetLoadResponseData.getDefaultInstance())
+        inMemoryState.updatedAt[widgetId] = System.currentTimeMillis() - UPDATE_FAIL_STALE
+    }
+
+    private fun handleException(views : RemoteViews, widgetId: Int, e : Exception) {
+        LOG.severe("Exception loading data $e")
+        e.printStackTrace()
+        val errorDetailString = context.getString(R.string.error_details_try_again)
+        if (e is com.android.volley.TimeoutError || e is SocketTimeoutException) {
+            setWidgetTextViews(views, context.getString(R.string.error_timeout), "", errorDetailString)
+        } else {
+            setWidgetTextViews(views, context.getString(R.string.error), "", errorDetailString)
+        }
+        inMemoryState.putLastLoadDataInMemory(prefs, widgetId, Ng.WidgetLoadResponseData.newBuilder()
+            .setLine2(errorDetailString).build())
+        inMemoryState.updatedAt[widgetId] = System.currentTimeMillis() - UPDATE_FAIL_STALE
     }
 
     fun scheduleWidgetClearing(context: Context, widgetId: Int) {

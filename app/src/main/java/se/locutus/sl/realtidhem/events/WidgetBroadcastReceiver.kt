@@ -10,6 +10,7 @@ import java.util.logging.Logger
 import android.widget.RemoteViews
 import se.locutus.sl.realtidhem.R
 import se.locutus.sl.realtidhem.net.NetworkManager
+import se.locutus.sl.realtidhem.widget.StandardWidgetProvider.Companion.setPendingIntents
 
 const val WIDGET_CONFIG_UPDATED = "widget_config_updated"
 
@@ -50,7 +51,7 @@ class ResetWidget : JobService() {
         return false
     }
 
-    fun getRemoveViews(widgetId : Int) : RemoteViews {
+    private fun getRemoveViews(widgetId : Int) : RemoteViews {
         val handler = WidgetBroadcastReceiver.widgetTouchHandler
         if (handler != null) {
             return handler.inMemoryState.getRemoveViews(widgetId, this, false)
@@ -66,6 +67,7 @@ class ResetWidget : JobService() {
         views.setTextViewText(R.id.widgetline2,  getString(R.string.idle_line2))
         views.setTextViewText(R.id.widgetline1, getString(R.string.idle_line1))
         views.setTextViewText(R.id.widgetmin, "")
+        setPendingIntents(this, views, widgetId)
         manager.updateAppWidget(widgetId, views)
         return false
     }

@@ -30,6 +30,24 @@ import se.locutus.sl.realtidhem.service.TimeTracker
 class StandardWidgetProvider : AppWidgetProvider() {
     companion object {
         val LOG = Logger.getLogger(StandardWidgetProvider::class.java.name)
+        fun basePendingIntent(context: Context, widgetId : Int, action : String? = null) : PendingIntent {
+            val intent = Intent(context, WidgetBroadcastReceiver::class.java).apply {
+                putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId)
+            }
+            if (action != null) {
+                intent.action = action
+            }
+            return PendingIntent.getBroadcast(context, widgetId, intent, PendingIntent.FLAG_UPDATE_CURRENT)
+        }
+
+        fun setPendingIntents(context: Context, views : RemoteViews, widgetId : Int) {
+            val pendingIntent = basePendingIntent(context, widgetId)
+            val leftPendingIntent = basePendingIntent(context, widgetId, CYCLE_STOP_LEFT)
+            val rightPendingIntent = basePendingIntent(context, widgetId, CYCLE_STOP_RIGHT)
+            views.setOnClickPendingIntent(R.id.widgetmain, pendingIntent)
+            views.setOnClickPendingIntent(R.id.larrow, leftPendingIntent)
+            views.setOnClickPendingIntent(R.id.rarrow, rightPendingIntent)
+        }
     }
 
     lateinit var timeTracker : TimeTracker
@@ -102,16 +120,6 @@ class StandardWidgetProvider : AppWidgetProvider() {
         LOG.info("onEnabled")
     }
 
-    fun basePendingIntent(context: Context, widgetId : Int, action : String? = null) : PendingIntent {
-        val intent = Intent(context, WidgetBroadcastReceiver::class.java).apply {
-            putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId)
-        }
-        if (action != null) {
-            intent.action = action
-        }
-        return PendingIntent.getBroadcast(context, widgetId, intent, PendingIntent.FLAG_UPDATE_CURRENT)
-    }
-
     override fun onDisabled(context: Context) {
         // Enter relevant functionality for when the last widget is disabled
     }
@@ -127,9 +135,6 @@ class StandardWidgetProvider : AppWidgetProvider() {
             if (selectedStopIndex >= widgetConfig.stopConfigurationCount) {
                 selectedStopIndex = 0
             }
-            val pendingIntent = basePendingIntent(context, appWidgetId)
-            val leftPendingIntent = basePendingIntent(context, appWidgetId, CYCLE_STOP_LEFT)
-            val rightPendingIntent = basePendingIntent(context, appWidgetId, CYCLE_STOP_RIGHT)
 
             val validConfig = widgetConfig.stopConfigurationCount > 0
             var widgetText =
@@ -147,9 +152,7 @@ class StandardWidgetProvider : AppWidgetProvider() {
             views.setTextViewText(R.id.widgetmin, "")
             views.setTextViewText(R.id.widgetline2, context.getString(R.string.idle_line2))
             if (validConfig) {
-                views.setOnClickPendingIntent(R.id.widgetmain, pendingIntent)
-                views.setOnClickPendingIntent(R.id.larrow, leftPendingIntent)
-                views.setOnClickPendingIntent(R.id.rarrow, rightPendingIntent)
+               setPendingIntents(context, views, appWidgetId)
             } else {
                 LOG.warning("Received update request for widget without configuration $appWidgetId")
             }

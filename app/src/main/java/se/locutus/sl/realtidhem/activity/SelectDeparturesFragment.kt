@@ -24,9 +24,4 @@ class SelectDeparturesFragment : androidx.fragment.app.Fragment() {
 
         return mainView
     }
-
-    companion object {
-        fun newInstance(): SelectDeparturesFragment =
-            SelectDeparturesFragment()
-    }
 }

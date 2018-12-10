@@ -107,18 +107,28 @@ class AddStopActivity : AppCompatActivity() {
         return true
     }
 
+    private fun snackbarRetryError(error_id : Int, siteId : Int) {
+        Snackbar.make(tabLayout, error_id , Snackbar.LENGTH_INDEFINITE)
+            .setAction(R.string.retry_load) {
+                loadDepsFor(siteId)
+            }.show()
+    }
+
     fun loadDepsFor (siteId : Int) {
         val request = Ng.StopDataRequest.newBuilder()
             .setSiteId(siteId.toLong())
             .build()
         departureAdapter.clear()
-        LOG.info("Loading depatures for $siteId")
+        LOG.info("Loading departures for $siteId")
         network.doStopDataRequest(request, true) { incomingRequestId: Int, responseData: Ng.ResponseData, e: Exception? ->
-            if (e != null) {
-                Snackbar.make(tabLayout, R.string.error , Snackbar.LENGTH_INDEFINITE)
-                    .setAction(R.string.retry_load) {
-                        loadDepsFor(siteId)
-                    }.show()
+            if (responseData.hasErrorResponse() && responseData.errorResponse.errorType != Ng.ErrorType.UNKNOWN_ERROR) {
+                if (responseData.errorResponse.errorType == Ng.ErrorType.SL_API_ERROR) {
+                    snackbarRetryError(R.string.sl_api_error, siteId)
+                } else {
+                    snackbarRetryError(R.string.error, siteId)
+                }
+            } else if (e != null) {
+                snackbarRetryError(R.string.error, siteId)
             } else {
                 LOG.info("Got response with ${responseData.allDepaturesResponse.depatureDataCount} departures")
                 handleLoadResonse(responseData)

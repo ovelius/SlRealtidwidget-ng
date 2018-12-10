@@ -45,14 +45,12 @@ fun setGreenBg(view : View) {
 class SelectStopFragment : androidx.fragment.app.Fragment() {
     companion object {
         val LOG = Logger.getLogger(SelectStopFragment::class.java.name)
-        fun newInstance(): SelectStopFragment =
-            SelectStopFragment()
     }
     val autoCompleteSet = HashSet<String>()
     internal lateinit var mAutoCompleteTextView : AutoCompleteTextView
     internal lateinit var displayNameText : EditText
     internal lateinit var addStopActivity : AddStopActivity
-    internal lateinit var mapContainer : View
+    private lateinit var mapContainer : View
     internal var map : GoogleMap? = null
     internal var nameToSiteIDs : HashMap<String, Int> = HashMap()
 
@@ -178,8 +176,8 @@ class SelectStopFragment : androidx.fragment.app.Fragment() {
                     val url = "http://anka.locutus.se/P?q=$p"
                     val stringRequest = StringRequest(Request.Method.GET, url,
                         Response.Listener<String> { response ->
-                            LOG.warning("got $response")
-                            var json: JSONObject = JSONObject(response)
+                            LOG.info("got $response")
+                            var json = JSONObject(response)
                             var list: JSONArray = json.getJSONArray("suggestions")
                             for (i in 0 until list.length() - 1) {
                                 var item: JSONObject = list.getJSONObject(i)

@@ -28,8 +28,6 @@ fun createColorMap(data : Ng.AllDepaturesResponseData) : Map<Int, Int> {
 class SelectLinesFragment : androidx.fragment.app.Fragment() {
     companion object {
         val LOG = Logger.getLogger(SelectLinesFragment::class.java.name)
-        fun newInstance(): SelectLinesFragment =
-            SelectLinesFragment()
     }
     internal lateinit var mLineList : ListView
     internal lateinit var addStopActivity : AddStopActivity

@@ -18,6 +18,7 @@ import se.locutus.sl.realtidhem.widget.storeWidgetConfig
 import java.lang.Exception
 import org.robolectric.shadows.ShadowAppWidgetManager
 import se.locutus.sl.realtidhem.widget.StandardWidgetProvider
+import java.lang.RuntimeException
 import java.net.SocketTimeoutException
 
 
@@ -76,7 +77,7 @@ class WidgetTouchTest {
     }
 
     @Test
-    fun testTouchWidgetAndErrorLoadingData() {
+    fun testTouchWidgetAndExceptionLoadingData() {
         val widgetId = createWidgetAndConfigFor()
         val touchHandler = WidgetTouchHandler(context, testNetwork)
 
@@ -87,6 +88,30 @@ class WidgetTouchTest {
         testNetwork.sendResponse(Ng.ResponseData.getDefaultInstance(), SocketTimeoutException())
 
         assertViewText(widgetId, R.id.widgetline1, R.string.error_timeout)
+        // Trigger config change to clear state.
+        touchHandler.configUpdated(widgetId, false)
+
+        // Touch again.
+        touchHandler.widgetTouched(widgetId, null)
+        // Generic garbage.
+        testNetwork.sendResponse(Ng.ResponseData.getDefaultInstance(), RuntimeException())
+        assertViewText(widgetId, R.id.widgetline1, R.string.error)
+        assertViewText(widgetId, R.id.widgetline2, R.string.error_details_try_again)
+    }
+
+    @Test
+    fun testTouchWidgetAndErrorLoadingData() {
+        val widgetId = createWidgetAndConfigFor()
+        val touchHandler = WidgetTouchHandler(context, testNetwork)
+        // Touch the widget.
+        touchHandler.widgetTouched(widgetId, null)
+
+        // It failed with a specific error.
+        testNetwork.sendResponse(Ng.ResponseData.newBuilder().setErrorResponse(Ng.LoadErrorResponse.newBuilder()
+            .setErrorType(Ng.ErrorType.SL_API_ERROR).setMessage("ooga")).build(), null)
+
+        assertViewText(widgetId, R.id.widgetline1, R.string.sl_api_error)
+        assertViewText(widgetId, R.id.widgetline2, context.getString(R.string.sl_api_error_detail, "ooga"))
     }
 
     fun assertViewText(widgetId : Int, viewId : Int, expectedText : String) {

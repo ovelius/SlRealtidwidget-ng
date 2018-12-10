@@ -66,8 +66,10 @@
     <string name="app_disclaimer">This is an open source application, developed as a small side-project for fun without profit :)
         \nThe app uses your location to determine what stop to show on what widget at what time.
     </string>
-    <string name="power_save_mode">Battery saver mode - no Internet access</string>
-    <string name="power_save_mode_no_whitelist">Disable battery optimizations for this app - touch here to go to settings</string>
+    <string name="power_save_mode">Battery saver mode - no Internet</string>
+    <string name="power_save_mode_no_whitelist">Touch here to go to settings and give the app Internet during battery saver mode</string>
     <string name="auto_updates_running">Automatic updates enabled</string>
     <string name="disable_battery_optimization_query">android disable battery optimization for specific app</string>
+    <string name="sl_api_error">SL error</string>
+    <string name="sl_api_error_detail">Can\'t load data from SL, error details: %1$s</string>
 </resources>
