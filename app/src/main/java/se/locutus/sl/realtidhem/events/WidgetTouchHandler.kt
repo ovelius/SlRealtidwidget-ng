@@ -19,10 +19,7 @@ import se.locutus.sl.realtidhem.service.TimeTracker
 import se.locutus.sl.realtidhem.widget.*
 import java.lang.Exception
 import java.net.SocketTimeoutException
-import java.util.concurrent.ConcurrentHashMap
 import java.util.logging.Logger
-import androidx.core.content.ContextCompat.startActivity
-import androidx.core.content.ContextCompat.getSystemService
 import android.os.PowerManager
 import android.widget.Toast
 import java.net.URLEncoder
@@ -77,25 +74,8 @@ class WidgetTouchHandler(val context: Context, val networkManager : NetworkInter
 
         val manager = AppWidgetManager.getInstance(context)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-           val pm = context.getSystemService(Context.POWER_SERVICE) as PowerManager?
-            if (pm != null && isUnlistedPowerSaveMode(pm)) {
-                if (inMemoryState.nextPowerSaveSettings) {
-                    tryLaunchBatteryOptimizationSettings()
-                    inMemoryState.nextPowerSaveSettings = false
-                    Toast.makeText(context, R.string.help_set_battery_optimization, Toast.LENGTH_LONG).show()
-                    return
-                } else {
-                    LOG.info("Power save mode detected without being whitelisted!")
-                    val views = inMemoryState.getRemoveViews(widgetId, context, false)
-                    val line2 = context.getString(R.string.power_save_mode_no_whitelist)
-                    setWidgetTextViews(views, context.getString(R.string.power_save_mode), "", line2)
-                    manager.updateAppWidget(widgetId, views)
-                    inMemoryState.replaceThread(ScrollThread(
-                        widgetId, views, line2, context
-                    ).apply { start() })
-                    inMemoryState.nextPowerSaveSettings = true
-                    return
-                }
+            if (maybeAbortDueToPowerSave(widgetId, manager)) {
+                return
             }
         }
 
@@ -147,6 +127,30 @@ class WidgetTouchHandler(val context: Context, val networkManager : NetworkInter
         return !pm.isIgnoringBatteryOptimizations(context.packageName)
     }
 
+    private fun maybeAbortDueToPowerSave(widgetId : Int, manager : AppWidgetManager) : Boolean {
+        val pm = context.getSystemService(Context.POWER_SERVICE) as PowerManager?
+        if (pm != null && isUnlistedPowerSaveMode(pm)) {
+            if (inMemoryState.nextPowerSaveSettings) {
+                tryLaunchBatteryOptimizationSettings()
+                inMemoryState.nextPowerSaveSettings = false
+                Toast.makeText(context, R.string.help_set_battery_optimization, Toast.LENGTH_LONG).show()
+                return true
+            } else {
+                LOG.info("Power save mode detected without being whitelisted!")
+                val views = inMemoryState.getRemoveViews(widgetId, context, false)
+                val line2 = context.getString(R.string.power_save_mode_no_whitelist)
+                setWidgetTextViews(views, context.getString(R.string.power_save_mode), "", line2)
+                manager.updateAppWidget(widgetId, views)
+                inMemoryState.replaceThread(ScrollThread(
+                    widgetId, views, line2, context
+                ).apply { start() })
+                inMemoryState.nextPowerSaveSettings = true
+                return true
+            }
+        }
+        return false
+    }
+
     private fun tryLaunchBatteryOptimizationSettings() {
         val intent = Intent(Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS).apply {
             flags = FLAG_ACTIVITY_NEW_TASK
@@ -175,12 +179,7 @@ class WidgetTouchHandler(val context: Context, val networkManager : NetworkInter
     }
 
     fun configUpdated(widgetId: Int, selectNewFromLocation : Boolean) {
-        inMemoryState.widgetConfigs.remove(widgetId)
-        inMemoryState.lastTouch.remove(widgetId)
-        inMemoryState.lastLoadedData.remove(widgetId)
-        inMemoryState.updatedAt.remove(widgetId)
-        inMemoryState.updateStartedAt.remove(widgetId)
-        inMemoryState.replaceThread(null, true)
+        inMemoryState.resetWidgetInMemoryState(widgetId)
 
         val appWidgetManager = AppWidgetManager.getInstance(context)
         val config = inMemoryState.getWidgetConfig(widgetId, prefs)
@@ -325,103 +324,6 @@ class WidgetTouchHandler(val context: Context, val networkManager : NetworkInter
         }
         if (widgetTag != null) {
             views.setTextViewText(R.id.widgettag, widgetTag)
-        }
-    }
-
-    internal class InMemoryState {
-        private var scrollThread : ScrollThread? = null
-        var nextPowerSaveSettings = false
-        var lastTouch = ConcurrentHashMap<Int, Long>()
-        var updatedAt = ConcurrentHashMap<Int, Long>()
-        var updateStartedAt = ConcurrentHashMap<Int, Long>()
-        var currentRequestId = ConcurrentHashMap<Int, Int>()
-        var touchCount = ConcurrentHashMap<Int, Int>()
-        var remoteViews = ConcurrentHashMap<Int, RemoteViews>()
-        var widgetConfigs = ConcurrentHashMap<Int, Ng.WidgetConfiguration>()
-        var lastLoadedData = ConcurrentHashMap<Int, Ng.WidgetLoadResponseData>()
-
-        fun replaceThread(thread : ScrollThread?, agressiveOff : Boolean = false) : ScrollThread? {
-            val replaced = scrollThread
-            if (scrollThread != null) {
-                scrollThread!!.running = false
-                scrollThread!!.agressiveOff = agressiveOff
-            }
-            scrollThread = thread
-            return replaced
-        }
-
-        fun disposeScroller(widgetId : Int) {
-            if (scrollThread?.widgetId == widgetId) {
-                scrollThread!!.running = false
-            }
-        }
-
-        fun threadWidgetId() : Int {
-            if (scrollThread != null) {
-                return scrollThread!!.widgetId
-            }
-            return Int.MIN_VALUE
-        }
-
-        fun putLastLoadDataInMemory(prefs : SharedPreferences, widgetId : Int, response : Ng.WidgetLoadResponseData) {
-            lastLoadedData[widgetId] = response
-            putLastLoadData(prefs, widgetId, response)
-        }
-
-        fun getRemoveViews(widgetId: Int, context : Context, forceNewViews : Boolean) : RemoteViews {
-            if (remoteViews[widgetId] == null || forceNewViews) {
-                // RemoteViews will fill with actions over time, so maybe create new views to
-                // avoid TransactionTooLargeException and slowdowns.
-                remoteViews[widgetId] = RemoteViews(context.packageName, R.layout.widgetlayout_base)
-            }
-            return remoteViews[widgetId]!!
-        }
-
-        fun hasRunningThread(widgetId: Int) : Boolean {
-            return threadWidgetId() == widgetId && scrollThread?.running == true
-        }
-
-        fun sinceLastTouch(widgetId : Int) : Long {
-            if (!lastTouch.containsKey(widgetId)) {
-                return Long.MAX_VALUE
-            }
-            return System.currentTimeMillis() - lastTouch[widgetId]!!
-        }
-
-        fun sinceLastUpdate(widgetId : Int) : Long {
-            if (!updatedAt.containsKey(widgetId)) {
-                return Long.MAX_VALUE
-            }
-            return System.currentTimeMillis() - updatedAt[widgetId]!!
-        }
-
-        fun sinceUpdateStarted(widgetId : Int) : Long {
-            if (!updateStartedAt.containsKey(widgetId)) {
-                return Long.MAX_VALUE
-            }
-            return System.currentTimeMillis() - updateStartedAt[widgetId]!!
-        }
-
-        fun maybeIncrementTouchCountAndOpenConfig(widgetId : Int) : Boolean {
-            val lastTouch = sinceLastTouch(widgetId)
-            if (lastTouch > RETOUCH_MILLIS ||  !touchCount.containsKey(widgetId)) {
-                touchCount[widgetId] = 1
-            } else {
-                touchCount[widgetId] = touchCount[widgetId]!! + 1
-            }
-            return touchCount[widgetId]!! >= TOUCH_TO_CONFIG
-        }
-
-        fun getWidgetConfig(widgetId : Int, prefs : SharedPreferences) : Ng.WidgetConfiguration {
-            if (!widgetConfigs.containsKey(widgetId)) {
-                LOG.info("Loading config for widget $widgetId")
-                widgetConfigs[widgetId] = loadWidgetConfigOrDefault(prefs, widgetId)
-            }
-            return widgetConfigs[widgetId]!!
-        }
-
-        override fun toString() : String {
-            return "lastTouch: $lastTouch\n widgetConfigs loaded: ${widgetConfigs.keys}"
         }
     }
 

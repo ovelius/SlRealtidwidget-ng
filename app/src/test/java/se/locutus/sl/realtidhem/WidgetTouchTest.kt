@@ -7,9 +7,12 @@ import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import se.locutus.sl.realtidhem.events.WidgetTouchHandler
 import android.appwidget.AppWidgetManager
+import android.content.Context
+import android.os.PowerManager
 import androidx.test.core.app.ApplicationProvider
 import android.widget.TextView
 import org.hamcrest.CoreMatchers.`is`
+import org.hamcrest.CoreMatchers.notNullValue
 import org.robolectric.Shadows.shadowOf
 import se.locutus.proto.Ng
 import se.locutus.sl.realtidhem.net.NetworkInterface
@@ -17,9 +20,13 @@ import se.locutus.sl.realtidhem.activity.WIDGET_CONFIG_PREFS
 import se.locutus.sl.realtidhem.widget.storeWidgetConfig
 import java.lang.Exception
 import org.robolectric.shadows.ShadowAppWidgetManager
+import org.robolectric.shadows.ShadowContextWrapper
 import se.locutus.sl.realtidhem.widget.StandardWidgetProvider
 import java.lang.RuntimeException
 import java.net.SocketTimeoutException
+import org.robolectric.shadows.ShadowPowerManager
+
+
 
 
 /**
@@ -37,6 +44,8 @@ class WidgetTouchTest {
         .setDeparturesFilter(Ng.DeparturesFilter.newBuilder().addDepartures("123 Bla"))
         .build()
     private val shadowAppWidgetManager: ShadowAppWidgetManager = shadowOf(AppWidgetManager.getInstance(context))
+    private val shadowPowerManager: ShadowPowerManager = shadowOf(context.getSystemService(Context.POWER_SERVICE) as PowerManager)
+    private val shadowContext : ShadowContextWrapper = shadowOf(context)
 
     @Test
     fun testTouchWidgetAndLoadData() {
@@ -112,6 +121,25 @@ class WidgetTouchTest {
 
         assertViewText(widgetId, R.id.widgetline1, R.string.sl_api_error)
         assertViewText(widgetId, R.id.widgetline2, context.getString(R.string.sl_api_error_detail, "ooga"))
+    }
+
+    @Test
+    fun testTouchWidgetPowerSave() {
+        val widgetId = createWidgetAndConfigFor()
+        val touchHandler = WidgetTouchHandler(context, testNetwork)
+        // Touch the widget in powersave mode.
+        shadowPowerManager.setIsPowerSaveMode(true)
+        touchHandler.widgetTouched(widgetId, null)
+
+        assertViewText(widgetId, R.id.widgetline1, R.string.power_save_mode)
+        assertViewText(widgetId, R.id.widgetline2, context.getString(R.string.power_save_mode_no_whitelist))
+
+        // Starts into settings.
+        touchHandler.widgetTouched(widgetId, null)
+
+        val intent = shadowContext.nextStartedActivity
+        assertThat(intent, notNullValue())
+        assertEquals("android.settings.IGNORE_BATTERY_OPTIMIZATION_SETTINGS", intent.action)
     }
 
     fun assertViewText(widgetId : Int, viewId : Int, expectedText : String) {
