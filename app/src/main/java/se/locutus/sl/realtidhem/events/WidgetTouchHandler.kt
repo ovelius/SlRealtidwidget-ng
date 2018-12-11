@@ -172,6 +172,7 @@ class WidgetTouchHandler(val context: Context, val networkManager : NetworkInter
         val touchCount = inMemoryState.touchCount[widgetId]
         if (touchCount == 2) {
             views.setTextViewText(R.id.widgetline2, context.getString(R.string.message_again))
+            views.setTextViewText(R.id.widgetline1, context.getString(R.string.message_again_line1))
         } else if (touchCount == 3) {
             views.setTextViewText(R.id.widgetline2, context.getString(R.string.one_more_time_config))
         }

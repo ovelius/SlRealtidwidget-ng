@@ -49,7 +49,8 @@
     <string name="undo">Ångra</string>
     <string name="error_loading_autocomplete">Kunde in söka</string>
     <string name="updating_attempt">Uppdaterar, försök %1$d</string>
-    <string name="message_again">Hörru, jag jobbar på detta...</string>
+    <string name="message_again_line1">Hörru, låt mig göra detta!</string>
+    <string name="message_again">Jag jobbar på det...</string>
     <string name="one_more_time_config">En gång till för att konfigurera</string>
     <string name="select_widget">Välj widget för att börja</string>
     <string name="widget_read_more">Läs mer om hur widgets läggs till</string>

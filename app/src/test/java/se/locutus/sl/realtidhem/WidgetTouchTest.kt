@@ -56,6 +56,14 @@ class WidgetTouchTest {
         touchHandler.widgetTouched(widgetId, null)
 
         assertViewText(widgetId, R.id.widgetline1, R.string.updating)
+        assertViewText(widgetId, R.id.widgetline2, R.string.updating)
+
+        // Be pesky.
+        touchHandler.widgetTouched(widgetId, null)
+        touchHandler.widgetTouched(widgetId, null)
+
+        assertViewText(widgetId, R.id.widgetline1, R.string.message_again_line1)
+        assertViewText(widgetId, R.id.widgetline2, R.string.message_again)
 
         testNetwork.sendResponse(Ng.ResponseData.newBuilder()
             .setLoadResponse(widgetLoadResponse("123 Hej", "1 min", "Mooore"))

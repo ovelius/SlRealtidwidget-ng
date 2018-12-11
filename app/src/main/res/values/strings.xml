@@ -54,6 +54,7 @@
     <string name="error_loading_autocomplete">Failed to search stops</string>
     <string name="updating_attempt">Updating, attempt %1$d</string>
     <string name="message_again">I do the retries here buddy...</string>
+    <string name="message_again_line1">Let me do my job!</string>
     <string name="one_more_time_config">Touch one more time for config</string>
     <string name="widget_help">This application is used as a widget only. Please go back to your homescreen to add
         widgets.
