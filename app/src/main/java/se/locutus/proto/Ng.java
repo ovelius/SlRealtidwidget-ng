@@ -9712,6 +9712,26 @@ public final class Ng {
      * <code>optional int32 bg_color = 6;</code>
      */
     int getBgColor();
+
+    /**
+     * <code>optional bool override_tag_text_color = 7;</code>
+     */
+    boolean getOverrideTagTextColor();
+
+    /**
+     * <code>optional int32 tag_text_color = 8;</code>
+     */
+    int getTagTextColor();
+
+    /**
+     * <code>optional bool override_middle_bar_color = 9;</code>
+     */
+    boolean getOverrideMiddleBarColor();
+
+    /**
+     * <code>optional int32 middle_bar_color = 10;</code>
+     */
+    int getMiddleBarColor();
   }
   /**
    * Protobuf type {@code se.locutus.proto.ColorConfig}
@@ -9861,6 +9881,98 @@ public final class Ng {
       bgColor_ = 0;
     }
 
+    public static final int OVERRIDE_TAG_TEXT_COLOR_FIELD_NUMBER = 7;
+    private boolean overrideTagTextColor_;
+    /**
+     * <code>optional bool override_tag_text_color = 7;</code>
+     */
+    public boolean getOverrideTagTextColor() {
+      return overrideTagTextColor_;
+    }
+    /**
+     * <code>optional bool override_tag_text_color = 7;</code>
+     */
+    private void setOverrideTagTextColor(boolean value) {
+      
+      overrideTagTextColor_ = value;
+    }
+    /**
+     * <code>optional bool override_tag_text_color = 7;</code>
+     */
+    private void clearOverrideTagTextColor() {
+      
+      overrideTagTextColor_ = false;
+    }
+
+    public static final int TAG_TEXT_COLOR_FIELD_NUMBER = 8;
+    private int tagTextColor_;
+    /**
+     * <code>optional int32 tag_text_color = 8;</code>
+     */
+    public int getTagTextColor() {
+      return tagTextColor_;
+    }
+    /**
+     * <code>optional int32 tag_text_color = 8;</code>
+     */
+    private void setTagTextColor(int value) {
+      
+      tagTextColor_ = value;
+    }
+    /**
+     * <code>optional int32 tag_text_color = 8;</code>
+     */
+    private void clearTagTextColor() {
+      
+      tagTextColor_ = 0;
+    }
+
+    public static final int OVERRIDE_MIDDLE_BAR_COLOR_FIELD_NUMBER = 9;
+    private boolean overrideMiddleBarColor_;
+    /**
+     * <code>optional bool override_middle_bar_color = 9;</code>
+     */
+    public boolean getOverrideMiddleBarColor() {
+      return overrideMiddleBarColor_;
+    }
+    /**
+     * <code>optional bool override_middle_bar_color = 9;</code>
+     */
+    private void setOverrideMiddleBarColor(boolean value) {
+      
+      overrideMiddleBarColor_ = value;
+    }
+    /**
+     * <code>optional bool override_middle_bar_color = 9;</code>
+     */
+    private void clearOverrideMiddleBarColor() {
+      
+      overrideMiddleBarColor_ = false;
+    }
+
+    public static final int MIDDLE_BAR_COLOR_FIELD_NUMBER = 10;
+    private int middleBarColor_;
+    /**
+     * <code>optional int32 middle_bar_color = 10;</code>
+     */
+    public int getMiddleBarColor() {
+      return middleBarColor_;
+    }
+    /**
+     * <code>optional int32 middle_bar_color = 10;</code>
+     */
+    private void setMiddleBarColor(int value) {
+      
+      middleBarColor_ = value;
+    }
+    /**
+     * <code>optional int32 middle_bar_color = 10;</code>
+     */
+    private void clearMiddleBarColor() {
+      
+      middleBarColor_ = 0;
+    }
+
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
       if (overrideMainColor_ != false) {
@@ -9880,6 +9992,18 @@ public final class Ng {
       }
       if (bgColor_ != 0) {
         output.writeInt32(6, bgColor_);
+      }
+      if (overrideTagTextColor_ != false) {
+        output.writeBool(7, overrideTagTextColor_);
+      }
+      if (tagTextColor_ != 0) {
+        output.writeInt32(8, tagTextColor_);
+      }
+      if (overrideMiddleBarColor_ != false) {
+        output.writeBool(9, overrideMiddleBarColor_);
+      }
+      if (middleBarColor_ != 0) {
+        output.writeInt32(10, middleBarColor_);
       }
     }
 
@@ -9911,6 +10035,22 @@ public final class Ng {
       if (bgColor_ != 0) {
         size += com.google.protobuf.CodedOutputStream
           .computeInt32Size(6, bgColor_);
+      }
+      if (overrideTagTextColor_ != false) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBoolSize(7, overrideTagTextColor_);
+      }
+      if (tagTextColor_ != 0) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(8, tagTextColor_);
+      }
+      if (overrideMiddleBarColor_ != false) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBoolSize(9, overrideMiddleBarColor_);
+      }
+      if (middleBarColor_ != 0) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(10, middleBarColor_);
       }
       memoizedSerializedSize = size;
       return size;
@@ -10136,6 +10276,98 @@ public final class Ng {
         return this;
       }
 
+      /**
+       * <code>optional bool override_tag_text_color = 7;</code>
+       */
+      public boolean getOverrideTagTextColor() {
+        return instance.getOverrideTagTextColor();
+      }
+      /**
+       * <code>optional bool override_tag_text_color = 7;</code>
+       */
+      public Builder setOverrideTagTextColor(boolean value) {
+        copyOnWrite();
+        instance.setOverrideTagTextColor(value);
+        return this;
+      }
+      /**
+       * <code>optional bool override_tag_text_color = 7;</code>
+       */
+      public Builder clearOverrideTagTextColor() {
+        copyOnWrite();
+        instance.clearOverrideTagTextColor();
+        return this;
+      }
+
+      /**
+       * <code>optional int32 tag_text_color = 8;</code>
+       */
+      public int getTagTextColor() {
+        return instance.getTagTextColor();
+      }
+      /**
+       * <code>optional int32 tag_text_color = 8;</code>
+       */
+      public Builder setTagTextColor(int value) {
+        copyOnWrite();
+        instance.setTagTextColor(value);
+        return this;
+      }
+      /**
+       * <code>optional int32 tag_text_color = 8;</code>
+       */
+      public Builder clearTagTextColor() {
+        copyOnWrite();
+        instance.clearTagTextColor();
+        return this;
+      }
+
+      /**
+       * <code>optional bool override_middle_bar_color = 9;</code>
+       */
+      public boolean getOverrideMiddleBarColor() {
+        return instance.getOverrideMiddleBarColor();
+      }
+      /**
+       * <code>optional bool override_middle_bar_color = 9;</code>
+       */
+      public Builder setOverrideMiddleBarColor(boolean value) {
+        copyOnWrite();
+        instance.setOverrideMiddleBarColor(value);
+        return this;
+      }
+      /**
+       * <code>optional bool override_middle_bar_color = 9;</code>
+       */
+      public Builder clearOverrideMiddleBarColor() {
+        copyOnWrite();
+        instance.clearOverrideMiddleBarColor();
+        return this;
+      }
+
+      /**
+       * <code>optional int32 middle_bar_color = 10;</code>
+       */
+      public int getMiddleBarColor() {
+        return instance.getMiddleBarColor();
+      }
+      /**
+       * <code>optional int32 middle_bar_color = 10;</code>
+       */
+      public Builder setMiddleBarColor(int value) {
+        copyOnWrite();
+        instance.setMiddleBarColor(value);
+        return this;
+      }
+      /**
+       * <code>optional int32 middle_bar_color = 10;</code>
+       */
+      public Builder clearMiddleBarColor() {
+        copyOnWrite();
+        instance.clearMiddleBarColor();
+        return this;
+      }
+
       // @@protoc_insertion_point(builder_scope:se.locutus.proto.ColorConfig)
     }
     protected final Object dynamicMethod(
@@ -10169,6 +10401,14 @@ public final class Ng {
               other.overrideBgColor_ != false, other.overrideBgColor_);
           bgColor_ = visitor.visitInt(bgColor_ != 0, bgColor_,
               other.bgColor_ != 0, other.bgColor_);
+          overrideTagTextColor_ = visitor.visitBoolean(overrideTagTextColor_ != false, overrideTagTextColor_,
+              other.overrideTagTextColor_ != false, other.overrideTagTextColor_);
+          tagTextColor_ = visitor.visitInt(tagTextColor_ != 0, tagTextColor_,
+              other.tagTextColor_ != 0, other.tagTextColor_);
+          overrideMiddleBarColor_ = visitor.visitBoolean(overrideMiddleBarColor_ != false, overrideMiddleBarColor_,
+              other.overrideMiddleBarColor_ != false, other.overrideMiddleBarColor_);
+          middleBarColor_ = visitor.visitInt(middleBarColor_ != 0, middleBarColor_,
+              other.middleBarColor_ != 0, other.middleBarColor_);
           if (visitor == com.google.protobuf.GeneratedMessageLite.MergeFromVisitor
               .INSTANCE) {
           }
@@ -10221,6 +10461,26 @@ public final class Ng {
                 case 48: {
 
                   bgColor_ = input.readInt32();
+                  break;
+                }
+                case 56: {
+
+                  overrideTagTextColor_ = input.readBool();
+                  break;
+                }
+                case 64: {
+
+                  tagTextColor_ = input.readInt32();
+                  break;
+                }
+                case 72: {
+
+                  overrideMiddleBarColor_ = input.readBool();
+                  break;
+                }
+                case 80: {
+
+                  middleBarColor_ = input.readInt32();
                   break;
                 }
               }

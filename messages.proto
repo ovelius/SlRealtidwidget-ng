@@ -167,6 +167,10 @@ message ColorConfig {
   int32 text_color = 4;
   bool override_bg_color = 5;
   int32 bg_color = 6;
+  bool override_tag_text_color = 7;
+  int32 tag_text_color = 8;
+  bool override_middle_bar_color = 9;
+  int32 middle_bar_color = 10;
 }
 
 message ThemeData {
