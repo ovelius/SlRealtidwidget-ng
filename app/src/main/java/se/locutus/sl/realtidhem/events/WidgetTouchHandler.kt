@@ -171,10 +171,10 @@ class WidgetTouchHandler(val context: Context, val networkManager : NetworkInter
     private fun stopTouchingMe(manager : AppWidgetManager, widgetId : Int) {
         val views = inMemoryState.getRemoveViews(widgetId, context, false)
         val touchCount = inMemoryState.touchCount[widgetId]
-        if (touchCount == 2) {
+        if (touchCount == 1) {
             views.setTextViewText(R.id.widgetline2, context.getString(R.string.message_again))
             views.setTextViewText(R.id.widgetline1, context.getString(R.string.message_again_line1))
-        } else if (touchCount == 3) {
+        } else if (touchCount == 2) {
             views.setTextViewText(R.id.widgetline2, context.getString(R.string.one_more_time_config))
         }
         manager.updateAppWidget(widgetId, views)
@@ -256,6 +256,9 @@ class WidgetTouchHandler(val context: Context, val networkManager : NetworkInter
                     if (!stopConfig.themeData.colorConfig.overrideMainColor) {
                         views.setInt(R.id.widgetcolor, "setBackgroundColor", responseData.loadResponse.color)
                     }
+                    inMemoryState.replaceThread(ScrollThread(
+                        widgetId, views, responseData.loadResponse.line2, context
+                    ).apply { start() })
                 } else {
                     setWidgetTextViews(
                         views,
@@ -266,9 +269,6 @@ class WidgetTouchHandler(val context: Context, val networkManager : NetworkInter
                 }
                 inMemoryState.putLastLoadDataInMemory(prefs, widgetId, loadResponse)
                 inMemoryState.updatedAt[widgetId] = time
-                inMemoryState.replaceThread(ScrollThread(
-                    widgetId, views, responseData.loadResponse.line2, context
-                ).apply { start() })
             }
         }
         manager.updateAppWidget(widgetId, views)

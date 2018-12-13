@@ -246,6 +246,7 @@ class AddStopActivity : AppCompatActivity() {
         updateStopDataDisplayText()
         if (linesAdapter.isSelected()) {
             config.clearDeparturesFilter()
+            config.clearLineFilter()
             for (item in linesAdapter.getSelectedItems()) {
                 config.addLineFilter(
                     Ng.LineFilter.newBuilder()

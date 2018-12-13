@@ -60,7 +60,6 @@ class WidgetTouchTest {
 
         // Be pesky.
         touchHandler.widgetTouched(widgetId, null)
-        touchHandler.widgetTouched(widgetId, null)
 
         assertViewText(widgetId, R.id.widgetline1, R.string.message_again_line1)
         assertViewText(widgetId, R.id.widgetline2, R.string.message_again)
@@ -91,6 +90,24 @@ class WidgetTouchTest {
 
         // No additional network requests.
         assertThat(testNetwork.dataRequestCounts, `is`(1))
+    }
+
+    @Test
+    fun testTouchWidgetAndNoDepartures() {
+        val widgetId = createWidgetAndConfigFor()
+        val touchHandler = WidgetTouchHandler(context, testNetwork)
+
+        // Touch the widget.
+        touchHandler.widgetTouched(widgetId, null)
+
+        testNetwork.sendResponse(
+            Ng.ResponseData.newBuilder()
+                .setLoadResponse(widgetLoadResponse("", "", ""))
+                .build(), null
+        )
+
+        assertViewText(widgetId, R.id.widgetline1, R.string.no_data)
+        assertViewText(widgetId, R.id.widgetline2, R.string.no_data_detail)
     }
 
     @Test
