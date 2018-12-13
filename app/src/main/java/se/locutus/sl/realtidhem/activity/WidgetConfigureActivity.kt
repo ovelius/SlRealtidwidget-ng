@@ -40,16 +40,17 @@ const val MODIFY_STOP_REQUEST_CODE: Int = 2
 const val ADD_WIDGET_REQUEST_CODE: Int = 3
 const val LOCATION_ACCESS_REQUEST_CODE = 99
 const val STOP_CONFIG_DATA_KEY = "stop_config_data_key"
+const val ALL_DEPARTURES_DATA_KEY = "all_departures_data_key"
 const val STOP_INDEX_DATA_KEY = "stop_config_index_data_key"
 const val WIDGET_CONFIG_PREFS = "widget_configs"
 
 fun setColor(activity : AppCompatActivity, tabLayout : TabLayout?, color : Int) {
-    val drawable = ColorDrawable(color!!)
+    val drawable = ColorDrawable(color)
     activity.supportActionBar!!.setBackgroundDrawable(drawable)
     val window = activity.window
     window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
     window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-    window.statusBarColor = color!!
+    window.statusBarColor = color
     if(tabLayout != null) {
         tabLayout.background = drawable
     }
@@ -131,6 +132,7 @@ class WidgetConfigureActivity : AppCompatActivity() {
 
         mWidgetPrefs = getSharedPreferences(WIDGET_CONFIG_PREFS, 0)
         widgetConfig = loadWidgetConfigOrDefault(mWidgetPrefs, mAppWidgetId)
+        LOG.info("Loaded config as $widgetConfig")
         mStopListAdapter = StopListAdapter(this)
         mListView.adapter = mStopListAdapter
         mListView.setOnItemClickListener { _, _, position, _ ->

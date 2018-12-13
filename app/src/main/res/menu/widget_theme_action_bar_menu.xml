@@ -7,9 +7,4 @@
           android:icon="@drawable/ic_done_24px"
           android:orderInCategory="100"
           app:showAsAction="always"/>
-    <item android:id="@+id/theme_widget_button"
-          android:title="@string/theme"
-          android:icon="@drawable/ic_baseline_them_24px"
-          android:orderInCategory="100"
-          app:showAsAction="always"/>
 </menu>

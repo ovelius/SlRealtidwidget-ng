@@ -4,6 +4,8 @@
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
     <color name="baseWidgetBg">#ff00</color>
+    <color name="baseWidgetText">#ff9900</color>
+    <color name="baseWidgetTagText">#F5F5F5</color>
     <color name="baseWidgetGreyBg">#303030</color>
     <color name="baseWidgetGreyerBg">#404040</color>
 </resources>

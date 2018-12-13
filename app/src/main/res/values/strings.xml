@@ -11,7 +11,6 @@
     <string name="title_activity_add_stop">Settings</string>
 
 
-
     <string name="idle_line1">Touch once to update</string>
     <string name="idle_line2">Multiple times to configure</string>
 
@@ -23,7 +22,9 @@
     <string name="no_stop_selected">Please select a stop</string>
     <string name="missing_configuration">Need at least one stop configured</string>
     <string name="success_storing_departures">Saving configuration with %1$d stops...</string>
-    <string name="location_access_rationale">Access to location allows widget to automatically display the nearest stop</string>
+    <string name="location_access_rationale">Access to location allows widget to automatically display the nearest
+        stop
+    </string>
     <string name="location_access_give">Give access</string>
     <string name="stop_display_name">Display stop as</string>
 
@@ -64,13 +65,25 @@
     <string name="about_info">About</string>
     <string name="back_to_config">Back</string>
     <string name="on_github">Project on Github</string>
-    <string name="app_disclaimer">This is an open source application, developed as a small side-project for fun without profit :)
+    <string name="app_disclaimer">This is an open source application, developed as a small side-project for fun without
+        profit :)
         \nThe app uses your location to determine what stop to show on what widget at what time.
     </string>
     <string name="power_save_mode">Battery saver mode - no Internet</string>
-    <string name="power_save_mode_no_whitelist">Touch here to go to settings and give the app Internet during battery saver mode</string>
+    <string name="power_save_mode_no_whitelist">Touch here to go to settings and give the app Internet during battery
+        saver mode
+    </string>
     <string name="auto_updates_running">Automatic updates enabled</string>
     <string name="disable_battery_optimization_query">android disable battery optimization for specific app</string>
-    <string name="sl_api_error">SL error</string>
+    <string name="sl_api_error">SL server error</string>
     <string name="sl_api_error_detail">Can\'t load data from SL, error details: %1$s</string>
+    <string name="theme">Theme</string>
+    <string name="preview">Preview:</string>
+    <string name="theme_stop">Theme stop</string>
+    <string name="color_custom">Set top bar color</string>
+    <string name="color_custom_text">Set text color</string>
+    <string name="color_bg">Set background color</string>
+    <string name="color_custom_tag_text">Set stop text color</string>
+    <string name="custom_separator">Set separator color</string>
+    <string name="no_data_to_theme">No stop data, can\'t change theme</string>
 </resources>
