@@ -28,6 +28,7 @@ import java.net.URLEncoder
 const val CYCLE_STOP_LEFT = "CYCLE_STOP_LEFT"
 const val CYCLE_STOP_RIGHT = "CYCLE_STOP_RIGHT"
 const val EXTRA_COLOR_THEME = "EXTRA_COLOR_THEME"
+const val EXTRA_THEME_CONFIG = "EXTRA_THEME_CONFIG"
 const val STALE_MILLIS = 30000
 const val UPDATE_RETRY_MILLIS = 10000
 const val UPDATE_AUTO_RETRY_MILLIS = 2000L
@@ -217,7 +218,7 @@ class WidgetTouchHandler(val context: Context, val networkManager : NetworkInter
         val requestId = networkManager.doStopDataRequest(stopDataRequest) {
                 incomingRequestId : Int, responseData: Ng.ResponseData, e: Exception? ->
             LOG.info("Got response in ${System.currentTimeMillis() - time} ms")
-            handleLoadResponse(views, widgetId, incomingRequestId, responseData, e)
+            handleLoadResponse(views, widgetId, incomingRequestId, responseData, e, stopConfig)
         }
         inMemoryState.currentRequestId[widgetId] = requestId
 
@@ -234,7 +235,7 @@ class WidgetTouchHandler(val context: Context, val networkManager : NetworkInter
         }
     }
 
-    fun handleLoadResponse(views : RemoteViews, widgetId : Int, incomingRequestId : Int, responseData: Ng.ResponseData, e: Exception?) {
+    fun handleLoadResponse(views : RemoteViews, widgetId : Int, incomingRequestId : Int, responseData: Ng.ResponseData, e: Exception?, stopConfig : Ng.StopConfiguration) {
         val currentRequestId = inMemoryState.currentRequestId[widgetId]
         if (currentRequestId != null && incomingRequestId != currentRequestId) {
             LOG.info("Not handling network response due to requestId mismatch got $incomingRequestId wanted $currentRequestId")
@@ -252,7 +253,9 @@ class WidgetTouchHandler(val context: Context, val networkManager : NetworkInter
                 val time = System.currentTimeMillis()
                 if (loadResponse.line1.isNotEmpty()) {
                     setWidgetTextViews(views, loadResponse.line1, loadResponse.minutes, loadResponse.line2)
-                    views.setInt(R.id.widgetcolor, "setBackgroundColor", responseData.loadResponse.color)
+                    if (!stopConfig.themeData.colorConfig.overrideMainColor) {
+                        views.setInt(R.id.widgetcolor, "setBackgroundColor", responseData.loadResponse.color)
+                    }
                 } else {
                     setWidgetTextViews(
                         views,

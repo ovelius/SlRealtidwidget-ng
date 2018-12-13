@@ -152,7 +152,9 @@ class StandardWidgetProvider : AppWidgetProvider() {
             views.setTextViewText(R.id.widgetmin, "")
             views.setTextViewText(R.id.widgetline2, context.getString(R.string.idle_line2))
             if (validConfig) {
-               setPendingIntents(context, views, appWidgetId)
+                val stopConfig = widgetConfig.getStopConfiguration(selectedStopIndex)
+                updateColors(context, views, stopConfig.themeData.colorConfig)
+                setPendingIntents(context, views, appWidgetId)
             } else {
                 LOG.warning("Received update request for widget without configuration $appWidgetId")
             }
@@ -166,5 +168,39 @@ class StandardWidgetProvider : AppWidgetProvider() {
             // Instruct the widget manager to update the widget
             appWidgetManager.updateAppWidget(appWidgetId, views)
         }
+
+    private fun updateColors(context : Context, views : RemoteViews, colorConfig : Ng.ColorConfig) {
+        if (colorConfig.overrideMainColor) {
+            views.setInt(R.id.widgetcolor, "setBackgroundColor", colorConfig.mainColor)
+        }
+        if (colorConfig.overrideBgColor) {
+            views.setInt(R.id.widgetbg_layout, "setBackgroundColor", colorConfig.bgColor)
+        } else {
+            val bgColor = ContextCompat.getColor(context, R.color.baseWidgetGreyBg)
+            views.setInt(R.id.widgetbg_layout, "setBackgroundColor", bgColor)
+        }
+        if (colorConfig.overrideTextColor) {
+            views.setTextColor(R.id.widgetline1, colorConfig.textColor)
+            views.setTextColor(R.id.widgetline2, colorConfig.textColor)
+            views.setTextColor(R.id.widgetmin, colorConfig.textColor)
+        } else {
+            val textColor = ContextCompat.getColor(context, R.color.baseWidgetText)
+            views.setTextColor(R.id.widgetline1, textColor)
+            views.setTextColor(R.id.widgetline2,textColor)
+            views.setTextColor(R.id.widgetmin, textColor)
+        }
+        if (colorConfig.overrideMiddleBarColor) {
+            views.setInt(R.id.widgetseparator, "setBackgroundColor", colorConfig.middleBarColor)
+        } else {
+            val color = ContextCompat.getColor(context, R.color.baseWidgetGreyerBg)
+            views.setInt(R.id.widgetseparator, "setBackgroundColor", color)
+        }
+        if (colorConfig.overrideTagTextColor) {
+            views.setTextColor(R.id.widgettag, colorConfig.tagTextColor)
+        } else {
+            val textColor = ContextCompat.getColor(context, R.color.baseWidgetTagText)
+            views.setTextColor(R.id.widgettag, textColor)
+        }
+    }
 }
 

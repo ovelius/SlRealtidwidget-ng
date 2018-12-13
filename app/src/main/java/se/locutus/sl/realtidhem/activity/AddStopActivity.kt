@@ -15,11 +15,13 @@ import se.locutus.proto.Ng
 import se.locutus.proto.Ng.DeparturesFilter
 import se.locutus.sl.realtidhem.R
 import se.locutus.sl.realtidhem.events.EXTRA_COLOR_THEME
+import se.locutus.sl.realtidhem.events.EXTRA_THEME_CONFIG
 import se.locutus.sl.realtidhem.net.NetworkInterface
 import se.locutus.sl.realtidhem.net.NetworkManager
 import java.util.*
 import java.util.logging.Logger
 
+const val MODIFY_THEME_REQUEST_CODE = 12
 
 class AddStopActivity : AppCompatActivity() {
     companion object {
@@ -34,6 +36,7 @@ class AddStopActivity : AppCompatActivity() {
     internal lateinit var network : NetworkInterface
     internal lateinit var tabLayout: TabLayout
     internal lateinit var viewPager: androidx.viewpager.widget.ViewPager
+    private var allDeparturesResponse : Ng.AllDepaturesResponseData? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,7 +44,9 @@ class AddStopActivity : AppCompatActivity() {
 
         // Do this early so fragments have access to the information.
         if (intent.hasExtra(STOP_CONFIG_DATA_KEY)) {
-            config = Ng.StopConfiguration.parseFrom(intent.getByteArrayExtra(STOP_CONFIG_DATA_KEY)).toBuilder()
+            val configBuilt = Ng.StopConfiguration.parseFrom(intent.getByteArrayExtra(STOP_CONFIG_DATA_KEY))
+            LOG.info("Got stop configuration $configBuilt")
+            config = configBuilt.toBuilder()
         }
         if (intent.hasExtra(STOP_INDEX_DATA_KEY)) {
             stopIndex = intent.getIntExtra(STOP_INDEX_DATA_KEY, -1)
@@ -167,6 +172,7 @@ class AddStopActivity : AppCompatActivity() {
         stopConfigureTabAdapter.selectLinesFragment.indexDepartures(colorMap, response.allDepaturesResponse)
         departureAdapter.sort(colorMap)
         departureAdapter.notifyDataSetChanged()
+        allDeparturesResponse = response.allDepaturesResponse
     }
 
     private fun getConfigErrorMessage() : Int? {
@@ -192,7 +198,32 @@ class AddStopActivity : AppCompatActivity() {
                 true
             }
         }
+        menu.findItem(R.id.theme_widget_button).setOnMenuItemClickListener { _ ->
+            LOG.info("Launching theme settings with config ${config.build()}")
+            if (allDeparturesResponse != null) {
+                val intent = Intent(this, ThemeActivity::class.java).apply {
+                    putExtra(EXTRA_COLOR_THEME, window.statusBarColor)
+                    putExtra(STOP_CONFIG_DATA_KEY, config.build().toByteArray())
+                    putExtra(ALL_DEPARTURES_DATA_KEY, allDeparturesResponse!!.toByteArray())
+                }
+                startActivityForResult(intent, MODIFY_THEME_REQUEST_CODE)
+            } else {
+                Snackbar.make(findViewById(R.id.tab_layout), R.string.no_data_to_theme, Snackbar.LENGTH_SHORT).show()
+            }
+            true
+        }
         return true
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        LOG.info("Activity result with request code $requestCode and data $data")
+        if (requestCode == MODIFY_THEME_REQUEST_CODE && data != null && data.hasExtra(EXTRA_THEME_CONFIG)) {
+            val themeConfig = Ng.ThemeData.parseFrom(data.getByteArrayExtra(EXTRA_THEME_CONFIG))
+            LOG.info("Received theme config of $themeConfig ")
+            config.themeData = themeConfig
+        } else {
+            LOG.severe("onActivityResult malformed request code/data $requestCode intent $data")
+        }
     }
 
     fun updateStopDataDisplayText() {
