@@ -98,7 +98,7 @@ class SelectStopFragment : androidx.fragment.app.Fragment() {
     override fun onStart() {
         super.onStart()
         val config = addStopActivity.config.stopData
-        LOG.info("OnStart, set stuff from ${config}")
+        LOG.info("OnStart, set stuff from $config")
         mAutoCompleteTextView.setText(config.canonicalName, false)
 
         mAutoCompleteTextView.setOnKeyListener{ _, keyCode : Int, _ ->
@@ -146,11 +146,12 @@ class SelectStopFragment : androidx.fragment.app.Fragment() {
                 var siteId : Int? = nameToSiteIDs[p.toString()]
 
                 val configuredName = addStopActivity.config.stopData.canonicalName
-                if (addStopActivity.config.stopData.siteId != 0L && configuredName == p) {
+                if (addStopActivity.config.stopData.siteId != 0L && configuredName == p.toString()) {
                     LOG.info("Configured name in autocomplete. Not doing anything.")
                     return
                 }
                 if (p?.length == 0) {
+                    addStopActivity.clearDeparturesList()
                     displayNameText.setText("", TextView.BufferType.EDITABLE)
                     return
                 }
@@ -163,12 +164,7 @@ class SelectStopFragment : androidx.fragment.app.Fragment() {
                     } else {
                         displayNameText.setText(p, TextView.BufferType.EDITABLE)
                     }
-                    addStopActivity.departureAdapter.clear()
-                    addStopActivity.departureAdapter.notifyDataSetChanged()
-                    addStopActivity.config.clearDeparturesFilter()
-                    addStopActivity.linesAdapter.clear()
-                    addStopActivity.linesAdapter.notifyDataSetChanged()
-                    addStopActivity.config.clearLineFilter()
+                    addStopActivity.clearDeparturesList()
                     addStopActivity.loadDepsFor(siteId)
                 } else {
                     mAutoCompleteTextView.setBackgroundColor((0x00000000).toInt())

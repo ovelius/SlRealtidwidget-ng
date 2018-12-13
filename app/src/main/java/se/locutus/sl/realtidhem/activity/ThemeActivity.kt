@@ -243,8 +243,7 @@ class ThemeActivity : AppCompatActivity() {
         for (departure in departureResponse.depatureDataList) {
             if (depSet.contains(departure.canonicalName)) {
                 result.add(departure)
-            }
-            if (stopConfig.lineFilterCount > 0) {
+            } else if (stopConfig.lineFilterCount > 0) {
                 for (lineFilter in stopConfig.lineFilterList) {
                     if (departure.directionId == lineFilter.directionId
                         && departure.groupOfLineId == lineFilter.groupOfLineId
@@ -252,6 +251,8 @@ class ThemeActivity : AppCompatActivity() {
                         result.add(departure)
                     }
                 }
+            } else {
+                result.add(departure)
             }
         }
         return result

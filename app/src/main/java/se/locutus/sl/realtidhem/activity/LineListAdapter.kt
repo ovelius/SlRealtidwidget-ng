@@ -9,6 +9,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import se.locutus.proto.Ng
 import se.locutus.sl.realtidhem.R
+import java.lang.IllegalArgumentException
 import java.lang.StringBuilder
 
 fun setImageViewIconAndColor(item : Ng.DepartureData, colorView : ImageView,  iconView : ImageView, root : View, directionView : ImageView?) {
@@ -42,8 +43,7 @@ val trafficToWeight = HashMap<Ng.NgTrafficType, Int>().apply{
 }
 
 class LineListAdapter(private val activity: AddStopActivity, private val lineList : ArrayList<List<Ng.DepartureData>>) : BaseAdapter() {
-    internal var selected : Ng.DepartureData = Ng.DepartureData.getDefaultInstance()
-    internal var selectedIndex : Int = -1
+    private var selected = HashSet<String>()
     private val inflater: LayoutInflater
             = activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
     override fun getItemId(position: Int): Long {
@@ -54,28 +54,50 @@ class LineListAdapter(private val activity: AddStopActivity, private val lineLis
         return lineList.size
     }
 
-    fun getSelectedIndex() : Int {
-        return selectedIndex
-    }
-
     fun isSelected() : Boolean {
-        return selected.groupOfLineId != 0
+        return selected.isNotEmpty()
     }
 
     override fun getItem(position: Int): List<Ng.DepartureData> {
         return lineList[position]
     }
 
+    fun firstSelectedIndex() : Int {
+        return getIndexForKey(selected.first())
+    }
+
+    fun getSelectedItems() : List<Ng.DepartureData> {
+        return lineList.asSequence().filter{ selected.contains(toKey(it)) }.map { it[0] }.toList()
+    }
+
+    private fun toKey(item : List<Ng.DepartureData>) : String {
+        return "${item[0].groupOfLineId}_${item[0].directionId}"
+    }
+
+    private fun getIndexForKey(key : String) : Int {
+        for (i in lineList.indices) {
+            if (toKey(lineList[i]) == key) {
+                return i
+            }
+        }
+        throw IllegalArgumentException("No such key $key")
+    }
+
+    private fun getItemForKey(key : String) : Ng.DepartureData {
+        return lineList[getIndexForKey(key)][0]
+    }
+
     fun clickItem(position: Int) {
-        val clicked = getItem(position)[0]
-        if (selected == clicked) {
-            selected = Ng.DepartureData.getDefaultInstance()
-            selectedIndex = -1
+        val item = lineList[position]
+        val key = toKey(item)
+        if (selected.contains(key)) {
+            selected.remove(key)
         } else {
-            val item = getItem(position)[0]
-            selected = item
-            selectedIndex = position
-            setColor(activity, activity.tabLayout, item.color)
+            selected.add(key)
+            if (selected.size == 1) {
+                val item = getItemForKey(selected.first())
+                setColor(activity, activity.tabLayout, item.color)
+            }
         }
 
         notifyDataSetChanged()
@@ -107,7 +129,7 @@ class LineListAdapter(private val activity: AddStopActivity, private val lineLis
         } else {
             nameSubText.text = ""
         }
-        if (getItem(position)[0] == selected) {
+        if (selected.contains(toKey(items))) {
             setGreenBg(root)
         } else {
             root.setBackgroundColor(0)
@@ -116,7 +138,7 @@ class LineListAdapter(private val activity: AddStopActivity, private val lineLis
     }
 
     fun clear() {
-        selected = Ng.DepartureData.getDefaultInstance()
+        selected.clear()
         lineList.clear()
     }
 
@@ -138,7 +160,7 @@ class LineListAdapter(private val activity: AddStopActivity, private val lineLis
     fun add(departure: List<Ng.DepartureData>, selected: Boolean) {
         lineList.add(departure)
         if (selected) {
-            this.selected = departure[0]
+            this.selected.add(toKey(departure))
         }
     }
 }

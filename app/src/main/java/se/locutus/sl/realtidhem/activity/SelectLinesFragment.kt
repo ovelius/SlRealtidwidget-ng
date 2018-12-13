@@ -49,26 +49,26 @@ class SelectLinesFragment : androidx.fragment.app.Fragment() {
     fun indexDepartures(colorMap : Map<Int, Int>, data : Ng.AllDepaturesResponseData) {
         LOG.info("Indexing departures ${data.depatureDataCount}")
         addStopActivity.linesAdapter.clear()
+        // Map with line as key, departureList as value.
         val map = HashMap<String, MutableList<Ng.DepartureData>>()
         for (departure in data.depatureDataList) {
             val key = "${departure.groupOfLineId}_${departure.directionId}"
             if (!map.containsKey(key)) {
-                map[key] = ArrayList<Ng.DepartureData>()
+                map[key] = ArrayList()
             }
             map[key]!!.add(departure)
         }
-        for (key in map.keys) {
-            addStopActivity.linesAdapter.add(map[key]!!, false)
-        }
-        LOG.info("Indexed to ${map.keys.size} lines")
-        if (addStopActivity.config.lineFilterCount > 0) {
-            // FIXME
-            val lineFilter = addStopActivity.config.lineFilterList[0]
+
+        val configuredLines = HashSet<String>()
+        for (lineFilter in addStopActivity.config.lineFilterList) {
             val selectedKey = "${lineFilter.groupOfLineId}_${lineFilter.directionId}"
-            if (map.containsKey(selectedKey)) {
-                addStopActivity.linesAdapter.selected = map[selectedKey]!![0]
-            }
+            configuredLines.add(selectedKey)
         }
+
+        for (key in map.keys) {
+            addStopActivity.linesAdapter.add(map[key]!!, configuredLines.contains(key))
+        }
+        LOG.info("Indexed to ${map.keys.size} lines, selected ${configuredLines.size}")
         addStopActivity.linesAdapter.sort(colorMap)
         addStopActivity.linesAdapter.notifyDataSetChanged()
     }

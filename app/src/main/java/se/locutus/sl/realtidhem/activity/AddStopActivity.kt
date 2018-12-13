@@ -97,7 +97,7 @@ class AddStopActivity : AppCompatActivity() {
                 if (linesAdapter.isSelected() && position == 2) {
                     Snackbar.make(tabLayout, R.string.select_just_one_line , Snackbar.LENGTH_SHORT).show()
                     viewPager.setCurrentItem(1, true)
-                    stopConfigureTabAdapter.selectLinesFragment.mLineList.smoothScrollToPosition(linesAdapter.selectedIndex)
+                    stopConfigureTabAdapter.selectLinesFragment.mLineList.smoothScrollToPosition(linesAdapter.firstSelectedIndex())
                 }
             }
         })
@@ -110,6 +110,15 @@ class AddStopActivity : AppCompatActivity() {
     override fun onSupportNavigateUp(): Boolean {
         finish()
         return true
+    }
+
+    fun clearDeparturesList() {
+        departureAdapter.clear()
+        departureAdapter.notifyDataSetChanged()
+        config.clearDeparturesFilter()
+        linesAdapter.clear()
+        linesAdapter.notifyDataSetChanged()
+        config.clearLineFilter()
     }
 
     private fun snackbarRetryError(error_id : Int, siteId : Int) {
@@ -237,10 +246,13 @@ class AddStopActivity : AppCompatActivity() {
         updateStopDataDisplayText()
         if (linesAdapter.isSelected()) {
             config.clearDeparturesFilter()
-            val selectedLineFilter = linesAdapter.selected
-            config.addLineFilter(Ng.LineFilter.newBuilder()
-                .setGroupOfLineId(selectedLineFilter.groupOfLineId)
-                .setDirectionId(selectedLineFilter.directionId))
+            for (item in linesAdapter.getSelectedItems()) {
+                config.addLineFilter(
+                    Ng.LineFilter.newBuilder()
+                        .setGroupOfLineId(item.groupOfLineId)
+                        .setDirectionId(item.directionId)
+                )
+            }
         } else {
             config.clearLineFilter()
             config
