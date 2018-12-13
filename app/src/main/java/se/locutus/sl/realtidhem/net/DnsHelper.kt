@@ -20,7 +20,12 @@ fun shouldUpdateBackendIp(prefs : SharedPreferences): Boolean{
 }
 
 fun updateBackendIp(prefs : SharedPreferences) : String {
-    val addr = InetAddress.getByName(HOSTNAME)
+    var addr : InetAddress? = null
+    try {
+        addr = InetAddress.getByName(HOSTNAME)
+    } catch (e : java.net.UnknownHostException) {
+        return e.toString()
+    }
         prefs.edit()
             .putString(IP_ADDR_KEY, addr.hostAddress)
             .putLong(IP_ADDR_TIME_KEY, System.currentTimeMillis())
