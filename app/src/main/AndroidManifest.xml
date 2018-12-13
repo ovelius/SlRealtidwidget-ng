@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="se.locutus.sl.realtidhem">
-    <uses-permission android:name="android.permission.INTERNET" />
+
+    <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+
     <application
-            android:networkSecurityConfig="@xml/network_security_config"
             android:allowBackup="true"
             android:icon="@mipmap/ic_launcher"
             android:label="@string/app_name"
+            android:networkSecurityConfig="@xml/network_security_config"
             android:roundIcon="@mipmap/ic_launcher"
             android:supportsRtl="true"
             android:theme="@style/AppTheme">
@@ -15,14 +17,17 @@
                 android:name="com.google.android.maps.v2.API_KEY"
                 android:value="AIzaSyCjpthlyIgCrmKgs0XCjS6znNyV8O-Y83Y"/>
         <!-- https://stackoverflow.com/questions/50461881/java-lang-noclassdeffounderrorfailed-resolution-of-lorg-apache-http-protocolve -->
-        <uses-library android:name="org.apache.http.legacy" android:required="false" />
+        <uses-library
+                android:name="org.apache.http.legacy"
+                android:required="false"/>
 
         <service
                 android:name=".service.BackgroundUpdaterService"
                 android:enabled="true">
         </service>
-        <service android:name=".events.ResetWidget"
-                 android:permission="android.permission.BIND_JOB_SERVICE"/>
+        <service
+                android:name=".events.ResetWidget"
+                android:permission="android.permission.BIND_JOB_SERVICE"/>
 
         <receiver android:name=".widget.StandardWidgetProvider">
             <intent-filter>
@@ -34,12 +39,14 @@
                     android:resource="@xml/standardwidget_info"/>
         </receiver>
 
-        <activity android:name=".activity.WidgetConfigureActivity"
-                  android:label="@string/configure_widget_title"
-                  android:theme="@style/AppTheme.NoActionBar">
+        <activity
+                android:name=".activity.WidgetConfigureActivity"
+                android:label="@string/configure_widget_title"
+                android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.APPWIDGET_CONFIGURE"/>
                 <action android:name="android.intent.action.MAIN"/>
+
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
@@ -53,6 +60,8 @@
                 android:name=".activity.AddStopActivity"
                 android:label="@string/add_stop_title"
                 android:theme="@style/AppTheme.NoActionBar">
+        </activity>
+        <activity android:name=".activity.ThemeActivity" android:theme="@style/AppTheme.NoActionBar" android:label="@string/theme_stop">
         </activity>
     </application>
 

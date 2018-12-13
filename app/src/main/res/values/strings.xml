@@ -28,8 +28,8 @@
     <string name="location_access_give">Give access</string>
     <string name="stop_display_name">Display stop as</string>
 
-    <string name="select_departures_tab">Select specific departures</string>
-    <string name="select_lines_tab">Select line</string>
+    <string name="select_departures_tab">Or select departures</string>
+    <string name="select_lines_tab">Select lines</string>
     <string name="select_stop_tab">Select stop</string>
 
     <string name="select_departures">Select departures</string>
