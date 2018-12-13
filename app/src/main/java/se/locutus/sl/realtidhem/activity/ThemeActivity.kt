@@ -19,8 +19,10 @@ import com.pes.androidmaterialcolorpickerdialog.ColorPicker
 import kotlinx.android.synthetic.main.activity_theme.*
 import se.locutus.proto.Ng
 import se.locutus.sl.realtidhem.events.EXTRA_THEME_CONFIG
+import java.lang.StringBuilder
 import java.util.*
 import java.util.logging.Logger
+import kotlin.collections.ArrayList
 
 
 class ThemeActivity : AppCompatActivity() {
@@ -75,7 +77,7 @@ class ThemeActivity : AppCompatActivity() {
             themeData = stopConfigBuilt.themeData.toBuilder()
             title = "${getString(R.string.theme_stop)} ${stopConfig.stopData.displayName}"
             tagText.text = stopConfig.stopData.displayName
-            minText.text = "${Random().nextInt(20)} min"
+            minText.text = randomMinutes()
         }
 
         if (intent.hasExtra(ALL_DEPARTURES_DATA_KEY)) {
@@ -209,6 +211,54 @@ class ThemeActivity : AppCompatActivity() {
             updateSeparatorColor()
         }
         setThemeStateFromConfig()
+        setDeparturesLines()
+    }
+
+    private fun setDeparturesLines() {
+        val items = extractDepartures()
+        if (items.isNotEmpty()) {
+            line1Text.text = items[0].canonicalName
+            if (items.size > 1) {
+                val line2 = StringBuilder()
+                for (i in items.indices) {
+                    if (i == 0) {
+                        continue
+                    }
+                    line2.append("${items[i].canonicalName} ${randomMinutes()}")
+                    if (i != items.size - 1) {
+                        line2.append(", ")
+                    }
+                    if (i > 4) {
+                        break
+                    }
+                }
+                line2Text.text = line2.toString()
+            }
+        }
+    }
+
+    private fun extractDepartures() : List<Ng.DepartureData> {
+        val result = ArrayList<Ng.DepartureData>()
+        val depSet = HashSet<String>().apply { addAll(stopConfig.departuresFilter.departuresList) }
+        for (departure in departureResponse.depatureDataList) {
+            if (depSet.contains(departure.canonicalName)) {
+                result.add(departure)
+            }
+            if (stopConfig.lineFilterCount > 0) {
+                for (lineFilter in stopConfig.lineFilterList) {
+                    if (departure.directionId == lineFilter.directionId
+                        && departure.groupOfLineId == lineFilter.groupOfLineId
+                    ) {
+                        result.add(departure)
+                    }
+                }
+            }
+        }
+        return result
+    }
+
+    private fun randomMinutes() : String {
+        return "${Random().nextInt(15) + 1} min"
     }
 
     private fun setThemeStateFromConfig() {
@@ -255,7 +305,7 @@ class ThemeActivity : AppCompatActivity() {
         if (checkBoxText.isChecked) {
             setTextViewsColor(themeData.colorConfig.textColor)
         } else {
-            line1Text.setTextColor(ContextCompat.getColor(this, R.color.baseWidgetText))
+            setTextViewsColor(ContextCompat.getColor(this, R.color.baseWidgetText))
         }
     }
 

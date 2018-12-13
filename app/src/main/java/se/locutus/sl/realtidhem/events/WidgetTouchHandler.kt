@@ -212,7 +212,7 @@ class WidgetTouchHandler(val context: Context, val networkManager : NetworkInter
         val stopDataRequest = Ng.StopDataRequest.newBuilder()
             .setSiteId(stopConfig.stopData.siteId)
             .setDeparturesFilter(stopConfig.departuresFilter)
-            .setLineFilter(stopConfig.lineFilter)
+            .addAllLineFilter(stopConfig.lineFilterList)
             .build()
         val time = System.currentTimeMillis()
         val requestId = networkManager.doStopDataRequest(stopDataRequest) {

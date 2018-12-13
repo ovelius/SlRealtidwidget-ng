@@ -156,7 +156,7 @@ message StoredStopData {
 message StopDataRequest {
   int64 site_id = 1;
   DeparturesFilter departures_filter = 2;
-  LineFilter line_filter = 3;
+  repeated LineFilter line_filter = 3;
   // Give all the data for the step if empty.
 }
 
@@ -183,6 +183,6 @@ message ThemeData {
 message StopConfiguration {
   StoredStopData stop_data = 1;
   DeparturesFilter departures_filter = 2;
-  LineFilter line_filter = 3;
+  repeated LineFilter line_filter = 3;
   ThemeData theme_data = 4;
 }

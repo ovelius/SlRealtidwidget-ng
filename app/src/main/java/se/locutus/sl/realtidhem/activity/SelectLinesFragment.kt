@@ -61,8 +61,9 @@ class SelectLinesFragment : androidx.fragment.app.Fragment() {
             addStopActivity.linesAdapter.add(map[key]!!, false)
         }
         LOG.info("Indexed to ${map.keys.size} lines")
-        if (addStopActivity.config.lineFilter.directionId != 0) {
-            val lineFilter = addStopActivity.config.lineFilter
+        if (addStopActivity.config.lineFilterCount > 0) {
+            // FIXME
+            val lineFilter = addStopActivity.config.lineFilterList[0]
             val selectedKey = "${lineFilter.groupOfLineId}_${lineFilter.directionId}"
             if (map.containsKey(selectedKey)) {
                 addStopActivity.linesAdapter.selected = map[selectedKey]!![0]

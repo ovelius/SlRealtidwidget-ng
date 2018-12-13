@@ -9127,17 +9127,26 @@ public final class Ng {
      * Give all the data for the step if empty.
      * </pre>
      *
-     * <code>optional .se.locutus.proto.LineFilter line_filter = 3;</code>
+     * <code>repeated .se.locutus.proto.LineFilter line_filter = 3;</code>
      */
-    boolean hasLineFilter();
+    java.util.List<se.locutus.proto.Ng.LineFilter> 
+        getLineFilterList();
     /**
      * <pre>
      * Give all the data for the step if empty.
      * </pre>
      *
-     * <code>optional .se.locutus.proto.LineFilter line_filter = 3;</code>
+     * <code>repeated .se.locutus.proto.LineFilter line_filter = 3;</code>
      */
-    se.locutus.proto.Ng.LineFilter getLineFilter();
+    se.locutus.proto.Ng.LineFilter getLineFilter(int index);
+    /**
+     * <pre>
+     * Give all the data for the step if empty.
+     * </pre>
+     *
+     * <code>repeated .se.locutus.proto.LineFilter line_filter = 3;</code>
+     */
+    int getLineFilterCount();
   }
   /**
    * Protobuf type {@code se.locutus.proto.StopDataRequest}
@@ -9148,7 +9157,9 @@ public final class Ng {
       // @@protoc_insertion_point(message_implements:se.locutus.proto.StopDataRequest)
       StopDataRequestOrBuilder {
     private StopDataRequest() {
+      lineFilter_ = emptyProtobufList();
     }
+    private int bitField0_;
     public static final int SITE_ID_FIELD_NUMBER = 1;
     private long siteId_;
     /**
@@ -9225,79 +9236,179 @@ public final class Ng {
     }
 
     public static final int LINE_FILTER_FIELD_NUMBER = 3;
-    private se.locutus.proto.Ng.LineFilter lineFilter_;
+    private com.google.protobuf.Internal.ProtobufList<se.locutus.proto.Ng.LineFilter> lineFilter_;
     /**
      * <pre>
      * Give all the data for the step if empty.
      * </pre>
      *
-     * <code>optional .se.locutus.proto.LineFilter line_filter = 3;</code>
+     * <code>repeated .se.locutus.proto.LineFilter line_filter = 3;</code>
      */
-    public boolean hasLineFilter() {
-      return lineFilter_ != null;
+    public java.util.List<se.locutus.proto.Ng.LineFilter> getLineFilterList() {
+      return lineFilter_;
     }
     /**
      * <pre>
      * Give all the data for the step if empty.
      * </pre>
      *
-     * <code>optional .se.locutus.proto.LineFilter line_filter = 3;</code>
+     * <code>repeated .se.locutus.proto.LineFilter line_filter = 3;</code>
      */
-    public se.locutus.proto.Ng.LineFilter getLineFilter() {
-      return lineFilter_ == null ? se.locutus.proto.Ng.LineFilter.getDefaultInstance() : lineFilter_;
+    public java.util.List<? extends se.locutus.proto.Ng.LineFilterOrBuilder> 
+        getLineFilterOrBuilderList() {
+      return lineFilter_;
     }
     /**
      * <pre>
      * Give all the data for the step if empty.
      * </pre>
      *
-     * <code>optional .se.locutus.proto.LineFilter line_filter = 3;</code>
+     * <code>repeated .se.locutus.proto.LineFilter line_filter = 3;</code>
      */
-    private void setLineFilter(se.locutus.proto.Ng.LineFilter value) {
+    public int getLineFilterCount() {
+      return lineFilter_.size();
+    }
+    /**
+     * <pre>
+     * Give all the data for the step if empty.
+     * </pre>
+     *
+     * <code>repeated .se.locutus.proto.LineFilter line_filter = 3;</code>
+     */
+    public se.locutus.proto.Ng.LineFilter getLineFilter(int index) {
+      return lineFilter_.get(index);
+    }
+    /**
+     * <pre>
+     * Give all the data for the step if empty.
+     * </pre>
+     *
+     * <code>repeated .se.locutus.proto.LineFilter line_filter = 3;</code>
+     */
+    public se.locutus.proto.Ng.LineFilterOrBuilder getLineFilterOrBuilder(
+        int index) {
+      return lineFilter_.get(index);
+    }
+    private void ensureLineFilterIsMutable() {
+      if (!lineFilter_.isModifiable()) {
+        lineFilter_ =
+            com.google.protobuf.GeneratedMessageLite.mutableCopy(lineFilter_);
+       }
+    }
+
+    /**
+     * <pre>
+     * Give all the data for the step if empty.
+     * </pre>
+     *
+     * <code>repeated .se.locutus.proto.LineFilter line_filter = 3;</code>
+     */
+    private void setLineFilter(
+        int index, se.locutus.proto.Ng.LineFilter value) {
       if (value == null) {
         throw new NullPointerException();
       }
-      lineFilter_ = value;
-      
-      }
+      ensureLineFilterIsMutable();
+      lineFilter_.set(index, value);
+    }
     /**
      * <pre>
      * Give all the data for the step if empty.
      * </pre>
      *
-     * <code>optional .se.locutus.proto.LineFilter line_filter = 3;</code>
+     * <code>repeated .se.locutus.proto.LineFilter line_filter = 3;</code>
      */
     private void setLineFilter(
-        se.locutus.proto.Ng.LineFilter.Builder builderForValue) {
-      lineFilter_ = builderForValue.build();
-      
+        int index, se.locutus.proto.Ng.LineFilter.Builder builderForValue) {
+      ensureLineFilterIsMutable();
+      lineFilter_.set(index, builderForValue.build());
     }
     /**
      * <pre>
      * Give all the data for the step if empty.
      * </pre>
      *
-     * <code>optional .se.locutus.proto.LineFilter line_filter = 3;</code>
+     * <code>repeated .se.locutus.proto.LineFilter line_filter = 3;</code>
      */
-    private void mergeLineFilter(se.locutus.proto.Ng.LineFilter value) {
-      if (lineFilter_ != null &&
-          lineFilter_ != se.locutus.proto.Ng.LineFilter.getDefaultInstance()) {
-        lineFilter_ =
-          se.locutus.proto.Ng.LineFilter.newBuilder(lineFilter_).mergeFrom(value).buildPartial();
-      } else {
-        lineFilter_ = value;
+    private void addLineFilter(se.locutus.proto.Ng.LineFilter value) {
+      if (value == null) {
+        throw new NullPointerException();
       }
-      
+      ensureLineFilterIsMutable();
+      lineFilter_.add(value);
     }
     /**
      * <pre>
      * Give all the data for the step if empty.
      * </pre>
      *
-     * <code>optional .se.locutus.proto.LineFilter line_filter = 3;</code>
+     * <code>repeated .se.locutus.proto.LineFilter line_filter = 3;</code>
      */
-    private void clearLineFilter() {  lineFilter_ = null;
-      
+    private void addLineFilter(
+        int index, se.locutus.proto.Ng.LineFilter value) {
+      if (value == null) {
+        throw new NullPointerException();
+      }
+      ensureLineFilterIsMutable();
+      lineFilter_.add(index, value);
+    }
+    /**
+     * <pre>
+     * Give all the data for the step if empty.
+     * </pre>
+     *
+     * <code>repeated .se.locutus.proto.LineFilter line_filter = 3;</code>
+     */
+    private void addLineFilter(
+        se.locutus.proto.Ng.LineFilter.Builder builderForValue) {
+      ensureLineFilterIsMutable();
+      lineFilter_.add(builderForValue.build());
+    }
+    /**
+     * <pre>
+     * Give all the data for the step if empty.
+     * </pre>
+     *
+     * <code>repeated .se.locutus.proto.LineFilter line_filter = 3;</code>
+     */
+    private void addLineFilter(
+        int index, se.locutus.proto.Ng.LineFilter.Builder builderForValue) {
+      ensureLineFilterIsMutable();
+      lineFilter_.add(index, builderForValue.build());
+    }
+    /**
+     * <pre>
+     * Give all the data for the step if empty.
+     * </pre>
+     *
+     * <code>repeated .se.locutus.proto.LineFilter line_filter = 3;</code>
+     */
+    private void addAllLineFilter(
+        java.lang.Iterable<? extends se.locutus.proto.Ng.LineFilter> values) {
+      ensureLineFilterIsMutable();
+      com.google.protobuf.AbstractMessageLite.addAll(
+          values, lineFilter_);
+    }
+    /**
+     * <pre>
+     * Give all the data for the step if empty.
+     * </pre>
+     *
+     * <code>repeated .se.locutus.proto.LineFilter line_filter = 3;</code>
+     */
+    private void clearLineFilter() {
+      lineFilter_ = emptyProtobufList();
+    }
+    /**
+     * <pre>
+     * Give all the data for the step if empty.
+     * </pre>
+     *
+     * <code>repeated .se.locutus.proto.LineFilter line_filter = 3;</code>
+     */
+    private void removeLineFilter(int index) {
+      ensureLineFilterIsMutable();
+      lineFilter_.remove(index);
     }
 
     public void writeTo(com.google.protobuf.CodedOutputStream output)
@@ -9308,8 +9419,8 @@ public final class Ng {
       if (departuresFilter_ != null) {
         output.writeMessage(2, getDeparturesFilter());
       }
-      if (lineFilter_ != null) {
-        output.writeMessage(3, getLineFilter());
+      for (int i = 0; i < lineFilter_.size(); i++) {
+        output.writeMessage(3, lineFilter_.get(i));
       }
     }
 
@@ -9326,9 +9437,9 @@ public final class Ng {
         size += com.google.protobuf.CodedOutputStream
           .computeMessageSize(2, getDeparturesFilter());
       }
-      if (lineFilter_ != null) {
+      for (int i = 0; i < lineFilter_.size(); i++) {
         size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(3, getLineFilter());
+          .computeMessageSize(3, lineFilter_.get(i));
       }
       memoizedSerializedSize = size;
       return size;
@@ -9489,44 +9600,93 @@ public final class Ng {
        * Give all the data for the step if empty.
        * </pre>
        *
-       * <code>optional .se.locutus.proto.LineFilter line_filter = 3;</code>
+       * <code>repeated .se.locutus.proto.LineFilter line_filter = 3;</code>
        */
-      public boolean hasLineFilter() {
-        return instance.hasLineFilter();
+      public java.util.List<se.locutus.proto.Ng.LineFilter> getLineFilterList() {
+        return java.util.Collections.unmodifiableList(
+            instance.getLineFilterList());
       }
       /**
        * <pre>
        * Give all the data for the step if empty.
        * </pre>
        *
-       * <code>optional .se.locutus.proto.LineFilter line_filter = 3;</code>
+       * <code>repeated .se.locutus.proto.LineFilter line_filter = 3;</code>
        */
-      public se.locutus.proto.Ng.LineFilter getLineFilter() {
-        return instance.getLineFilter();
+      public int getLineFilterCount() {
+        return instance.getLineFilterCount();
+      }/**
+       * <pre>
+       * Give all the data for the step if empty.
+       * </pre>
+       *
+       * <code>repeated .se.locutus.proto.LineFilter line_filter = 3;</code>
+       */
+      public se.locutus.proto.Ng.LineFilter getLineFilter(int index) {
+        return instance.getLineFilter(index);
       }
       /**
        * <pre>
        * Give all the data for the step if empty.
        * </pre>
        *
-       * <code>optional .se.locutus.proto.LineFilter line_filter = 3;</code>
-       */
-      public Builder setLineFilter(se.locutus.proto.Ng.LineFilter value) {
-        copyOnWrite();
-        instance.setLineFilter(value);
-        return this;
-        }
-      /**
-       * <pre>
-       * Give all the data for the step if empty.
-       * </pre>
-       *
-       * <code>optional .se.locutus.proto.LineFilter line_filter = 3;</code>
+       * <code>repeated .se.locutus.proto.LineFilter line_filter = 3;</code>
        */
       public Builder setLineFilter(
+          int index, se.locutus.proto.Ng.LineFilter value) {
+        copyOnWrite();
+        instance.setLineFilter(index, value);
+        return this;
+      }
+      /**
+       * <pre>
+       * Give all the data for the step if empty.
+       * </pre>
+       *
+       * <code>repeated .se.locutus.proto.LineFilter line_filter = 3;</code>
+       */
+      public Builder setLineFilter(
+          int index, se.locutus.proto.Ng.LineFilter.Builder builderForValue) {
+        copyOnWrite();
+        instance.setLineFilter(index, builderForValue);
+        return this;
+      }
+      /**
+       * <pre>
+       * Give all the data for the step if empty.
+       * </pre>
+       *
+       * <code>repeated .se.locutus.proto.LineFilter line_filter = 3;</code>
+       */
+      public Builder addLineFilter(se.locutus.proto.Ng.LineFilter value) {
+        copyOnWrite();
+        instance.addLineFilter(value);
+        return this;
+      }
+      /**
+       * <pre>
+       * Give all the data for the step if empty.
+       * </pre>
+       *
+       * <code>repeated .se.locutus.proto.LineFilter line_filter = 3;</code>
+       */
+      public Builder addLineFilter(
+          int index, se.locutus.proto.Ng.LineFilter value) {
+        copyOnWrite();
+        instance.addLineFilter(index, value);
+        return this;
+      }
+      /**
+       * <pre>
+       * Give all the data for the step if empty.
+       * </pre>
+       *
+       * <code>repeated .se.locutus.proto.LineFilter line_filter = 3;</code>
+       */
+      public Builder addLineFilter(
           se.locutus.proto.Ng.LineFilter.Builder builderForValue) {
         copyOnWrite();
-        instance.setLineFilter(builderForValue);
+        instance.addLineFilter(builderForValue);
         return this;
       }
       /**
@@ -9534,11 +9694,12 @@ public final class Ng {
        * Give all the data for the step if empty.
        * </pre>
        *
-       * <code>optional .se.locutus.proto.LineFilter line_filter = 3;</code>
+       * <code>repeated .se.locutus.proto.LineFilter line_filter = 3;</code>
        */
-      public Builder mergeLineFilter(se.locutus.proto.Ng.LineFilter value) {
+      public Builder addLineFilter(
+          int index, se.locutus.proto.Ng.LineFilter.Builder builderForValue) {
         copyOnWrite();
-        instance.mergeLineFilter(value);
+        instance.addLineFilter(index, builderForValue);
         return this;
       }
       /**
@@ -9546,10 +9707,36 @@ public final class Ng {
        * Give all the data for the step if empty.
        * </pre>
        *
-       * <code>optional .se.locutus.proto.LineFilter line_filter = 3;</code>
+       * <code>repeated .se.locutus.proto.LineFilter line_filter = 3;</code>
        */
-      public Builder clearLineFilter() {  copyOnWrite();
+      public Builder addAllLineFilter(
+          java.lang.Iterable<? extends se.locutus.proto.Ng.LineFilter> values) {
+        copyOnWrite();
+        instance.addAllLineFilter(values);
+        return this;
+      }
+      /**
+       * <pre>
+       * Give all the data for the step if empty.
+       * </pre>
+       *
+       * <code>repeated .se.locutus.proto.LineFilter line_filter = 3;</code>
+       */
+      public Builder clearLineFilter() {
+        copyOnWrite();
         instance.clearLineFilter();
+        return this;
+      }
+      /**
+       * <pre>
+       * Give all the data for the step if empty.
+       * </pre>
+       *
+       * <code>repeated .se.locutus.proto.LineFilter line_filter = 3;</code>
+       */
+      public Builder removeLineFilter(int index) {
+        copyOnWrite();
+        instance.removeLineFilter(index);
         return this;
       }
 
@@ -9566,6 +9753,7 @@ public final class Ng {
           return DEFAULT_INSTANCE;
         }
         case MAKE_IMMUTABLE: {
+          lineFilter_.makeImmutable();
           return null;
         }
         case NEW_BUILDER: {
@@ -9577,9 +9765,10 @@ public final class Ng {
           siteId_ = visitor.visitLong(siteId_ != 0L, siteId_,
               other.siteId_ != 0L, other.siteId_);
           departuresFilter_ = visitor.visitMessage(departuresFilter_, other.departuresFilter_);
-          lineFilter_ = visitor.visitMessage(lineFilter_, other.lineFilter_);
+          lineFilter_= visitor.visitList(lineFilter_, other.lineFilter_);
           if (visitor == com.google.protobuf.GeneratedMessageLite.MergeFromVisitor
               .INSTANCE) {
+            bitField0_ |= other.bitField0_;
           }
           return this;
         }
@@ -9621,16 +9810,12 @@ public final class Ng {
                   break;
                 }
                 case 26: {
-                  se.locutus.proto.Ng.LineFilter.Builder subBuilder = null;
-                  if (lineFilter_ != null) {
-                    subBuilder = lineFilter_.toBuilder();
+                  if (!lineFilter_.isModifiable()) {
+                    lineFilter_ =
+                        com.google.protobuf.GeneratedMessageLite.mutableCopy(lineFilter_);
                   }
-                  lineFilter_ = input.readMessage(se.locutus.proto.Ng.LineFilter.parser(), extensionRegistry);
-                  if (subBuilder != null) {
-                    subBuilder.mergeFrom(lineFilter_);
-                    lineFilter_ = subBuilder.buildPartial();
-                  }
-
+                  lineFilter_.add(
+                      input.readMessage(se.locutus.proto.Ng.LineFilter.parser(), extensionRegistry));
                   break;
                 }
               }
@@ -11237,13 +11422,18 @@ public final class Ng {
     se.locutus.proto.Ng.DeparturesFilter getDeparturesFilter();
 
     /**
-     * <code>optional .se.locutus.proto.LineFilter line_filter = 3;</code>
+     * <code>repeated .se.locutus.proto.LineFilter line_filter = 3;</code>
      */
-    boolean hasLineFilter();
+    java.util.List<se.locutus.proto.Ng.LineFilter> 
+        getLineFilterList();
     /**
-     * <code>optional .se.locutus.proto.LineFilter line_filter = 3;</code>
+     * <code>repeated .se.locutus.proto.LineFilter line_filter = 3;</code>
      */
-    se.locutus.proto.Ng.LineFilter getLineFilter();
+    se.locutus.proto.Ng.LineFilter getLineFilter(int index);
+    /**
+     * <code>repeated .se.locutus.proto.LineFilter line_filter = 3;</code>
+     */
+    int getLineFilterCount();
 
     /**
      * <code>optional .se.locutus.proto.ThemeData theme_data = 4;</code>
@@ -11263,7 +11453,9 @@ public final class Ng {
       // @@protoc_insertion_point(message_implements:se.locutus.proto.StopConfiguration)
       StopConfigurationOrBuilder {
     private StopConfiguration() {
+      lineFilter_ = emptyProtobufList();
     }
+    private int bitField0_;
     public static final int STOP_DATA_FIELD_NUMBER = 1;
     private se.locutus.proto.Ng.StoredStopData stopData_;
     /**
@@ -11369,55 +11561,123 @@ public final class Ng {
     }
 
     public static final int LINE_FILTER_FIELD_NUMBER = 3;
-    private se.locutus.proto.Ng.LineFilter lineFilter_;
+    private com.google.protobuf.Internal.ProtobufList<se.locutus.proto.Ng.LineFilter> lineFilter_;
     /**
-     * <code>optional .se.locutus.proto.LineFilter line_filter = 3;</code>
+     * <code>repeated .se.locutus.proto.LineFilter line_filter = 3;</code>
      */
-    public boolean hasLineFilter() {
-      return lineFilter_ != null;
+    public java.util.List<se.locutus.proto.Ng.LineFilter> getLineFilterList() {
+      return lineFilter_;
     }
     /**
-     * <code>optional .se.locutus.proto.LineFilter line_filter = 3;</code>
+     * <code>repeated .se.locutus.proto.LineFilter line_filter = 3;</code>
      */
-    public se.locutus.proto.Ng.LineFilter getLineFilter() {
-      return lineFilter_ == null ? se.locutus.proto.Ng.LineFilter.getDefaultInstance() : lineFilter_;
+    public java.util.List<? extends se.locutus.proto.Ng.LineFilterOrBuilder> 
+        getLineFilterOrBuilderList() {
+      return lineFilter_;
     }
     /**
-     * <code>optional .se.locutus.proto.LineFilter line_filter = 3;</code>
+     * <code>repeated .se.locutus.proto.LineFilter line_filter = 3;</code>
      */
-    private void setLineFilter(se.locutus.proto.Ng.LineFilter value) {
+    public int getLineFilterCount() {
+      return lineFilter_.size();
+    }
+    /**
+     * <code>repeated .se.locutus.proto.LineFilter line_filter = 3;</code>
+     */
+    public se.locutus.proto.Ng.LineFilter getLineFilter(int index) {
+      return lineFilter_.get(index);
+    }
+    /**
+     * <code>repeated .se.locutus.proto.LineFilter line_filter = 3;</code>
+     */
+    public se.locutus.proto.Ng.LineFilterOrBuilder getLineFilterOrBuilder(
+        int index) {
+      return lineFilter_.get(index);
+    }
+    private void ensureLineFilterIsMutable() {
+      if (!lineFilter_.isModifiable()) {
+        lineFilter_ =
+            com.google.protobuf.GeneratedMessageLite.mutableCopy(lineFilter_);
+       }
+    }
+
+    /**
+     * <code>repeated .se.locutus.proto.LineFilter line_filter = 3;</code>
+     */
+    private void setLineFilter(
+        int index, se.locutus.proto.Ng.LineFilter value) {
       if (value == null) {
         throw new NullPointerException();
       }
-      lineFilter_ = value;
-      
-      }
+      ensureLineFilterIsMutable();
+      lineFilter_.set(index, value);
+    }
     /**
-     * <code>optional .se.locutus.proto.LineFilter line_filter = 3;</code>
+     * <code>repeated .se.locutus.proto.LineFilter line_filter = 3;</code>
      */
     private void setLineFilter(
-        se.locutus.proto.Ng.LineFilter.Builder builderForValue) {
-      lineFilter_ = builderForValue.build();
-      
+        int index, se.locutus.proto.Ng.LineFilter.Builder builderForValue) {
+      ensureLineFilterIsMutable();
+      lineFilter_.set(index, builderForValue.build());
     }
     /**
-     * <code>optional .se.locutus.proto.LineFilter line_filter = 3;</code>
+     * <code>repeated .se.locutus.proto.LineFilter line_filter = 3;</code>
      */
-    private void mergeLineFilter(se.locutus.proto.Ng.LineFilter value) {
-      if (lineFilter_ != null &&
-          lineFilter_ != se.locutus.proto.Ng.LineFilter.getDefaultInstance()) {
-        lineFilter_ =
-          se.locutus.proto.Ng.LineFilter.newBuilder(lineFilter_).mergeFrom(value).buildPartial();
-      } else {
-        lineFilter_ = value;
+    private void addLineFilter(se.locutus.proto.Ng.LineFilter value) {
+      if (value == null) {
+        throw new NullPointerException();
       }
-      
+      ensureLineFilterIsMutable();
+      lineFilter_.add(value);
     }
     /**
-     * <code>optional .se.locutus.proto.LineFilter line_filter = 3;</code>
+     * <code>repeated .se.locutus.proto.LineFilter line_filter = 3;</code>
      */
-    private void clearLineFilter() {  lineFilter_ = null;
-      
+    private void addLineFilter(
+        int index, se.locutus.proto.Ng.LineFilter value) {
+      if (value == null) {
+        throw new NullPointerException();
+      }
+      ensureLineFilterIsMutable();
+      lineFilter_.add(index, value);
+    }
+    /**
+     * <code>repeated .se.locutus.proto.LineFilter line_filter = 3;</code>
+     */
+    private void addLineFilter(
+        se.locutus.proto.Ng.LineFilter.Builder builderForValue) {
+      ensureLineFilterIsMutable();
+      lineFilter_.add(builderForValue.build());
+    }
+    /**
+     * <code>repeated .se.locutus.proto.LineFilter line_filter = 3;</code>
+     */
+    private void addLineFilter(
+        int index, se.locutus.proto.Ng.LineFilter.Builder builderForValue) {
+      ensureLineFilterIsMutable();
+      lineFilter_.add(index, builderForValue.build());
+    }
+    /**
+     * <code>repeated .se.locutus.proto.LineFilter line_filter = 3;</code>
+     */
+    private void addAllLineFilter(
+        java.lang.Iterable<? extends se.locutus.proto.Ng.LineFilter> values) {
+      ensureLineFilterIsMutable();
+      com.google.protobuf.AbstractMessageLite.addAll(
+          values, lineFilter_);
+    }
+    /**
+     * <code>repeated .se.locutus.proto.LineFilter line_filter = 3;</code>
+     */
+    private void clearLineFilter() {
+      lineFilter_ = emptyProtobufList();
+    }
+    /**
+     * <code>repeated .se.locutus.proto.LineFilter line_filter = 3;</code>
+     */
+    private void removeLineFilter(int index) {
+      ensureLineFilterIsMutable();
+      lineFilter_.remove(index);
     }
 
     public static final int THEME_DATA_FIELD_NUMBER = 4;
@@ -11480,8 +11740,8 @@ public final class Ng {
       if (departuresFilter_ != null) {
         output.writeMessage(2, getDeparturesFilter());
       }
-      if (lineFilter_ != null) {
-        output.writeMessage(3, getLineFilter());
+      for (int i = 0; i < lineFilter_.size(); i++) {
+        output.writeMessage(3, lineFilter_.get(i));
       }
       if (themeData_ != null) {
         output.writeMessage(4, getThemeData());
@@ -11501,9 +11761,9 @@ public final class Ng {
         size += com.google.protobuf.CodedOutputStream
           .computeMessageSize(2, getDeparturesFilter());
       }
-      if (lineFilter_ != null) {
+      for (int i = 0; i < lineFilter_.size(); i++) {
         size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(3, getLineFilter());
+          .computeMessageSize(3, lineFilter_.get(i));
       }
       if (themeData_ != null) {
         size += com.google.protobuf.CodedOutputStream
@@ -11686,47 +11946,99 @@ public final class Ng {
       }
 
       /**
-       * <code>optional .se.locutus.proto.LineFilter line_filter = 3;</code>
+       * <code>repeated .se.locutus.proto.LineFilter line_filter = 3;</code>
        */
-      public boolean hasLineFilter() {
-        return instance.hasLineFilter();
+      public java.util.List<se.locutus.proto.Ng.LineFilter> getLineFilterList() {
+        return java.util.Collections.unmodifiableList(
+            instance.getLineFilterList());
       }
       /**
-       * <code>optional .se.locutus.proto.LineFilter line_filter = 3;</code>
+       * <code>repeated .se.locutus.proto.LineFilter line_filter = 3;</code>
        */
-      public se.locutus.proto.Ng.LineFilter getLineFilter() {
-        return instance.getLineFilter();
+      public int getLineFilterCount() {
+        return instance.getLineFilterCount();
+      }/**
+       * <code>repeated .se.locutus.proto.LineFilter line_filter = 3;</code>
+       */
+      public se.locutus.proto.Ng.LineFilter getLineFilter(int index) {
+        return instance.getLineFilter(index);
       }
       /**
-       * <code>optional .se.locutus.proto.LineFilter line_filter = 3;</code>
-       */
-      public Builder setLineFilter(se.locutus.proto.Ng.LineFilter value) {
-        copyOnWrite();
-        instance.setLineFilter(value);
-        return this;
-        }
-      /**
-       * <code>optional .se.locutus.proto.LineFilter line_filter = 3;</code>
+       * <code>repeated .se.locutus.proto.LineFilter line_filter = 3;</code>
        */
       public Builder setLineFilter(
+          int index, se.locutus.proto.Ng.LineFilter value) {
+        copyOnWrite();
+        instance.setLineFilter(index, value);
+        return this;
+      }
+      /**
+       * <code>repeated .se.locutus.proto.LineFilter line_filter = 3;</code>
+       */
+      public Builder setLineFilter(
+          int index, se.locutus.proto.Ng.LineFilter.Builder builderForValue) {
+        copyOnWrite();
+        instance.setLineFilter(index, builderForValue);
+        return this;
+      }
+      /**
+       * <code>repeated .se.locutus.proto.LineFilter line_filter = 3;</code>
+       */
+      public Builder addLineFilter(se.locutus.proto.Ng.LineFilter value) {
+        copyOnWrite();
+        instance.addLineFilter(value);
+        return this;
+      }
+      /**
+       * <code>repeated .se.locutus.proto.LineFilter line_filter = 3;</code>
+       */
+      public Builder addLineFilter(
+          int index, se.locutus.proto.Ng.LineFilter value) {
+        copyOnWrite();
+        instance.addLineFilter(index, value);
+        return this;
+      }
+      /**
+       * <code>repeated .se.locutus.proto.LineFilter line_filter = 3;</code>
+       */
+      public Builder addLineFilter(
           se.locutus.proto.Ng.LineFilter.Builder builderForValue) {
         copyOnWrite();
-        instance.setLineFilter(builderForValue);
+        instance.addLineFilter(builderForValue);
         return this;
       }
       /**
-       * <code>optional .se.locutus.proto.LineFilter line_filter = 3;</code>
+       * <code>repeated .se.locutus.proto.LineFilter line_filter = 3;</code>
        */
-      public Builder mergeLineFilter(se.locutus.proto.Ng.LineFilter value) {
+      public Builder addLineFilter(
+          int index, se.locutus.proto.Ng.LineFilter.Builder builderForValue) {
         copyOnWrite();
-        instance.mergeLineFilter(value);
+        instance.addLineFilter(index, builderForValue);
         return this;
       }
       /**
-       * <code>optional .se.locutus.proto.LineFilter line_filter = 3;</code>
+       * <code>repeated .se.locutus.proto.LineFilter line_filter = 3;</code>
        */
-      public Builder clearLineFilter() {  copyOnWrite();
+      public Builder addAllLineFilter(
+          java.lang.Iterable<? extends se.locutus.proto.Ng.LineFilter> values) {
+        copyOnWrite();
+        instance.addAllLineFilter(values);
+        return this;
+      }
+      /**
+       * <code>repeated .se.locutus.proto.LineFilter line_filter = 3;</code>
+       */
+      public Builder clearLineFilter() {
+        copyOnWrite();
         instance.clearLineFilter();
+        return this;
+      }
+      /**
+       * <code>repeated .se.locutus.proto.LineFilter line_filter = 3;</code>
+       */
+      public Builder removeLineFilter(int index) {
+        copyOnWrite();
+        instance.removeLineFilter(index);
         return this;
       }
 
@@ -11788,6 +12100,7 @@ public final class Ng {
           return DEFAULT_INSTANCE;
         }
         case MAKE_IMMUTABLE: {
+          lineFilter_.makeImmutable();
           return null;
         }
         case NEW_BUILDER: {
@@ -11798,10 +12111,11 @@ public final class Ng {
           se.locutus.proto.Ng.StopConfiguration other = (se.locutus.proto.Ng.StopConfiguration) arg1;
           stopData_ = visitor.visitMessage(stopData_, other.stopData_);
           departuresFilter_ = visitor.visitMessage(departuresFilter_, other.departuresFilter_);
-          lineFilter_ = visitor.visitMessage(lineFilter_, other.lineFilter_);
+          lineFilter_= visitor.visitList(lineFilter_, other.lineFilter_);
           themeData_ = visitor.visitMessage(themeData_, other.themeData_);
           if (visitor == com.google.protobuf.GeneratedMessageLite.MergeFromVisitor
               .INSTANCE) {
+            bitField0_ |= other.bitField0_;
           }
           return this;
         }
@@ -11851,16 +12165,12 @@ public final class Ng {
                   break;
                 }
                 case 26: {
-                  se.locutus.proto.Ng.LineFilter.Builder subBuilder = null;
-                  if (lineFilter_ != null) {
-                    subBuilder = lineFilter_.toBuilder();
+                  if (!lineFilter_.isModifiable()) {
+                    lineFilter_ =
+                        com.google.protobuf.GeneratedMessageLite.mutableCopy(lineFilter_);
                   }
-                  lineFilter_ = input.readMessage(se.locutus.proto.Ng.LineFilter.parser(), extensionRegistry);
-                  if (subBuilder != null) {
-                    subBuilder.mergeFrom(lineFilter_);
-                    lineFilter_ = subBuilder.buildPartial();
-                  }
-
+                  lineFilter_.add(
+                      input.readMessage(se.locutus.proto.Ng.LineFilter.parser(), extensionRegistry));
                   break;
                 }
                 case 34: {

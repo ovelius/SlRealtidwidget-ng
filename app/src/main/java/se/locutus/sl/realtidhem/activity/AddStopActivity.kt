@@ -199,6 +199,7 @@ class AddStopActivity : AppCompatActivity() {
             }
         }
         menu.findItem(R.id.theme_widget_button).setOnMenuItemClickListener { _ ->
+            updateConfigProto()
             LOG.info("Launching theme settings with config ${config.build()}")
             if (allDeparturesResponse != null) {
                 val intent = Intent(this, ThemeActivity::class.java).apply {
@@ -232,13 +233,12 @@ class AddStopActivity : AppCompatActivity() {
         config.setStopData(stopData)
     }
 
-    private fun finishSuccessfully() {
+    private fun updateConfigProto() {
         updateStopDataDisplayText()
-
         if (linesAdapter.isSelected()) {
             config.clearDeparturesFilter()
             val selectedLineFilter = linesAdapter.selected
-            config.setLineFilter(Ng.LineFilter.newBuilder()
+            config.addLineFilter(Ng.LineFilter.newBuilder()
                 .setGroupOfLineId(selectedLineFilter.groupOfLineId)
                 .setDirectionId(selectedLineFilter.directionId))
         } else {
@@ -249,6 +249,11 @@ class AddStopActivity : AppCompatActivity() {
                         .addAllDepartures(departureAdapter.getCheckedItems())
                 )
         }
+    }
+
+    private fun finishSuccessfully() {
+        updateConfigProto()
+
         val resultIntent = Intent()
         resultIntent.putExtra(STOP_CONFIG_DATA_KEY, config.build().toByteArray())
         if (stopIndex >= 0) {
