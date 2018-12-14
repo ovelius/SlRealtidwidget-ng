@@ -25,13 +25,14 @@ internal class InMemoryState {
     private var widgetConfigs = ConcurrentHashMap<Int, Ng.WidgetConfiguration>()
     var lastLoadedData = ConcurrentHashMap<Int, Ng.WidgetLoadResponseData>()
 
-    fun replaceThread(thread : WidgetTouchHandler.ScrollThread?, agressiveOff : Boolean = false) : WidgetTouchHandler.ScrollThread? {
+    fun replaceAndStartThread(thread : WidgetTouchHandler.ScrollThread?, agressiveOff : Boolean = false) : WidgetTouchHandler.ScrollThread? {
         val replaced = scrollThread
         if (scrollThread != null) {
             scrollThread!!.running = false
             scrollThread!!.agressiveOff = agressiveOff
         }
         scrollThread = thread
+        thread?.start()
         return replaced
     }
 
@@ -112,7 +113,7 @@ internal class InMemoryState {
         lastLoadedData.remove(widgetId)
         updatedAt.remove(widgetId)
         updateStartedAt.remove(widgetId)
-        replaceThread(null, true)
+        replaceAndStartThread(null, true)
     }
 
     override fun toString() : String {

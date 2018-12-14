@@ -71,7 +71,7 @@ class WidgetTouchTest {
         // Scroller is active.
         assertThat(touchHandler.inMemoryState.hasRunningThread(widgetId), `is`(true))
         // Kill the thread.
-        touchHandler.inMemoryState.replaceThread(null)!!.join()
+        touchHandler.inMemoryState.replaceAndStartThread(null)!!.join()
         // No longer active.
         assertThat(touchHandler.inMemoryState.hasRunningThread(widgetId), `is`(false))
 
@@ -86,7 +86,7 @@ class WidgetTouchTest {
         assertViewText(widgetId, R.id.widgetline1, "123 Hej")
         assertViewText(widgetId, R.id.widgetmin, "1 min")
         assertThat(touchHandler.inMemoryState.hasRunningThread(widgetId), `is`(true))
-        touchHandler.inMemoryState.replaceThread(null)!!.join()
+        touchHandler.inMemoryState.replaceAndStartThread(null)!!.join()
 
         // No additional network requests.
         assertThat(testNetwork.dataRequestCounts, `is`(1))
@@ -145,6 +145,8 @@ class WidgetTouchTest {
             .setErrorType(Ng.ErrorType.SL_API_ERROR).setMessage("ooga")).build(), null)
 
         assertViewText(widgetId, R.id.widgetline1, R.string.sl_api_error)
+        assertThat(touchHandler.inMemoryState.hasRunningThread(widgetId), `is`(true))
+        touchHandler.inMemoryState.replaceAndStartThread(null)!!.join()
         assertViewText(widgetId, R.id.widgetline2, context.getString(R.string.sl_api_error_detail, "ooga"))
     }
 

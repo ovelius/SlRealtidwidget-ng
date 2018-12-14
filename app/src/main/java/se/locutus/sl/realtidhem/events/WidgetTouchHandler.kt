@@ -95,11 +95,11 @@ class WidgetTouchHandler(val context: Context, val networkManager : NetworkInter
         } else if (!inMemoryState.hasRunningThread(widgetId)) {
             val lastLoadedData = inMemoryState.lastLoadedData[widgetId]
             if (lastLoadedData != null) {
-                inMemoryState.replaceThread(ScrollThread(
+                inMemoryState.replaceAndStartThread(ScrollThread(
                     widgetId,
                     inMemoryState.remoteViews[widgetId]!!,
                     lastLoadedData.line2, context
-                ).apply { start() })
+                ))
             }
         } else {
             LOG.info("Updated and has running thread, not doing anything $widgetId")
@@ -142,9 +142,9 @@ class WidgetTouchHandler(val context: Context, val networkManager : NetworkInter
                 val line2 = context.getString(R.string.power_save_mode_no_whitelist)
                 setWidgetTextViews(views, context.getString(R.string.power_save_mode), "", line2)
                 manager.updateAppWidget(widgetId, views)
-                inMemoryState.replaceThread(ScrollThread(
+                inMemoryState.replaceAndStartThread(ScrollThread(
                     widgetId, views, line2, context
-                ).apply { start() })
+                ))
                 inMemoryState.nextPowerSaveSettings = true
                 return true
             }
@@ -256,9 +256,9 @@ class WidgetTouchHandler(val context: Context, val networkManager : NetworkInter
                     if (!stopConfig.themeData.colorConfig.overrideMainColor) {
                         views.setInt(R.id.widgetcolor, "setBackgroundColor", responseData.loadResponse.color)
                     }
-                    inMemoryState.replaceThread(ScrollThread(
+                    inMemoryState.replaceAndStartThread(ScrollThread(
                         widgetId, views, responseData.loadResponse.line2, context
-                    ).apply { start() })
+                    ))
                 } else {
                     setWidgetTextViews(
                         views,
@@ -278,13 +278,18 @@ class WidgetTouchHandler(val context: Context, val networkManager : NetworkInter
     private fun handleError(views : RemoteViews, widgetId: Int, e : Ng.LoadErrorResponse) {
         LOG.warning("Error loading data $e")
 
+        var line2 = context.getString(R.string.error_details_try_again)
         if (e.errorType == Ng.ErrorType.SL_API_ERROR) {
-            setWidgetTextViews(views, context.getString(R.string.sl_api_error), "", context.getString(R.string.sl_api_error_detail, e.message))
+            line2 = context.getString(R.string.sl_api_error_detail, e.message)
+            setWidgetTextViews(views, context.getString(R.string.sl_api_error), "", line2)
         } else {
-            setWidgetTextViews(views, context.getString(R.string.error), "", context.getString(R.string.error_details_try_again))
+            setWidgetTextViews(views, context.getString(R.string.error), "", line2)
         }
         inMemoryState.putLastLoadDataInMemory(prefs, widgetId, Ng.WidgetLoadResponseData.getDefaultInstance())
         inMemoryState.updatedAt[widgetId] = System.currentTimeMillis() - UPDATE_FAIL_STALE
+        inMemoryState.replaceAndStartThread(ScrollThread(
+            widgetId, views, line2, context
+        ))
     }
 
     private fun handleException(views : RemoteViews, widgetId: Int, e : Exception) {
