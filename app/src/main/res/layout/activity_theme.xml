@@ -26,7 +26,7 @@
                 android:layout_width="match_parent"
                 android:paddingTop="?attr/actionBarSize"
                 android:layout_height="wrap_content"
-                tools:context=".activity.ThemeActivity">
+                tools:context=".activity.theme.ThemeActivity">
 
             <TextView
             android:layout_width="match_parent"

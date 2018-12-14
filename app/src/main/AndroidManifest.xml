@@ -61,7 +61,7 @@
                 android:label="@string/add_stop_title"
                 android:theme="@style/AppTheme.NoActionBar">
         </activity>
-        <activity android:name=".activity.ThemeActivity" android:theme="@style/AppTheme.NoActionBar" android:label="@string/theme_stop">
+        <activity android:name=".activity.theme.ThemeActivity" android:theme="@style/AppTheme.NoActionBar" android:label="@string/theme_stop">
         </activity>
     </application>
 

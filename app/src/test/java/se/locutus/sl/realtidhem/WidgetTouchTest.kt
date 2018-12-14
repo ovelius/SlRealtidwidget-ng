@@ -8,6 +8,7 @@ import org.robolectric.RobolectricTestRunner
 import se.locutus.sl.realtidhem.events.WidgetTouchHandler
 import android.appwidget.AppWidgetManager
 import android.content.Context
+import android.content.SharedPreferences
 import android.os.PowerManager
 import androidx.test.core.app.ApplicationProvider
 import android.widget.TextView
@@ -25,8 +26,7 @@ import se.locutus.sl.realtidhem.widget.StandardWidgetProvider
 import java.lang.RuntimeException
 import java.net.SocketTimeoutException
 import org.robolectric.shadows.ShadowPowerManager
-
-
+import se.locutus.sl.realtidhem.widget.getLastLoadData
 
 
 /**
@@ -80,6 +80,8 @@ class WidgetTouchTest {
         assertViewText(widgetId, R.id.widgetline2, "Mooore")
 
         assertThat(testNetwork.dataRequestCounts, `is`(1))
+        val prefs = context.getSharedPreferences(WIDGET_CONFIG_PREFS, 0)
+        assertThat(getLastLoadData(prefs, widgetId), notNullValue())
 
         // Touch it again!
         touchHandler.widgetTouched(widgetId, null)

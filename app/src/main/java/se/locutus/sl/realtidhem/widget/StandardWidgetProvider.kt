@@ -150,7 +150,11 @@ class StandardWidgetProvider : AppWidgetProvider() {
             views.setTextViewText(R.id.widgettag, widgetText)
             views.setTextViewText(R.id.widgetline1, context.getString(R.string.idle_line1))
             views.setTextViewText(R.id.widgetmin, "")
-            views.setTextViewText(R.id.widgetline2, context.getString(R.string.idle_line2))
+            if (lastData != null && lastData.idleMessage.isNotEmpty()) {
+                views.setTextViewText(R.id.widgetline2, lastData.idleMessage)
+            } else {
+                views.setTextViewText(R.id.widgetline2, context.getString(R.string.idle_line2))
+            }
             if (validConfig) {
                 val stopConfig = widgetConfig.getStopConfiguration(selectedStopIndex)
                 updateColors(context, views, stopConfig.themeData.colorConfig)

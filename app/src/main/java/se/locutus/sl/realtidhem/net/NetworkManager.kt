@@ -73,7 +73,7 @@ class ProtoRequest
 
     override fun getHeaders(): MutableMap<String, String> {
         val headers = HashMap<String, String>()
-        headers["Content-Type"] = "application/octet-stream";
+        headers["Content-Type"] = "application/octet-stream"
         return headers
     }
 

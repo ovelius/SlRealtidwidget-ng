@@ -14,6 +14,7 @@ import kotlinx.android.synthetic.main.activity_add_stop.*
 import se.locutus.proto.Ng
 import se.locutus.proto.Ng.DeparturesFilter
 import se.locutus.sl.realtidhem.R
+import se.locutus.sl.realtidhem.activity.theme.ThemeActivity
 import se.locutus.sl.realtidhem.events.EXTRA_COLOR_THEME
 import se.locutus.sl.realtidhem.events.EXTRA_THEME_CONFIG
 import se.locutus.sl.realtidhem.net.NetworkInterface

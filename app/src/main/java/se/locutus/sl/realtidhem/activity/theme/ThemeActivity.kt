@@ -1,4 +1,4 @@
-package se.locutus.sl.realtidhem.activity
+package se.locutus.sl.realtidhem.activity.theme
 
 import android.app.Activity
 import android.content.Intent
@@ -18,6 +18,9 @@ import se.locutus.sl.realtidhem.events.EXTRA_COLOR_THEME
 import com.pes.androidmaterialcolorpickerdialog.ColorPicker
 import kotlinx.android.synthetic.main.activity_theme.*
 import se.locutus.proto.Ng
+import se.locutus.sl.realtidhem.activity.ALL_DEPARTURES_DATA_KEY
+import se.locutus.sl.realtidhem.activity.STOP_CONFIG_DATA_KEY
+import se.locutus.sl.realtidhem.activity.setColor
 import se.locutus.sl.realtidhem.events.EXTRA_THEME_CONFIG
 import java.lang.StringBuilder
 import java.util.*
@@ -86,7 +89,7 @@ class ThemeActivity : AppCompatActivity() {
 
         if (intent.hasExtra(EXTRA_COLOR_THEME)) {
             color = intent.getIntExtra(EXTRA_COLOR_THEME, 0x7fff0000)
-            setColor(this, null ,intent.getIntExtra(EXTRA_COLOR_THEME, 0))
+            setColor(this, null, intent.getIntExtra(EXTRA_COLOR_THEME, 0))
         }
 
 
