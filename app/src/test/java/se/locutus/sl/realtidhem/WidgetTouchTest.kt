@@ -8,7 +8,6 @@ import org.robolectric.RobolectricTestRunner
 import se.locutus.sl.realtidhem.events.WidgetTouchHandler
 import android.appwidget.AppWidgetManager
 import android.content.Context
-import android.content.SharedPreferences
 import android.os.PowerManager
 import androidx.test.core.app.ApplicationProvider
 import android.widget.TextView
@@ -26,7 +25,9 @@ import se.locutus.sl.realtidhem.widget.StandardWidgetProvider
 import java.lang.RuntimeException
 import java.net.SocketTimeoutException
 import org.robolectric.shadows.ShadowPowerManager
+import se.locutus.sl.realtidhem.events.CYCLE_STOP_RIGHT
 import se.locutus.sl.realtidhem.widget.getLastLoadData
+import se.locutus.sl.realtidhem.widget.widgetKeySelectedStop
 
 
 /**
@@ -40,8 +41,12 @@ class WidgetTouchTest {
     private val context = ApplicationProvider.getApplicationContext<android.app.Application>()
     private val prefs = context.getSharedPreferences(WIDGET_CONFIG_PREFS, 0)
     private val stop1 = Ng.StopConfiguration.newBuilder()
-        .setStopData(Ng.StoredStopData.newBuilder().setSiteId(123L))
+        .setStopData(Ng.StoredStopData.newBuilder().setSiteId(123L).setDisplayName("Stop1"))
         .setDeparturesFilter(Ng.DeparturesFilter.newBuilder().addDepartures("123 Bla"))
+        .build()
+    private val stop2 = Ng.StopConfiguration.newBuilder()
+        .setStopData(Ng.StoredStopData.newBuilder().setSiteId(321L).setDisplayName("Stop2"))
+        .addLineFilter(Ng.LineFilter.newBuilder().setDirectionId(1).setGroupOfLineId(1))
         .build()
     private val shadowAppWidgetManager: ShadowAppWidgetManager = shadowOf(AppWidgetManager.getInstance(context))
     private val shadowPowerManager: ShadowPowerManager = shadowOf(context.getSystemService(Context.POWER_SERVICE) as PowerManager)
@@ -49,7 +54,7 @@ class WidgetTouchTest {
 
     @Test
     fun testTouchWidgetAndLoadData() {
-        val widgetId = createWidgetAndConfigFor()
+        val widgetId = createWidgetConfig()
         val touchHandler = WidgetTouchHandler(context, testNetwork)
 
         // Touch the widget.
@@ -70,6 +75,8 @@ class WidgetTouchTest {
 
         // Scroller is active.
         assertThat(touchHandler.inMemoryState.hasRunningThread(widgetId), `is`(true))
+        // It worked no need to retry.
+        assertThat(touchHandler.inMemoryState.shouldRetry(widgetId, 2000L), `is`(false))
         // Kill the thread.
         touchHandler.inMemoryState.replaceAndStartThread(null)!!.join()
         // No longer active.
@@ -95,8 +102,53 @@ class WidgetTouchTest {
     }
 
     @Test
+    fun testWidgetConfigUpdatedWithIdleMessage() {
+        val widgetId = createWidgetConfig()
+        val touchHandler = WidgetTouchHandler(context, testNetwork)
+
+        // Touch the widget.
+        touchHandler.widgetTouched(widgetId, null)
+        testNetwork.sendResponse(Ng.ResponseData.newBuilder()
+            .setLoadResponse(widgetLoadResponse("123 Hej", "1 min", "Mooore", "IdleHello"))
+            .build(), null)
+        // Scroller is active.
+        assertThat(touchHandler.inMemoryState.hasRunningThread(widgetId), `is`(true))
+
+        touchHandler.configUpdated(widgetId, false)
+        assertThat(prefs.getInt(widgetKeySelectedStop(widgetId), 0), `is`(0))
+
+        assertViewText(widgetId, R.id.widgetline1, R.string.idle_line1)
+        assertViewText(widgetId, R.id.widgetline2, "IdleHello")
+
+        // Touch the widget.
+        touchHandler.widgetTouched(widgetId, null)
+        testNetwork.sendResponse(Ng.ResponseData.newBuilder()
+            .setLoadResponse(widgetLoadResponse("123 Hej", "1 min", "Mooore", ""))
+            .build(), null)
+
+        touchHandler.configUpdated(widgetId, false)
+        assertViewText(widgetId, R.id.widgetline1, R.string.idle_line1)
+        assertViewText(widgetId, R.id.widgetline2,  R.string.idle_line2)
+    }
+
+    @Test
+    fun testWidgetChangeStop() {
+        val widgetId = createWidgetConfig()
+        val touchHandler = WidgetTouchHandler(context, testNetwork)
+        touchHandler.configUpdated(widgetId, false)
+        assertThat(prefs.getInt(widgetKeySelectedStop(widgetId), 0), `is`(0))
+        assertViewText(widgetId, R.id.widgetline1, R.string.idle_line1)
+        assertViewText(widgetId, R.id.widgetline1, R.string.idle_line1)
+        assertViewText(widgetId, R.id.widgettag,  "Stop1")
+
+        touchHandler.widgetTouched(widgetId, CYCLE_STOP_RIGHT)
+        assertThat(prefs.getInt(widgetKeySelectedStop(widgetId), 0), `is`(1))
+        assertViewText(widgetId, R.id.widgettag,  "Stop2")
+    }
+
+    @Test
     fun testTouchWidgetAndNoDepartures() {
-        val widgetId = createWidgetAndConfigFor()
+        val widgetId = createWidgetConfig()
         val touchHandler = WidgetTouchHandler(context, testNetwork)
 
         // Touch the widget.
@@ -114,7 +166,7 @@ class WidgetTouchTest {
 
     @Test
     fun testTouchWidgetAndExceptionLoadingData() {
-        val widgetId = createWidgetAndConfigFor()
+        val widgetId = createWidgetConfig()
         val touchHandler = WidgetTouchHandler(context, testNetwork)
 
         // Touch the widget.
@@ -122,6 +174,7 @@ class WidgetTouchTest {
 
         // It failed!
         testNetwork.sendResponse(Ng.ResponseData.getDefaultInstance(), SocketTimeoutException())
+        assertThat(touchHandler.inMemoryState.shouldRetry(widgetId, 2000L), `is`(true))
 
         assertViewText(widgetId, R.id.widgetline1, R.string.error_timeout)
         // Trigger config change to clear state.
@@ -131,13 +184,14 @@ class WidgetTouchTest {
         touchHandler.widgetTouched(widgetId, null)
         // Generic garbage.
         testNetwork.sendResponse(Ng.ResponseData.getDefaultInstance(), RuntimeException())
+        assertThat(touchHandler.inMemoryState.shouldRetry(widgetId, 2000L), `is`(true))
         assertViewText(widgetId, R.id.widgetline1, R.string.error)
         assertViewText(widgetId, R.id.widgetline2, R.string.error_details_try_again)
     }
 
     @Test
     fun testTouchWidgetAndErrorLoadingData() {
-        val widgetId = createWidgetAndConfigFor()
+        val widgetId = createWidgetConfig()
         val touchHandler = WidgetTouchHandler(context, testNetwork)
         // Touch the widget.
         touchHandler.widgetTouched(widgetId, null)
@@ -145,6 +199,8 @@ class WidgetTouchTest {
         // It failed with a specific error.
         testNetwork.sendResponse(Ng.ResponseData.newBuilder().setErrorResponse(Ng.LoadErrorResponse.newBuilder()
             .setErrorType(Ng.ErrorType.SL_API_ERROR).setMessage("ooga")).build(), null)
+        // TODO: This should not be retried..
+        assertThat(touchHandler.inMemoryState.shouldRetry(widgetId, 2000L), `is`(true))
 
         assertViewText(widgetId, R.id.widgetline1, R.string.sl_api_error)
         assertThat(touchHandler.inMemoryState.hasRunningThread(widgetId), `is`(true))
@@ -154,7 +210,7 @@ class WidgetTouchTest {
 
     @Test
     fun testTouchWidgetPowerSave() {
-        val widgetId = createWidgetAndConfigFor()
+        val widgetId = createWidgetConfig()
         val touchHandler = WidgetTouchHandler(context, testNetwork)
         // Touch the widget in powersave mode.
         shadowPowerManager.setIsPowerSaveMode(true)
@@ -181,15 +237,25 @@ class WidgetTouchTest {
         assertViewText(widgetId, viewId, context.getString(text))
     }
 
-    fun widgetLoadResponse(line1 : String, min : String, line2 : String) : Ng.WidgetLoadResponseData {
-        return Ng.WidgetLoadResponseData.newBuilder().setLine1(line1).setLine2(line2).setMinutes(min).build()
+    fun widgetLoadResponse(line1 : String, min : String, line2 : String, idleMessage : String = "") : Ng.WidgetLoadResponseData {
+        return Ng.WidgetLoadResponseData.newBuilder()
+            .setLine1(line1)
+            .setLine2(line2)
+            .setMinutes(min)
+            .setIdleMessage(idleMessage)
+            .build()
     }
 
-    fun createWidgetAndConfigFor() : Int{
-        val widgetId = shadowAppWidgetManager.createWidget(StandardWidgetProvider::class.java, R.layout.widgetlayout_base)
+    private fun createWidgetId() : Int {
+        return shadowAppWidgetManager.createWidget(StandardWidgetProvider::class.java, R.layout.widgetlayout_base)
+    }
+
+    private fun createWidgetConfig() : Int{
+        val widgetId = createWidgetId()
         val config = Ng.WidgetConfiguration.newBuilder()
             .setWidgetId(widgetId.toLong())
             .addStopConfiguration(stop1)
+            .addStopConfiguration(stop2)
             .build()
         storeWidgetConfig(prefs, config)
         return widgetId

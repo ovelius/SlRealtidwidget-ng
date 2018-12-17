@@ -54,6 +54,13 @@ internal class InMemoryState {
         putLastLoadData(prefs, widgetId, response)
     }
 
+    fun shouldRetry(widgetId: Int, retryMillis : Long) : Boolean {
+        // Only retry if there wasn't a recent update.
+        return sinceLastUpdate(widgetId) > retryMillis &&
+            // And user hasn't tried to update something else recently.
+            sinceUpdateStarted(widgetId)  > retryMillis
+    }
+
     fun getRemoveViews(widgetId: Int, context : Context, forceNewViews : Boolean) : RemoteViews {
         if (remoteViews[widgetId] == null || forceNewViews) {
             // RemoteViews will fill with actions over time, so maybe create new views to

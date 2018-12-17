@@ -39,7 +39,7 @@ const val MAX_ATTEMPTS = 3
 const val CLEAR_TIME_MIN_MILLIS = 60 * 1000L
 const val CLEAR_TIME_MAX_MILLIS = 80 * 1000L
 
-class WidgetTouchHandler(val context: Context, val networkManager : NetworkInterface) {
+class WidgetTouchHandler(val context: Context, val networkManager : NetworkInterface, val retryMillis : Long = UPDATE_AUTO_RETRY_MILLIS) {
     companion object {
         val LOG = Logger.getLogger(WidgetTouchHandler::class.java.name)
     }
@@ -224,14 +224,11 @@ class WidgetTouchHandler(val context: Context, val networkManager : NetworkInter
 
         if (attempt < MAX_ATTEMPTS) {
             mainHandler.postDelayed({
-                // Only retry if there wasn't a recent update.
-                if (inMemoryState.sinceLastUpdate(widgetId) > UPDATE_AUTO_RETRY_MILLIS &&
-                    // And user hasn't tried to update something else recently.
-                    inMemoryState.sinceUpdateStarted(widgetId)  > UPDATE_AUTO_RETRY_MILLIS) {
+                if (inMemoryState.shouldRetry(widgetId, retryMillis)) {
                     LOG.info("retrying update...")
                     loadWidgetData(widgetId, manager, stopConfig , attempt + 1)
                 }
-            }, UPDATE_AUTO_RETRY_MILLIS * attempt)
+            }, retryMillis * attempt)
         }
     }
 
