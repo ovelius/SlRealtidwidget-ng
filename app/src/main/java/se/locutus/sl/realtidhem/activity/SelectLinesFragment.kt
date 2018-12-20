@@ -33,6 +33,7 @@ class SelectLinesFragment : androidx.fragment.app.Fragment() {
     internal lateinit var addStopActivity : AddStopActivity
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        LOG.info("onCreateView")
         val mainView =  inflater.inflate(R.layout.content_select_lines, container, false)
         addStopActivity = activity as AddStopActivity
 
@@ -46,9 +47,11 @@ class SelectLinesFragment : androidx.fragment.app.Fragment() {
         return mainView
     }
 
-    fun indexDepartures(colorMap : Map<Int, Int>, data : Ng.AllDepaturesResponseData) {
+    fun indexDepartures(colorMap : Map<Int, Int>, data : Ng.AllDepaturesResponseData,
+                        linesAdapter : LineListAdapter,
+                        lineFilterList: List<Ng.LineFilter>) {
         LOG.info("Indexing departures ${data.depatureDataCount}")
-        addStopActivity.linesAdapter.clear()
+        linesAdapter.clear()
         // Map with line as key, departureList as value.
         val map = HashMap<String, MutableList<Ng.DepartureData>>()
         for (departure in data.depatureDataList) {
@@ -60,17 +63,17 @@ class SelectLinesFragment : androidx.fragment.app.Fragment() {
         }
 
         val configuredLines = HashSet<String>()
-        for (lineFilter in addStopActivity.config.lineFilterList) {
+        for (lineFilter in lineFilterList) {
             val selectedKey = "${lineFilter.groupOfLineId}_${lineFilter.directionId}"
             configuredLines.add(selectedKey)
         }
 
         for (key in map.keys) {
-            addStopActivity.linesAdapter.add(map[key]!!, configuredLines.contains(key))
+            linesAdapter.add(map[key]!!, configuredLines.contains(key))
         }
         LOG.info("Indexed to ${map.keys.size} lines, selected ${configuredLines.size}")
-        addStopActivity.linesAdapter.sort(colorMap)
-        addStopActivity.linesAdapter.notifyDataSetChanged()
+        linesAdapter.sort(colorMap)
+        linesAdapter.notifyDataSetChanged()
     }
 
 

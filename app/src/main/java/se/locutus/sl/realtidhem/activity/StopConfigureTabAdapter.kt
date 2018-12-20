@@ -1,11 +1,6 @@
 package se.locutus.sl.realtidhem.activity
 
 import android.content.Context
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentPagerAdapter
-import androidx.fragment.app.FragmentTabHost
-import android.view.ViewGroup
 import se.locutus.sl.realtidhem.R
 
 class StopConfigureTabAdapter(var context : Context, fm : androidx.fragment.app.FragmentManager) : androidx.fragment.app.FragmentPagerAdapter(fm) {

@@ -43,6 +43,7 @@ const val STOP_CONFIG_DATA_KEY = "stop_config_data_key"
 const val ALL_DEPARTURES_DATA_KEY = "all_departures_data_key"
 const val STOP_INDEX_DATA_KEY = "stop_config_index_data_key"
 const val WIDGET_CONFIG_PREFS = "widget_configs"
+const val WIDGET_CONFIG_DATA_KEY = "widget_config_data_key"
 
 fun setColor(activity : AppCompatActivity, tabLayout : TabLayout?, color : Int) {
     val drawable = ColorDrawable(color)
@@ -97,8 +98,8 @@ class WidgetConfigureActivity : AppCompatActivity() {
         builder.create().show()
     }
 
-    public override fun onCreate(icicle: Bundle?) {
-        super.onCreate(icicle)
+    public override fun onCreate(bundle: Bundle?) {
+        super.onCreate(bundle)
         setResult(Activity.RESULT_CANCELED)
         setContentView(R.layout.widget_configure_activty)
         setSupportActionBar(config_toolbar)
@@ -131,8 +132,13 @@ class WidgetConfigureActivity : AppCompatActivity() {
         }
 
         mWidgetPrefs = getSharedPreferences(WIDGET_CONFIG_PREFS, 0)
-        widgetConfig = loadWidgetConfigOrDefault(mWidgetPrefs, mAppWidgetId)
-        LOG.info("Loaded config as $widgetConfig")
+        if (bundle?.containsKey(WIDGET_CONFIG_DATA_KEY) == true) {
+            widgetConfig = WidgetConfiguration.parseFrom(bundle.getByteArray(WIDGET_CONFIG_DATA_KEY))
+            LOG.info("Loaded config from bundle $widgetConfig")
+        } else {
+            widgetConfig = loadWidgetConfigOrDefault(mWidgetPrefs, mAppWidgetId)
+            LOG.info("Loaded config from prefs $widgetConfig")
+        }
         mStopListAdapter = StopListAdapter(this)
         mListView.adapter = mStopListAdapter
         mListView.setOnItemClickListener { _, _, position, _ ->
@@ -175,6 +181,12 @@ class WidgetConfigureActivity : AppCompatActivity() {
                 )
             }
         }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle?) {
+        super.onSaveInstanceState(outState)
+        LOG.info("onSaveInstanceState")
+        outState?.putByteArray(WIDGET_CONFIG_DATA_KEY, widgetConfig.toByteArray())
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

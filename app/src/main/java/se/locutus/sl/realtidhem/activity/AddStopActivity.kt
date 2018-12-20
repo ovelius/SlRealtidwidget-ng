@@ -3,6 +3,7 @@ package se.locutus.sl.realtidhem.activity
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.os.PersistableBundle
 import android.view.Menu
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
@@ -43,10 +44,16 @@ class AddStopActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_stop)
 
-        // Do this early so fragments have access to the information.
-        if (intent.hasExtra(STOP_CONFIG_DATA_KEY)) {
+        if (savedInstanceState?.containsKey(STOP_CONFIG_DATA_KEY) == true) {
+            val configBuilt = Ng.StopConfiguration.parseFrom(savedInstanceState.getByteArray(STOP_CONFIG_DATA_KEY))
+            LOG.info("Got stop from saved bundle $configBuilt")
+            if (savedInstanceState.containsKey(ALL_DEPARTURES_DATA_KEY)) {
+                allDeparturesResponse = Ng.AllDepaturesResponseData.parseFrom(savedInstanceState.getByteArray(ALL_DEPARTURES_DATA_KEY))
+            }
+            config = configBuilt.toBuilder()
+        } else if (intent.hasExtra(STOP_CONFIG_DATA_KEY)) {
             val configBuilt = Ng.StopConfiguration.parseFrom(intent.getByteArrayExtra(STOP_CONFIG_DATA_KEY))
-            LOG.info("Got stop configuration $configBuilt")
+            LOG.info("Got stop from start intent $configBuilt")
             config = configBuilt.toBuilder()
         }
         if (intent.hasExtra(STOP_INDEX_DATA_KEY)) {
@@ -74,7 +81,7 @@ class AddStopActivity : AppCompatActivity() {
         viewPager.adapter = stopConfigureTabAdapter
         tabLayout.setupWithViewPager(viewPager)
 
-        if (config.stopData.siteId != 0L) {
+        if (config.stopData.siteId != 0L /* && allDeparturesResponse == null */) {
             loadDepsFor(config.stopData.siteId.toInt())
         }
 
@@ -104,8 +111,15 @@ class AddStopActivity : AppCompatActivity() {
         })
     }
 
+    override fun onSaveInstanceState(outState: Bundle?) {
+        super.onSaveInstanceState(outState)
+        LOG.info("onSaveInstanceState $outState")
+        outState?.putByteArray(STOP_CONFIG_DATA_KEY, config.build().toByteArray())
+        outState?.putByteArray(ALL_DEPARTURES_DATA_KEY, allDeparturesResponse!!.toByteArray())
+    }
+
     private fun getDisplayText() : String {
-        return stopConfigureTabAdapter.selectStopFragment.displayNameText.text.toString()
+        return config.stopData.displayName
     }
 
     override fun onSupportNavigateUp(): Boolean {
@@ -179,7 +193,7 @@ class AddStopActivity : AppCompatActivity() {
         }
 
         val colorMap = createColorMap(response.allDepaturesResponse)
-        stopConfigureTabAdapter.selectLinesFragment.indexDepartures(colorMap, response.allDepaturesResponse)
+        stopConfigureTabAdapter.selectLinesFragment.indexDepartures(colorMap, response.allDepaturesResponse, linesAdapter, config.lineFilterList)
         departureAdapter.sort(colorMap)
         departureAdapter.notifyDataSetChanged()
         allDeparturesResponse = response.allDepaturesResponse
@@ -237,14 +251,13 @@ class AddStopActivity : AppCompatActivity() {
         }
     }
 
-    fun updateStopDataDisplayText() {
+    fun updateStopDataDisplayText(displayText : String) {
         val stopData = config.stopData.toBuilder()
-        stopData.displayName = getDisplayText()
+        stopData.displayName = displayText
         config.setStopData(stopData)
     }
 
     private fun updateConfigProto() {
-        updateStopDataDisplayText()
         if (linesAdapter.isSelected()) {
             config.clearDeparturesFilter()
             config.clearLineFilter()

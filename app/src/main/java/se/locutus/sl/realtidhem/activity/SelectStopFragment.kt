@@ -54,6 +54,11 @@ class SelectStopFragment : androidx.fragment.app.Fragment() {
     internal var map : GoogleMap? = null
     internal var nameToSiteIDs : HashMap<String, Int> = HashMap()
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        LOG.info("Fragment create with bundle $savedInstanceState")
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val mainView =  inflater.inflate(R.layout.content_add_stop, container, false)
         addStopActivity = activity as AddStopActivity
@@ -63,44 +68,10 @@ class SelectStopFragment : androidx.fragment.app.Fragment() {
         mapContainer = mainView.findViewById(R.id.map_container)
         mapContainer.visibility = View.GONE
         mAutoCompleteTextView.threshold = 1
-        return mainView
-    }
 
-    private fun bitmapDescriptorFromVector(context : Context, vectorResId : Int) : BitmapDescriptor {
-        val vectorDrawable = ContextCompat.getDrawable(context, vectorResId)!!
-        vectorDrawable.setBounds(0, 0, vectorDrawable.intrinsicWidth, vectorDrawable.intrinsicHeight)
-        val bitmap = Bitmap.createBitmap(vectorDrawable.intrinsicWidth, vectorDrawable.intrinsicHeight, Bitmap.Config.ARGB_8888)
-        val canvas = Canvas(bitmap)
-        vectorDrawable.draw(canvas)
-        return BitmapDescriptorFactory.fromBitmap(bitmap)
-}
-
-    fun mapTo(lat : Double, lng : Double) {
-        if (map != null) {
-            mapContainer.visibility = View.VISIBLE
-            val latLng = LatLng(lat, lng)
-            val mapMarker =  bitmapDescriptorFromVector(addStopActivity, R.drawable.ic_location_on_24px)
-            val marker = MarkerOptions().apply {
-                position(latLng)
-                icon(mapMarker)
-            }
-            map!!.clear()
-            map!!.addMarker(marker)
-            map!!.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 11.0f))
-        }
-    }
-
-    private fun hideKeyboard() {
-        val imm = addStopActivity.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
-        imm.hideSoftInputFromWindow(mAutoCompleteTextView.windowToken, 0)
-    }
-
-    override fun onStart() {
-        super.onStart()
         val config = addStopActivity.config.stopData
-        LOG.info("OnStart, set stuff from $config")
+        LOG.info("onCreateView, set stuff from $config")
         mAutoCompleteTextView.setText(config.canonicalName, false)
-
         mAutoCompleteTextView.setOnKeyListener{ _, keyCode : Int, _ ->
             if(keyCode == KeyEvent.KEYCODE_DEL) {
                 if (config.siteId != 0L) {
@@ -110,13 +81,6 @@ class SelectStopFragment : androidx.fragment.app.Fragment() {
             false
         }
 
-        val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
-              mapFragment.getMapAsync{it ->
-                  map = it
-                  if (config.siteId != 0L) {
-                      mapTo(config.lat, config.lng)
-                  }
-         }
         displayNameText.setText(config.displayName, TextView.BufferType.EDITABLE)
         displayNameText.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(p0: Editable?) {
@@ -124,14 +88,20 @@ class SelectStopFragment : androidx.fragment.app.Fragment() {
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
             }
             override fun onTextChanged(p: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                addStopActivity.updateStopDataDisplayText()
+                addStopActivity.updateStopDataDisplayText(p.toString())
             }
         })
-
         if (config.siteId != 0L && !config.canonicalName.isEmpty()) {
             setGreenBg(mAutoCompleteTextView)
         }
 
+        val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
+        mapFragment.getMapAsync{it ->
+            map = it
+            if (config.siteId != 0L) {
+                mapTo(config.lat, config.lng)
+            }
+        }
         val adapter = ArrayAdapter<String>(
             this.activity!!,
             android.R.layout.simple_dropdown_item_1line, ArrayList()
@@ -164,6 +134,7 @@ class SelectStopFragment : androidx.fragment.app.Fragment() {
                     } else {
                         displayNameText.setText(p, TextView.BufferType.EDITABLE)
                     }
+                    addStopActivity.updateStopDataDisplayText(displayNameText.text.toString())
                     addStopActivity.clearDeparturesList()
                     addStopActivity.loadDepsFor(siteId)
                 } else {
@@ -204,5 +175,36 @@ class SelectStopFragment : androidx.fragment.app.Fragment() {
                 }
             }
         })
+
+        return mainView
+    }
+
+    private fun bitmapDescriptorFromVector(context : Context, vectorResId : Int) : BitmapDescriptor {
+        val vectorDrawable = ContextCompat.getDrawable(context, vectorResId)!!
+        vectorDrawable.setBounds(0, 0, vectorDrawable.intrinsicWidth, vectorDrawable.intrinsicHeight)
+        val bitmap = Bitmap.createBitmap(vectorDrawable.intrinsicWidth, vectorDrawable.intrinsicHeight, Bitmap.Config.ARGB_8888)
+        val canvas = Canvas(bitmap)
+        vectorDrawable.draw(canvas)
+        return BitmapDescriptorFactory.fromBitmap(bitmap)
+}
+
+    fun mapTo(lat : Double, lng : Double) {
+        if (map != null) {
+            mapContainer.visibility = View.VISIBLE
+            val latLng = LatLng(lat, lng)
+            val mapMarker =  bitmapDescriptorFromVector(addStopActivity, R.drawable.ic_location_on_24px)
+            val marker = MarkerOptions().apply {
+                position(latLng)
+                icon(mapMarker)
+            }
+            map!!.clear()
+            map!!.addMarker(marker)
+            map!!.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 11.0f))
+        }
+    }
+
+    private fun hideKeyboard() {
+        val imm = addStopActivity.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(mAutoCompleteTextView.windowToken, 0)
     }
 }
