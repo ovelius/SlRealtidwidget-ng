@@ -3,7 +3,6 @@ package se.locutus.sl.realtidhem.activity
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.os.PersistableBundle
 import android.view.Menu
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
@@ -115,7 +114,9 @@ class AddStopActivity : AppCompatActivity() {
         super.onSaveInstanceState(outState)
         LOG.info("onSaveInstanceState $outState")
         outState?.putByteArray(STOP_CONFIG_DATA_KEY, config.build().toByteArray())
-        outState?.putByteArray(ALL_DEPARTURES_DATA_KEY, allDeparturesResponse!!.toByteArray())
+        if (allDeparturesResponse != null) {
+            outState?.putByteArray(ALL_DEPARTURES_DATA_KEY, allDeparturesResponse!!.toByteArray())
+        }
     }
 
     private fun getDisplayText() : String {
