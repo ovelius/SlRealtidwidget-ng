@@ -76,7 +76,19 @@ class AddStopActivity : AppCompatActivity() {
             setColor(this, tabLayout ,intent.getIntExtra(EXTRA_COLOR_THEME, 0))
         }
         viewPager = findViewById(R.id.view_pager)
-        stopConfigureTabAdapter = StopConfigureTabAdapter(this, supportFragmentManager)
+
+        // Create or recycle fragments.
+        val stopFragment = supportFragmentManager.findFragmentByTag(fragmentName(0))
+            ?: SelectStopFragment()
+        val lineFragment = supportFragmentManager.findFragmentByTag(fragmentName(1))
+            ?: SelectLinesFragment()
+        val departuresFragment = supportFragmentManager.findFragmentByTag(fragmentName(2))
+            ?: SelectDeparturesFragment()
+        stopConfigureTabAdapter = StopConfigureTabAdapter(this, supportFragmentManager,
+            stopFragment as SelectStopFragment,
+            lineFragment as SelectLinesFragment,
+            departuresFragment as SelectDeparturesFragment)
+
         viewPager.adapter = stopConfigureTabAdapter
         tabLayout.setupWithViewPager(viewPager)
 
@@ -108,6 +120,10 @@ class AddStopActivity : AppCompatActivity() {
                 }
             }
         })
+    }
+
+    private fun fragmentName(index: Int): String {
+        return "android:switcher:${R.id.view_pager}:$index"
     }
 
     override fun onSaveInstanceState(outState: Bundle?) {

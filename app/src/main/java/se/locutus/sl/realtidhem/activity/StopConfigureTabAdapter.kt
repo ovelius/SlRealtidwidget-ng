@@ -3,10 +3,11 @@ package se.locutus.sl.realtidhem.activity
 import android.content.Context
 import se.locutus.sl.realtidhem.R
 
-class StopConfigureTabAdapter(var context : Context, fm : androidx.fragment.app.FragmentManager) : androidx.fragment.app.FragmentPagerAdapter(fm) {
-    var selectStopFragment = SelectStopFragment()
-    var selectDeparturesFragment = SelectDeparturesFragment()
-    var selectLinesFragment = SelectLinesFragment()
+class StopConfigureTabAdapter(var context : Context, fm : androidx.fragment.app.FragmentManager,
+                              val selectStopFragment : SelectStopFragment,
+                              val selectLinesFragment : SelectLinesFragment,
+                              val selectDeparturesFragment : SelectDeparturesFragment)
+      : androidx.fragment.app.FragmentPagerAdapter(fm) {
 
     private val fragmentList = ArrayList<androidx.fragment.app.Fragment>().apply {
         add(selectStopFragment)
