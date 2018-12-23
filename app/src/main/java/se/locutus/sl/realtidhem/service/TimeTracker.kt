@@ -1,5 +1,6 @@
 package se.locutus.sl.realtidhem.service
 
+import android.app.AlarmManager
 import android.content.Context
 import java.util.*
 import kotlin.collections.ArrayList
@@ -10,8 +11,8 @@ const val TIME_PREFS = "time_prefs"
 /**
  * Helper class for finding/scheduling automatic updates for the widget.
  */
-class TimeTracker(var context : Context) {
-    val prefs = context.getSharedPreferences(TIME_PREFS, 0)
+class TimeTracker(val context : Context) {
+    private val prefs = context.getSharedPreferences(TIME_PREFS, 0)
 
     private fun isWeekDay(c : Calendar) : Boolean {
         return c.get(Calendar.DAY_OF_WEEK) != Calendar.SATURDAY && c.get(Calendar.DAY_OF_WEEK) != Calendar.SUNDAY
@@ -46,6 +47,26 @@ class TimeTracker(var context : Context) {
         if (prefs.getInt(key, 0) == 0) {
             prefs.edit().putInt(key, 1).apply()
         }
+    }
+
+    fun getRecords(widgetId: Int) : List<TimeRecord> {
+        val recordsList = ArrayList<TimeRecord>()
+        val widgetStart = "$widgetId:"
+        val allPrefs = prefs.all
+        for (key in allPrefs.keys) {
+            if (key.startsWith(widgetStart)) {
+                val split = key.split(":")
+                // Right type of record.
+                if (split.size == 5) {
+                    val weekDay = split[2].toBoolean()
+                    val hour = split[3].toInt()
+                    val min = split[4].toInt()
+                    val count = prefs.getInt(key, 0)
+                    recordsList.add(TimeRecord(hour, min, weekDay, count))
+                }
+            }
+        }
+        return recordsList
     }
 
     fun compactRecords(widgetId: Int) : List<TimeRecord> {

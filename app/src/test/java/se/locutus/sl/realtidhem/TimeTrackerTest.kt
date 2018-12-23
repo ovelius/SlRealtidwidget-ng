@@ -72,6 +72,20 @@ class TimeTrackerTest {
     }
 
     @Test
+    fun testRecordAndReadBack() {
+        tracker.recordUpdate(widgetId, c)
+        tracker.recordUpdate(widgetId, c)
+        tracker.compactRecords(widgetId)
+        tracker.recordUpdate(widgetId, c)
+        tracker.recordUpdate(widgetId, c)
+        tracker.compactRecords(widgetId)
+
+        val records = tracker.getRecords(widgetId)
+        assertEquals(1, records.size)
+        assertEquals(TimeTracker.TimeRecord(21, 10, false, 2), records[0])
+    }
+
+    @Test
     fun testRecordKey() {
         assertEquals(c.get(Calendar.HOUR_OF_DAY), 21)
         assertEquals(c.get(Calendar.DAY_OF_WEEK), Calendar.SUNDAY)
