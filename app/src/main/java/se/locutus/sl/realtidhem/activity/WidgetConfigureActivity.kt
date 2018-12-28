@@ -13,10 +13,7 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.View
 import android.view.WindowManager
-import android.widget.Button
-import android.widget.ListView
-import android.widget.TextView
-import android.widget.ViewSwitcher
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -29,9 +26,8 @@ import se.locutus.sl.realtidhem.R
 import se.locutus.sl.realtidhem.events.EXTRA_COLOR_THEME
 import se.locutus.sl.realtidhem.events.WIDGET_CONFIG_UPDATED
 import se.locutus.sl.realtidhem.events.WidgetBroadcastReceiver
-import se.locutus.sl.realtidhem.widget.getAllWidgetIds
-import se.locutus.sl.realtidhem.widget.loadWidgetConfigOrDefault
-import se.locutus.sl.realtidhem.widget.storeWidgetConfig
+import se.locutus.sl.realtidhem.service.BackgroundUpdaterService
+import se.locutus.sl.realtidhem.widget.*
 import java.util.*
 import java.util.logging.Logger
 
@@ -61,12 +57,14 @@ class WidgetConfigureActivity : AppCompatActivity() {
     companion object {
         val LOG = Logger.getLogger(WidgetConfigureActivity::class.java.name)
     }
-    internal var mAppWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID
-    internal lateinit var mWidgetPrefs : SharedPreferences
-    internal lateinit var mListView : ListView
-    internal lateinit var mAddStopHelperText : TextView
-    internal lateinit var mStopListAdapter: StopListAdapter
-    internal lateinit var viewSwitcher : ViewSwitcher
+    private var mAppWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID
+    private lateinit var mWidgetPrefs : SharedPreferences
+    private lateinit var mListView : ListView
+
+    private lateinit var mAddStopHelperText : TextView
+    private lateinit var mStopListAdapter: StopListAdapter
+    private lateinit var viewSwitcher : ViewSwitcher
+    private lateinit var spinner : Spinner
     internal var widgetConfig : WidgetConfiguration = WidgetConfiguration.getDefaultInstance()
     internal var color : Int? = null
 
@@ -113,13 +111,37 @@ class WidgetConfigureActivity : AppCompatActivity() {
             val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/ovelius/SlRealtidwidget-ng"))
             startActivity(browserIntent)
         }
-
-        mAddStopHelperText = findViewById(R.id.no_stops_help_text)
-        if (intent.extras != null) {
-            mAppWidgetId = intent.extras.getInt(
+        if (intent?.hasExtra(AppWidgetManager.EXTRA_APPWIDGET_ID) == true) {
+            mAppWidgetId = intent!!.extras!!.getInt(
                 AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID
             )
         }
+        mWidgetPrefs = getSharedPreferences(WIDGET_CONFIG_PREFS, 0)
+        spinner = findViewById(R.id.update_mode_spinner)
+        val adapter = ArrayAdapter<String>(this,
+                android.R.layout.simple_spinner_item,
+            resources.getStringArray(R.array.update_mode_array))
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        spinner.adapter = adapter
+        spinner.setSelection(mWidgetPrefs.getInt(widgetKeyUpdateMode(mAppWidgetId), LEARNING_UPDATE_MODE))
+        spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
+                LOG.info("selected update mode $position")
+                mWidgetPrefs.edit().putInt(widgetKeyUpdateMode(mAppWidgetId), position).apply()
+                val intent = Intent(applicationContext, BackgroundUpdaterService::class.java)
+                if (position == ALWAYS_UPDATE_MODE) {
+                    startService(intent)
+                } else {
+                    stopService(intent)
+                }
+
+            }
+            override fun onNothingSelected(parent: AdapterView<*>) {
+            }
+
+        }
+        mAddStopHelperText = findViewById(R.id.no_stops_help_text)
+
 
         if (mAppWidgetId == AppWidgetManager.INVALID_APPWIDGET_ID) {
             showWidgetDialog()
@@ -131,7 +153,6 @@ class WidgetConfigureActivity : AppCompatActivity() {
            setColor(this, null, color!!)
         }
 
-        mWidgetPrefs = getSharedPreferences(WIDGET_CONFIG_PREFS, 0)
         if (bundle?.containsKey(WIDGET_CONFIG_DATA_KEY) == true) {
             widgetConfig = WidgetConfiguration.parseFrom(bundle.getByteArray(WIDGET_CONFIG_DATA_KEY))
             LOG.info("Loaded config from bundle $widgetConfig")

@@ -86,4 +86,11 @@
     <string name="color_custom_tag_text">Set stop text color</string>
     <string name="custom_separator">Set separator color</string>
     <string name="no_data_to_theme">No stop data, can\'t change theme</string>
+    <string name="update_mode">Update mode:</string>
+    <string name="stops_showing_on_widget">Show data from these stops:</string>
+    <string-array name="update_mode_array">
+        <item>Self-learning</item>
+        <item>Manual</item>
+        <item>Always</item>
+    </string-array>
 </resources>

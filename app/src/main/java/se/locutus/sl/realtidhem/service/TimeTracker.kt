@@ -7,6 +7,8 @@ import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 
 const val TIME_PREFS = "time_prefs"
+// Each timeslot will keep the widget updated for 15 minutes.
+const val UPDATE_TIME_MILLIS = 60 * 15 * 1000
 
 /**
  * Helper class for finding/scheduling automatic updates for the widget.

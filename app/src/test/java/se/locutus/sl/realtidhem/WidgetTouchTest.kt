@@ -246,12 +246,8 @@ class WidgetTouchTest {
             .build()
     }
 
-    private fun createWidgetId() : Int {
-        return shadowAppWidgetManager.createWidget(StandardWidgetProvider::class.java, R.layout.widgetlayout_base)
-    }
-
     private fun createWidgetConfig() : Int{
-        val widgetId = createWidgetId()
+        val widgetId = createWidgetId(shadowAppWidgetManager)
         val config = Ng.WidgetConfiguration.newBuilder()
             .setWidgetId(widgetId.toLong())
             .addStopConfiguration(stop1)

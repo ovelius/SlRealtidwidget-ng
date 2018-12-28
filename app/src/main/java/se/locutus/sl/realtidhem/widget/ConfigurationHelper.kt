@@ -8,6 +8,9 @@ import android.location.Location
 import android.util.Base64
 import se.locutus.proto.Ng
 
+const val LEARNING_UPDATE_MODE = 0
+const val MANUAL_UPDATE_MODE = 1
+const val ALWAYS_UPDATE_MODE = 2
 
 fun widgetKey(widgetId : Int) : String {
     return "widget_$widgetId"
@@ -17,6 +20,15 @@ fun widgetKeyLastData(widgetId : Int) : String {
 }
 fun widgetKeySelectedStop(widgetId : Int) : String {
     return "widget_selected_stop$widgetId"
+}
+
+// TODO This should be in proto?
+fun widgetKeyUpdateMode(widgetId : Int) : String {
+    return "widget_update_mode$widgetId"
+}
+
+fun widgetKeyAlwaysUpdateEndTime(widgetId : Int) : String {
+    return "widget_always_update_end_time$widgetId"
 }
 
 fun widgetKeyStopSelectedAt(widgetId : Int) : String {
@@ -38,6 +50,8 @@ fun deleteWidget(prefs : SharedPreferences, widgetId : Int) {
         .remove(widgetKeyLastData(widgetId))
         .remove(widgetKeySelectedStop(widgetId))
         .remove(widgetKeyStopSelectedAt(widgetId))
+        .remove(widgetKeyUpdateMode(widgetId))
+        .remove(widgetKeyAlwaysUpdateEndTime(widgetId))
         .apply()
 }
 

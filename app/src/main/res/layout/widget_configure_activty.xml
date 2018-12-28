@@ -27,16 +27,36 @@
                 app:popupTheme="@style/AppTheme.PopupOverlay"/>
 
     </com.google.android.material.appbar.AppBarLayout>
-
-
-
+    <LinearLayout
+            android:id="@+id/stop_list_parent"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:paddingTop="?attr/actionBarSize"
+            android:orientation="vertical">
+        <!-- TODO: Move these to separate tab -->
+        <TextView
+                android:id="@+id/update_mode_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/update_mode"
+        />
+        <Spinner
+            android:id="@+id/update_mode_spinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+        <TextView
+                android:id="@+id/stops_list_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/stops_showing_on_widget"
+        />
         <ListView
                 android:id="@+id/stop_list_view"
                 android:layout_width="match_parent"
-                android:paddingTop="?attr/actionBarSize"
                 android:visibility="gone"
                 android:layout_height="wrap_content">
         </ListView>
+    </LinearLayout>
         <TextView
                 android:id="@+id/no_stops_help_text"
                 android:layout_width="match_parent"
