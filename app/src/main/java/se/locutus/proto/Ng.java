@@ -7854,6 +7854,23 @@ public final class Ng {
      * <code>repeated .se.locutus.proto.StopConfiguration stop_configuration = 2;</code>
      */
     int getStopConfigurationCount();
+
+    /**
+     * <pre>
+     * Settings for how widget is updated.
+     * </pre>
+     *
+     * <code>optional .se.locutus.proto.UpdateSettings update_settings = 3;</code>
+     */
+    boolean hasUpdateSettings();
+    /**
+     * <pre>
+     * Settings for how widget is updated.
+     * </pre>
+     *
+     * <code>optional .se.locutus.proto.UpdateSettings update_settings = 3;</code>
+     */
+    se.locutus.proto.Ng.UpdateSettings getUpdateSettings();
   }
   /**
    * <pre>
@@ -8082,6 +8099,82 @@ public final class Ng {
       stopConfiguration_.remove(index);
     }
 
+    public static final int UPDATE_SETTINGS_FIELD_NUMBER = 3;
+    private se.locutus.proto.Ng.UpdateSettings updateSettings_;
+    /**
+     * <pre>
+     * Settings for how widget is updated.
+     * </pre>
+     *
+     * <code>optional .se.locutus.proto.UpdateSettings update_settings = 3;</code>
+     */
+    public boolean hasUpdateSettings() {
+      return updateSettings_ != null;
+    }
+    /**
+     * <pre>
+     * Settings for how widget is updated.
+     * </pre>
+     *
+     * <code>optional .se.locutus.proto.UpdateSettings update_settings = 3;</code>
+     */
+    public se.locutus.proto.Ng.UpdateSettings getUpdateSettings() {
+      return updateSettings_ == null ? se.locutus.proto.Ng.UpdateSettings.getDefaultInstance() : updateSettings_;
+    }
+    /**
+     * <pre>
+     * Settings for how widget is updated.
+     * </pre>
+     *
+     * <code>optional .se.locutus.proto.UpdateSettings update_settings = 3;</code>
+     */
+    private void setUpdateSettings(se.locutus.proto.Ng.UpdateSettings value) {
+      if (value == null) {
+        throw new NullPointerException();
+      }
+      updateSettings_ = value;
+      
+      }
+    /**
+     * <pre>
+     * Settings for how widget is updated.
+     * </pre>
+     *
+     * <code>optional .se.locutus.proto.UpdateSettings update_settings = 3;</code>
+     */
+    private void setUpdateSettings(
+        se.locutus.proto.Ng.UpdateSettings.Builder builderForValue) {
+      updateSettings_ = builderForValue.build();
+      
+    }
+    /**
+     * <pre>
+     * Settings for how widget is updated.
+     * </pre>
+     *
+     * <code>optional .se.locutus.proto.UpdateSettings update_settings = 3;</code>
+     */
+    private void mergeUpdateSettings(se.locutus.proto.Ng.UpdateSettings value) {
+      if (updateSettings_ != null &&
+          updateSettings_ != se.locutus.proto.Ng.UpdateSettings.getDefaultInstance()) {
+        updateSettings_ =
+          se.locutus.proto.Ng.UpdateSettings.newBuilder(updateSettings_).mergeFrom(value).buildPartial();
+      } else {
+        updateSettings_ = value;
+      }
+      
+    }
+    /**
+     * <pre>
+     * Settings for how widget is updated.
+     * </pre>
+     *
+     * <code>optional .se.locutus.proto.UpdateSettings update_settings = 3;</code>
+     */
+    private void clearUpdateSettings() {  updateSettings_ = null;
+      
+    }
+
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
       if (widgetId_ != 0L) {
@@ -8089,6 +8182,9 @@ public final class Ng {
       }
       for (int i = 0; i < stopConfiguration_.size(); i++) {
         output.writeMessage(2, stopConfiguration_.get(i));
+      }
+      if (updateSettings_ != null) {
+        output.writeMessage(3, getUpdateSettings());
       }
     }
 
@@ -8104,6 +8200,10 @@ public final class Ng {
       for (int i = 0; i < stopConfiguration_.size(); i++) {
         size += com.google.protobuf.CodedOutputStream
           .computeMessageSize(2, stopConfiguration_.get(i));
+      }
+      if (updateSettings_ != null) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(3, getUpdateSettings());
       }
       memoizedSerializedSize = size;
       return size;
@@ -8375,6 +8475,75 @@ public final class Ng {
         return this;
       }
 
+      /**
+       * <pre>
+       * Settings for how widget is updated.
+       * </pre>
+       *
+       * <code>optional .se.locutus.proto.UpdateSettings update_settings = 3;</code>
+       */
+      public boolean hasUpdateSettings() {
+        return instance.hasUpdateSettings();
+      }
+      /**
+       * <pre>
+       * Settings for how widget is updated.
+       * </pre>
+       *
+       * <code>optional .se.locutus.proto.UpdateSettings update_settings = 3;</code>
+       */
+      public se.locutus.proto.Ng.UpdateSettings getUpdateSettings() {
+        return instance.getUpdateSettings();
+      }
+      /**
+       * <pre>
+       * Settings for how widget is updated.
+       * </pre>
+       *
+       * <code>optional .se.locutus.proto.UpdateSettings update_settings = 3;</code>
+       */
+      public Builder setUpdateSettings(se.locutus.proto.Ng.UpdateSettings value) {
+        copyOnWrite();
+        instance.setUpdateSettings(value);
+        return this;
+        }
+      /**
+       * <pre>
+       * Settings for how widget is updated.
+       * </pre>
+       *
+       * <code>optional .se.locutus.proto.UpdateSettings update_settings = 3;</code>
+       */
+      public Builder setUpdateSettings(
+          se.locutus.proto.Ng.UpdateSettings.Builder builderForValue) {
+        copyOnWrite();
+        instance.setUpdateSettings(builderForValue);
+        return this;
+      }
+      /**
+       * <pre>
+       * Settings for how widget is updated.
+       * </pre>
+       *
+       * <code>optional .se.locutus.proto.UpdateSettings update_settings = 3;</code>
+       */
+      public Builder mergeUpdateSettings(se.locutus.proto.Ng.UpdateSettings value) {
+        copyOnWrite();
+        instance.mergeUpdateSettings(value);
+        return this;
+      }
+      /**
+       * <pre>
+       * Settings for how widget is updated.
+       * </pre>
+       *
+       * <code>optional .se.locutus.proto.UpdateSettings update_settings = 3;</code>
+       */
+      public Builder clearUpdateSettings() {  copyOnWrite();
+        instance.clearUpdateSettings();
+        return this;
+      }
+
       // @@protoc_insertion_point(builder_scope:se.locutus.proto.WidgetConfiguration)
     }
     protected final Object dynamicMethod(
@@ -8400,6 +8569,7 @@ public final class Ng {
           widgetId_ = visitor.visitLong(widgetId_ != 0L, widgetId_,
               other.widgetId_ != 0L, other.widgetId_);
           stopConfiguration_= visitor.visitList(stopConfiguration_, other.stopConfiguration_);
+          updateSettings_ = visitor.visitMessage(updateSettings_, other.updateSettings_);
           if (visitor == com.google.protobuf.GeneratedMessageLite.MergeFromVisitor
               .INSTANCE) {
             bitField0_ |= other.bitField0_;
@@ -8437,6 +8607,19 @@ public final class Ng {
                   }
                   stopConfiguration_.add(
                       input.readMessage(se.locutus.proto.Ng.StopConfiguration.parser(), extensionRegistry));
+                  break;
+                }
+                case 26: {
+                  se.locutus.proto.Ng.UpdateSettings.Builder subBuilder = null;
+                  if (updateSettings_ != null) {
+                    subBuilder = updateSettings_.toBuilder();
+                  }
+                  updateSettings_ = input.readMessage(se.locutus.proto.Ng.UpdateSettings.parser(), extensionRegistry);
+                  if (subBuilder != null) {
+                    subBuilder.mergeFrom(updateSettings_);
+                    updateSettings_ = subBuilder.buildPartial();
+                  }
+
                   break;
                 }
               }
@@ -8481,6 +8664,405 @@ public final class Ng {
     private static volatile com.google.protobuf.Parser<WidgetConfiguration> PARSER;
 
     public static com.google.protobuf.Parser<WidgetConfiguration> parser() {
+      return DEFAULT_INSTANCE.getParserForType();
+    }
+  }
+
+  public interface UpdateSettingsOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:se.locutus.proto.UpdateSettings)
+      com.google.protobuf.MessageLiteOrBuilder {
+
+    /**
+     * <code>optional .se.locutus.proto.UpdateSettings.UpdateMode update_mode = 1;</code>
+     */
+    int getUpdateModeValue();
+    /**
+     * <code>optional .se.locutus.proto.UpdateSettings.UpdateMode update_mode = 1;</code>
+     */
+    se.locutus.proto.Ng.UpdateSettings.UpdateMode getUpdateMode();
+  }
+  /**
+   * Protobuf type {@code se.locutus.proto.UpdateSettings}
+   */
+  public  static final class UpdateSettings extends
+      com.google.protobuf.GeneratedMessageLite<
+          UpdateSettings, UpdateSettings.Builder> implements
+      // @@protoc_insertion_point(message_implements:se.locutus.proto.UpdateSettings)
+      UpdateSettingsOrBuilder {
+    private UpdateSettings() {
+    }
+    /**
+     * Protobuf enum {@code se.locutus.proto.UpdateSettings.UpdateMode}
+     */
+    public enum UpdateMode
+        implements com.google.protobuf.Internal.EnumLite {
+      /**
+       * <pre>
+       * Learn when to update from user interaction. This is default.
+       * </pre>
+       *
+       * <code>LEARNING_UPDATE_MODE = 0;</code>
+       */
+      LEARNING_UPDATE_MODE(0),
+      /**
+       * <pre>
+       * Update only from user interaction.
+       * </pre>
+       *
+       * <code>MANUAL_UPDATE_MODE = 1;</code>
+       */
+      MANUAL_UPDATE_MODE(1),
+      /**
+       * <pre>
+       * Always keep updated when screen is on.
+       * </pre>
+       *
+       * <code>ALWAYS_UPDATE_MODE = 2;</code>
+       */
+      ALWAYS_UPDATE_MODE(2),
+      UNRECOGNIZED(-1),
+      ;
+
+      /**
+       * <pre>
+       * Learn when to update from user interaction. This is default.
+       * </pre>
+       *
+       * <code>LEARNING_UPDATE_MODE = 0;</code>
+       */
+      public static final int LEARNING_UPDATE_MODE_VALUE = 0;
+      /**
+       * <pre>
+       * Update only from user interaction.
+       * </pre>
+       *
+       * <code>MANUAL_UPDATE_MODE = 1;</code>
+       */
+      public static final int MANUAL_UPDATE_MODE_VALUE = 1;
+      /**
+       * <pre>
+       * Always keep updated when screen is on.
+       * </pre>
+       *
+       * <code>ALWAYS_UPDATE_MODE = 2;</code>
+       */
+      public static final int ALWAYS_UPDATE_MODE_VALUE = 2;
+
+
+      public final int getNumber() {
+        return value;
+      }
+
+      /**
+       * @deprecated Use {@link #forNumber(int)} instead.
+       */
+      @java.lang.Deprecated
+      public static UpdateMode valueOf(int value) {
+        return forNumber(value);
+      }
+
+      public static UpdateMode forNumber(int value) {
+        switch (value) {
+          case 0: return LEARNING_UPDATE_MODE;
+          case 1: return MANUAL_UPDATE_MODE;
+          case 2: return ALWAYS_UPDATE_MODE;
+          default: return null;
+        }
+      }
+
+      public static com.google.protobuf.Internal.EnumLiteMap<UpdateMode>
+          internalGetValueMap() {
+        return internalValueMap;
+      }
+      private static final com.google.protobuf.Internal.EnumLiteMap<
+          UpdateMode> internalValueMap =
+            new com.google.protobuf.Internal.EnumLiteMap<UpdateMode>() {
+              public UpdateMode findValueByNumber(int number) {
+                return UpdateMode.forNumber(number);
+              }
+            };
+
+      private final int value;
+
+      private UpdateMode(int value) {
+        this.value = value;
+      }
+
+      // @@protoc_insertion_point(enum_scope:se.locutus.proto.UpdateSettings.UpdateMode)
+    }
+
+    public static final int UPDATE_MODE_FIELD_NUMBER = 1;
+    private int updateMode_;
+    /**
+     * <code>optional .se.locutus.proto.UpdateSettings.UpdateMode update_mode = 1;</code>
+     */
+    public int getUpdateModeValue() {
+      return updateMode_;
+    }
+    /**
+     * <code>optional .se.locutus.proto.UpdateSettings.UpdateMode update_mode = 1;</code>
+     */
+    public se.locutus.proto.Ng.UpdateSettings.UpdateMode getUpdateMode() {
+      se.locutus.proto.Ng.UpdateSettings.UpdateMode result = se.locutus.proto.Ng.UpdateSettings.UpdateMode.forNumber(updateMode_);
+      return result == null ? se.locutus.proto.Ng.UpdateSettings.UpdateMode.UNRECOGNIZED : result;
+    }
+    /**
+     * <code>optional .se.locutus.proto.UpdateSettings.UpdateMode update_mode = 1;</code>
+     */
+    private void setUpdateModeValue(int value) {
+        updateMode_ = value;
+    }
+    /**
+     * <code>optional .se.locutus.proto.UpdateSettings.UpdateMode update_mode = 1;</code>
+     */
+    private void setUpdateMode(se.locutus.proto.Ng.UpdateSettings.UpdateMode value) {
+      if (value == null) {
+        throw new NullPointerException();
+      }
+      
+      updateMode_ = value.getNumber();
+    }
+    /**
+     * <code>optional .se.locutus.proto.UpdateSettings.UpdateMode update_mode = 1;</code>
+     */
+    private void clearUpdateMode() {
+      
+      updateMode_ = 0;
+    }
+
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      if (updateMode_ != se.locutus.proto.Ng.UpdateSettings.UpdateMode.LEARNING_UPDATE_MODE.getNumber()) {
+        output.writeEnum(1, updateMode_);
+      }
+    }
+
+    public int getSerializedSize() {
+      int size = memoizedSerializedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      if (updateMode_ != se.locutus.proto.Ng.UpdateSettings.UpdateMode.LEARNING_UPDATE_MODE.getNumber()) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeEnumSize(1, updateMode_);
+      }
+      memoizedSerializedSize = size;
+      return size;
+    }
+
+    public static se.locutus.proto.Ng.UpdateSettings parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data);
+    }
+    public static se.locutus.proto.Ng.UpdateSettings parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data, extensionRegistry);
+    }
+    public static se.locutus.proto.Ng.UpdateSettings parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data);
+    }
+    public static se.locutus.proto.Ng.UpdateSettings parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data, extensionRegistry);
+    }
+    public static se.locutus.proto.Ng.UpdateSettings parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, input);
+    }
+    public static se.locutus.proto.Ng.UpdateSettings parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, input, extensionRegistry);
+    }
+    public static se.locutus.proto.Ng.UpdateSettings parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return parseDelimitedFrom(DEFAULT_INSTANCE, input);
+    }
+    public static se.locutus.proto.Ng.UpdateSettings parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return parseDelimitedFrom(DEFAULT_INSTANCE, input, extensionRegistry);
+    }
+    public static se.locutus.proto.Ng.UpdateSettings parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, input);
+    }
+    public static se.locutus.proto.Ng.UpdateSettings parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, input, extensionRegistry);
+    }
+
+    public static Builder newBuilder() {
+      return DEFAULT_INSTANCE.toBuilder();
+    }
+    public static Builder newBuilder(se.locutus.proto.Ng.UpdateSettings prototype) {
+      return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
+    }
+
+    /**
+     * Protobuf type {@code se.locutus.proto.UpdateSettings}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessageLite.Builder<
+          se.locutus.proto.Ng.UpdateSettings, Builder> implements
+        // @@protoc_insertion_point(builder_implements:se.locutus.proto.UpdateSettings)
+        se.locutus.proto.Ng.UpdateSettingsOrBuilder {
+      // Construct using se.locutus.proto.Ng.UpdateSettings.newBuilder()
+      private Builder() {
+        super(DEFAULT_INSTANCE);
+      }
+
+
+      /**
+       * <code>optional .se.locutus.proto.UpdateSettings.UpdateMode update_mode = 1;</code>
+       */
+      public int getUpdateModeValue() {
+        return instance.getUpdateModeValue();
+      }
+      /**
+       * <code>optional .se.locutus.proto.UpdateSettings.UpdateMode update_mode = 1;</code>
+       */
+      public Builder setUpdateModeValue(int value) {
+        copyOnWrite();
+        instance.setUpdateModeValue(value);
+        return this;
+      }
+      /**
+       * <code>optional .se.locutus.proto.UpdateSettings.UpdateMode update_mode = 1;</code>
+       */
+      public se.locutus.proto.Ng.UpdateSettings.UpdateMode getUpdateMode() {
+        return instance.getUpdateMode();
+      }
+      /**
+       * <code>optional .se.locutus.proto.UpdateSettings.UpdateMode update_mode = 1;</code>
+       */
+      public Builder setUpdateMode(se.locutus.proto.Ng.UpdateSettings.UpdateMode value) {
+        copyOnWrite();
+        instance.setUpdateMode(value);
+        return this;
+      }
+      /**
+       * <code>optional .se.locutus.proto.UpdateSettings.UpdateMode update_mode = 1;</code>
+       */
+      public Builder clearUpdateMode() {
+        copyOnWrite();
+        instance.clearUpdateMode();
+        return this;
+      }
+
+      // @@protoc_insertion_point(builder_scope:se.locutus.proto.UpdateSettings)
+    }
+    protected final Object dynamicMethod(
+        com.google.protobuf.GeneratedMessageLite.MethodToInvoke method,
+        Object arg0, Object arg1) {
+      switch (method) {
+        case NEW_MUTABLE_INSTANCE: {
+          return new se.locutus.proto.Ng.UpdateSettings();
+        }
+        case IS_INITIALIZED: {
+          return DEFAULT_INSTANCE;
+        }
+        case MAKE_IMMUTABLE: {
+          return null;
+        }
+        case NEW_BUILDER: {
+          return new Builder();
+        }
+        case VISIT: {
+          Visitor visitor = (Visitor) arg0;
+          se.locutus.proto.Ng.UpdateSettings other = (se.locutus.proto.Ng.UpdateSettings) arg1;
+          updateMode_ = visitor.visitInt(updateMode_ != 0, updateMode_,    other.updateMode_ != 0, other.updateMode_);
+          if (visitor == com.google.protobuf.GeneratedMessageLite.MergeFromVisitor
+              .INSTANCE) {
+          }
+          return this;
+        }
+        case MERGE_FROM_STREAM: {
+          com.google.protobuf.CodedInputStream input =
+              (com.google.protobuf.CodedInputStream) arg0;
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry =
+              (com.google.protobuf.ExtensionRegistryLite) arg1;
+          try {
+            boolean done = false;
+            while (!done) {
+              int tag = input.readTag();
+              switch (tag) {
+                case 0:
+                  done = true;
+                  break;
+                default: {
+                  if (!input.skipField(tag)) {
+                    done = true;
+                  }
+                  break;
+                }
+                case 8: {
+                  int rawValue = input.readEnum();
+
+                  updateMode_ = rawValue;
+                  break;
+                }
+              }
+            }
+          } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+            throw new RuntimeException(e.setUnfinishedMessage(this));
+          } catch (java.io.IOException e) {
+            throw new RuntimeException(
+                new com.google.protobuf.InvalidProtocolBufferException(
+                    e.getMessage()).setUnfinishedMessage(this));
+          } finally {
+          }
+        }
+        case GET_DEFAULT_INSTANCE: {
+          return DEFAULT_INSTANCE;
+        }
+        case GET_PARSER: {
+          if (PARSER == null) {    synchronized (se.locutus.proto.Ng.UpdateSettings.class) {
+              if (PARSER == null) {
+                PARSER = new DefaultInstanceBasedParser(DEFAULT_INSTANCE);
+              }
+            }
+          }
+          return PARSER;
+        }
+      }
+      throw new UnsupportedOperationException();
+    }
+
+
+    // @@protoc_insertion_point(class_scope:se.locutus.proto.UpdateSettings)
+    private static final se.locutus.proto.Ng.UpdateSettings DEFAULT_INSTANCE;
+    static {
+      DEFAULT_INSTANCE = new UpdateSettings();
+      DEFAULT_INSTANCE.makeImmutable();
+    }
+
+    public static se.locutus.proto.Ng.UpdateSettings getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    private static volatile com.google.protobuf.Parser<UpdateSettings> PARSER;
+
+    public static com.google.protobuf.Parser<UpdateSettings> parser() {
       return DEFAULT_INSTANCE.getParserForType();
     }
   }

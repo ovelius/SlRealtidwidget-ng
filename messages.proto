@@ -143,6 +143,20 @@ message WidgetConfiguration {
   int64 widget_id = 1;
   // The stops we've configured at this widget.
   repeated StopConfiguration stop_configuration = 2;
+  // Settings for how widget is updated.
+  UpdateSettings update_settings = 3;
+}
+
+message UpdateSettings {
+  enum UpdateMode {
+	// Learn when to update from user interaction. This is default.
+	LEARNING_UPDATE_MODE = 0;
+	// Update only from user interaction.
+    MANUAL_UPDATE_MODE = 1;
+	// Always keep updated when screen is on.
+    ALWAYS_UPDATE_MODE = 2;
+  }
+  UpdateMode update_mode = 1;
 }
 
 message StoredStopData {
