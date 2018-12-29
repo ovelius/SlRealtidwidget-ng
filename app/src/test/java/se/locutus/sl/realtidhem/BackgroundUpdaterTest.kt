@@ -1,12 +1,10 @@
 package se.locutus.sl.realtidhem
 
 import android.appwidget.AppWidgetManager
-import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.os.PowerManager
 import androidx.test.core.app.ApplicationProvider
-import org.hamcrest.CoreMatchers
 import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.Before
@@ -18,12 +16,11 @@ import org.robolectric.Shadows.shadowOf
 import org.robolectric.shadows.ShadowAppWidgetManager
 import org.robolectric.shadows.ShadowPowerManager
 import org.robolectric.shadows.ShadowService
+import se.locutus.proto.Ng
 import se.locutus.sl.realtidhem.activity.WIDGET_CONFIG_PREFS
 import se.locutus.sl.realtidhem.service.BackgroundUpdaterService
 import se.locutus.sl.realtidhem.service.SERVICE_NOTIFICATION_ID
-import se.locutus.sl.realtidhem.widget.LEARNING_UPDATE_MODE
-import se.locutus.sl.realtidhem.widget.MANUAL_UPDATE_MODE
-import se.locutus.sl.realtidhem.widget.widgetKeyUpdateMode
+import se.locutus.sl.realtidhem.widget.storeWidgetConfig
 
 @RunWith(RobolectricTestRunner::class)
 class BackgroundUpdaterTest {
@@ -46,6 +43,10 @@ class BackgroundUpdaterTest {
         assertThat(shadow.lastForegroundNotificationId, `is`(0))
         assertThat(shadow.isForegroundStopped, `is`(false))
 
+        service.widgetIdProvider = {
+            intArrayOf()
+        }
+
         service.onStartCommand(null, 0, 0)
 
         assertThat(shadow.isStoppedBySelf, `is`(true))
@@ -55,12 +56,11 @@ class BackgroundUpdaterTest {
 
     @Test
     fun testStopNoUpdatableWidgets() {
-        val widgetId = createWidgetId(shadowAppWidgetManager)
+        val widgetId = createWidgetConfig(createUpdateSettings(Ng.UpdateSettings.UpdateMode.MANUAL_UPDATE_MODE))
         service.widgetIdProvider = {
             intArrayOf(widgetId)
         }
         val intent = Intent().apply { putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId) }
-        prefs.edit().putInt(widgetKeyUpdateMode(widgetId), MANUAL_UPDATE_MODE).commit()
         service.onStartCommand(intent, 0, 0)
 
         // Still doesn't start.
@@ -71,14 +71,13 @@ class BackgroundUpdaterTest {
 
     @Test
     fun testStartSelfLearningWidgets() {
-        val widgetId = createWidgetId(shadowAppWidgetManager)
+        val widgetId = createWidgetConfig(createUpdateSettings(Ng.UpdateSettings.UpdateMode.LEARNING_UPDATE_MODE))
         service.widgetIdProvider = {
             intArrayOf(widgetId)
         }
         val intent = Intent().apply { putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId) }
         // Change update mode.
         shadowPowerManager.setIsInteractive(false)
-        prefs.edit().putInt(widgetKeyUpdateMode(widgetId), LEARNING_UPDATE_MODE).commit()
         service.onStartCommand(intent, 0 ,0)
 
         assertThat(shadow.isStoppedBySelf, `is`(false))
@@ -90,5 +89,19 @@ class BackgroundUpdaterTest {
         shadowPowerManager.setIsInteractive(true)
         service.onStartCommand(intent, 0 ,0)
         assertThat(service.hasAutoUpdatesRunning(), `is`(true))
+    }
+
+    private fun createUpdateSettings(mode : Ng.UpdateSettings.UpdateMode) : Ng.UpdateSettings {
+        return Ng.UpdateSettings.newBuilder().setUpdateMode(mode).build()
+    }
+
+    private fun createWidgetConfig(updateSettings : Ng.UpdateSettings) : Int{
+        val widgetId = createWidgetId(shadowAppWidgetManager)
+        val config = Ng.WidgetConfiguration.newBuilder()
+            .setUpdateSettings(updateSettings)
+            .setWidgetId(widgetId.toLong())
+            .build()
+        storeWidgetConfig(prefs, config)
+        return widgetId
     }
 }

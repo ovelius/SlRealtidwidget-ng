@@ -11,6 +11,7 @@ import android.os.Handler
 import android.os.Looper
 import android.os.PowerManager
 import androidx.core.app.NotificationCompat
+import se.locutus.proto.Ng
 import se.locutus.sl.realtidhem.R
 import se.locutus.sl.realtidhem.activity.WIDGET_CONFIG_PREFS
 import se.locutus.sl.realtidhem.events.STALE_MILLIS
@@ -33,8 +34,9 @@ class BackgroundUpdaterService : Service() {
     private val timer = Timer()
     private lateinit var prefs : SharedPreferences
     private lateinit var powerManager : PowerManager
-    private var autoUpdateSequenceEndTime = ConcurrentHashMap<Int, Long>()
+    private val autoUpdateSequenceEndTime = ConcurrentHashMap<Int, Long>()
     private val selfLearningTimeouts = ConcurrentHashMap<Int, Long>()
+    private val widgetConfigs = ConcurrentHashMap<Int, Ng.WidgetConfiguration>()
 
     // https://github.com/robolectric/robolectric/issues/3763
     internal var widgetIdProvider : () -> IntArray = { getAllWidgetIds(this) }
@@ -110,21 +112,27 @@ class BackgroundUpdaterService : Service() {
         }
     }
 
+    private fun getConfigFor(widgetId: Int) : Ng.WidgetConfiguration {
+        if (!widgetConfigs.containsKey(widgetId)) {
+            widgetConfigs[widgetId] = loadWidgetConfigOrDefault(prefs, widgetId)
+        }
+        return widgetConfigs[widgetId]!!
+    }
+
     private fun shouldUpdate(widgetId : Int) : Boolean {
-        val updateMode = prefs.getInt(widgetKeyUpdateMode(widgetId), LEARNING_UPDATE_MODE)
-        if (updateMode == MANUAL_UPDATE_MODE) {
+        val updateMode = getConfigFor(widgetId).updateSettings.updateMode
+        if (updateMode == Ng.UpdateSettings.UpdateMode.MANUAL_UPDATE_MODE) {
             return false
         }
-        if (updateMode == LEARNING_UPDATE_MODE) {
-            LOG.info("learning mode $widgetId ${selfLearningTimeouts}")
+        if (updateMode == Ng.UpdateSettings.UpdateMode.LEARNING_UPDATE_MODE) {
             return selfLearningTimeouts.containsKey(widgetId)
                     && System.currentTimeMillis() <= selfLearningTimeouts[widgetId]!!
         }
-        if (updateMode == ALWAYS_UPDATE_MODE) {
+        if (updateMode == Ng.UpdateSettings.UpdateMode.ALWAYS_UPDATE_MODE) {
             if (!autoUpdateSequenceEndTime.containsKey(widgetId)) {
                 autoUpdateSequenceEndTime[widgetId] =
-                        System.currentTimeMillis() + prefs.getInt(
-                    widgetKeyAlwaysUpdateEndTime(widgetId), DEFAULT_ALWAYS_UPDATE_TIMEOUT_MILLIS)
+                        // TODO: Make configureable.
+                        System.currentTimeMillis() + DEFAULT_ALWAYS_UPDATE_TIMEOUT_MILLIS
             }
             return System.currentTimeMillis() <= autoUpdateSequenceEndTime[widgetId]!!
         }

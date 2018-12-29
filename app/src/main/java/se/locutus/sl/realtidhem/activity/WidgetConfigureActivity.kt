@@ -20,6 +20,7 @@ import androidx.core.content.ContextCompat
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayout
 import kotlinx.android.synthetic.main.widget_configure_activty.*
+import se.locutus.proto.Ng
 import se.locutus.proto.Ng.StopConfiguration
 import se.locutus.proto.Ng.WidgetConfiguration
 import se.locutus.sl.realtidhem.R
@@ -123,13 +124,15 @@ class WidgetConfigureActivity : AppCompatActivity() {
             resources.getStringArray(R.array.update_mode_array))
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         spinner.adapter = adapter
-        spinner.setSelection(mWidgetPrefs.getInt(widgetKeyUpdateMode(mAppWidgetId), LEARNING_UPDATE_MODE))
+        spinner.setSelection(widgetConfig.updateSettings.updateModeValue)
         spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
                 LOG.info("selected update mode $position")
-                mWidgetPrefs.edit().putInt(widgetKeyUpdateMode(mAppWidgetId), position).apply()
+                val updateSettings = widgetConfig.updateSettings.toBuilder()
+                updateSettings.updateModeValue = position
+                widgetConfig = widgetConfig.toBuilder().setUpdateSettings(updateSettings).build()
                 val intent = Intent(applicationContext, BackgroundUpdaterService::class.java)
-                if (position == ALWAYS_UPDATE_MODE) {
+                if (position == Ng.UpdateSettings.UpdateMode.ALWAYS_UPDATE_MODE_VALUE) {
                     startService(intent)
                 } else {
                     stopService(intent)
