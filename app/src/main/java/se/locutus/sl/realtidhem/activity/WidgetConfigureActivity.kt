@@ -10,6 +10,7 @@ import android.content.pm.PackageManager
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Bundle
+import android.text.InputType
 import android.view.Menu
 import android.view.View
 import android.view.WindowManager
@@ -19,6 +20,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayout
+import com.google.protobuf.InvalidProtocolBufferException
 import kotlinx.android.synthetic.main.widget_configure_activty.*
 import se.locutus.proto.Ng
 import se.locutus.proto.Ng.StopConfiguration
@@ -29,6 +31,7 @@ import se.locutus.sl.realtidhem.events.WIDGET_CONFIG_UPDATED
 import se.locutus.sl.realtidhem.events.WidgetBroadcastReceiver
 import se.locutus.sl.realtidhem.service.BackgroundUpdaterService
 import se.locutus.sl.realtidhem.widget.*
+import java.lang.IllegalArgumentException
 import java.util.*
 import java.util.logging.Logger
 
@@ -71,6 +74,10 @@ class WidgetConfigureActivity : AppCompatActivity() {
 
     public override fun onResume() {
         super.onResume()
+        maybeShowStopListView()
+    }
+
+    private fun maybeShowStopListView() {
         if (widgetConfig.stopConfigurationCount == 0) {
             mAddStopHelperText.visibility = View.VISIBLE
             mListView.visibility = View.GONE
@@ -267,13 +274,27 @@ class WidgetConfigureActivity : AppCompatActivity() {
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.widget_config_action_bar_menu, menu)
+        menu.findItem(R.id.export_btn).isVisible = widgetConfig.stopConfigurationCount != 0
+        menu.findItem(R.id.import_btn).isVisible = widgetConfig.stopConfigurationCount == 0
         menu.findItem(R.id.about_btn).setOnMenuItemClickListener {_ ->
             setTextVersion(findViewById(R.id.version_text))
             viewSwitcher.showNext()
             true
         }
+        menu.findItem(R.id.import_btn).setOnMenuItemClickListener { _ ->
+            createConfigInputDialog()
+            true
+        }
+        menu.findItem(R.id.export_btn).setOnMenuItemClickListener { _ ->
+            val configString = "SL realtime widget config:${widgetConfigToString(widgetConfig)}:"
+            val sharingIntent = Intent(android.content.Intent.ACTION_SEND)
+            sharingIntent.type = "text/plain"
+            sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "SL realtime widget config")
+            sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, configString)
+            startActivity(Intent.createChooser(sharingIntent, resources.getString(R.string.share_using)))
+            true
+        }
         menu.findItem(R.id.save_widget_action).setOnMenuItemClickListener {_ ->
-
             val message = getConfigErrorMessage()
             if (message != null) {
                 Snackbar.make(mListView, message, Snackbar.LENGTH_SHORT)
@@ -288,6 +309,37 @@ class WidgetConfigureActivity : AppCompatActivity() {
         }
         return true
     }
+
+    private fun createConfigInputDialog() {
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle(R.string.import_settings)
+        val input = EditText(this)
+        input.minLines = 5
+        input.setLines(5)
+        input.inputType = InputType.TYPE_TEXT_FLAG_MULTI_LINE
+        builder.setView(input)
+        builder.setPositiveButton(R.string.import_settings_btn) { _, _ ->
+            val settings = input.text.toString()
+            try {
+                widgetConfig = fromUserInputString(settings, mAppWidgetId)
+                Snackbar.make(mListView, getString(R.string.loaded_config, widgetConfig.stopConfigurationCount),
+                    Snackbar.LENGTH_LONG).show()
+                maybeShowStopListView()
+                mStopListAdapter.notifyDataSetChanged()
+            } catch (e : IllegalArgumentException) {
+                LOG.warning("Invalid config string $settings")
+                Snackbar.make(mListView, getString(R.string.failed_config), Snackbar.LENGTH_LONG).show()
+            } catch (e : InvalidProtocolBufferException) {
+                LOG.warning("Invalid config string $settings")
+                Snackbar.make(mListView, getString(R.string.failed_config), Snackbar.LENGTH_LONG).show()
+            }
+        }
+        builder.setNegativeButton(R.string.import_settings_btn_cancel) { dialog, p1 ->
+            dialog.cancel()
+        }
+        builder.show()
+    }
+
 
     private fun sendWidgetUpdateBroadcast(widgetId : Int) {
         val intentUpdate = Intent(this, WidgetBroadcastReceiver::class.java).apply {

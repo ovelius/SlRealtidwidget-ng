@@ -7,6 +7,7 @@ import android.content.SharedPreferences
 import android.location.Location
 import android.util.Base64
 import se.locutus.proto.Ng
+import java.lang.IllegalArgumentException
 
 fun widgetKey(widgetId : Int) : String {
     return "widget_$widgetId"
@@ -60,11 +61,14 @@ fun setSelectedStopIndex(prefs : SharedPreferences, widgetId: Int, selected : In
     prefs.edit().putInt(widgetKeySelectedStop(widgetId),selected).apply()
 }
 
+fun widgetConfigToString(config : Ng.WidgetConfiguration) : String {
+    return Base64.encodeToString(config.toByteArray(), 0)
+}
+
 fun storeWidgetConfig(prefs : SharedPreferences, config : Ng.WidgetConfiguration) {
     val widgetKey = widgetKey(config.widgetId.toInt())
     val edit = prefs.edit()
-    val data = Base64.encodeToString(config.toByteArray(), 0)
-    edit.putString(widgetKey, data).commit()
+    edit.putString(widgetKey, widgetConfigToString(config)).commit()
 }
 
 fun getStopClosestToLocation(config : Ng.WidgetConfiguration, location : Location) : Int {
@@ -83,6 +87,16 @@ fun getStopClosestToLocation(config : Ng.WidgetConfiguration, location : Locatio
         }
     }
     return closestLocationIndex
+}
+
+fun fromUserInputString(string : String, widgetId : Int) : Ng.WidgetConfiguration {
+    var vettedString = string
+    if (vettedString.contains(":")) {
+        vettedString = vettedString.split(":")[1]
+        vettedString = vettedString.trim()
+    }
+    val bytes = Base64.decode(vettedString, 0)
+    return Ng.WidgetConfiguration.parseFrom(bytes).toBuilder().setWidgetId(widgetId.toLong()).build()
 }
 
 fun getAllWidgetIds(context : Context) : IntArray {

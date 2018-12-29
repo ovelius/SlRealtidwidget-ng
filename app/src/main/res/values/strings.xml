@@ -88,6 +88,13 @@
     <string name="no_data_to_theme">No stop data, can\'t change theme</string>
     <string name="update_mode">Update mode:</string>
     <string name="stops_showing_on_widget">Show data from these stops:</string>
+    <string name="import_settings">Import settings from string</string>
+    <string name="export_settings">Export settings to string</string>
+    <string name="share_using">Store config string somewhere</string>
+    <string name="import_settings_btn">Import</string>
+    <string name="import_settings_btn_cancel">Cancel</string>
+    <string name="failed_config">Invalid config string</string>
+    <string name="loaded_config">Loaded config with %1$d stops</string>
     <string-array name="update_mode_array">
         <item>Self-learning</item>
         <item>Manual</item>

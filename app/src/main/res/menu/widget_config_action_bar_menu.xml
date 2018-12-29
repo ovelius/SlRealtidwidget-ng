@@ -11,4 +11,12 @@
           android:title="@string/about_info"
           android:orderInCategory="100"
           app:showAsAction="never"/>
+    <item android:id="@+id/import_btn"
+          android:title="@string/import_settings"
+          android:orderInCategory="100"
+          app:showAsAction="never"/>
+    <item android:id="@+id/export_btn"
+          android:title="@string/export_settings"
+          android:orderInCategory="100"
+          app:showAsAction="never"/>
 </menu>
