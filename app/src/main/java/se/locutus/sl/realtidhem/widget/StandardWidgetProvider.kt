@@ -215,7 +215,8 @@ class StandardWidgetProvider : AppWidgetProvider() {
         newOptions: Bundle?
     ) {
         val prefs = context!!.getSharedPreferences(WIDGET_CONFIG_PREFS,  0)
-        val providerInfoMinHeight = AppWidgetManager.getInstance(context).getAppWidgetInfo(appWidgetId).minHeight
+        // Random stuff for sure.
+        val providerInfoMinHeight = AppWidgetManager.getInstance(context).getAppWidgetInfo(appWidgetId).minHeight - 10
         val minHeight = newOptions!!.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_HEIGHT)
 
         var layout = R.layout.widgetlayout_base
