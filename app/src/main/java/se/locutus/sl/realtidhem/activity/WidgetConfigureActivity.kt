@@ -125,31 +125,7 @@ class WidgetConfigureActivity : AppCompatActivity() {
             )
         }
         mWidgetPrefs = getSharedPreferences(WIDGET_CONFIG_PREFS, 0)
-        spinner = findViewById(R.id.update_mode_spinner)
-        val adapter = ArrayAdapter<String>(this,
-                android.R.layout.simple_spinner_item,
-            resources.getStringArray(R.array.update_mode_array))
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        spinner.adapter = adapter
-        spinner.setSelection(widgetConfig.updateSettings.updateModeValue)
-        spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
-                LOG.info("selected update mode $position")
-                val updateSettings = widgetConfig.updateSettings.toBuilder()
-                updateSettings.updateModeValue = position
-                widgetConfig = widgetConfig.toBuilder().setUpdateSettings(updateSettings).build()
-                val intent = Intent(applicationContext, BackgroundUpdaterService::class.java)
-                if (position == Ng.UpdateSettings.UpdateMode.ALWAYS_UPDATE_MODE_VALUE) {
-                    startService(intent)
-                } else {
-                    stopService(intent)
-                }
-
-            }
-            override fun onNothingSelected(parent: AdapterView<*>) {
-            }
-
-        }
+        configureUpdateModeSpinner()
         mAddStopHelperText = findViewById(R.id.no_stops_help_text)
 
 
@@ -211,6 +187,34 @@ class WidgetConfigureActivity : AppCompatActivity() {
                     LOCATION_ACCESS_REQUEST_CODE
                 )
             }
+        }
+    }
+
+    fun configureUpdateModeSpinner() {
+        spinner = findViewById(R.id.update_mode_spinner)
+        val adapter = ArrayAdapter<String>(this,
+            android.R.layout.simple_spinner_item,
+            resources.getStringArray(R.array.update_mode_array))
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        spinner.adapter = adapter
+        spinner.setSelection(widgetConfig.updateSettings.updateModeValue)
+        spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
+                LOG.info("selected update mode $position")
+                val updateSettings = widgetConfig.updateSettings.toBuilder()
+                updateSettings.updateModeValue = position
+                widgetConfig = widgetConfig.toBuilder().setUpdateSettings(updateSettings).build()
+                val intent = Intent(applicationContext, BackgroundUpdaterService::class.java)
+                if (position == Ng.UpdateSettings.UpdateMode.ALWAYS_UPDATE_MODE_VALUE) {
+                    startService(intent)
+                } else {
+                    stopService(intent)
+                }
+
+            }
+            override fun onNothingSelected(parent: AdapterView<*>) {
+            }
+
         }
     }
 
