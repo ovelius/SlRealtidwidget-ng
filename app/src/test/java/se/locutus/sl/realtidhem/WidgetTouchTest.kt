@@ -8,11 +8,11 @@ import org.robolectric.RobolectricTestRunner
 import se.locutus.sl.realtidhem.events.WidgetTouchHandler
 import android.appwidget.AppWidgetManager
 import android.content.Context
+import android.content.Intent
 import android.os.PowerManager
 import androidx.test.core.app.ApplicationProvider
 import android.widget.TextView
-import org.hamcrest.CoreMatchers.`is`
-import org.hamcrest.CoreMatchers.notNullValue
+import org.hamcrest.CoreMatchers.*
 import org.robolectric.Shadows.shadowOf
 import se.locutus.proto.Ng
 import se.locutus.sl.realtidhem.net.NetworkInterface
@@ -25,6 +25,7 @@ import se.locutus.sl.realtidhem.widget.StandardWidgetProvider
 import java.lang.RuntimeException
 import java.net.SocketTimeoutException
 import org.robolectric.shadows.ShadowPowerManager
+import se.locutus.sl.realtidhem.activity.WidgetConfigureActivity
 import se.locutus.sl.realtidhem.events.CYCLE_STOP_RIGHT
 import se.locutus.sl.realtidhem.widget.getLastLoadData
 import se.locutus.sl.realtidhem.widget.widgetKeySelectedStop
@@ -206,6 +207,34 @@ class WidgetTouchTest {
         assertThat(touchHandler.inMemoryState.hasRunningThread(widgetId), `is`(true))
         touchHandler.inMemoryState.replaceAndStartThread(null)!!.join()
         assertViewText(widgetId, R.id.widgetline2, context.getString(R.string.sl_api_error_detail, "ooga"))
+    }
+
+    @Test
+    fun testTouchToConfig() {
+        val widgetId = createWidgetConfig()
+        val touchHandler = WidgetTouchHandler(context, testNetwork)
+        // Touch the widget once.
+        touchHandler.widgetTouched(widgetId, null)
+        // Nothing
+        assertThat(shadowContext.nextStartedActivity, nullValue())
+        // Got some failure yada yada.
+        testNetwork.sendResponse(Ng.ResponseData.newBuilder().setErrorResponse(Ng.LoadErrorResponse.newBuilder()
+            .setErrorType(Ng.ErrorType.SL_API_ERROR).setMessage("ooga")).build(), null)
+        // Again
+        touchHandler.widgetTouched(widgetId, null)
+        // Nothing
+        assertThat(shadowContext.nextStartedActivity, nullValue())
+        // Third time.
+        touchHandler.widgetTouched(widgetId, null)
+        val gotIntent = shadowContext.nextStartedActivity
+        assertThat(gotIntent, notNullValue())
+        val expectedIntent = Intent(context, WidgetConfigureActivity::class.java).apply {
+            putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId)
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        }
+        assertThat(gotIntent.component, `is`(expectedIntent.component))
+        assertThat(gotIntent.flags, `is`(expectedIntent.flags))
+        assertThat(gotIntent.extras[AppWidgetManager.EXTRA_APPWIDGET_ID], `is`(expectedIntent.extras[AppWidgetManager.EXTRA_APPWIDGET_ID]))
     }
 
     @Test
