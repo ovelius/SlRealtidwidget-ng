@@ -5,6 +5,7 @@ import android.content.SharedPreferences
 import android.widget.RemoteViews
 import se.locutus.proto.Ng
 import se.locutus.sl.realtidhem.R
+import se.locutus.sl.realtidhem.widget.getWidgetLayoutId
 import se.locutus.sl.realtidhem.widget.loadWidgetConfigOrDefault
 import se.locutus.sl.realtidhem.widget.putLastLoadData
 import java.util.concurrent.ConcurrentHashMap
@@ -61,12 +62,12 @@ internal class InMemoryState {
             sinceUpdateStarted(widgetId)  > retryMillis
     }
 
-    fun getRemoveViews(widgetId: Int, context : Context, forceNewViews : Boolean) : RemoteViews {
+    fun getRemoveViews(widgetId: Int, prefs: SharedPreferences, context : Context, forceNewViews : Boolean) : RemoteViews {
         if (remoteViews[widgetId] == null || forceNewViews) {
             // RemoteViews will fill with actions over time, so maybe create new views to
             // avoid TransactionTooLargeException and slowdowns.
             remoteViews[widgetId] =
-                    RemoteViews(context.packageName, R.layout.widgetlayout_base)
+                    RemoteViews(context.packageName, getWidgetLayoutId(prefs, widgetId))
         }
         return remoteViews[widgetId]!!
     }

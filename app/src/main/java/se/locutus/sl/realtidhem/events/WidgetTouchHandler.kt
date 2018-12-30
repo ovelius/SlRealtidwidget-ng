@@ -138,7 +138,7 @@ class WidgetTouchHandler(val context: Context, val networkManager : NetworkInter
                 return true
             } else {
                 LOG.info("Power save mode detected without being whitelisted!")
-                val views = inMemoryState.getRemoveViews(widgetId, context, false)
+                val views = inMemoryState.getRemoveViews(widgetId, prefs, context, false)
                 val line2 = context.getString(R.string.power_save_mode_no_whitelist)
                 setWidgetTextViews(views, context.getString(R.string.power_save_mode), "", line2)
                 manager.updateAppWidget(widgetId, views)
@@ -169,7 +169,7 @@ class WidgetTouchHandler(val context: Context, val networkManager : NetworkInter
     }
 
     private fun stopTouchingMe(manager : AppWidgetManager, widgetId : Int) {
-        val views = inMemoryState.getRemoveViews(widgetId, context, false)
+        val views = inMemoryState.getRemoveViews(widgetId, prefs, context, false)
         val touchCount = inMemoryState.touchCount[widgetId]
         if (touchCount == 1) {
             views.setTextViewText(R.id.widgetline2, context.getString(R.string.message_again))
@@ -203,7 +203,7 @@ class WidgetTouchHandler(val context: Context, val networkManager : NetworkInter
         inMemoryState.disposeScroller(widgetId)
         inMemoryState.updateStartedAt[widgetId] = System.currentTimeMillis()
         // Create new views here to make sure we don't overfill the previous views with actions.
-        val views = inMemoryState.getRemoveViews(widgetId, context, true)
+        val views = inMemoryState.getRemoveViews(widgetId, prefs, context, true)
 
         val line1 = if (attempt > 1) context.getString(R.string.updating_attempt, attempt) else context.getString(R.string.updating)
         setWidgetTextViews(views, line1, "", context.getString(R.string.updating), stopConfig.stopData.displayName)

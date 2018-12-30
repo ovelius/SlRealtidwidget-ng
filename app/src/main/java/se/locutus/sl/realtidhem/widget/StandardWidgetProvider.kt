@@ -13,6 +13,7 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.location.Location
+import android.os.Bundle
 import androidx.core.content.ContextCompat
 import android.view.View
 import se.locutus.proto.Ng
@@ -143,7 +144,7 @@ class StandardWidgetProvider : AppWidgetProvider() {
                     true -> widgetConfig.getStopConfiguration(selectedStopIndex).stopData.displayName
                 }
             // Construct the RemoteViews object
-            val views = RemoteViews(context.packageName, R.layout.widgetlayout_base)
+            val views = RemoteViews(context.packageName, getWidgetLayoutId(prefs, appWidgetId))
             if (lastData != null) {
                 views.setInt(R.id.widgetcolor, "setBackgroundColor", lastData.color)
             }
@@ -205,6 +206,28 @@ class StandardWidgetProvider : AppWidgetProvider() {
             val textColor = ContextCompat.getColor(context, R.color.baseWidgetTagText)
             views.setTextColor(R.id.widgettag, textColor)
         }
+    }
+
+    override fun onAppWidgetOptionsChanged(
+        context: Context?,
+        appWidgetManager: AppWidgetManager?,
+        appWidgetId: Int,
+        newOptions: Bundle?
+    ) {
+        val prefs = context!!.getSharedPreferences(WIDGET_CONFIG_PREFS,  0)
+        val providerInfoMinHeight = AppWidgetManager.getInstance(context).getAppWidgetInfo(appWidgetId).minHeight
+        val minHeight = newOptions!!.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_HEIGHT)
+
+        var layout = R.layout.widgetlayout_base
+        if (minHeight >  providerInfoMinHeight) {
+            layout = R.layout.widgetlayout_double
+        }
+        LOG.info("Resize event provider min height $providerInfoMinHeight new height $minHeight layout chosen $layout")
+        prefs.edit().putInt(widgetKeyLayout(appWidgetId), layout).apply()
+
+        sendWidgetUpdateBroadcast(context, appWidgetId)
+
+        super.onAppWidgetOptionsChanged(context, appWidgetManager, appWidgetId, newOptions)
     }
 }
 

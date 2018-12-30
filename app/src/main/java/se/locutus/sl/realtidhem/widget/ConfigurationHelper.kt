@@ -3,10 +3,14 @@ package se.locutus.sl.realtidhem.widget
 import android.appwidget.AppWidgetManager
 import android.content.ComponentName
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
 import android.location.Location
 import android.util.Base64
 import se.locutus.proto.Ng
+import se.locutus.sl.realtidhem.R
+import se.locutus.sl.realtidhem.events.WIDGET_CONFIG_UPDATED
+import se.locutus.sl.realtidhem.events.WidgetBroadcastReceiver
 import java.lang.IllegalArgumentException
 
 fun widgetKey(widgetId : Int) : String {
@@ -23,6 +27,10 @@ fun widgetKeyStopSelectedAt(widgetId : Int) : String {
     return "widget_stop_selected_at$widgetId"
 }
 
+fun widgetKeyLayout(widgetId : Int) : String {
+    return "widget_key_layout$widgetId"
+}
+
 fun loadWidgetConfigOrDefault(prefs : SharedPreferences, widgetId : Int) : Ng.WidgetConfiguration {
     val widgetKey = widgetKey(widgetId)
     if (prefs.contains(widgetKey)) {
@@ -37,6 +45,7 @@ fun deleteWidget(prefs : SharedPreferences, widgetId : Int) {
     edit.remove(widgetKey(widgetId))
         .remove(widgetKeyLastData(widgetId))
         .remove(widgetKeySelectedStop(widgetId))
+        .remove(widgetKeyLayout(widgetId))
         .remove(widgetKeyStopSelectedAt(widgetId))
         .apply()
 }
@@ -46,6 +55,10 @@ fun putLastLoadData(prefs : SharedPreferences, widgetId: Int, response : Ng.Widg
     val edit = prefs.edit()
     val data = Base64.encodeToString(response.toByteArray(), 0)
     edit.putString(widgetKey, data).apply()
+}
+
+fun getWidgetLayoutId(prefs : SharedPreferences, widgetId: Int) : Int {
+    return prefs.getInt(widgetKeyLayout(widgetId), R.layout.widgetlayout_base)
 }
 
 fun getLastLoadData(prefs : SharedPreferences, widgetId: Int) : Ng.WidgetLoadResponseData? {
@@ -103,4 +116,12 @@ fun getAllWidgetIds(context : Context) : IntArray {
     val manager = AppWidgetManager.getInstance(context)
     val component = ComponentName(context, StandardWidgetProvider::class.java)
     return manager.getAppWidgetIds(component)
+}
+
+fun sendWidgetUpdateBroadcast(context : Context, widgetId : Int) {
+    val intentUpdate = Intent(context, WidgetBroadcastReceiver::class.java).apply {
+        action = WIDGET_CONFIG_UPDATED
+        putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId)
+    }
+    context.sendBroadcast(intentUpdate)
 }

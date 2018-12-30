@@ -77,4 +77,13 @@
     <string name="color_custom_tag_text">Ändra färg på hållplatstext</string>
     <string name="custom_separator">Ändra färg på mellan raden</string>
     <string name="no_data_to_theme">Hållplatsdata saknas, kan inte ändra tema</string>
---></resources>
+    <string name="update_mode">Uppdateringsläge:</string>
+    <string name="stops_showing_on_widget">Visa inforrmation från dessa hållplatser:</string>
+    <string name="import_settings">Importera inställningar från sträng</string>
+    <string name="export_settings">Exportera inställningar till sträng</string>
+    <string name="share_using">Lagra strängen någonstans</string>
+    <string name="import_settings_btn">Importera</string>
+    <string name="import_settings_btn_cancel">Avbryt</string>
+    <string name="failed_config">Ogiltig sträng</string>
+    <string name="loaded_config">Laddad inställningar med %1$d hållplatser</string>
+    --></resources>

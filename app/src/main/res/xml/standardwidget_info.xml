@@ -6,7 +6,7 @@
                     android:previewImage="@drawable/appwidget_preview"
                     android:initialLayout="@layout/widgetlayout_base"
                     android:configure="se.locutus.sl.realtidhem.activity.WidgetConfigureActivity"
-                    android:resizeMode="horizontal"
+                    android:resizeMode="horizontal|vertical"
                     android:widgetCategory="home_screen|keyguard"
                     android:initialKeyguardLayout="@layout/widgetlayout_base">
 </appwidget-provider>

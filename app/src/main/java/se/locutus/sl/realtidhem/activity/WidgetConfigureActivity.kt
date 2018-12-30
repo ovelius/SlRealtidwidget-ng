@@ -89,7 +89,7 @@ class WidgetConfigureActivity : AppCompatActivity() {
 
     private fun showWidgetDialog() {
         for (widgetId in getAllWidgetIds(this)) {
-            sendWidgetUpdateBroadcast(widgetId)
+            sendWidgetUpdateBroadcast(this, widgetId)
         }
         val url = "https://support.google.com/android/answer/2781850?hl=${Locale.getDefault().language}"
         val builder = AlertDialog.Builder(this)
@@ -302,7 +302,7 @@ class WidgetConfigureActivity : AppCompatActivity() {
             } else {
                 LOG.info("Storing config for $mAppWidgetId")
                 storeWidgetConfig(mWidgetPrefs, widgetConfig)
-                sendWidgetUpdateBroadcast(mAppWidgetId)
+                sendWidgetUpdateBroadcast(this, mAppWidgetId)
                 finishOk()
             }
             true
@@ -340,14 +340,6 @@ class WidgetConfigureActivity : AppCompatActivity() {
         builder.show()
     }
 
-
-    private fun sendWidgetUpdateBroadcast(widgetId : Int) {
-        val intentUpdate = Intent(this, WidgetBroadcastReceiver::class.java).apply {
-            action = WIDGET_CONFIG_UPDATED
-            putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId)
-        }
-        sendBroadcast(intentUpdate)
-    }
 
     private fun getConfigErrorMessage() : Int? {
         if (widgetConfig.stopConfigurationCount <= 0) {
