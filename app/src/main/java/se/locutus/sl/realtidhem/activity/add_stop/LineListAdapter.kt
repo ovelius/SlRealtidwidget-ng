@@ -1,4 +1,4 @@
-package se.locutus.sl.realtidhem.activity
+package se.locutus.sl.realtidhem.activity.add_stop
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -9,6 +9,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import se.locutus.proto.Ng
 import se.locutus.sl.realtidhem.R
+import se.locutus.sl.realtidhem.activity.setColor
 import java.lang.IllegalArgumentException
 import java.lang.StringBuilder
 
@@ -121,7 +122,13 @@ class LineListAdapter(private val activity: AddStopActivity, private val lineLis
         val colorView = root.findViewById<ImageView>(R.id.line_list_color)
         val iconView = root.findViewById<ImageView>(R.id.line_list_icon)
         val directionView = root.findViewById<ImageView>(R.id.line_list_direction_icon)
-        setImageViewIconAndColor(getItem(position)[0], colorView, iconView, root, directionView)
+        setImageViewIconAndColor(
+            getItem(position)[0],
+            colorView,
+            iconView,
+            root,
+            directionView
+        )
         val items = getItem(position)
         nameText.text = items[0].canonicalName
         if (items.size > 1) {

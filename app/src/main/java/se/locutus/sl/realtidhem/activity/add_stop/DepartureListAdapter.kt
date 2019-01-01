@@ -1,4 +1,4 @@
-package se.locutus.sl.realtidhem.activity
+package se.locutus.sl.realtidhem.activity.add_stop
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -9,6 +9,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import se.locutus.proto.Ng
 import se.locutus.sl.realtidhem.R
+import se.locutus.sl.realtidhem.activity.setColor
 import java.lang.IllegalArgumentException
 import java.util.*
 import java.util.logging.Logger
@@ -62,7 +63,13 @@ class DepartureListAdapter(private val activity: AddStopActivity, private val de
         val departureName = departureList[position].canonicalName
         val iconView = root.findViewById<ImageView>(R.id.line_list_icon)
 
-        setImageViewIconAndColor(departureList[position], colorView, iconView, root, null)
+        setImageViewIconAndColor(
+            departureList[position],
+            colorView,
+            iconView,
+            root,
+            null
+        )
         nameText.text = departureName
         if  (checks.contains(departureName)) {
             setGreenBg(root)

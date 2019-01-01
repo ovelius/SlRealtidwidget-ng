@@ -1,4 +1,4 @@
-package se.locutus.sl.realtidhem.activity
+package se.locutus.sl.realtidhem.activity.add_stop
 
 import android.os.Bundle
 import android.view.LayoutInflater

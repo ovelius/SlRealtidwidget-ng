@@ -22,15 +22,12 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayout
 import com.google.protobuf.InvalidProtocolBufferException
 import kotlinx.android.synthetic.main.widget_configure_activty.*
-import se.locutus.proto.Ng
 import se.locutus.proto.Ng.StopConfiguration
 import se.locutus.proto.Ng.WidgetConfiguration
 import se.locutus.sl.realtidhem.R
+import se.locutus.sl.realtidhem.activity.add_stop.AddStopActivity
 import se.locutus.sl.realtidhem.events.EXTRA_COLOR_THEME
 import se.locutus.sl.realtidhem.events.EXTRA_RECONFIGURE_WIDGET
-import se.locutus.sl.realtidhem.events.WIDGET_CONFIG_UPDATED
-import se.locutus.sl.realtidhem.events.WidgetBroadcastReceiver
-import se.locutus.sl.realtidhem.service.BackgroundUpdaterService
 import se.locutus.sl.realtidhem.widget.*
 import java.lang.IllegalArgumentException
 import java.util.*

@@ -1,17 +1,14 @@
-package se.locutus.sl.realtidhem.activity
+package se.locutus.sl.realtidhem.activity.add_stop
 
 import android.app.Activity
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
-import android.graphics.drawable.Drawable
 import android.os.Bundle
 import com.google.android.material.snackbar.Snackbar
-import androidx.fragment.app.Fragment
 import androidx.core.content.ContextCompat
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
@@ -26,7 +23,6 @@ import com.android.volley.Response
 import com.android.volley.toolbox.StringRequest
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.MapFragment
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.BitmapDescriptor
 import com.google.android.gms.maps.model.BitmapDescriptorFactory

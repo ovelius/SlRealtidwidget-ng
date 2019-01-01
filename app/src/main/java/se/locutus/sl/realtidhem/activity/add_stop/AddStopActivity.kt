@@ -1,4 +1,4 @@
-package se.locutus.sl.realtidhem.activity
+package se.locutus.sl.realtidhem.activity.add_stop
 
 import android.app.Activity
 import android.content.Intent
@@ -14,6 +14,7 @@ import kotlinx.android.synthetic.main.activity_add_stop.*
 import se.locutus.proto.Ng
 import se.locutus.proto.Ng.DeparturesFilter
 import se.locutus.sl.realtidhem.R
+import se.locutus.sl.realtidhem.activity.*
 import se.locutus.sl.realtidhem.activity.theme.ThemeActivity
 import se.locutus.sl.realtidhem.events.EXTRA_COLOR_THEME
 import se.locutus.sl.realtidhem.events.EXTRA_THEME_CONFIG
@@ -47,7 +48,9 @@ class AddStopActivity : AppCompatActivity() {
             val configBuilt = Ng.StopConfiguration.parseFrom(savedInstanceState.getByteArray(STOP_CONFIG_DATA_KEY))
             LOG.info("Got stop from saved bundle $configBuilt")
             if (savedInstanceState.containsKey(ALL_DEPARTURES_DATA_KEY)) {
-                allDeparturesResponse = Ng.AllDepaturesResponseData.parseFrom(savedInstanceState.getByteArray(ALL_DEPARTURES_DATA_KEY))
+                allDeparturesResponse = Ng.AllDepaturesResponseData.parseFrom(savedInstanceState.getByteArray(
+                    ALL_DEPARTURES_DATA_KEY
+                ))
             }
             config = configBuilt.toBuilder()
         } else if (intent.hasExtra(STOP_CONFIG_DATA_KEY)) {
@@ -75,7 +78,7 @@ class AddStopActivity : AppCompatActivity() {
         )
         tabLayout = findViewById(R.id.tab_layout)
         if (intent.hasExtra(EXTRA_COLOR_THEME)) {
-            setColor(this, tabLayout ,intent.getIntExtra(EXTRA_COLOR_THEME, 0))
+            setColor(this, tabLayout, intent.getIntExtra(EXTRA_COLOR_THEME, 0))
         }
         viewPager = findViewById(R.id.view_pager)
 
@@ -86,10 +89,12 @@ class AddStopActivity : AppCompatActivity() {
             ?: SelectLinesFragment()
         val departuresFragment = supportFragmentManager.findFragmentByTag(fragmentName(2))
             ?: SelectDeparturesFragment()
-        stopConfigureTabAdapter = StopConfigureTabAdapter(this, supportFragmentManager,
+        stopConfigureTabAdapter = StopConfigureTabAdapter(
+            this, supportFragmentManager,
             stopFragment as SelectStopFragment,
             lineFragment as SelectLinesFragment,
-            departuresFragment as SelectDeparturesFragment)
+            departuresFragment as SelectDeparturesFragment
+        )
 
         viewPager.adapter = stopConfigureTabAdapter
         tabLayout.setupWithViewPager(viewPager)
