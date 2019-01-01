@@ -28,6 +28,7 @@ import java.net.URLEncoder
 const val CYCLE_STOP_LEFT = "CYCLE_STOP_LEFT"
 const val CYCLE_STOP_RIGHT = "CYCLE_STOP_RIGHT"
 const val EXTRA_COLOR_THEME = "EXTRA_COLOR_THEME"
+const val EXTRA_RECONFIGURE_WIDGET = "EXTRA_RECONFIGURE_WIDGET"
 const val EXTRA_THEME_CONFIG = "EXTRA_THEME_CONFIG"
 const val STALE_MILLIS = 30000
 const val UPDATE_RETRY_MILLIS = 10000
@@ -112,6 +113,7 @@ class WidgetTouchHandler(val context: Context, val networkManager : NetworkInter
                 putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId)
                 if (lastLoadedData != null) {
                     putExtra(EXTRA_COLOR_THEME, lastLoadedData.color)
+                    putExtra(EXTRA_RECONFIGURE_WIDGET, true)
                 }
             }
             context.startActivity(intent)

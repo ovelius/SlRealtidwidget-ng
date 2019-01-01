@@ -42,7 +42,7 @@
     <string name="error_no_departures">Inga avgångar hittades för denna hållplats!</string>
     <string name="no_stop_added">Tryck på knappen nedan för att lägga till en hållplats</string>
     <string name="select_just_one_dep">Avmarkera alla avgångar för att välja en rad istället</string>
-    <string name="select_just_one_line">Avmarkera linjen för att välja specifika avgångar istället</string>
+    <string name="select_just_one_line">Avmarkera alla linjer för att välja specifika avgångar istället</string>
     <string name="no_data">Inga avgångar</string>
     <string name="no_data_detail">Inga data tillgängliga just nu</string>
     <string name="deleted">Borttagen hållplats</string>
@@ -54,7 +54,7 @@
     <string name="one_more_time_config">En gång till för att konfigurera</string>
     <string name="select_widget">Välj widget för att börja</string>
     <string name="widget_read_more">Läs mer om hur widgets läggs till</string>
-    <string name="widget_help">Denna applikation används endast som en widget. Gå tillbaka till din hemmaskärm för att
+    <string name="widget_help">Denna applikation används endast som en widget. Gå tillbaka till din hemskärm för att
         använda widgets.
     </string>
     <string name="about_info">Om appen</string>

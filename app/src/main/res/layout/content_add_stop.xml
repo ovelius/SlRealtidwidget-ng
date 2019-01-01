@@ -14,22 +14,26 @@
     <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/margin_search"
             android:text="@string/stop_name"
             android:layout_marginBottom="4dp"/>
     <AutoCompleteTextView
             android:id="@+id/stop_auto_complete"
             android:layout_width="match_parent"
+            android:layout_marginLeft="@dimen/margin_search"
             android:layout_height="wrap_content"
             android:inputType="textNoSuggestions"/>
     <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/margin_search"
             android:text="@string/stop_display_name"
             android:layout_marginBottom="4dp"/>
 
         <EditText
                 android:id="@+id/stop_display_name_text"
                 android:layout_width="match_parent"
+                android:layout_marginLeft="@dimen/margin_search"
                 android:inputType="textNoSuggestions"
                 android:layout_height="wrap_content"
         />

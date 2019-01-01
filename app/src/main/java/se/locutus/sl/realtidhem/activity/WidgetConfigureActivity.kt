@@ -27,6 +27,7 @@ import se.locutus.proto.Ng.StopConfiguration
 import se.locutus.proto.Ng.WidgetConfiguration
 import se.locutus.sl.realtidhem.R
 import se.locutus.sl.realtidhem.events.EXTRA_COLOR_THEME
+import se.locutus.sl.realtidhem.events.EXTRA_RECONFIGURE_WIDGET
 import se.locutus.sl.realtidhem.events.WIDGET_CONFIG_UPDATED
 import se.locutus.sl.realtidhem.events.WidgetBroadcastReceiver
 import se.locutus.sl.realtidhem.service.BackgroundUpdaterService
@@ -71,6 +72,7 @@ class WidgetConfigureActivity : AppCompatActivity() {
     private lateinit var spinner : Spinner
     internal var widgetConfig : WidgetConfiguration = WidgetConfiguration.getDefaultInstance()
     internal var color : Int? = null
+    private var isNewWidget = false
 
     public override fun onResume() {
         super.onResume()
@@ -111,7 +113,6 @@ class WidgetConfigureActivity : AppCompatActivity() {
         setSupportActionBar(config_toolbar)
         mListView = findViewById(R.id.stop_list_view)
         viewSwitcher = findViewById(R.id.viewSwitcher1)
-
         findViewById<Button>(R.id.ok_btn_about).setOnClickListener {
             viewSwitcher.showPrevious()
         }
@@ -125,7 +126,7 @@ class WidgetConfigureActivity : AppCompatActivity() {
             )
         }
         mWidgetPrefs = getSharedPreferences(WIDGET_CONFIG_PREFS, 0)
-        configureUpdateModeSpinner()
+        // configureUpdateModeSpinner()
         mAddStopHelperText = findViewById(R.id.no_stops_help_text)
 
 
@@ -134,9 +135,15 @@ class WidgetConfigureActivity : AppCompatActivity() {
             return
         }
 
+        // Use the color extra to determine if this is a new widget.
         if (intent.hasExtra(EXTRA_COLOR_THEME)) {
             color = intent.getIntExtra(EXTRA_COLOR_THEME, 0)
            setColor(this, null, color!!)
+        }
+        isNewWidget = !intent.getBooleanExtra(EXTRA_RECONFIGURE_WIDGET, false)
+        if (!isNewWidget) {
+            supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+            supportActionBar!!.setDisplayShowHomeEnabled(true)
         }
 
         if (bundle?.containsKey(WIDGET_CONFIG_DATA_KEY) == true) {
@@ -190,6 +197,7 @@ class WidgetConfigureActivity : AppCompatActivity() {
         }
     }
 
+    /*
     fun configureUpdateModeSpinner() {
         spinner = findViewById(R.id.update_mode_spinner)
         val adapter = ArrayAdapter<String>(this,
@@ -216,7 +224,7 @@ class WidgetConfigureActivity : AppCompatActivity() {
             }
 
         }
-    }
+    }*/
 
     override fun onSaveInstanceState(outState: Bundle?) {
         super.onSaveInstanceState(outState)
@@ -280,6 +288,10 @@ class WidgetConfigureActivity : AppCompatActivity() {
         menuInflater.inflate(R.menu.widget_config_action_bar_menu, menu)
         menu.findItem(R.id.export_btn).isVisible = widgetConfig.stopConfigurationCount != 0
         menu.findItem(R.id.import_btn).isVisible = widgetConfig.stopConfigurationCount == 0
+        menu.findItem(R.id.save_widget_action).isVisible = isNewWidget
+        menu.findItem(R.id.save_widget_action).setOnMenuItemClickListener { _ ->
+            onSupportNavigateUp()
+        }
         menu.findItem(R.id.about_btn).setOnMenuItemClickListener {_ ->
             setTextVersion(findViewById(R.id.version_text))
             viewSwitcher.showNext()
@@ -298,20 +310,34 @@ class WidgetConfigureActivity : AppCompatActivity() {
             startActivity(Intent.createChooser(sharingIntent, resources.getString(R.string.share_using)))
             true
         }
-        menu.findItem(R.id.save_widget_action).setOnMenuItemClickListener {_ ->
-            val message = getConfigErrorMessage()
-            if (message != null) {
-                Snackbar.make(mListView, message, Snackbar.LENGTH_SHORT)
-                    .setAction("Action", null).show()
-            } else {
-                LOG.info("Storing config for $mAppWidgetId")
-                storeWidgetConfig(mWidgetPrefs, widgetConfig)
-                sendWidgetUpdateBroadcast(this, mAppWidgetId)
-                finishOk()
-            }
-            true
-        }
         return true
+    }
+
+    override fun onBackPressed() {
+        if (getConfigErrorMessage() == null) {
+            finishSuccessFully()
+        } else {
+            super.onBackPressed()
+        }
+    }
+
+    private fun finishSuccessFully() {
+        LOG.info("Storing config for $mAppWidgetId")
+        storeWidgetConfig(mWidgetPrefs, widgetConfig)
+        sendWidgetUpdateBroadcast(this, mAppWidgetId)
+        finishOk()
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        val message = getConfigErrorMessage()
+        if (message != null) {
+            Snackbar.make(mListView, message, Snackbar.LENGTH_SHORT)
+                .setAction("Action", null).show()
+            return false
+        } else {
+            finishSuccessFully()
+            return true
+        }
     }
 
     private fun createConfigInputDialog() {

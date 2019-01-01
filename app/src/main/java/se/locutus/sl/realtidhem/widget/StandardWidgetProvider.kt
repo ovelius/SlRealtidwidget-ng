@@ -215,20 +215,27 @@ class StandardWidgetProvider : AppWidgetProvider() {
         newOptions: Bundle?
     ) {
         val prefs = context!!.getSharedPreferences(WIDGET_CONFIG_PREFS,  0)
-        // Random stuff for sure.
-        val providerInfoMinHeight = AppWidgetManager.getInstance(context).getAppWidgetInfo(appWidgetId).minHeight - 10
-        val minHeight = newOptions!!.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_HEIGHT)
+        val providerInfoMinHeight = AppWidgetManager.getInstance(context).getAppWidgetInfo(appWidgetId).minHeight
+        val currentMinHeight = newOptions!!.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_HEIGHT)
 
         var layout = R.layout.widgetlayout_base
-        if (minHeight >  providerInfoMinHeight) {
+        if (shouldUseDoubleLayout(providerInfoMinHeight, currentMinHeight)) {
             layout = R.layout.widgetlayout_double
         }
-        LOG.info("Resize event provider min height $providerInfoMinHeight new height $minHeight layout chosen $layout")
+        LOG.info("Resize event provider min height $providerInfoMinHeight new height $currentMinHeight layout chosen $layout")
         prefs.edit().putInt(widgetKeyLayout(appWidgetId), layout).apply()
 
         sendWidgetUpdateBroadcast(context, appWidgetId)
 
         super.onAppWidgetOptionsChanged(context, appWidgetManager, appWidgetId, newOptions)
+    }
+
+    /**
+     * Strange logic to determine if we should use the double layout or not.
+     * Should be doing some smart dps calculations here...
+     */
+    private fun shouldUseDoubleLayout(providerMinHeight : Int, currentMinHeight : Int) : Boolean {
+        return (currentMinHeight >  (providerMinHeight - 10))
     }
 }
 

@@ -59,6 +59,8 @@ class ThemeActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_theme)
         setSupportActionBar(theme_toolbar)
+        supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+        supportActionBar!!.setDisplayShowHomeEnabled(true)
         line1Text = findViewById(R.id.widgetline1)
         line2Text = findViewById(R.id.widgetline2)
         minText = findViewById(R.id.widgetmin)
@@ -351,15 +353,15 @@ class ThemeActivity : AppCompatActivity() {
         minText.setTextColor(color)
     }
 
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.widget_theme_action_bar_menu, menu)
-        menu.findItem(R.id.save_widget_action).setOnMenuItemClickListener {_ ->
-            val resultIntent = Intent()
-            resultIntent.putExtra(EXTRA_THEME_CONFIG, themeData.build().toByteArray())
-            setResult(Activity.RESULT_OK, resultIntent)
-            finish()
-            true
-        }
+    override fun onBackPressed() {
+        onSupportNavigateUp()
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        val resultIntent = Intent()
+        resultIntent.putExtra(EXTRA_THEME_CONFIG, themeData.build().toByteArray())
+        setResult(Activity.RESULT_OK, resultIntent)
+        finish()
         return true
     }
 }

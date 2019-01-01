@@ -59,6 +59,8 @@ class AddStopActivity : AppCompatActivity() {
             stopIndex = intent.getIntExtra(STOP_INDEX_DATA_KEY, -1)
         }
         setSupportActionBar(toolbar)
+        supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+        supportActionBar!!.setDisplayShowHomeEnabled(true)
 
         requestQueue = Volley.newRequestQueue(this)
         network = NetworkManager(this)
@@ -139,10 +141,6 @@ class AddStopActivity : AppCompatActivity() {
         return config.stopData.displayName
     }
 
-    override fun onSupportNavigateUp(): Boolean {
-        finish()
-        return true
-    }
 
     fun clearDeparturesList() {
         departureAdapter.clear()
@@ -226,19 +224,27 @@ class AddStopActivity : AppCompatActivity() {
         return null
     }
 
+    override fun onBackPressed() {
+        if (getConfigErrorMessage() == null) {
+            finishSuccessfully()
+        } else {
+            super.onBackPressed()
+        }
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        val message = getConfigErrorMessage()
+        if (message != null) {
+            Snackbar.make(findViewById(R.id.tab_layout), message, Snackbar.LENGTH_SHORT)
+                .setAction("Action", null).show()
+            return false
+        }
+        finishSuccessfully()
+        return true
+    }
+
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.stop_config_action_bar_menu, menu)
-        menu.findItem(R.id.save_widget_action).setOnMenuItemClickListener { _ ->
-            val message = getConfigErrorMessage()
-            if (message != null) {
-                Snackbar.make(findViewById(R.id.tab_layout), message, Snackbar.LENGTH_SHORT)
-                    .setAction("Action", null).show()
-                false
-            } else {
-                finishSuccessfully()
-                true
-            }
-        }
         menu.findItem(R.id.theme_widget_button).setOnMenuItemClickListener { _ ->
             updateConfigProto()
             LOG.info("Launching theme settings with config ${config.build()}")

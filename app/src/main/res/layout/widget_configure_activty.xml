@@ -33,7 +33,7 @@
             android:layout_height="fill_parent"
             android:paddingTop="?attr/actionBarSize"
             android:orientation="vertical">
-        <!-- TODO: Move these to separate tab -->
+        <!-- TODO: Move these to separate tab
         <TextView
                 android:id="@+id/update_mode_text"
                 android:layout_width="match_parent"
@@ -49,7 +49,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/stops_showing_on_widget"
-        />
+        /> -->
         <ListView
                 android:id="@+id/stop_list_view"
                 android:layout_width="match_parent"
