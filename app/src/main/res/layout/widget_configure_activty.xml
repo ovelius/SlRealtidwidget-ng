@@ -26,52 +26,22 @@
                 android:background="?attr/colorPrimary"
                 app:popupTheme="@style/AppTheme.PopupOverlay"/>
 
-    </com.google.android.material.appbar.AppBarLayout>
-    <LinearLayout
-            android:id="@+id/stop_list_parent"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:paddingTop="?attr/actionBarSize"
-            android:orientation="vertical">
-        <!-- TODO: Move these to separate tab
-        <TextView
-                android:id="@+id/update_mode_text"
+        <com.google.android.material.tabs.TabLayout
+                android:id="@+id/tab_layout"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/update_mode"
-        />
-        <Spinner
-            android:id="@+id/update_mode_spinner"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-        <TextView
-                android:id="@+id/stops_list_text"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/stops_showing_on_widget"
-        /> -->
-        <ListView
-                android:id="@+id/stop_list_view"
-                android:layout_width="match_parent"
-                android:visibility="gone"
-                android:layout_height="wrap_content">
-        </ListView>
-    </LinearLayout>
-        <TextView
-                android:id="@+id/no_stops_help_text"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center_vertical|center_horizontal"
-                android:text="@string/no_stop_added"
-        />
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/add_stop_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom|end"
-            android:layout_margin="@dimen/fab_margin"
-            app:srcCompat="@android:drawable/ic_menu_add"/>
+                android:layout_height="?attr/actionBarSize"
+                android:layout_gravity="left"
+                android:background="@color/colorPrimary"
+                app:tabGravity="fill"
+                app:tabMode="fixed"/>
 
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.viewpager.widget.ViewPager
+            android:id="@+id/view_pager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
     <androidx.coordinatorlayout.widget.CoordinatorLayout

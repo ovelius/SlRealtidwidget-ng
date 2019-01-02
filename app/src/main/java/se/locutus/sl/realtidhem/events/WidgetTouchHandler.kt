@@ -40,7 +40,12 @@ const val MAX_ATTEMPTS = 3
 const val CLEAR_TIME_MIN_MILLIS = 60 * 1000L
 const val CLEAR_TIME_MAX_MILLIS = 80 * 1000L
 
-class WidgetTouchHandler(val context: Context, val networkManager : NetworkInterface, val retryMillis : Long = UPDATE_AUTO_RETRY_MILLIS) {
+interface TouchHandlerInterface {
+    fun widgetTouched(widgetId :  Int, action : String?, userTouch : Boolean = true)
+}
+
+class WidgetTouchHandler(val context: Context, val networkManager : NetworkInterface, val retryMillis : Long = UPDATE_AUTO_RETRY_MILLIS)
+    : TouchHandlerInterface {
     companion object {
         val LOG = Logger.getLogger(WidgetTouchHandler::class.java.name)
     }
@@ -49,7 +54,7 @@ class WidgetTouchHandler(val context: Context, val networkManager : NetworkInter
     internal val inMemoryState = InMemoryState()
     val mainHandler = Handler(Looper.getMainLooper())
 
-    fun widgetTouched(widgetId :  Int, action : String?, userTouch : Boolean = true) {
+    override fun widgetTouched(widgetId :  Int, action : String?, userTouch : Boolean) {
         val widgetConfig = inMemoryState.getWidgetConfig(widgetId, prefs)
         var selectedStopIndex = prefs.getInt(widgetKeySelectedStop(widgetId), 0)
 
@@ -88,8 +93,8 @@ class WidgetTouchHandler(val context: Context, val networkManager : NetworkInter
                 // Only record if this was an update from a users interaction.
                 if (userTouch) {
                     timeTracker.record(widgetId)
+                    scheduleWidgetClearing(context, widgetId)
                 }
-                scheduleWidgetClearing(context, widgetId)
             } else {
                 stopTouchingMe(manager, widgetId)
             }
