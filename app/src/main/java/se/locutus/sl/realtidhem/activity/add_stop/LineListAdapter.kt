@@ -105,6 +105,9 @@ class LineListAdapter(private val activity: AddStopActivity, private val lineLis
     }
 
     private fun buildStopString(items : List<Ng.DepartureData>) : String {
+        if (items.isEmpty()) {
+            throw IllegalArgumentException("Can't build sublist from 0 items!")
+        }
         val sb = StringBuilder()
         for (item in items) {
             sb.append(item.canonicalName)
@@ -132,7 +135,7 @@ class LineListAdapter(private val activity: AddStopActivity, private val lineLis
         val items = getItem(position)
         nameText.text = items[0].canonicalName
         if (items.size > 1) {
-            nameSubText.text = buildStopString(getItem(position).subList(1, items.size -1))
+            nameSubText.text = buildStopString(items.subList(1, items.size))
         } else {
             nameSubText.text = ""
         }
