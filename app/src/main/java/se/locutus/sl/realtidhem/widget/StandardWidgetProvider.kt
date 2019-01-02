@@ -14,6 +14,7 @@ import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.location.Location
 import android.os.Bundle
+import android.util.TypedValue
 import androidx.core.content.ContextCompat
 import android.view.View
 import se.locutus.proto.Ng
@@ -215,14 +216,14 @@ class StandardWidgetProvider : AppWidgetProvider() {
         newOptions: Bundle?
     ) {
         val prefs = context!!.getSharedPreferences(WIDGET_CONFIG_PREFS,  0)
-        val providerInfoMinHeight = AppWidgetManager.getInstance(context).getAppWidgetInfo(appWidgetId).minHeight
         val currentMinHeight = newOptions!!.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_HEIGHT)
 
         var layout = R.layout.widgetlayout_base
-        if (shouldUseDoubleLayout(providerInfoMinHeight, currentMinHeight)) {
+        val cells = getCellsForSize(currentMinHeight)
+        if (cells > 1) {
             layout = R.layout.widgetlayout_double
         }
-        LOG.info("Resize event provider min height $providerInfoMinHeight new height $currentMinHeight layout chosen $layout")
+        LOG.info("Widget $appWidgetId resize event cell $cells ")
         prefs.edit().putInt(widgetKeyLayout(appWidgetId), layout).apply()
 
         sendWidgetUpdateBroadcast(context, appWidgetId)
@@ -230,12 +231,12 @@ class StandardWidgetProvider : AppWidgetProvider() {
         super.onAppWidgetOptionsChanged(context, appWidgetManager, appWidgetId, newOptions)
     }
 
-    /**
-     * Strange logic to determine if we should use the double layout or not.
-     * Should be doing some smart dps calculations here...
-     */
-    private fun shouldUseDoubleLayout(providerMinHeight : Int, currentMinHeight : Int) : Boolean {
-        return (currentMinHeight >  (providerMinHeight - 10))
+    private fun getCellsForSize(size: Int): Int {
+        var n = 2
+        while (70 * n - 30 < size) {
+            ++n
+        }
+        return n - 1
     }
 }
 

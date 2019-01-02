@@ -25,6 +25,11 @@ import java.util.logging.Logger
 
 const val MODIFY_THEME_REQUEST_CODE = 12
 
+
+fun fragmentName(index: Int): String {
+    return "android:switcher:${R.id.view_pager}:$index"
+}
+
 class AddStopActivity : AppCompatActivity() {
     companion object {
         val LOG = Logger.getLogger(AddStopActivity::class.java.name)
@@ -43,7 +48,6 @@ class AddStopActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_stop)
-
         if (savedInstanceState?.containsKey(STOP_CONFIG_DATA_KEY) == true) {
             val configBuilt = Ng.StopConfiguration.parseFrom(savedInstanceState.getByteArray(STOP_CONFIG_DATA_KEY))
             LOG.info("Got stop from saved bundle $configBuilt")
@@ -127,10 +131,6 @@ class AddStopActivity : AppCompatActivity() {
                 }
             }
         })
-    }
-
-    private fun fragmentName(index: Int): String {
-        return "android:switcher:${R.id.view_pager}:$index"
     }
 
     override fun onSaveInstanceState(outState: Bundle?) {
