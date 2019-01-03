@@ -12,6 +12,7 @@ import se.locutus.sl.realtidhem.R
 import se.locutus.sl.realtidhem.activity.WIDGET_CONFIG_PREFS
 import se.locutus.sl.realtidhem.net.NetworkManager
 import se.locutus.sl.realtidhem.widget.StandardWidgetProvider.Companion.setPendingIntents
+import se.locutus.sl.realtidhem.widget.getWidgetLayoutId
 
 const val WIDGET_CONFIG_UPDATED = "widget_config_updated"
 
@@ -54,11 +55,11 @@ class ResetWidget : JobService() {
 
     private fun getRemoveViews(widgetId : Int) : RemoteViews {
         val handler = WidgetBroadcastReceiver.widgetTouchHandler
+        val prefs = getSharedPreferences(WIDGET_CONFIG_PREFS, 0)
         if (handler != null) {
-            val prefs = getSharedPreferences(WIDGET_CONFIG_PREFS, 0)
             return handler.inMemoryState.getRemoveViews(widgetId, prefs,this, false)
         }
-        return RemoteViews(packageName, R.layout.widgetlayout_base)
+        return RemoteViews(packageName, getWidgetLayoutId(prefs, widgetId))
     }
 
     override fun onStartJob(params: JobParameters?): Boolean {
