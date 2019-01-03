@@ -65,7 +65,8 @@ class BackgroundUpdaterService : Service() {
         LOG.info("Widget Ids ${allWidgetIds.toList()}")
         var updateAny = false
         for (widgetId in allWidgetIds) {
-            if (shouldUpdate(widgetId)) {
+            val config = getConfigFor(widgetId)
+            if (shouldUpdate(widgetId, config.updateSettings.updateMode)) {
                 updateAny = true
             }
         }
@@ -122,17 +123,33 @@ class BackgroundUpdaterService : Service() {
 
     private fun updateOnce() {
         val touchHandler = widgetTouchProvider()
-        var updatedWidget = false
+        var updatedAnyWidget = false
+        var hasAlwaysUpdateWidget = false
         for (widgetId in widgetIdProvider()) {
-            if (shouldUpdate(widgetId)) {
+            val config = getConfigFor(widgetId)
+            val updateMode = config.updateSettings.updateMode
+            if (updateMode == Ng.UpdateSettings.UpdateMode.ALWAYS_UPDATE_MODE) {
+                hasAlwaysUpdateWidget = true
+            }
+            if (shouldUpdate(widgetId, updateMode)) {
                 LOG.info("Automatic update of widget $widgetId")
                 touchHandler.widgetTouched(widgetId, "", false)
-                updatedWidget = true
+                updatedAnyWidget = true
+            } else {
+                setStaleMessages(widgetId, updateMode)
             }
         }
-        if (!updatedWidget) {
+        if (!updatedAnyWidget) {
             LOG.info("No widgets left to update")
+            if (!hasAlwaysUpdateWidget) {
+                // Stop the service. Wait for next alarm to fire to start it again.
+                stopSelf()
+            }
         }
+    }
+
+    private fun setStaleMessages(widgetId : Int, updateMode : Ng.UpdateSettings.UpdateMode) {
+
     }
 
     private fun getConfigFor(widgetId: Int) : Ng.WidgetConfiguration {
@@ -142,8 +159,7 @@ class BackgroundUpdaterService : Service() {
         return widgetConfigs[widgetId]!!
     }
 
-    private fun shouldUpdate(widgetId : Int) : Boolean {
-        val updateMode = getConfigFor(widgetId).updateSettings.updateMode
+    private fun shouldUpdate(widgetId : Int, updateMode : Ng.UpdateSettings.UpdateMode) : Boolean {
         if (updateMode == Ng.UpdateSettings.UpdateMode.MANUAL_UPDATE_MODE) {
             return false
         }
@@ -173,8 +189,10 @@ class BackgroundUpdaterService : Service() {
                 updateOnce()
             }
         }
+        // Clear automatic update timeouts.
+        autoUpdateSequenceEndTime.clear()
         LOG.info("Scheduling automatic updates with $updateTimePeriodMillis millis period")
-        timer.schedule(timerTask, updateTimePeriodMillis, updateTimePeriodMillis)
+        timer.schedule(timerTask, 50, updateTimePeriodMillis)
     }
 
     fun hasAutoUpdatesRunning() : Boolean {

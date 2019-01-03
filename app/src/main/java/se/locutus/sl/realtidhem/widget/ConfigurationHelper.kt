@@ -11,6 +11,7 @@ import se.locutus.proto.Ng
 import se.locutus.sl.realtidhem.R
 import se.locutus.sl.realtidhem.events.WIDGET_CONFIG_UPDATED
 import se.locutus.sl.realtidhem.events.WidgetBroadcastReceiver
+import se.locutus.sl.realtidhem.service.BackgroundUpdaterService
 import java.lang.IllegalArgumentException
 
 fun widgetKey(widgetId : Int) : String {
@@ -118,10 +119,16 @@ fun getAllWidgetIds(context : Context) : IntArray {
     return manager.getAppWidgetIds(component)
 }
 
-fun sendWidgetUpdateBroadcast(context : Context, widgetId : Int) {
+fun sendWidgetUpdateBroadcast(context : Context, widgetId : Int, widgetConfig : Ng.WidgetConfiguration?) {
     val intentUpdate = Intent(context, WidgetBroadcastReceiver::class.java).apply {
         action = WIDGET_CONFIG_UPDATED
         putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId)
+    }
+    if (widgetConfig != null &&
+        widgetConfig.updateSettings.updateMode == Ng.UpdateSettings.UpdateMode.ALWAYS_UPDATE_MODE) {
+        val intent = Intent(context, BackgroundUpdaterService::class.java)
+        context!!.stopService(intent)
+        context!!.startService(intent)
     }
     context.sendBroadcast(intentUpdate)
 }

@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:id="@+id/stop_list_parent"
               android:orientation="vertical"
+              android:layout_marginLeft="@dimen/margin_search"
               android:layout_width="fill_parent"
               android:layout_height="fill_parent">
         <TextView
@@ -14,6 +15,12 @@
             android:id="@+id/update_mode_spinner"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
+        <TextView
+                android:id="@+id/update_mode_explain"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/update_mode"
+        />
 
         <ListView
                 android:id="@+id/update_period_list_view"

@@ -5,6 +5,7 @@ import android.content.Context
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
+import kotlin.math.min
 
 const val TIME_PREFS = "time_prefs"
 // Each timeslot will keep the widget updated for 15 minutes.
@@ -51,7 +52,7 @@ class TimeTracker(val context : Context) {
         }
     }
 
-    fun getRecords(widgetId: Int) : List<TimeRecord> {
+    fun getRecords(widgetId: Int) : ArrayList<TimeRecord> {
         val recordsList = ArrayList<TimeRecord>()
         val widgetStart = "$widgetId:"
         val allPrefs = prefs.all
@@ -119,7 +120,26 @@ class TimeTracker(val context : Context) {
         return recordsMap
     }
 
-    class TimeRecord(val hour : Int, val minute : Int, val weekday : Boolean,  var count : Int = 1){
+    class TimeRecord(val hour : Int, val minute : Int, val weekday : Boolean,  var count : Int = 1) : Comparable<TimeRecord> {
+
+        override fun compareTo(other: TimeRecord): Int {
+            if (other.weekday && !weekday) {
+                return -1
+            }
+            if (!other.weekday && weekday) {
+                return 1
+            }
+            if (other.hour > hour) {
+                return -1
+            }
+            if (other.hour < hour) {
+                return 1
+            }
+            if (other.minute > minute) {
+                return -1
+            }
+            return 1
+        }
 
         override fun toString() : String {
             return "Record(h:$hour, m:$minute, wk:$weekday, c:$count)"

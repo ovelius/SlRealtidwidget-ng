@@ -226,7 +226,7 @@ class StandardWidgetProvider : AppWidgetProvider() {
         LOG.info("Widget $appWidgetId resize event cell $cells ")
         prefs.edit().putInt(widgetKeyLayout(appWidgetId), layout).apply()
 
-        sendWidgetUpdateBroadcast(context, appWidgetId)
+        sendWidgetUpdateBroadcast(context, appWidgetId, null)
 
         super.onAppWidgetOptionsChanged(context, appWidgetManager, appWidgetId, newOptions)
     }

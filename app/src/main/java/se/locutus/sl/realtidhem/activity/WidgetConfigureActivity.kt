@@ -76,7 +76,7 @@ class WidgetConfigureActivity : AppCompatActivity() {
 
     private fun showWidgetDialog() {
         for (widgetId in getAllWidgetIds(this)) {
-            sendWidgetUpdateBroadcast(this, widgetId)
+            sendWidgetUpdateBroadcast(this, widgetId, widgetConfig)
         }
         val url = "https://support.google.com/android/answer/2781850?hl=${Locale.getDefault().language}"
         val builder = AlertDialog.Builder(this)
@@ -176,7 +176,7 @@ class WidgetConfigureActivity : AppCompatActivity() {
         }
     }
 
-    fun getTimeRecords() : List<TimeTracker.TimeRecord> {
+    fun getTimeRecords() : ArrayList<TimeTracker.TimeRecord> {
         return timeTracker.getRecords(mAppWidgetId)
     }
 
@@ -278,7 +278,7 @@ class WidgetConfigureActivity : AppCompatActivity() {
     private fun finishSuccessFully() {
         LOG.info("Storing config for $mAppWidgetId")
         storeWidgetConfig(mWidgetPrefs, widgetConfig)
-        sendWidgetUpdateBroadcast(this, mAppWidgetId)
+        sendWidgetUpdateBroadcast(this, mAppWidgetId, widgetConfig)
         finishOk()
     }
 
