@@ -157,6 +157,12 @@ message UpdateSettings {
     ALWAYS_UPDATE_MODE = 2;
   }
   UpdateMode update_mode = 1;
+  // Always update mode
+  bool update_when_screen_on = 2;
+  int32 update_sequence_length = 3;
+  //  Self-learning mode
+  int32 interactions_to_learn = 4;
+  int32 learning_periods = 5;
 }
 
 message StoredStopData {
