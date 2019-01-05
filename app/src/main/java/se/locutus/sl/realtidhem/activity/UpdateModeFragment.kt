@@ -21,12 +21,18 @@ class UpdateModeFragment : androidx.fragment.app.Fragment() {
     private lateinit var updatePeriodList : ListView
     private lateinit var updateTextArray : Array<String>
 
+    private lateinit var alwaysUpdateSettings : View
+    private lateinit var selfLearningSettings : View
+
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val mainView = inflater.inflate(R.layout.content_update_mode, container, false)
         widgetConfigureActivity = activity as WidgetConfigureActivity
         spinner = mainView.findViewById(R.id.update_mode_spinner)
         updateModeHelpText = mainView.findViewById(R.id.update_mode_explain)
         updatePeriodList = mainView.findViewById(R.id.update_period_list_view)
+        alwaysUpdateSettings = mainView.findViewById(R.id.always_update_settings)
+        selfLearningSettings = mainView.findViewById(R.id.self_learning_settings)
         updatePeriodList.adapter = widgetConfigureActivity.adapter
         configureUpdateModeSpinner(mainView)
         updateTextArray = resources.getStringArray(R.array.update_mode_help)
@@ -61,10 +67,15 @@ class UpdateModeFragment : androidx.fragment.app.Fragment() {
              widgetConfigureActivity.widgetConfig = widgetConfigureActivity.widgetConfig.toBuilder()
                  .setUpdateSettings(updateSettings).build()
              if (position == Ng.UpdateSettings.UpdateMode.LEARNING_UPDATE_MODE_VALUE) {
-                 updatePeriodList.visibility = View.VISIBLE
+                 selfLearningSettings.visibility = View.VISIBLE
                  updateUpdatePeriod()
              } else {
-                 updatePeriodList.visibility = View.GONE
+                 selfLearningSettings.visibility = View.GONE
+             }
+             if (position == Ng.UpdateSettings.UpdateMode.ALWAYS_UPDATE_MODE_VALUE) {
+                 alwaysUpdateSettings.visibility = View.VISIBLE
+             } else {
+                 alwaysUpdateSettings.visibility = View.GONE
              }
              updateModeHelpText.text = updateTextArray[position]
 
