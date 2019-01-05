@@ -5,9 +5,11 @@ import android.content.Context
 import android.content.Intent
 import android.os.Looper
 import android.os.PowerManager
+import android.widget.TextView
 import androidx.test.core.app.ApplicationProvider
 import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.MatcherAssert.assertThat
+import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -27,6 +29,7 @@ import se.locutus.sl.realtidhem.widget.storeWidgetConfig
 
 @RunWith(RobolectricTestRunner::class)
 class BackgroundUpdaterTest {
+    private val TEST_UPDATE_PERIOD = 100L
     private lateinit var service : BackgroundUpdaterService
     private lateinit var shadow : ShadowService
     private val context = ApplicationProvider.getApplicationContext<android.app.Application>()
@@ -42,7 +45,7 @@ class BackgroundUpdaterTest {
         service.widgetTouchProvider = {
             touchHandler
         }
-        service.updateTimePeriodMillis = 100
+        service.updateTimePeriodMillis = TEST_UPDATE_PERIOD
         shadowAppWidgetManager = shadowOf(AppWidgetManager.getInstance(service))
         shadow = shadowOf(service)
     }
@@ -98,19 +101,32 @@ class BackgroundUpdaterTest {
         shadowPowerManager.setIsInteractive(true)
         service.onStartCommand(intent, 0 ,0)
         assertThat(service.hasAutoUpdatesRunning(), `is`(true))
-        shaowLooper.runOneTask()
 
-        assertThat(touchHandler.updateCount, `is`(0))
+        Thread.sleep(10)
+        shaowLooper.runOneTask()
+        assertThat(touchHandler.updateCount, `is`(1))
         // Send one more start command.
         service.onStartCommand(intent, 0 ,0)
         // Wait for things to run.
-        Thread.sleep(150)
+        Thread.sleep(20)
         // Run a couple of tasks.
         shaowLooper.runOneTask()
         shaowLooper.runOneTask()
-        shaowLooper.runOneTask()
-        // We made one update.
+        // We still only made one update.
         assertThat(touchHandler.updateCount, `is`(1))
+        // Wait one update period
+        Thread.sleep(TEST_UPDATE_PERIOD + 20)
+        shaowLooper.runOneTask()
+        assertThat(touchHandler.updateCount, `is`(2))
+        // Simulate timeout
+        service.selfLearningTimeouts[widgetId] = 0
+        Thread.sleep(TEST_UPDATE_PERIOD + 20)
+        shaowLooper.runOneTask()
+        shaowLooper.runOneTask()
+        // No additional updates.
+        assertThat(touchHandler.updateCount, `is`(2))
+        assertViewText(widgetId, R.id.widgetline1, R.string.idle_line1)
+        assertViewText(widgetId, R.id.widgetline2,  R.string.idle_line2)
     }
 
     private fun createUpdateSettings(mode : Ng.UpdateSettings.UpdateMode) : Ng.UpdateSettings {
@@ -125,6 +141,16 @@ class BackgroundUpdaterTest {
             .build()
         storeWidgetConfig(prefs, config)
         return widgetId
+    }
+
+    fun assertViewText(widgetId : Int, viewId : Int, expectedText : String) {
+        val view = shadowAppWidgetManager.getViewFor(widgetId)
+        val actualText = view.findViewById<TextView>(viewId).text
+        Assert.assertEquals(expectedText, actualText)
+    }
+
+    fun assertViewText(widgetId : Int, viewId : Int, text : Int) {
+        assertViewText(widgetId, viewId, context.getString(text))
     }
 
     //val context: Context, val networkManager : NetworkInterface, val retryMillis : Long = UPDATE_AUTO_RETRY_MILLIS

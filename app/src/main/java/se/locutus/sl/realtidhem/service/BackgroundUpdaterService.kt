@@ -6,6 +6,7 @@ import java.util.logging.Logger
 import android.content.*
 import android.graphics.Color
 import android.os.*
+import android.widget.RemoteViews
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import se.locutus.proto.Ng
@@ -33,7 +34,7 @@ class BackgroundUpdaterService : Service() {
     private lateinit var prefs : SharedPreferences
     private lateinit var powerManager : PowerManager
     private val autoUpdateSequenceEndTime = ConcurrentHashMap<Int, Long>()
-    private val selfLearningTimeouts = ConcurrentHashMap<Int, Long>()
+    internal val selfLearningTimeouts = ConcurrentHashMap<Int, Long>()
     private val widgetConfigs = ConcurrentHashMap<Int, Ng.WidgetConfiguration>()
 
     // These members are exposed for testing.
@@ -58,8 +59,13 @@ class BackgroundUpdaterService : Service() {
         if (intent?.hasExtra(AppWidgetManager.EXTRA_APPWIDGET_ID) == true) {
             // Typical case is a widget update intent alarm triggering.
             val id = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, 0)
+            val config = getConfigFor(id, true)
             LOG.info("Received extra widgetId $id")
-            selfLearningTimeouts[id] = System.currentTimeMillis() + UPDATE_TIME_MILLIS
+            if (config.updateSettings.updateMode == Ng.UpdateSettings.UpdateMode.LEARNING_UPDATE_MODE) {
+                selfLearningTimeouts[id] = System.currentTimeMillis() + UPDATE_TIME_MILLIS
+            } else if (config.updateSettings.updateMode == Ng.UpdateSettings.UpdateMode.ALWAYS_UPDATE_MODE) {
+                autoUpdateSequenceEndTime.remove(id)
+            }
         }
         val allWidgetIds = widgetIdProvider()
         LOG.info("Widget Ids ${allWidgetIds.toList()}")
@@ -149,11 +155,20 @@ class BackgroundUpdaterService : Service() {
     }
 
     private fun setStaleMessages(widgetId : Int, updateMode : Ng.UpdateSettings.UpdateMode) {
-
+        val alwaysUpdate = updateMode == Ng.UpdateSettings.UpdateMode.ALWAYS_UPDATE_MODE
+        val line1 = if (alwaysUpdate) getString(R.string.idle_line1_auto) else getString(R.string.idle_line1)
+        val line2 = if (alwaysUpdate) getString(R.string.idle_line2_auto) else getString(R.string.idle_line2)
+        val manager = AppWidgetManager.getInstance(this)
+        val views = RemoteViews(packageName, getWidgetLayoutId(prefs, widgetId))
+        views.setTextViewText(R.id.widgetline2,  line2)
+        views.setTextViewText(R.id.widgetline1, line1)
+        views.setTextViewText(R.id.widgetmin, "")
+        StandardWidgetProvider.setPendingIntents(this, views, widgetId, alwaysUpdate)
+        manager.updateAppWidget(widgetId, views)
     }
 
-    private fun getConfigFor(widgetId: Int) : Ng.WidgetConfiguration {
-        if (!widgetConfigs.containsKey(widgetId)) {
+    private fun getConfigFor(widgetId: Int, refresh: Boolean = false) : Ng.WidgetConfiguration {
+        if (!widgetConfigs.containsKey(widgetId) || refresh) {
             widgetConfigs[widgetId] = loadWidgetConfigOrDefault(prefs, widgetId)
         }
         return widgetConfigs[widgetId]!!
@@ -192,7 +207,7 @@ class BackgroundUpdaterService : Service() {
         // Clear automatic update timeouts.
         autoUpdateSequenceEndTime.clear()
         LOG.info("Scheduling automatic updates with $updateTimePeriodMillis millis period")
-        timer.schedule(timerTask, 50, updateTimePeriodMillis)
+        timer.schedule(timerTask, 0, updateTimePeriodMillis)
     }
 
     fun hasAutoUpdatesRunning() : Boolean {
@@ -204,6 +219,14 @@ class BackgroundUpdaterService : Service() {
         if (timerTask != null) {
             timerTask!!.cancel()
             timerTask = null
+        }
+        for (widgetId in widgetIdProvider()) {
+            val config = getConfigFor(widgetId)
+            val updateMode = config.updateSettings.updateMode
+            if (updateMode == Ng.UpdateSettings.UpdateMode.ALWAYS_UPDATE_MODE) {
+                // Set something else here.
+                setStaleMessages(widgetId, updateMode)
+            }
         }
     }
 
