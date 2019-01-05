@@ -95,6 +95,10 @@
     <string name="import_settings_btn_cancel">Cancel</string>
     <string name="failed_config">Invalid config string</string>
     <string name="loaded_config">Loaded config with %1$d stops</string>
+    <string name="update_mode_tab">Widget settings</string>
+    <string name="stop_list_tab">Stops to load</string>
+    <string name="idle_line1_auto">Touch to start</string>
+    <string name="idle_line2_auto">update sequence</string>
     <string-array name="update_mode_array">
         <item>Self-learning</item>
         <item>Manual</item>

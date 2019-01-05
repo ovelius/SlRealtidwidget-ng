@@ -84,7 +84,7 @@ class WidgetTouchHandler(val context: Context, val networkManager : NetworkInter
         if (inMemoryState.sinceLastUpdate(widgetId) > STALE_MILLIS) {
             if (inMemoryState.sinceUpdateStarted(widgetId) > UPDATE_RETRY_MILLIS) {
                 LOG.info("Triggering update for config for widget $widgetId")
-                loadWidgetData(widgetId, manager, widgetConfig.getStopConfiguration(selectedStopIndex), 1)
+                loadWidgetData(widgetId, manager, widgetConfig.getStopConfiguration(selectedStopIndex), 1, userTouch)
                 // Only record if this was an update from a users interaction.
                 if (userTouch) {
                     timeTracker.record(widgetId)
@@ -201,7 +201,7 @@ class WidgetTouchHandler(val context: Context, val networkManager : NetworkInter
 
     }
 
-    fun loadWidgetData(widgetId :  Int, manager : AppWidgetManager, stopConfig : Ng.StopConfiguration, attempt : Int) {
+    fun loadWidgetData(widgetId :  Int, manager : AppWidgetManager, stopConfig : Ng.StopConfiguration, attempt : Int, userTouch : Boolean) {
         inMemoryState.disposeScroller(widgetId)
         inMemoryState.updateStartedAt[widgetId] = System.currentTimeMillis()
         // Create new views here to make sure we don't overfill the previous views with actions.
@@ -220,7 +220,7 @@ class WidgetTouchHandler(val context: Context, val networkManager : NetworkInter
         val requestId = networkManager.doStopDataRequest(stopDataRequest) {
                 incomingRequestId : Int, responseData: Ng.ResponseData, e: Exception? ->
             LOG.info("Got response in ${System.currentTimeMillis() - time} ms")
-            handleLoadResponse(views, widgetId, incomingRequestId, responseData, e, stopConfig)
+            handleLoadResponse(views, widgetId, incomingRequestId, responseData, e, stopConfig, userTouch)
         }
         inMemoryState.currentRequestId[widgetId] = requestId
 
@@ -228,13 +228,13 @@ class WidgetTouchHandler(val context: Context, val networkManager : NetworkInter
             mainHandler.postDelayed({
                 if (inMemoryState.shouldRetry(widgetId, retryMillis)) {
                     LOG.info("retrying update...")
-                    loadWidgetData(widgetId, manager, stopConfig , attempt + 1)
+                    loadWidgetData(widgetId, manager, stopConfig , attempt + 1, userTouch)
                 }
             }, retryMillis * attempt)
         }
     }
 
-    fun handleLoadResponse(views : RemoteViews, widgetId : Int, incomingRequestId : Int, responseData: Ng.ResponseData, e: Exception?, stopConfig : Ng.StopConfiguration) {
+    fun handleLoadResponse(views : RemoteViews, widgetId : Int, incomingRequestId : Int, responseData: Ng.ResponseData, e: Exception?, stopConfig : Ng.StopConfiguration, userTouch : Boolean) {
         val currentRequestId = inMemoryState.currentRequestId[widgetId]
         if (currentRequestId != null && incomingRequestId != currentRequestId) {
             LOG.info("Not handling network response due to requestId mismatch got $incomingRequestId wanted $currentRequestId")
@@ -271,7 +271,9 @@ class WidgetTouchHandler(val context: Context, val networkManager : NetworkInter
             }
         }
         manager.updateAppWidget(widgetId, views)
-        scheduleWidgetClearing(context, widgetId)
+        if (userTouch) {
+            scheduleWidgetClearing(context, widgetId)
+        }
     }
 
     private fun handleError(views : RemoteViews, widgetId: Int, e : Ng.LoadErrorResponse) {
