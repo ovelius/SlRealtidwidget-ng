@@ -22,6 +22,7 @@ import se.locutus.sl.realtidhem.activity.WIDGET_CONFIG_PREFS
 import se.locutus.sl.realtidhem.events.CYCLE_STOP_LEFT
 import se.locutus.sl.realtidhem.events.CYCLE_STOP_RIGHT
 import se.locutus.sl.realtidhem.events.WidgetBroadcastReceiver
+import se.locutus.sl.realtidhem.service.BackgroundUpdaterService
 import se.locutus.sl.realtidhem.service.TimeTracker
 
 
@@ -32,20 +33,24 @@ import se.locutus.sl.realtidhem.service.TimeTracker
 class StandardWidgetProvider : AppWidgetProvider() {
     companion object {
         val LOG = Logger.getLogger(StandardWidgetProvider::class.java.name)
-        fun basePendingIntent(context: Context, widgetId : Int, action : String? = null) : PendingIntent {
-            val intent = Intent(context, WidgetBroadcastReceiver::class.java).apply {
+        fun basePendingIntent(context: Context, widgetId : Int, action : String?, targetService: Boolean) : PendingIntent {
+            val target = if (targetService) BackgroundUpdaterService::class.java else WidgetBroadcastReceiver::class.java
+            val intent = Intent(context, target).apply {
                 putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId)
             }
             if (action != null) {
                 intent.action = action
             }
+            if (targetService) {
+                return PendingIntent.getService(context, widgetId, intent, PendingIntent.FLAG_UPDATE_CURRENT)
+            }
             return PendingIntent.getBroadcast(context, widgetId, intent, PendingIntent.FLAG_UPDATE_CURRENT)
         }
 
-        fun setPendingIntents(context: Context, views : RemoteViews, widgetId : Int) {
-            val pendingIntent = basePendingIntent(context, widgetId)
-            val leftPendingIntent = basePendingIntent(context, widgetId, CYCLE_STOP_LEFT)
-            val rightPendingIntent = basePendingIntent(context, widgetId, CYCLE_STOP_RIGHT)
+        fun setPendingIntents(context: Context, views : RemoteViews, widgetId : Int, targetService: Boolean) {
+            val pendingIntent = basePendingIntent(context, widgetId, null, targetService)
+            val leftPendingIntent = basePendingIntent(context, widgetId, CYCLE_STOP_LEFT, targetService)
+            val rightPendingIntent = basePendingIntent(context, widgetId, CYCLE_STOP_RIGHT, targetService)
             views.setOnClickPendingIntent(R.id.widgetmain, pendingIntent)
             views.setOnClickPendingIntent(R.id.larrow, leftPendingIntent)
             views.setOnClickPendingIntent(R.id.rarrow, rightPendingIntent)
@@ -160,7 +165,7 @@ class StandardWidgetProvider : AppWidgetProvider() {
             if (validConfig) {
                 val stopConfig = widgetConfig.getStopConfiguration(selectedStopIndex)
                 updateColors(context, views, stopConfig.themeData.colorConfig)
-                setPendingIntents(context, views, appWidgetId)
+                setPendingIntents(context, views, appWidgetId, false)
             } else {
                 LOG.warning("Received update request for widget without configuration $appWidgetId")
             }

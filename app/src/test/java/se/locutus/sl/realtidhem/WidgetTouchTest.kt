@@ -139,7 +139,7 @@ class WidgetTouchTest {
         touchHandler.configUpdated(widgetId, false)
         assertThat(prefs.getInt(widgetKeySelectedStop(widgetId), 0), `is`(0))
         assertViewText(widgetId, R.id.widgetline1, R.string.idle_line1)
-        assertViewText(widgetId, R.id.widgetline1, R.string.idle_line1)
+        assertViewText(widgetId, R.id.widgetline2, R.string.idle_line2)
         assertViewText(widgetId, R.id.widgettag,  "Stop1")
 
         touchHandler.widgetTouched(widgetId, CYCLE_STOP_RIGHT)

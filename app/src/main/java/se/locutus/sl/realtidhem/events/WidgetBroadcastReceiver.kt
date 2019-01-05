@@ -70,7 +70,7 @@ class ResetWidget : JobService() {
         views.setTextViewText(R.id.widgetline2,  getString(R.string.idle_line2))
         views.setTextViewText(R.id.widgetline1, getString(R.string.idle_line1))
         views.setTextViewText(R.id.widgetmin, "")
-        setPendingIntents(this, views, widgetId)
+        setPendingIntents(this, views, widgetId, false)
         manager.updateAppWidget(widgetId, views)
         return false
     }
