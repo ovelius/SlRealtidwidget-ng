@@ -1,5 +1,5 @@
 <resources>
-    <dimen name="fab_margin">20dp</dimen>
+    <dimen name="fab_margin">32dp</dimen>
     <dimen name="margin_search">16dp</dimen>
     <dimen name="color_margin">32dp</dimen>
     <dimen name="theme_color_size">64dp</dimen>

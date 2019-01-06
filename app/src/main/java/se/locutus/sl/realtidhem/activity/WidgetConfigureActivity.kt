@@ -7,6 +7,7 @@ import android.appwidget.AppWidgetManager
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
+import android.content.res.ColorStateList
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Bundle
@@ -170,6 +171,9 @@ class WidgetConfigureActivity : AppCompatActivity() {
                 }
             }
             startActivityForResult(addIntent, ADD_STOP_REQUEST_CODE)
+        }
+        if (color != null) {
+            add_stop_button.backgroundTintList= ColorStateList.valueOf(color!!)
         }
 
         if (ContextCompat.checkSelfPermission(this,

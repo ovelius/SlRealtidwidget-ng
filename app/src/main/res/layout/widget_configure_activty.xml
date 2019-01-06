@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <ViewSwitcher
-        android:id="@+id/viewSwitcher1"
+        xmlns:app="http://schemas.android.com/apk/res-auto" android:id="@+id/viewSwitcher1"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:inAnimation="@android:anim/slide_in_left" xmlns:android="http://schemas.android.com/apk/res/android">
@@ -67,10 +67,12 @@
     <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/add_stop_button"
             android:layout_width="wrap_content"
+            style="@style/Widget.AppCompat.Button.Colored"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|end"
             android:layout_margin="@dimen/fab_margin"
-            app:srcCompat="@android:drawable/ic_menu_add"/>
+            app:srcCompat="@android:drawable/ic_menu_add"
+            app:backgroundTint="@color/colorPrimary"/>
 
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
