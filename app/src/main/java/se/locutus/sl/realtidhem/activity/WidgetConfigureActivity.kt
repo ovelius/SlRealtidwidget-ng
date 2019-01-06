@@ -139,10 +139,8 @@ class WidgetConfigureActivity : AppCompatActivity() {
            setColor(this, null, color!!)
         }
         isNewWidget = !intent.getBooleanExtra(EXTRA_RECONFIGURE_WIDGET, false)
-        if (!isNewWidget) {
-            supportActionBar!!.setDisplayHomeAsUpEnabled(true)
-            supportActionBar!!.setDisplayShowHomeEnabled(true)
-        }
+        supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+        supportActionBar!!.setDisplayShowHomeEnabled(true)
 
         if (bundle?.containsKey(WIDGET_CONFIG_DATA_KEY) == true) {
             widgetConfig = WidgetConfiguration.parseFrom(bundle.getByteArray(WIDGET_CONFIG_DATA_KEY))
@@ -289,10 +287,6 @@ class WidgetConfigureActivity : AppCompatActivity() {
         menuInflater.inflate(R.menu.widget_config_action_bar_menu, menu)
         menu.findItem(R.id.export_btn).isVisible = widgetConfig.stopConfigurationCount != 0
         menu.findItem(R.id.import_btn).isVisible = widgetConfig.stopConfigurationCount == 0
-        menu.findItem(R.id.save_widget_action).isVisible = isNewWidget
-        menu.findItem(R.id.save_widget_action).setOnMenuItemClickListener { _ ->
-            onSupportNavigateUp()
-        }
         menu.findItem(R.id.about_btn).setOnMenuItemClickListener {_ ->
             setTextVersion(findViewById(R.id.version_text))
             viewSwitcher.showNext()
