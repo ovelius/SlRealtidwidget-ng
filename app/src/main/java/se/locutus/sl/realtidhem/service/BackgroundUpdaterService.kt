@@ -72,7 +72,7 @@ class BackgroundUpdaterService : Service() {
         var updateAny = false
         for (widgetId in allWidgetIds) {
             val config = getConfigFor(widgetId)
-            if (shouldUpdate(widgetId, config.updateSettings.updateMode)) {
+            if (shouldUpdate(widgetId, config.updateSettings)) {
                 updateAny = true
             }
         }
@@ -137,7 +137,7 @@ class BackgroundUpdaterService : Service() {
             if (updateMode == Ng.UpdateSettings.UpdateMode.ALWAYS_UPDATE_MODE) {
                 hasAlwaysUpdateWidget = true
             }
-            if (shouldUpdate(widgetId, updateMode)) {
+            if (shouldUpdate(widgetId, config.updateSettings)) {
                 LOG.info("Automatic update of widget $widgetId")
                 touchHandler.widgetTouched(widgetId, "", false)
                 updatedAnyWidget = true
@@ -174,7 +174,8 @@ class BackgroundUpdaterService : Service() {
         return widgetConfigs[widgetId]!!
     }
 
-    private fun shouldUpdate(widgetId : Int, updateMode : Ng.UpdateSettings.UpdateMode) : Boolean {
+    private fun shouldUpdate(widgetId : Int, updateSettings : Ng.UpdateSettings) : Boolean {
+        val updateMode = updateSettings.updateMode
         if (updateMode == Ng.UpdateSettings.UpdateMode.MANUAL_UPDATE_MODE) {
             return false
         }
@@ -185,8 +186,7 @@ class BackgroundUpdaterService : Service() {
         if (updateMode == Ng.UpdateSettings.UpdateMode.ALWAYS_UPDATE_MODE) {
             if (!autoUpdateSequenceEndTime.containsKey(widgetId)) {
                 autoUpdateSequenceEndTime[widgetId] =
-                        // TODO: Make configureable.
-                        System.currentTimeMillis() + DEFAULT_ALWAYS_UPDATE_TIMEOUT_MILLIS
+                        System.currentTimeMillis() + updateSettings.updateSequenceLength * 60 * 1000L
             }
             return System.currentTimeMillis() <= autoUpdateSequenceEndTime[widgetId]!!
         }
