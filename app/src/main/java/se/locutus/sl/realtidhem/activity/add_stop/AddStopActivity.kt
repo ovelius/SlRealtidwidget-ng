@@ -163,6 +163,10 @@ class AddStopActivity : AppCompatActivity() {
             }.show()
     }
 
+    fun hasLoadedDeparturesFor(siteId : Int) : Boolean {
+        return allDeparturesResponse?.stopData?.siteId == siteId.toLong()
+    }
+
     fun loadDepsFor (siteId : Int) {
         val request = Ng.StopDataRequest.newBuilder()
             .setSiteId(siteId.toLong())

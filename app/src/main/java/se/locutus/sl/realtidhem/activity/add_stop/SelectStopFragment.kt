@@ -125,6 +125,10 @@ class SelectStopFragment : androidx.fragment.app.Fragment() {
                     LOG.info("Selected $p $siteId")
                     hideKeyboard()
                     setGreenBg(mAutoCompleteTextView)
+                    if (addStopActivity.hasLoadedDeparturesFor(siteId)) {
+                        LOG.info("Departures already loaded")
+                        return
+                    }
                     if (p!!.contains("(")) {
                         displayNameText.setText(p.substring(0, p.indexOf("(") - 1), TextView.BufferType.EDITABLE)
                     } else {
