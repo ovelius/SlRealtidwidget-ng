@@ -1,15 +1,20 @@
 package se.locutus.sl.realtidhem.activity
 
-import android.content.Intent
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import se.locutus.proto.Ng
 import se.locutus.sl.realtidhem.R
-import se.locutus.sl.realtidhem.service.BackgroundUpdaterService
 import java.util.logging.Logger
+
+const val MAX_UPDATE_PERIOD = 100000000
+const val DEFAULT_UPDATE_PERIOD = 4
+const val DEFAULT_LEARNING_PERIODS = 6
+const val DEFAULT_INTERACTIONS_TO_LEARN = 4
 
 class UpdateModeFragment : androidx.fragment.app.Fragment() {
     companion object {
@@ -24,19 +29,113 @@ class UpdateModeFragment : androidx.fragment.app.Fragment() {
     private lateinit var alwaysUpdateSettings : View
     private lateinit var selfLearningSettings : View
 
+    private lateinit var updateOnUnlock : CheckBox
+    private lateinit var updateForever : CheckBox
+    private lateinit var updateSequenceLength : EditText
+
+    private lateinit var learnPeriodCount : EditText
+    private lateinit var interactionsToLearn : EditText
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val mainView = inflater.inflate(R.layout.content_update_mode, container, false)
         widgetConfigureActivity = activity as WidgetConfigureActivity
+        val updateSettings = widgetConfigureActivity.widgetConfig.updateSettings
         spinner = mainView.findViewById(R.id.update_mode_spinner)
         updateModeHelpText = mainView.findViewById(R.id.update_mode_explain)
         updatePeriodList = mainView.findViewById(R.id.update_period_list_view)
         alwaysUpdateSettings = mainView.findViewById(R.id.always_update_settings)
         selfLearningSettings = mainView.findViewById(R.id.self_learning_settings)
+        updateOnUnlock = mainView.findViewById(R.id.checkbox_screen_on)
+        learnPeriodCount = mainView.findViewById(R.id.self_update_period_count)
+        interactionsToLearn = mainView.findViewById(R.id.self_update_period_threshold)
+        updateSequenceLength = mainView.findViewById(R.id.update_sequence_length)
+        updateOnUnlock.isChecked = updateSettings.updateWhenScreenOn
+        updateOnUnlock.setOnCheckedChangeListener { _, isChecked ->
+            val updateSettings = widgetConfigureActivity.widgetConfig.updateSettings.toBuilder()
+            updateSettings.updateWhenScreenOn = isChecked
+            widgetConfigureActivity.widgetConfig = widgetConfigureActivity.widgetConfig.toBuilder()
+                .setUpdateSettings(updateSettings).build()
+        }
+        updateForever = mainView.findViewById(R.id.checkbox_update_forever)
+        if (updateSettings.updateSequenceLength >= MAX_UPDATE_PERIOD) {
+            updateForever.isChecked = true
+            updateSequenceLength.isEnabled = false
+            updateSequenceLength.setText(DEFAULT_UPDATE_PERIOD.toString(), TextView.BufferType.EDITABLE)
+        } else {
+            updateForever.isChecked = false
+            updateSequenceLength.isEnabled = true
+            if (updateSettings.updateSequenceLength == 0) {
+                updateSequenceLength.setText(
+                    updateSettings.updateSequenceLength.toString(),
+                    TextView.BufferType.EDITABLE
+                )
+            } else {
+                updateSequenceLength.setText(
+                    DEFAULT_UPDATE_PERIOD.toString(),
+                    TextView.BufferType.EDITABLE
+                )
+            }
+        }
+        updateForever.setOnCheckedChangeListener { _, isChecked ->
+            refreshUpdatePeriod(isChecked)
+        }
+        updateSequenceLength.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(p0: Editable?) {}
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
+            override fun onTextChanged(p: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                if (!p.isNullOrBlank()) {
+                  refreshUpdatePeriod(updateForever.isChecked)
+                }
+            }})
         updatePeriodList.adapter = widgetConfigureActivity.adapter
         configureUpdateModeSpinner(mainView)
         updateTextArray = resources.getStringArray(R.array.update_mode_help)
+        if (updateSettings.learningPeriods == 0) {
+            learnPeriodCount.setText(DEFAULT_LEARNING_PERIODS.toString(), TextView.BufferType.EDITABLE)
+        } else {
+            learnPeriodCount.setText(updateSettings.learningPeriods.toString(), TextView.BufferType.EDITABLE)
+        }
+        learnPeriodCount.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(p0: Editable?) {}
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
+            override fun onTextChanged(p: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                if (!p.isNullOrBlank()) {
+                    val updateSettings = widgetConfigureActivity.widgetConfig.updateSettings.toBuilder()
+                    updateSettings.learningPeriods = Integer.parseInt(p.toString())
+                    widgetConfigureActivity.widgetConfig = widgetConfigureActivity.widgetConfig.toBuilder()
+                        .setUpdateSettings(updateSettings).build()
+                }
+            }})
+        if (updateSettings.interactionsToLearn == 0) {
+            interactionsToLearn.setText(DEFAULT_INTERACTIONS_TO_LEARN, TextView.BufferType.EDITABLE)
+        } else {
+            interactionsToLearn.setText(updateSettings.interactionsToLearn.toString(), TextView.BufferType.EDITABLE)
+        }
+        interactionsToLearn.addTextChangedListener(object : TextWatcher {
+                override fun afterTextChanged(p0: Editable?) {}
+                override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
+                override fun onTextChanged(p: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                    if (!p.isNullOrBlank()) {
+                        val updateSettings = widgetConfigureActivity.widgetConfig.updateSettings.toBuilder()
+                        updateSettings.interactionsToLearn = Integer.parseInt(p.toString())
+                        widgetConfigureActivity.widgetConfig = widgetConfigureActivity.widgetConfig.toBuilder()
+                            .setUpdateSettings(updateSettings).build()
+                    }
+                }})
         return mainView
+    }
+
+    private fun refreshUpdatePeriod(isChecked : Boolean) {
+        val updateSettings = widgetConfigureActivity.widgetConfig.updateSettings.toBuilder()
+        if (isChecked) {
+            updateSettings.updateSequenceLength = MAX_UPDATE_PERIOD
+            updateSequenceLength.isEnabled = false
+        } else {
+            updateSettings.updateSequenceLength = Integer.parseInt(updateSequenceLength.text.toString())
+            updateSequenceLength.isEnabled = true
+        }
+        widgetConfigureActivity.widgetConfig = widgetConfigureActivity.widgetConfig.toBuilder()
+            .setUpdateSettings(updateSettings).build()
     }
 
     private fun updateUpdatePeriod() {
