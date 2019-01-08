@@ -80,7 +80,7 @@ class TimeTrackerTest {
         tracker.recordUpdate(widgetId, c)
         tracker.compactRecords(widgetId)
 
-        val records = tracker.getRecords(widgetId)
+        val records = tracker.getRecords(widgetId, 0)
         assertEquals(1, records.size)
         assertEquals(TimeTracker.TimeRecord(21, 10, false, 2), records[0])
     }

@@ -9,6 +9,8 @@ import android.view.ViewGroup
 import android.widget.*
 import se.locutus.proto.Ng
 import se.locutus.sl.realtidhem.R
+import se.locutus.sl.realtidhem.service.TimeTracker
+import se.locutus.sl.realtidhem.service.sortRecordsByTimeAndCutoff
 import java.util.logging.Logger
 
 const val MAX_UPDATE_PERIOD = 100000000
@@ -104,10 +106,11 @@ class UpdateModeFragment : androidx.fragment.app.Fragment() {
                     updateSettings.learningPeriods = Integer.parseInt(p.toString())
                     widgetConfigureActivity.widgetConfig = widgetConfigureActivity.widgetConfig.toBuilder()
                         .setUpdateSettings(updateSettings).build()
+                    updateUpdatePeriod()
                 }
             }})
         if (updateSettings.interactionsToLearn == 0) {
-            interactionsToLearn.setText(DEFAULT_INTERACTIONS_TO_LEARN, TextView.BufferType.EDITABLE)
+            interactionsToLearn.setText(DEFAULT_INTERACTIONS_TO_LEARN.toString(), TextView.BufferType.EDITABLE)
         } else {
             interactionsToLearn.setText(updateSettings.interactionsToLearn.toString(), TextView.BufferType.EDITABLE)
         }
@@ -120,6 +123,7 @@ class UpdateModeFragment : androidx.fragment.app.Fragment() {
                         updateSettings.interactionsToLearn = Integer.parseInt(p.toString())
                         widgetConfigureActivity.widgetConfig = widgetConfigureActivity.widgetConfig.toBuilder()
                             .setUpdateSettings(updateSettings).build()
+                        updateUpdatePeriod()
                     }
                 }})
         return mainView
@@ -141,10 +145,14 @@ class UpdateModeFragment : androidx.fragment.app.Fragment() {
     private fun updateUpdatePeriod() {
         widgetConfigureActivity.adapter.clear()
         val records = widgetConfigureActivity.getTimeRecords()
-        records.sort()
-        for (record in records) {
-            if (record.count > 2) {
-                widgetConfigureActivity.adapter.add("${record.hour}:${record.minute} -wk ${record.weekday} ${record.count}")
+        val updateSettings = widgetConfigureActivity.widgetConfig.updateSettings
+        val sortedRecords = sortRecordsByTimeAndCutoff(records, updateSettings.interactionsToLearn)
+        var added = 0
+        for (record in sortedRecords) {
+            widgetConfigureActivity.adapter.add("${record.hour}:${record.minute} -wk ${record.weekday} ${record.count}")
+            added++
+            if (added >= updateSettings.learningPeriods) {
+                break
             }
         }
         widgetConfigureActivity.adapter.notifyDataSetChanged()

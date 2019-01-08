@@ -9,6 +9,8 @@
                 android:id="@+id/update_mode_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:textSize="@dimen/main_text_size"
+                android:layout_margin="@dimen/margin_search"
                 android:text="@string/update_mode"
         />
         <Spinner
@@ -51,6 +53,7 @@
                 <EditText
                         android:id="@+id/update_sequence_length"
                         android:layout_width="match_parent"
+                        android:layout_margin="@dimen/margin_search"
                         android:inputType="numberSigned"
                         android:layout_height="wrap_content"
                 />
@@ -65,6 +68,7 @@
                 <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/margin_search"
                         android:text="@string/self_learning_periods"
                         android:layout_marginBottom="4dp"/>
 
@@ -72,11 +76,13 @@
                         android:id="@+id/self_update_period_count"
                         android:layout_width="match_parent"
                         android:inputType="numberSigned"
+                        android:layout_margin="@dimen/margin_search"
                         android:layout_height="wrap_content"
                 />
                 <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/margin_search"
                         android:text="@string/self_learning_threshold"
                         android:layout_marginBottom="4dp"/>
 

@@ -1,15 +1,28 @@
 package se.locutus.sl.realtidhem.service
 
-import android.app.AlarmManager
 import android.content.Context
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
-import kotlin.math.min
 
 const val TIME_PREFS = "time_prefs"
 // Each timeslot will keep the widget updated for 15 minutes.
 const val UPDATE_TIME_MILLIS = 60 * 15 * 1000
+
+
+fun sortRecordsByTimeAndCutoff(records : ArrayList<TimeTracker.TimeRecord> , countCutoff : Int) : ArrayList<TimeTracker.TimeRecord> {
+    records.sortWith(Comparator { o1, o2 ->
+        o2.count - o1.count
+    })
+    val filteredRecords = ArrayList<TimeTracker.TimeRecord>()
+    for (record in records) {
+        if (record.count >= countCutoff) {
+            filteredRecords.add(record)
+        }
+    }
+    filteredRecords.sort()
+    return filteredRecords
+}
 
 /**
  * Helper class for finding/scheduling automatic updates for the widget.
@@ -52,7 +65,7 @@ class TimeTracker(val context : Context) {
         }
     }
 
-    fun getRecords(widgetId: Int) : ArrayList<TimeRecord> {
+    fun getRecords(widgetId: Int, cutoffCount : Int) : ArrayList<TimeRecord> {
         val recordsList = ArrayList<TimeRecord>()
         val widgetStart = "$widgetId:"
         val allPrefs = prefs.all
@@ -65,7 +78,9 @@ class TimeTracker(val context : Context) {
                     val hour = split[3].toInt()
                     val min = split[4].toInt()
                     val count = prefs.getInt(key, 0)
-                    recordsList.add(TimeRecord(hour, min, weekDay, count))
+                    if (count >= cutoffCount) {
+                        recordsList.add(TimeRecord(hour, min, weekDay, count))
+                    }
                 }
             }
         }
@@ -121,7 +136,6 @@ class TimeTracker(val context : Context) {
     }
 
     class TimeRecord(val hour : Int, val minute : Int, val weekday : Boolean,  var count : Int = 1) : Comparable<TimeRecord> {
-
         override fun compareTo(other: TimeRecord): Int {
             if (other.weekday && !weekday) {
                 return -1

@@ -176,7 +176,7 @@ class WidgetConfigureActivity : AppCompatActivity() {
     }
 
     fun getTimeRecords() : ArrayList<TimeTracker.TimeRecord> {
-        return timeTracker.getRecords(mAppWidgetId)
+        return timeTracker.getRecords(mAppWidgetId, 0)
     }
 
     override fun onSaveInstanceState(outState: Bundle?) {
