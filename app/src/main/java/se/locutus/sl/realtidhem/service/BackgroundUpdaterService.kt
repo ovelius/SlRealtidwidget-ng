@@ -56,14 +56,17 @@ class BackgroundUpdaterService : Service() {
             }
 
         LOG.info("Received intent $intent")
+        var updateString : String? = null
         if (intent?.hasExtra(AppWidgetManager.EXTRA_APPWIDGET_ID) == true) {
             // Typical case is a widget update intent alarm triggering.
             val id = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, 0)
             val config = getConfigFor(id, true)
-            LOG.info("Received extra widgetId $id")
             if (config.updateSettings.updateMode == Ng.UpdateSettings.UpdateMode.LEARNING_UPDATE_MODE) {
+                LOG.info("Received extra widgetId $id for learning widget")
+                updateString = "Learning widget $id"
                 selfLearningTimeouts[id] = System.currentTimeMillis() + UPDATE_TIME_MILLIS
             } else if (config.updateSettings.updateMode == Ng.UpdateSettings.UpdateMode.ALWAYS_UPDATE_MODE) {
+                LOG.info("Received extra widgetId $id for auto update widget")
                 autoUpdateSequenceEndTime.remove(id)
             }
         }
@@ -87,7 +90,7 @@ class BackgroundUpdaterService : Service() {
             startAutoUpdateSequence()
         }
 
-        createForeGroundNotification(channelId)
+        createForeGroundNotification(channelId, updateString)
 
         return START_STICKY
     }
@@ -103,7 +106,7 @@ class BackgroundUpdaterService : Service() {
         return channelId
     }
 
-    private fun createForeGroundNotification(channelId : String ) {
+    private fun createForeGroundNotification(channelId : String, contentText : String?) {
         val disableI = Intent(this, BackgroundUpdaterService::class.java).apply { action = "test" }
         val pdisable = PendingIntent.getService(
             this, 0,
@@ -116,15 +119,17 @@ class BackgroundUpdaterService : Service() {
             enableI, 0
         )
 
-        val notification = NotificationCompat.Builder(this, channelId)
+        val builder = NotificationCompat.Builder(this, channelId)
             .setSmallIcon(R.mipmap.ic_launcher)
             .addAction(R.mipmap.ic_launcher, "Disable", pdisable)
             .addAction(R.mipmap.ic_launcher, "Enable", penable)
             .setContentTitle(getString(R.string.auto_updates_running))
             // .setContentIntent(pendingIntent)
-            .build()
+        if (contentText != null) {
+            builder.setContentText(contentText)
+        }
 
-        startForeground(SERVICE_NOTIFICATION_ID, notification)
+        startForeground(SERVICE_NOTIFICATION_ID, builder.build())
     }
 
     private fun updateOnce() {
@@ -138,7 +143,7 @@ class BackgroundUpdaterService : Service() {
                 hasAlwaysUpdateWidget = true
             }
             if (shouldUpdate(widgetId, config.updateSettings)) {
-                LOG.info("Automatic update of widget $widgetId")
+                LOG.info("Update of widget $widgetId with type ${config.updateSettings.updateMode}")
                 touchHandler.widgetTouched(widgetId, "", false)
                 updatedAnyWidget = true
             } else {

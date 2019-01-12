@@ -18,6 +18,27 @@ const val DEFAULT_UPDATE_PERIOD = 4
 const val DEFAULT_LEARNING_PERIODS = 6
 const val DEFAULT_INTERACTIONS_TO_LEARN = 4
 
+fun getInteractionsToLearn(updateSettings : Ng.UpdateSettings) : Int {
+    if (updateSettings.interactionsToLearn <= 0) {
+        return DEFAULT_INTERACTIONS_TO_LEARN
+    }
+    return updateSettings.interactionsToLearn
+}
+
+fun getLearningPeriods(updateSettings : Ng.UpdateSettings) : Int {
+    if (updateSettings.learningPeriods <= 0) {
+        return DEFAULT_LEARNING_PERIODS
+    }
+    return updateSettings.learningPeriods
+}
+
+fun getUpdateSequenceLength(updateSettings: Ng.UpdateSettings) : Int {
+    if (updateSettings.updateSequenceLength <= 0) {
+        return DEFAULT_UPDATE_PERIOD
+    }
+    return updateSettings.updateSequenceLength
+}
+
 class UpdateModeFragment : androidx.fragment.app.Fragment() {
     companion object {
         val LOG = Logger.getLogger(UpdateModeFragment::class.java.name)
@@ -66,17 +87,7 @@ class UpdateModeFragment : androidx.fragment.app.Fragment() {
         } else {
             updateForever.isChecked = false
             updateSequenceLength.isEnabled = true
-            if (updateSettings.updateSequenceLength == 0) {
-                updateSequenceLength.setText(
-                    updateSettings.updateSequenceLength.toString(),
-                    TextView.BufferType.EDITABLE
-                )
-            } else {
-                updateSequenceLength.setText(
-                    DEFAULT_UPDATE_PERIOD.toString(),
-                    TextView.BufferType.EDITABLE
-                )
-            }
+            updateSequenceLength.setText(getUpdateSequenceLength(updateSettings).toString(), TextView.BufferType.EDITABLE)
         }
         updateForever.setOnCheckedChangeListener { _, isChecked ->
             refreshUpdatePeriod(isChecked)
@@ -92,11 +103,7 @@ class UpdateModeFragment : androidx.fragment.app.Fragment() {
         updatePeriodList.adapter = widgetConfigureActivity.adapter
         configureUpdateModeSpinner(mainView)
         updateTextArray = resources.getStringArray(R.array.update_mode_help)
-        if (updateSettings.learningPeriods == 0) {
-            learnPeriodCount.setText(DEFAULT_LEARNING_PERIODS.toString(), TextView.BufferType.EDITABLE)
-        } else {
-            learnPeriodCount.setText(updateSettings.learningPeriods.toString(), TextView.BufferType.EDITABLE)
-        }
+        learnPeriodCount.setText(getLearningPeriods(updateSettings).toString(), TextView.BufferType.EDITABLE)
         learnPeriodCount.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(p0: Editable?) {}
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
@@ -109,11 +116,7 @@ class UpdateModeFragment : androidx.fragment.app.Fragment() {
                     updateUpdatePeriod()
                 }
             }})
-        if (updateSettings.interactionsToLearn == 0) {
-            interactionsToLearn.setText(DEFAULT_INTERACTIONS_TO_LEARN.toString(), TextView.BufferType.EDITABLE)
-        } else {
-            interactionsToLearn.setText(updateSettings.interactionsToLearn.toString(), TextView.BufferType.EDITABLE)
-        }
+        interactionsToLearn.setText(getInteractionsToLearn(updateSettings).toString(), TextView.BufferType.EDITABLE)
         interactionsToLearn.addTextChangedListener(object : TextWatcher {
                 override fun afterTextChanged(p0: Editable?) {}
                 override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
@@ -146,12 +149,10 @@ class UpdateModeFragment : androidx.fragment.app.Fragment() {
         widgetConfigureActivity.adapter.clear()
         val records = widgetConfigureActivity.getTimeRecords()
         val updateSettings = widgetConfigureActivity.widgetConfig.updateSettings
-        val sortedRecords = sortRecordsByTimeAndCutoff(records, updateSettings.interactionsToLearn)
-        var added = 0
-        for (record in sortedRecords) {
+        val sortedRecords = sortRecordsByTimeAndCutoff(records, getInteractionsToLearn(updateSettings))
+        for ((index, record) in sortedRecords.withIndex()) {
             widgetConfigureActivity.adapter.add("${record.hour}:${record.minute} -wk ${record.weekday} ${record.count}")
-            added++
-            if (added >= updateSettings.learningPeriods) {
+            if (index >= getLearningPeriods(updateSettings)) {
                 break
             }
         }

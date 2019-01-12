@@ -1,6 +1,5 @@
 package se.locutus.sl.realtidhem.activity
 
-import android.content.Context
 import android.content.Intent
 import android.content.res.ColorStateList
 import android.os.Bundle
@@ -9,7 +8,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ListView
 import android.widget.TextView
-import kotlinx.android.synthetic.main.widget_configure_activty.*
 import se.locutus.sl.realtidhem.R
 import se.locutus.sl.realtidhem.activity.add_stop.AddStopActivity
 import se.locutus.sl.realtidhem.events.EXTRA_COLOR_THEME

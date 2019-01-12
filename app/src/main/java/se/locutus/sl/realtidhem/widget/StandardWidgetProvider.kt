@@ -19,6 +19,8 @@ import androidx.core.content.ContextCompat
 import android.view.View
 import se.locutus.proto.Ng
 import se.locutus.sl.realtidhem.activity.WIDGET_CONFIG_PREFS
+import se.locutus.sl.realtidhem.activity.getInteractionsToLearn
+import se.locutus.sl.realtidhem.activity.getLearningPeriods
 import se.locutus.sl.realtidhem.events.CYCLE_STOP_LEFT
 import se.locutus.sl.realtidhem.events.CYCLE_STOP_RIGHT
 import se.locutus.sl.realtidhem.events.WidgetBroadcastReceiver
@@ -72,12 +74,26 @@ class StandardWidgetProvider : AppWidgetProvider() {
             LOG.info("Updating $id")
             updateAppWidget(context, widgetConfig, appWidgetManager, prefs, id)
             LOG.info("Compacting widget touch records to ${timeTracker.compactRecords(id)}")
+            if (widgetConfig.updateSettings.updateMode == Ng.UpdateSettings.UpdateMode.LEARNING_UPDATE_MODE)  {
+                scheduleWidgetUpdates(id, widgetConfig.updateSettings)
+            }
         }
 
         if (widgetsNeedingLocation.isNotEmpty()) {
             LOG.info("Found widgets with multiple stops ${widgetsNeedingLocation.keys}")
             requestSingleLocationUpdate(context, widgetsNeedingLocation, prefs, appWidgetManager)
        }
+    }
+
+    private fun scheduleWidgetUpdates(widgetId: Int, updateSettings : Ng.UpdateSettings) {
+        var records = timeTracker.getRecords(widgetId, getInteractionsToLearn(updateSettings))
+        var filteredList : MutableList<TimeTracker.TimeRecord> = records
+        val learningPeriods = getLearningPeriods(updateSettings)
+        if (records.size > learningPeriods) {
+            filteredList = records.subList(0, learningPeriods)
+        }
+        LOG.info("Scheduling ${filteredList.size} update periods for $widgetId")
+        timeTracker.scheduleAlarmsFrom(widgetId, filteredList)
     }
 
     fun requestSingleLocationUpdate(context: Context,

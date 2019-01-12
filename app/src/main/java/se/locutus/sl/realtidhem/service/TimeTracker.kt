@@ -1,9 +1,16 @@
 package se.locutus.sl.realtidhem.service
 
+import android.app.PendingIntent
+import android.appwidget.AppWidgetManager
 import android.content.Context
+import android.content.Intent
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
+import android.app.AlarmManager
+import android.os.Build
+import java.util.logging.Logger
+
 
 const val TIME_PREFS = "time_prefs"
 // Each timeslot will keep the widget updated for 15 minutes.
@@ -28,6 +35,10 @@ fun sortRecordsByTimeAndCutoff(records : ArrayList<TimeTracker.TimeRecord> , cou
  * Helper class for finding/scheduling automatic updates for the widget.
  */
 class TimeTracker(val context : Context) {
+    companion object {
+        val LOG = Logger.getLogger(TimeTracker::class.java.name)
+    }
+
     private val prefs = context.getSharedPreferences(TIME_PREFS, 0)
 
     private fun isWeekDay(c : Calendar) : Boolean {
@@ -43,12 +54,54 @@ class TimeTracker(val context : Context) {
         return base + if (rest5 == 0) - 10 else 0
     }
 
-    fun createAlarmKey(widgetId : Int, hour : Int, min : Int, weekday: Boolean) : String {
+    private fun createAlarmKey(widgetId : Int, hour : Int, min : Int, weekday: Boolean) : String {
         return "$widgetId:wd:$weekday:$hour:$min"
     }
 
     fun createRecordKey(widgetId : Int, c : Calendar) : String {
         return "$widgetId:wd:${isWeekDay(c)}:${c.get(Calendar.HOUR_OF_DAY)}:${translateMinutes(c.get(Calendar.MINUTE))}:${c.get(Calendar.DAY_OF_MONTH)}"
+    }
+
+    private fun createPendingIntent(widgetId: Int) : PendingIntent {
+        val intent = Intent(context, BackgroundUpdaterService::class.java).apply {
+            putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId)
+        }
+        return PendingIntent.getService(context, widgetId*widgetId, intent, PendingIntent.FLAG_UPDATE_CURRENT)
+    }
+
+    fun scheduleAlarmsFrom(widgetId: Int, records : List<TimeRecord>) {
+        val intent = createPendingIntent(widgetId)
+        val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        for (record in records) {
+            if (record.weekday) {
+                LOG.info("Scheduling weekday alarm ${record.hour}:${record.minute}")
+                scheduleAlarmForDayRepeating(Calendar.MONDAY, intent, record, alarmManager)
+                scheduleAlarmForDayRepeating(Calendar.TUESDAY, intent, record, alarmManager)
+                scheduleAlarmForDayRepeating(Calendar.WEDNESDAY, intent, record, alarmManager)
+                scheduleAlarmForDayRepeating(Calendar.THURSDAY, intent, record, alarmManager)
+                scheduleAlarmForDayRepeating(Calendar.FRIDAY, intent, record, alarmManager)
+            } else {
+                LOG.info("Scheduling weekend alarm ${record.hour}:${record.minute}")
+                scheduleAlarmForDayRepeating(Calendar.SATURDAY, intent, record, alarmManager)
+                scheduleAlarmForDayRepeating(Calendar.SUNDAY, intent, record, alarmManager)
+            }
+        }
+    }
+
+    private fun scheduleAlarmForDayRepeating(day : Int, intent : PendingIntent, timeRecord: TimeRecord, alarmManager : AlarmManager) {
+        val calendar = Calendar.getInstance()
+        calendar.set(Calendar.DAY_OF_WEEK, day)
+        calendar.set(Calendar.HOUR_OF_DAY, timeRecord.hour)
+        calendar.set(Calendar.MINUTE, timeRecord.minute)
+        calendar.set(Calendar.SECOND, 0)
+        calendar.set(Calendar.MILLISECOND, 0)
+        // Use RTC_WAKEUP ?
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, calendar.timeInMillis, intent)
+        } else {
+            alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.timeInMillis, intent)
+        }
     }
 
     /**
