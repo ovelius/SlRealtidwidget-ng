@@ -129,6 +129,7 @@ class UpdateModeFragment : androidx.fragment.app.Fragment() {
                         updateUpdatePeriod()
                     }
                 }})
+        updateUpdatePeriod()
         return mainView
     }
 
@@ -145,6 +146,20 @@ class UpdateModeFragment : androidx.fragment.app.Fragment() {
             .setUpdateSettings(updateSettings).build()
     }
 
+    private fun setListSize() {
+        val adapter = widgetConfigureActivity.adapter
+        var totalHeight = 0
+        for (i in 0 until adapter.count) {
+            val listItem = adapter.getView(i, null, updatePeriodList)
+            listItem.measure(0, 0)
+            totalHeight += listItem.measuredHeight
+        }
+        val params = updatePeriodList.layoutParams
+        params.height = totalHeight + (updatePeriodList.dividerHeight * (adapter.count - 1))
+        updatePeriodList.layoutParams = params
+        updatePeriodList.requestLayout()
+    }
+
     private fun updateUpdatePeriod() {
         widgetConfigureActivity.adapter.clear()
         val records = widgetConfigureActivity.getTimeRecords()
@@ -157,6 +172,7 @@ class UpdateModeFragment : androidx.fragment.app.Fragment() {
             }
         }
         widgetConfigureActivity.adapter.notifyDataSetChanged()
+        setListSize()
     }
 
  fun configureUpdateModeSpinner(mainView : View) {
@@ -164,11 +180,11 @@ class UpdateModeFragment : androidx.fragment.app.Fragment() {
      val adapter = ArrayAdapter<String>(activity,
          android.R.layout.simple_spinner_item,
          resources.getStringArray(R.array.update_mode_array))
-     adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+     adapter.setDropDownViewResource(R.layout.spinner_item)
      spinner.adapter = adapter
      spinner.setSelection(widgetConfigureActivity.widgetConfig.updateSettings.updateModeValue)
      spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-         override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
+         override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
              LOG.info("selected update mode $position")
              val updateSettings = widgetConfigureActivity.widgetConfig.updateSettings.toBuilder()
              updateSettings.updateModeValue = position

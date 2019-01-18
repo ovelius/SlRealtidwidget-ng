@@ -24,6 +24,7 @@ import se.locutus.proto.Ng
 import se.locutus.sl.realtidhem.activity.WIDGET_CONFIG_PREFS
 import se.locutus.sl.realtidhem.events.TouchHandlerInterface
 import se.locutus.sl.realtidhem.service.BackgroundUpdaterService
+import se.locutus.sl.realtidhem.service.EXTRA_UPDATE_TIME
 import se.locutus.sl.realtidhem.service.SERVICE_NOTIFICATION_ID
 import se.locutus.sl.realtidhem.widget.storeWidgetConfig
 
@@ -87,7 +88,9 @@ class BackgroundUpdaterTest {
         service.widgetIdProvider = {
             intArrayOf(widgetId)
         }
-        val intent = Intent().apply { putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId) }
+        val intent = Intent().apply {
+            putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId)
+        }
         // Change update mode.
         shadowPowerManager.setIsInteractive(false)
         service.onStartCommand(intent, 0 ,0)
@@ -127,6 +130,22 @@ class BackgroundUpdaterTest {
         assertThat(touchHandler.updateCount, `is`(2))
         assertViewText(widgetId, R.id.widgetline1, R.string.idle_line1)
         assertViewText(widgetId, R.id.widgetline2,  R.string.idle_line2)
+    }
+
+    @Test
+    fun testStartSelfLearningWidgetsLateUpdate() {
+        val widgetId = createWidgetConfig(createUpdateSettings(Ng.UpdateSettings.UpdateMode.LEARNING_UPDATE_MODE))
+        service.widgetIdProvider = {
+            intArrayOf(widgetId)
+        }
+        val intent = Intent().apply {
+            putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId)
+            putExtra(EXTRA_UPDATE_TIME, 0L)
+        }
+        // Try again.
+        shadowPowerManager.setIsInteractive(true)
+        service.onStartCommand(intent, 0 ,0)
+        assertThat(service.hasAutoUpdatesRunning(), `is`(false))
     }
 
     private fun createUpdateSettings(mode : Ng.UpdateSettings.UpdateMode) : Ng.UpdateSettings {

@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android" android:layout_height="fill_parent"
+            android:fillViewport="true"
+            android:layout_width="fill_parent">
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:id="@+id/stop_list_parent"
               android:orientation="vertical"
               android:layout_marginLeft="@dimen/margin_search"
               android:layout_width="fill_parent"
-              android:layout_height="fill_parent">
+              android:layout_height="wrap_content">
         <TextView
                 android:id="@+id/update_mode_text"
                 android:layout_width="match_parent"
@@ -16,11 +19,13 @@
         <Spinner
             android:id="@+id/update_mode_spinner"
             android:layout_width="match_parent"
+            android:layout_margin="@dimen/margin_search"
             android:layout_height="wrap_content" />
         <TextView
                 android:id="@+id/update_mode_explain"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_margin="@dimen/margin_search"
                 android:text="@string/update_mode"
         />
 
@@ -29,30 +34,34 @@
                       android:orientation="vertical"
                       android:visibility="gone"
                       android:layout_width="fill_parent"
-                      android:layout_height="fill_parent">
+                      android:layout_height="wrap_content">
                 <CheckBox
                         android:text="@string/update_on_sceen_on"
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
                         android:textSize="16sp"
+                        android:layout_margin="@dimen/margin_search"
                         android:layout_gravity="center"
                         android:id="@+id/checkbox_screen_on"/>
                 <CheckBox
                         android:text="@string/update_forever"
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/margin_search"
                         android:textSize="16sp"
                         android:layout_gravity="center"
                         android:id="@+id/checkbox_update_forever"/>
                 <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:textSize="@dimen/main_text_size"
                         android:text="@string/update_sequence_length"
-                        android:layout_marginBottom="4dp"/>
+                        android:layout_margin="@dimen/margin_search" />
 
                 <EditText
                         android:id="@+id/update_sequence_length"
                         android:layout_width="match_parent"
+                        android:textSize="@dimen/main_text_size"
                         android:layout_margin="@dimen/margin_search"
                         android:inputType="numberSigned"
                         android:layout_height="wrap_content"
@@ -64,11 +73,12 @@
                       android:orientation="vertical"
                       android:visibility="gone"
                       android:layout_width="fill_parent"
-                      android:layout_height="fill_parent">
+                      android:layout_height="wrap_content">
                 <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="@dimen/margin_search"
+                        android:textSize="@dimen/main_text_size"
                         android:text="@string/self_learning_periods"
                         android:layout_marginBottom="4dp"/>
 
@@ -83,6 +93,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="@dimen/margin_search"
+                        android:textSize="@dimen/main_text_size"
                         android:text="@string/self_learning_threshold"
                         android:layout_marginBottom="4dp"/>
 
@@ -90,12 +101,15 @@
                         android:id="@+id/self_update_period_threshold"
                         android:layout_width="match_parent"
                         android:inputType="numberSigned"
+                        android:layout_margin="@dimen/margin_search"
                         android:layout_height="wrap_content"
                 />
                 <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/current_self_learning_periods"
+                        android:textSize="@dimen/main_text_size"
+                        android:layout_margin="@dimen/margin_search"
                         android:layout_marginBottom="4dp"/>
                 <ListView
                         android:id="@+id/update_period_list_view"
@@ -104,3 +118,4 @@
                 </ListView>
         </LinearLayout>
 </LinearLayout>
+</ScrollView>

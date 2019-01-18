@@ -13,6 +13,7 @@ import java.util.logging.Logger
 
 
 const val TIME_PREFS = "time_prefs"
+const val EXTRA_UPDATE_TIME = "update_time"
 // Each timeslot will keep the widget updated for 15 minutes.
 const val UPDATE_TIME_MILLIS = 60 * 15 * 1000
 
@@ -62,46 +63,46 @@ class TimeTracker(val context : Context) {
         return "$widgetId:wd:${isWeekDay(c)}:${c.get(Calendar.HOUR_OF_DAY)}:${translateMinutes(c.get(Calendar.MINUTE))}:${c.get(Calendar.DAY_OF_MONTH)}"
     }
 
-    private fun createPendingIntent(widgetId: Int) : PendingIntent {
+    private fun createPendingIntent(widgetId: Int, timeRecord: TimeRecord, triggerTime : Long) : PendingIntent {
+        val requestCode = widgetId + timeRecord.minute * 1000 + timeRecord.hour * 10000 + (if (timeRecord.weekday) 100000 else 0)
         val intent = Intent(context, BackgroundUpdaterService::class.java).apply {
             putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId)
+            putExtra(EXTRA_UPDATE_TIME, triggerTime)
         }
-        return PendingIntent.getService(context, widgetId*widgetId, intent, PendingIntent.FLAG_UPDATE_CURRENT)
+        return PendingIntent.getService(context, requestCode, intent, 0)
     }
 
     fun scheduleAlarmsFrom(widgetId: Int, records : List<TimeRecord>) {
-        val intent = createPendingIntent(widgetId)
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         for (record in records) {
             if (record.weekday) {
                 LOG.info("Scheduling weekday alarm ${record.hour}:${record.minute}")
-                scheduleAlarmForDayRepeating(Calendar.MONDAY, intent, record, alarmManager)
-                scheduleAlarmForDayRepeating(Calendar.TUESDAY, intent, record, alarmManager)
-                scheduleAlarmForDayRepeating(Calendar.WEDNESDAY, intent, record, alarmManager)
-                scheduleAlarmForDayRepeating(Calendar.THURSDAY, intent, record, alarmManager)
-                scheduleAlarmForDayRepeating(Calendar.FRIDAY, intent, record, alarmManager)
+                scheduleAlarmForDayRepeating(widgetId, Calendar.MONDAY,  record, alarmManager)
+                scheduleAlarmForDayRepeating(widgetId, Calendar.TUESDAY, record, alarmManager)
+                scheduleAlarmForDayRepeating(widgetId, Calendar.WEDNESDAY, record, alarmManager)
+                scheduleAlarmForDayRepeating(widgetId, Calendar.THURSDAY, record, alarmManager)
+                scheduleAlarmForDayRepeating(widgetId, Calendar.FRIDAY, record, alarmManager)
             } else {
                 LOG.info("Scheduling weekend alarm ${record.hour}:${record.minute}")
-                scheduleAlarmForDayRepeating(Calendar.SATURDAY, intent, record, alarmManager)
-                scheduleAlarmForDayRepeating(Calendar.SUNDAY, intent, record, alarmManager)
+                scheduleAlarmForDayRepeating(widgetId, Calendar.SATURDAY, record, alarmManager)
+                scheduleAlarmForDayRepeating(widgetId, Calendar.SUNDAY, record, alarmManager)
             }
         }
     }
 
-    private fun scheduleAlarmForDayRepeating(day : Int, intent : PendingIntent, timeRecord: TimeRecord, alarmManager : AlarmManager) {
+    private fun scheduleAlarmForDayRepeating(widgetId: Int, day : Int, timeRecord: TimeRecord, alarmManager : AlarmManager) {
         val calendar = Calendar.getInstance()
         calendar.set(Calendar.DAY_OF_WEEK, day)
         calendar.set(Calendar.HOUR_OF_DAY, timeRecord.hour)
         calendar.set(Calendar.MINUTE, timeRecord.minute)
         calendar.set(Calendar.SECOND, 0)
         calendar.set(Calendar.MILLISECOND, 0)
-        // Use RTC_WAKEUP ?
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, calendar.timeInMillis, intent)
-        } else {
-            alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.timeInMillis, intent)
+        if (calendar.timeInMillis < System.currentTimeMillis()) {
+            LOG.info("Alarm set in the past, skipping for day $day")
+            return
         }
+        val intent = createPendingIntent(widgetId, timeRecord, calendar.timeInMillis)
+        alarmManager.setWindow(AlarmManager.RTC, calendar.timeInMillis, 10*60*1000, intent)
     }
 
     /**

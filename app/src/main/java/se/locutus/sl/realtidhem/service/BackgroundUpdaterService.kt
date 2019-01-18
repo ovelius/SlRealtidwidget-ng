@@ -62,9 +62,11 @@ class BackgroundUpdaterService : Service() {
             val id = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, 0)
             val config = getConfigFor(id, true)
             if (config.updateSettings.updateMode == Ng.UpdateSettings.UpdateMode.LEARNING_UPDATE_MODE) {
-                LOG.info("Received extra widgetId $id for learning widget")
                 updateString = "Learning widget $id"
-                selfLearningTimeouts[id] = System.currentTimeMillis() + UPDATE_TIME_MILLIS
+                val triggerTime = intent.getLongExtra(EXTRA_UPDATE_TIME, System.currentTimeMillis())
+                val overtTime = System.currentTimeMillis() - triggerTime
+                LOG.info("Received extra widgetId $id for learning widget with overtime $overtTime")
+                selfLearningTimeouts[id] = System.currentTimeMillis() + UPDATE_TIME_MILLIS - overtTime
             } else if (config.updateSettings.updateMode == Ng.UpdateSettings.UpdateMode.ALWAYS_UPDATE_MODE) {
                 LOG.info("Received extra widgetId $id for auto update widget")
                 autoUpdateSequenceEndTime.remove(id)
