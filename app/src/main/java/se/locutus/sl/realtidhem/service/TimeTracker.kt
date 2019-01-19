@@ -60,7 +60,12 @@ class TimeTracker(val context : Context) {
     }
 
     fun createRecordKey(widgetId : Int, c : Calendar) : String {
-        return "$widgetId:wd:${isWeekDay(c)}:${c.get(Calendar.HOUR_OF_DAY)}:${translateMinutes(c.get(Calendar.MINUTE))}:${c.get(Calendar.DAY_OF_MONTH)}"
+        var minutes = translateMinutes(c.get(Calendar.MINUTE))
+        if (minutes < 0) {
+            minutes = 50
+            c.add(Calendar.HOUR, -1)
+        }
+        return "$widgetId:wd:${isWeekDay(c)}:${c.get(Calendar.HOUR_OF_DAY)}:$minutes:${c.get(Calendar.DAY_OF_MONTH)}"
     }
 
     private fun createPendingIntent(widgetId: Int, timeRecord: TimeRecord, triggerTime : Long) : PendingIntent {
@@ -131,6 +136,8 @@ class TimeTracker(val context : Context) {
                     val weekDay = split[2].toBoolean()
                     val hour = split[3].toInt()
                     val min = split[4].toInt()
+                    // Hack for records with negative minutes.
+                    if (min < 0) continue
                     val count = prefs.getInt(key, 0)
                     if (count >= cutoffCount) {
                         recordsList.add(TimeRecord(hour, min, weekDay, count))

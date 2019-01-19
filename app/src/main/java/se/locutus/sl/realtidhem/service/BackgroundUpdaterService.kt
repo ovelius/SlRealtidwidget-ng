@@ -161,6 +161,7 @@ class BackgroundUpdaterService : Service() {
         }
         if (!updatedAnyWidget) {
             LOG.info("No widgets left to update")
+            stopAutoUpdateSequence()
             if (!hasAlwaysUpdateWidget) {
                 // Stop the service. Wait for next alarm to fire to start it again.
                 stopSelf()

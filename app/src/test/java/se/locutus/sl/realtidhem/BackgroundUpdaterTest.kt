@@ -82,6 +82,23 @@ class BackgroundUpdaterTest {
         assertThat(service.hasAutoUpdatesRunning(), `is`(false))
     }
 
+
+    /*
+    @Test
+    fun testStopAutoUpdateSequence() {
+        val widgetId = createWidgetConfig(createUpdateSettings(Ng.UpdateSettings.UpdateMode.ALWAYS_UPDATE_MODE))
+        service.widgetIdProvider = {
+            intArrayOf(widgetId)
+        }
+        val intent = Intent().apply { putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId) }
+        service.onStartCommand(intent, 0, 0)
+
+        // Still doesn't start.
+        assertThat(shadow.isStoppedBySelf, `is`(true))
+        assertThat(shadow.lastForegroundNotificationId, `is`(0))
+        assertThat(service.hasAutoUpdatesRunning(), `is`(false))
+    } */
+
     @Test
     fun testStartSelfLearningWidgets() {
         val widgetId = createWidgetConfig(createUpdateSettings(Ng.UpdateSettings.UpdateMode.LEARNING_UPDATE_MODE))
@@ -148,8 +165,8 @@ class BackgroundUpdaterTest {
         assertThat(service.hasAutoUpdatesRunning(), `is`(false))
     }
 
-    private fun createUpdateSettings(mode : Ng.UpdateSettings.UpdateMode) : Ng.UpdateSettings {
-        return Ng.UpdateSettings.newBuilder().setUpdateMode(mode).build()
+    private fun createUpdateSettings(mode : Ng.UpdateSettings.UpdateMode, sequenceMinutes : Int = 1) : Ng.UpdateSettings {
+        return Ng.UpdateSettings.newBuilder().setUpdateMode(mode).setUpdateSequenceLength(sequenceMinutes).build()
     }
 
     private fun createWidgetConfig(updateSettings : Ng.UpdateSettings) : Int{
