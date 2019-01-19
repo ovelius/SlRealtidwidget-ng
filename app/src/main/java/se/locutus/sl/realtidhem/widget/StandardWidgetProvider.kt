@@ -14,7 +14,6 @@ import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.location.Location
 import android.os.Bundle
-import android.util.TypedValue
 import androidx.core.content.ContextCompat
 import android.view.View
 import se.locutus.proto.Ng
@@ -25,6 +24,7 @@ import se.locutus.sl.realtidhem.events.CYCLE_STOP_LEFT
 import se.locutus.sl.realtidhem.events.CYCLE_STOP_RIGHT
 import se.locutus.sl.realtidhem.events.WidgetBroadcastReceiver
 import se.locutus.sl.realtidhem.service.BackgroundUpdaterService
+import se.locutus.sl.realtidhem.service.EXTRA_MANUAL_TOUCH
 import se.locutus.sl.realtidhem.service.TimeTracker
 
 
@@ -44,18 +44,10 @@ class StandardWidgetProvider : AppWidgetProvider() {
                 intent.action = action
             }
             if (targetService) {
+                intent.putExtra(EXTRA_MANUAL_TOUCH, true)
                 return PendingIntent.getService(context, widgetId, intent, PendingIntent.FLAG_UPDATE_CURRENT)
             }
             return PendingIntent.getBroadcast(context, widgetId, intent, PendingIntent.FLAG_UPDATE_CURRENT)
-        }
-
-        fun setPendingIntents(context: Context, views : RemoteViews, widgetId : Int, targetService: Boolean) {
-            val pendingIntent = basePendingIntent(context, widgetId, null, targetService)
-            val leftPendingIntent = basePendingIntent(context, widgetId, CYCLE_STOP_LEFT, targetService)
-            val rightPendingIntent = basePendingIntent(context, widgetId, CYCLE_STOP_RIGHT, targetService)
-            views.setOnClickPendingIntent(R.id.widgetmain, pendingIntent)
-            views.setOnClickPendingIntent(R.id.larrow, leftPendingIntent)
-            views.setOnClickPendingIntent(R.id.rarrow, rightPendingIntent)
         }
     }
 
@@ -153,82 +145,8 @@ class StandardWidgetProvider : AppWidgetProvider() {
             prefs : SharedPreferences,
             appWidgetId: Int
         ) {
-            val lastData = getLastLoadData(prefs, appWidgetId)
-            var selectedStopIndex = prefs.getInt(widgetKeySelectedStop(appWidgetId), 0)
-            if (selectedStopIndex >= widgetConfig.stopConfigurationCount) {
-                selectedStopIndex = 0
-            }
-
-            val validConfig = widgetConfig.stopConfigurationCount > 0
-            var widgetText =
-                when (validConfig) {
-                    false -> context.getString(R.string.error_corrupt)
-                    true -> widgetConfig.getStopConfiguration(selectedStopIndex).stopData.displayName
-                }
-            // Construct the RemoteViews object
-            val views = RemoteViews(context.packageName, getWidgetLayoutId(prefs, appWidgetId))
-            if (lastData != null) {
-                views.setInt(R.id.widgetcolor, "setBackgroundColor", lastData.color)
-            }
-            views.setTextViewText(R.id.widgettag, widgetText)
-            views.setTextViewText(R.id.widgetline1, context.getString(R.string.idle_line1))
-            views.setTextViewText(R.id.widgetmin, "")
-            if (lastData != null && lastData.idleMessage.isNotEmpty()) {
-                views.setTextViewText(R.id.widgetline2, lastData.idleMessage)
-            } else {
-                views.setTextViewText(R.id.widgetline2, context.getString(R.string.idle_line2))
-            }
-            if (validConfig) {
-                val stopConfig = widgetConfig.getStopConfiguration(selectedStopIndex)
-                updateColors(context, views, stopConfig.themeData.colorConfig)
-                setPendingIntents(context, views, appWidgetId, false)
-            } else {
-                LOG.warning("Received update request for widget without configuration $appWidgetId")
-            }
-            if (widgetConfig.stopConfigurationCount <= 1) {
-                views.setViewVisibility(R.id.rarrow, View.GONE)
-                views.setViewVisibility(R.id.larrow, View.GONE)
-            } else {
-                views.setViewVisibility(R.id.rarrow, View.VISIBLE)
-                views.setViewVisibility(R.id.larrow, View.VISIBLE)
-            }
-            // Instruct the widget manager to update the widget
-            appWidgetManager.updateAppWidget(appWidgetId, views)
+            setWidgetViews(context, widgetConfig, appWidgetManager, prefs, appWidgetId)
         }
-
-    private fun updateColors(context : Context, views : RemoteViews, colorConfig : Ng.ColorConfig) {
-        if (colorConfig.overrideMainColor) {
-            views.setInt(R.id.widgetcolor, "setBackgroundColor", colorConfig.mainColor)
-        }
-        if (colorConfig.overrideBgColor) {
-            views.setInt(R.id.widgetbg_layout, "setBackgroundColor", colorConfig.bgColor)
-        } else {
-            val bgColor = ContextCompat.getColor(context, R.color.baseWidgetGreyBg)
-            views.setInt(R.id.widgetbg_layout, "setBackgroundColor", bgColor)
-        }
-        if (colorConfig.overrideTextColor) {
-            views.setTextColor(R.id.widgetline1, colorConfig.textColor)
-            views.setTextColor(R.id.widgetline2, colorConfig.textColor)
-            views.setTextColor(R.id.widgetmin, colorConfig.textColor)
-        } else {
-            val textColor = ContextCompat.getColor(context, R.color.baseWidgetText)
-            views.setTextColor(R.id.widgetline1, textColor)
-            views.setTextColor(R.id.widgetline2,textColor)
-            views.setTextColor(R.id.widgetmin, textColor)
-        }
-        if (colorConfig.overrideMiddleBarColor) {
-            views.setInt(R.id.widgetseparator, "setBackgroundColor", colorConfig.middleBarColor)
-        } else {
-            val color = ContextCompat.getColor(context, R.color.baseWidgetGreyerBg)
-            views.setInt(R.id.widgetseparator, "setBackgroundColor", color)
-        }
-        if (colorConfig.overrideTagTextColor) {
-            views.setTextColor(R.id.widgettag, colorConfig.tagTextColor)
-        } else {
-            val textColor = ContextCompat.getColor(context, R.color.baseWidgetTagText)
-            views.setTextColor(R.id.widgettag, textColor)
-        }
-    }
 
     override fun onAppWidgetOptionsChanged(
         context: Context?,
@@ -261,3 +179,98 @@ class StandardWidgetProvider : AppWidgetProvider() {
     }
 }
 
+fun setWidgetViews(context: Context,
+                 widgetConfig : Ng.WidgetConfiguration,
+                 appWidgetManager: AppWidgetManager,
+                 prefs : SharedPreferences,
+                 appWidgetId: Int) {
+    val lastData = getLastLoadData(prefs, appWidgetId)
+    var selectedStopIndex = prefs.getInt(widgetKeySelectedStop(appWidgetId), 0)
+    if (selectedStopIndex >= widgetConfig.stopConfigurationCount) {
+        selectedStopIndex = 0
+    }
+
+    val validConfig = widgetConfig.stopConfigurationCount > 0
+    var widgetText =
+        when (validConfig) {
+            false -> context.getString(R.string.error_corrupt)
+            true -> widgetConfig.getStopConfiguration(selectedStopIndex).stopData.displayName
+        }
+    // Construct the RemoteViews object
+    val views = RemoteViews(context.packageName, getWidgetLayoutId(prefs, appWidgetId))
+    if (lastData != null) {
+        views.setInt(R.id.widgetcolor, "setBackgroundColor", lastData.color)
+    }
+    val alwaysUpdate = widgetConfig.updateSettings.updateMode == Ng.UpdateSettings.UpdateMode.ALWAYS_UPDATE_MODE
+    val line1 = if (alwaysUpdate) context.getString(R.string.idle_line1_auto) else context.getString(R.string.idle_line1)
+    val line2 = if (alwaysUpdate) context.getString(R.string.idle_line2_auto, widgetConfig.updateSettings.updateSequenceLength) else context.getString(R.string.idle_line2)
+    views.setTextViewText(R.id.widgettag, widgetText)
+    views.setTextViewText(R.id.widgetline1, line1)
+    views.setTextViewText(R.id.widgetmin, "")
+    if (lastData != null && lastData.idleMessage.isNotEmpty()) {
+        views.setTextViewText(R.id.widgetline2, lastData.idleMessage)
+    } else {
+        views.setTextViewText(R.id.widgetline2, line2)
+    }
+    if (validConfig) {
+        val stopConfig = widgetConfig.getStopConfiguration(selectedStopIndex)
+        updateColors(context, views, stopConfig.themeData.colorConfig)
+        setPendingIntents(context, views, appWidgetId, alwaysUpdate)
+    } else {
+        StandardWidgetProvider.LOG.warning("Received update request for widget without configuration $appWidgetId")
+    }
+    if (widgetConfig.stopConfigurationCount <= 1) {
+        views.setViewVisibility(R.id.rarrow, View.GONE)
+        views.setViewVisibility(R.id.larrow, View.GONE)
+    } else {
+        views.setViewVisibility(R.id.rarrow, View.VISIBLE)
+        views.setViewVisibility(R.id.larrow, View.VISIBLE)
+    }
+    // Instruct the widget manager to update the widget
+    appWidgetManager.updateAppWidget(appWidgetId, views)
+}
+
+private fun updateColors(context : Context, views : RemoteViews, colorConfig : Ng.ColorConfig) {
+    if (colorConfig.overrideMainColor) {
+        views.setInt(R.id.widgetcolor, "setBackgroundColor", colorConfig.mainColor)
+    }
+    if (colorConfig.overrideBgColor) {
+        views.setInt(R.id.widgetbg_layout, "setBackgroundColor", colorConfig.bgColor)
+    } else {
+        val bgColor = ContextCompat.getColor(context, R.color.baseWidgetGreyBg)
+        views.setInt(R.id.widgetbg_layout, "setBackgroundColor", bgColor)
+    }
+    if (colorConfig.overrideTextColor) {
+        views.setTextColor(R.id.widgetline1, colorConfig.textColor)
+        views.setTextColor(R.id.widgetline2, colorConfig.textColor)
+        views.setTextColor(R.id.widgetmin, colorConfig.textColor)
+    } else {
+        val textColor = ContextCompat.getColor(context, R.color.baseWidgetText)
+        views.setTextColor(R.id.widgetline1, textColor)
+        views.setTextColor(R.id.widgetline2,textColor)
+        views.setTextColor(R.id.widgetmin, textColor)
+    }
+    if (colorConfig.overrideMiddleBarColor) {
+        views.setInt(R.id.widgetseparator, "setBackgroundColor", colorConfig.middleBarColor)
+    } else {
+        val color = ContextCompat.getColor(context, R.color.baseWidgetGreyerBg)
+        views.setInt(R.id.widgetseparator, "setBackgroundColor", color)
+    }
+    if (colorConfig.overrideTagTextColor) {
+        views.setTextColor(R.id.widgettag, colorConfig.tagTextColor)
+    } else {
+        val textColor = ContextCompat.getColor(context, R.color.baseWidgetTagText)
+        views.setTextColor(R.id.widgettag, textColor)
+    }
+}
+
+fun setPendingIntents(context: Context, views : RemoteViews, widgetId : Int, targetService: Boolean) {
+    val pendingIntent = StandardWidgetProvider.basePendingIntent(context, widgetId, null, targetService)
+    val leftPendingIntent =
+        StandardWidgetProvider.basePendingIntent(context, widgetId, CYCLE_STOP_LEFT, targetService)
+    val rightPendingIntent =
+        StandardWidgetProvider.basePendingIntent(context, widgetId, CYCLE_STOP_RIGHT, targetService)
+    views.setOnClickPendingIntent(R.id.widgetmain, pendingIntent)
+    views.setOnClickPendingIntent(R.id.larrow, leftPendingIntent)
+    views.setOnClickPendingIntent(R.id.rarrow, rightPendingIntent)
+}

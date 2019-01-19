@@ -44,6 +44,41 @@ interface TouchHandlerInterface {
     fun widgetTouched(widgetId :  Int, action : String?, userTouch : Boolean = true)
 }
 
+fun openWidgetConfig(context : Context, color : Int?, widgetId: Int) {
+    val intent = Intent(context, WidgetConfigureActivity::class.java).apply {
+        flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId)
+        if (color != null) {
+            putExtra(EXTRA_COLOR_THEME, color)
+            putExtra(EXTRA_RECONFIGURE_WIDGET, true)
+        }
+    }
+    context.startActivity(intent)
+}
+
+fun cycleSelectedStop(action : String?, prefs : SharedPreferences, widgetId: Int, configCount : Int) : Int {
+    var selectedStopIndex = prefs.getInt(widgetKeySelectedStop(widgetId), 0)
+    if (CYCLE_STOP_LEFT.equals(action)) {
+        selectedStopIndex--
+        if (selectedStopIndex < 0) {
+            selectedStopIndex += configCount
+        }
+        setSelectedStopIndex(prefs, widgetId, selectedStopIndex)
+    }
+
+    if (CYCLE_STOP_RIGHT.equals(action)) {
+        selectedStopIndex++
+        if (selectedStopIndex >= configCount) {
+            selectedStopIndex -= configCount
+        }
+        setSelectedStopIndex(prefs, widgetId, selectedStopIndex)
+    }
+    if (selectedStopIndex >= configCount) {
+        selectedStopIndex = 0
+    }
+    return selectedStopIndex
+}
+
 class WidgetTouchHandler(val context: Context, val networkManager : NetworkInterface, val retryMillis : Long = UPDATE_AUTO_RETRY_MILLIS)
     : TouchHandlerInterface {
     companion object {
@@ -56,27 +91,12 @@ class WidgetTouchHandler(val context: Context, val networkManager : NetworkInter
 
     override fun widgetTouched(widgetId :  Int, action : String?, userTouch : Boolean) {
         val widgetConfig = inMemoryState.getWidgetConfig(widgetId, prefs)
-        var selectedStopIndex = prefs.getInt(widgetKeySelectedStop(widgetId), 0)
+        var selectedStopIndex = cycleSelectedStop (action, prefs, widgetId, widgetConfig.stopConfigurationCount)
 
-        if (CYCLE_STOP_LEFT.equals(action)) {
-            selectedStopIndex--
-            if (selectedStopIndex < 0) {
-                selectedStopIndex += widgetConfig.stopConfigurationCount
-            }
-            setSelectedStopIndex(prefs, widgetId, selectedStopIndex)
+        if (CYCLE_STOP_RIGHT.equals(action) ||  (CYCLE_STOP_LEFT.equals(action))) {
             configUpdated(widgetId, false)
         }
-        if (CYCLE_STOP_RIGHT.equals(action)) {
-            selectedStopIndex++
-            if (selectedStopIndex >= widgetConfig.stopConfigurationCount) {
-                selectedStopIndex -= widgetConfig.stopConfigurationCount
-            }
-            setSelectedStopIndex(prefs, widgetId, selectedStopIndex)
-            configUpdated(widgetId, false)
-        }
-        if (selectedStopIndex >= widgetConfig.stopConfigurationCount) {
-            selectedStopIndex = 0
-        }
+
         LOG.info("Selected stop index is $selectedStopIndex")
 
         val manager = AppWidgetManager.getInstance(context)
@@ -113,18 +133,9 @@ class WidgetTouchHandler(val context: Context, val networkManager : NetworkInter
 
         if (inMemoryState.maybeIncrementTouchCountAndOpenConfig(widgetId)) {
             val lastLoadedData = inMemoryState.lastLoadedData[widgetId]
-            val intent = Intent(context, WidgetConfigureActivity::class.java).apply {
-                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId)
-                if (lastLoadedData != null) {
-                    putExtra(EXTRA_COLOR_THEME, lastLoadedData.color)
-                    putExtra(EXTRA_RECONFIGURE_WIDGET, true)
-                }
-            }
-            context.startActivity(intent)
+            openWidgetConfig(context, lastLoadedData?.color, widgetId)
             return
         }
-        inMemoryState.lastTouch[widgetId] = System.currentTimeMillis()
     }
 
     @SuppressLint("NewApi")

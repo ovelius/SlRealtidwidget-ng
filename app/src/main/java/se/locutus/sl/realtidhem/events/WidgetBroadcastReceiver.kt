@@ -11,8 +11,8 @@ import android.widget.RemoteViews
 import se.locutus.sl.realtidhem.R
 import se.locutus.sl.realtidhem.activity.WIDGET_CONFIG_PREFS
 import se.locutus.sl.realtidhem.net.NetworkManager
-import se.locutus.sl.realtidhem.widget.StandardWidgetProvider.Companion.setPendingIntents
 import se.locutus.sl.realtidhem.widget.getWidgetLayoutId
+import se.locutus.sl.realtidhem.widget.setPendingIntents
 
 const val WIDGET_CONFIG_UPDATED = "widget_config_updated"
 

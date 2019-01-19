@@ -22,6 +22,7 @@ const val DEFAULT_ALWAYS_UPDATE_TIMEOUT_MILLIS = 60 * 1000 * 5
 const val SERVICE_NOTIFICATION_ID = 1337
 // Update once every -1 second of being stale.
 const val UPDATE_PERIOD_MILLIS = STALE_MILLIS + 1000L
+const val EXTRA_MANUAL_TOUCH = "manual_touch"
 
 class BackgroundUpdaterService : Service() {
     companion object {
@@ -36,6 +37,7 @@ class BackgroundUpdaterService : Service() {
     private val autoUpdateSequenceEndTime = ConcurrentHashMap<Int, Long>()
     internal val selfLearningTimeouts = ConcurrentHashMap<Int, Long>()
     private val widgetConfigs = ConcurrentHashMap<Int, Ng.WidgetConfiguration>()
+    private val inMemoryState = InMemoryState()
 
     // These members are exposed for testing.
     // https://github.com/robolectric/robolectric/issues/3763
@@ -46,14 +48,6 @@ class BackgroundUpdaterService : Service() {
     internal var updateTimePeriodMillis = UPDATE_PERIOD_MILLIS
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        val channelId =
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                createNotificationChannel("my_service", "My Background Service")
-            } else {
-                // If earlier version channel ID is not used
-                // https://developer.android.com/reference/android/support/v4/app/NotificationCompat.Builder.html#NotificationCompat.Builder(android.content.Context)
-                ""
-            }
 
         LOG.info("Received intent $intent")
         var updateString : String? = null
@@ -68,7 +62,12 @@ class BackgroundUpdaterService : Service() {
                 LOG.info("Received extra widgetId $id for learning widget with overtime $overtTime")
                 selfLearningTimeouts[id] = System.currentTimeMillis() + UPDATE_TIME_MILLIS - overtTime
             } else if (config.updateSettings.updateMode == Ng.UpdateSettings.UpdateMode.ALWAYS_UPDATE_MODE) {
-                LOG.info("Received extra widgetId $id for auto update widget")
+                LOG.info("Received extra widgetId $id for auto update widget manual extra ${intent.hasExtra(EXTRA_MANUAL_TOUCH)}")
+                if (intent.hasExtra(EXTRA_MANUAL_TOUCH)) {
+                    if (inMemoryState.maybeIncrementTouchCountAndOpenConfig(id)) {
+                        openWidgetConfig(this, null, id)
+                    }
+                }
                 autoUpdateSequenceEndTime.remove(id)
             }
         }
@@ -92,6 +91,14 @@ class BackgroundUpdaterService : Service() {
             startAutoUpdateSequence()
         }
 
+        val channelId =
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                createNotificationChannel("my_service", "My Background Service")
+            } else {
+                // If earlier version channel ID is not used
+                // https://developer.android.com/reference/android/support/v4/app/NotificationCompat.Builder.html#NotificationCompat.Builder(android.content.Context)
+                ""
+            }
         createForeGroundNotification(channelId, updateString)
 
         return START_STICKY
@@ -162,16 +169,9 @@ class BackgroundUpdaterService : Service() {
     }
 
     private fun setStaleMessages(widgetId : Int, updateMode : Ng.UpdateSettings.UpdateMode) {
-        val alwaysUpdate = updateMode == Ng.UpdateSettings.UpdateMode.ALWAYS_UPDATE_MODE
-        val line1 = if (alwaysUpdate) getString(R.string.idle_line1_auto) else getString(R.string.idle_line1)
-        val line2 = if (alwaysUpdate) getString(R.string.idle_line2_auto) else getString(R.string.idle_line2)
         val manager = AppWidgetManager.getInstance(this)
-        val views = RemoteViews(packageName, getWidgetLayoutId(prefs, widgetId))
-        views.setTextViewText(R.id.widgetline2,  line2)
-        views.setTextViewText(R.id.widgetline1, line1)
-        views.setTextViewText(R.id.widgetmin, "")
-        StandardWidgetProvider.setPendingIntents(this, views, widgetId, alwaysUpdate)
-        manager.updateAppWidget(widgetId, views)
+        setWidgetViews(this, getConfigFor(widgetId),
+                           manager, prefs, widgetId)
     }
 
     private fun getConfigFor(widgetId: Int, refresh: Boolean = false) : Ng.WidgetConfiguration {

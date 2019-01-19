@@ -104,6 +104,7 @@ internal class InMemoryState {
         } else {
             touchCount[widgetId] = touchCount[widgetId]!! + 1
         }
+        this.lastTouch[widgetId] = System.currentTimeMillis()
         return touchCount[widgetId]!! >= TOUCH_TO_CONFIG
     }
 
