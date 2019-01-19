@@ -72,7 +72,7 @@ class WidgetConfigureActivity : AppCompatActivity() {
     internal var widgetConfig : WidgetConfiguration = WidgetConfiguration.getDefaultInstance()
     internal var color : Int? = null
     private lateinit var timeTracker : TimeTracker
-    lateinit var adapter : ArrayAdapter<String>
+    lateinit var adapter : UpdatePeriodAdapter
     private var isNewWidget = false
 
     private fun showWidgetDialog() {
@@ -97,7 +97,7 @@ class WidgetConfigureActivity : AppCompatActivity() {
         setResult(Activity.RESULT_CANCELED)
         setContentView(R.layout.widget_configure_activty)
         setSupportActionBar(config_toolbar)
-        adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, ArrayList<String>())
+        adapter = UpdatePeriodAdapter(this)
         viewSwitcher = findViewById(R.id.viewSwitcher1)
         findViewById<Button>(R.id.ok_btn_about).setOnClickListener {
             viewSwitcher.showPrevious()

@@ -103,7 +103,7 @@
     <string name="update_forever">Update sequence never stops</string>
     <string name="update_sequence_length">Update sequence length:</string>
     <string name="self_learning_periods">Learn at most these many periods:</string>
-    <string name="current_self_learning_periods">Current learned periods:</string>
+    <string name="current_self_learning_periods">Scheduled update periods:</string>
     <string name="self_learning_threshold">Manual interations required to allocate a period:</string>
     <string-array name="update_mode_array">
         <item>Self-learning</item>

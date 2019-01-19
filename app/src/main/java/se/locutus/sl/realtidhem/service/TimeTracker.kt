@@ -192,10 +192,10 @@ class TimeTracker(val context : Context) {
     class TimeRecord(val hour : Int, val minute : Int, val weekday : Boolean,  var count : Int = 1) : Comparable<TimeRecord> {
         override fun compareTo(other: TimeRecord): Int {
             if (other.weekday && !weekday) {
-                return -1
+                return 1
             }
             if (!other.weekday && weekday) {
-                return 1
+                return -1
             }
             if (other.hour > hour) {
                 return -1
