@@ -28,7 +28,7 @@ class BackgroundUpdaterService : Service() {
     companion object {
         val LOG = Logger.getLogger(BackgroundUpdaterService::class.java.name)
     }
-    private var wakeLockReceiver: WakeLockReceiever = WakeLockReceiever(this)
+    internal var wakeLockReceiver: WakeLockReceiever = WakeLockReceiever(this)
     private val mainHandler = Handler(Looper.getMainLooper())
     private var timerTask : TimerTask? = null
     private val timer = Timer()
@@ -165,6 +165,7 @@ class BackgroundUpdaterService : Service() {
             stopAutoUpdateSequence()
             if (!hasAlwaysUpdateWidgetRequiringScreenOn) {
                 // Stop the service. Wait for next alarm to fire to start it again.
+                LOG.info("Stopping self, no screen on event to listen for")
                 stopSelf()
             }
         }
@@ -202,7 +203,6 @@ class BackgroundUpdaterService : Service() {
             return
         }
         timerTask = timerTask{
-            LOG.info("Running task at ${System.currentTimeMillis()}")
             mainHandler.post {
                 updateOnce()
             }

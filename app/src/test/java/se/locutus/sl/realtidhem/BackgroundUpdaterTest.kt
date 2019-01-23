@@ -89,7 +89,7 @@ class BackgroundUpdaterTest {
 
     @Test
     fun testStopAutoUpdateSequence() {
-        val widgetId = createWidgetConfig(createUpdateSettings(Ng.UpdateSettings.UpdateMode.ALWAYS_UPDATE_MODE))
+        val widgetId = createWidgetConfig(createUpdateSettings(Ng.UpdateSettings.UpdateMode.ALWAYS_UPDATE_MODE, 2))
         service.widgetIdProvider = {
             intArrayOf(widgetId)
         }
@@ -115,7 +115,35 @@ class BackgroundUpdaterTest {
         // Did not update.
         assertThat(touchHandler.updateCount, `is`(2))
         assertViewText(widgetId, R.id.widgetline1, R.string.idle_line1_auto)
-        assertViewText(widgetId, R.id.widgetline2,  context.getString(R.string.idle_line2_auto, 1))
+        assertViewText(widgetId, R.id.widgetline2,  context.getString(R.string.idle_line2_auto, 2))
+
+        // We stopped the service, since no widgets require the screen broadcast listener.
+        assertThat(shadow.isStoppedBySelf, `is`(true))
+    }
+
+    @Test
+    fun testRunSequenceOnScreenOn() {
+        val widgetId = createWidgetConfig(createUpdateSettings(Ng.UpdateSettings.UpdateMode.ALWAYS_UPDATE_MODE,2, true))
+        service.widgetIdProvider = {
+            intArrayOf(widgetId)
+        }
+        val intent = Intent().apply { putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId) }
+        service.onStartCommand(intent, 0, 0)
+        shadowLooper.runOneTask()
+
+        // Runs update right away.
+        shadowLooper.runOneTask()
+        assertThat(touchHandler.updateCount, `is`(1))
+
+        service.autoUpdateSequenceEndTime[widgetId] = 0
+        runOneTask()
+
+        assertThat(service.hasAutoUpdatesRunning(), `is`(false))
+        assertThat(shadow.isStoppedBySelf, `is`(false))
+
+        val screenIntent = Intent(Intent.ACTION_SCREEN_ON)
+        service.wakeLockReceiver.onReceive(context, screenIntent)
+        assertThat(service.hasAutoUpdatesRunning(), `is`(true))
     }
 
     @Test
@@ -180,8 +208,12 @@ class BackgroundUpdaterTest {
         assertThat(service.hasAutoUpdatesRunning(), `is`(false))
     }
 
-    private fun createUpdateSettings(mode : Ng.UpdateSettings.UpdateMode, sequenceMinutes : Int = 1) : Ng.UpdateSettings {
-        return Ng.UpdateSettings.newBuilder().setUpdateMode(mode).setUpdateSequenceLength(sequenceMinutes).build()
+    private fun createUpdateSettings(mode : Ng.UpdateSettings.UpdateMode, sequenceMinutes : Int = 1, listenForScreenOn : Boolean = false) : Ng.UpdateSettings {
+        return Ng.UpdateSettings.newBuilder()
+            .setUpdateMode(mode)
+            .setUpdateSequenceLength(sequenceMinutes)
+            .setUpdateWhenScreenOn(listenForScreenOn)
+            .build()
     }
 
     private fun createWidgetConfig(updateSettings : Ng.UpdateSettings) : Int{

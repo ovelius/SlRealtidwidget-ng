@@ -15,7 +15,7 @@ class WakeLockReceiever(val service : BackgroundUpdaterService) : BroadcastRecei
         val km = context.getSystemService(Context.KEYGUARD_SERVICE) as KeyguardManager
         if (Intent.ACTION_SCREEN_ON == intent.action) {
             if (km.isKeyguardLocked) {
-                LOG.warning("Intent received ${intent.action} but screen still locked")
+                LOG.info("Intent received ${intent.action} but screen still locked")
                 return
             }
         }
@@ -24,6 +24,6 @@ class WakeLockReceiever(val service : BackgroundUpdaterService) : BroadcastRecei
         } else {
             service.startAutoUpdateSequence()
         }
-        LOG.warning("Intent received $intent")
+        LOG.info("Intent received $intent")
     }
 }
