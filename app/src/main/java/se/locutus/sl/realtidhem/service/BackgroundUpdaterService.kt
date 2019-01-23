@@ -34,9 +34,8 @@ class BackgroundUpdaterService : Service() {
     private val timer = Timer()
     private lateinit var prefs : SharedPreferences
     private lateinit var powerManager : PowerManager
-    private val autoUpdateSequenceEndTime = ConcurrentHashMap<Int, Long>()
+    internal val autoUpdateSequenceEndTime = ConcurrentHashMap<Int, Long>()
     internal val selfLearningTimeouts = ConcurrentHashMap<Int, Long>()
-    private val widgetConfigs = ConcurrentHashMap<Int, Ng.WidgetConfiguration>()
     private val inMemoryState = InMemoryState()
 
     // These members are exposed for testing.
@@ -54,7 +53,7 @@ class BackgroundUpdaterService : Service() {
         if (intent?.hasExtra(AppWidgetManager.EXTRA_APPWIDGET_ID) == true) {
             // Typical case is a widget update intent alarm triggering.
             val id = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, 0)
-            val config = getConfigFor(id, true)
+            val config = inMemoryState.getWidgetConfig(id, prefs, true)
             if (config.updateSettings.updateMode == Ng.UpdateSettings.UpdateMode.LEARNING_UPDATE_MODE) {
                 updateString = "Learning widget $id"
                 val triggerTime = intent.getLongExtra(EXTRA_UPDATE_TIME, System.currentTimeMillis())
@@ -75,7 +74,7 @@ class BackgroundUpdaterService : Service() {
         LOG.info("Widget Ids ${allWidgetIds.toList()}")
         var updateAny = false
         for (widgetId in allWidgetIds) {
-            val config = getConfigFor(widgetId)
+            val config = inMemoryState.getWidgetConfig(widgetId, prefs)
             if (shouldUpdate(widgetId, config.updateSettings)) {
                 updateAny = true
             }
@@ -144,25 +143,27 @@ class BackgroundUpdaterService : Service() {
     private fun updateOnce() {
         val touchHandler = widgetTouchProvider()
         var updatedAnyWidget = false
-        var hasAlwaysUpdateWidget = false
+        var hasAlwaysUpdateWidgetRequiringScreenOn = false
+        LOG.info("Update once at ${System.currentTimeMillis()}")
         for (widgetId in widgetIdProvider()) {
-            val config = getConfigFor(widgetId)
-            val updateMode = config.updateSettings.updateMode
-            if (updateMode == Ng.UpdateSettings.UpdateMode.ALWAYS_UPDATE_MODE) {
-                hasAlwaysUpdateWidget = true
+            val config = inMemoryState.getWidgetConfig(widgetId, prefs)
+            val updateSetting = config.updateSettings
+            if (updateSetting.updateMode == Ng.UpdateSettings.UpdateMode.ALWAYS_UPDATE_MODE
+                && updateSetting.updateWhenScreenOn) {
+                hasAlwaysUpdateWidgetRequiringScreenOn = true
             }
             if (shouldUpdate(widgetId, config.updateSettings)) {
-                LOG.info("Update of widget $widgetId with type ${config.updateSettings.updateMode}")
+                LOG.info("Update of widget $widgetId with type ${config.updateSettings.updateMode} at ${System.currentTimeMillis()}")
                 touchHandler.widgetTouched(widgetId, "", false)
                 updatedAnyWidget = true
             } else {
-                setStaleMessages(widgetId, updateMode)
+                setStaleMessages(widgetId, updateSetting.updateMode)
             }
         }
         if (!updatedAnyWidget) {
             LOG.info("No widgets left to update")
             stopAutoUpdateSequence()
-            if (!hasAlwaysUpdateWidget) {
+            if (!hasAlwaysUpdateWidgetRequiringScreenOn) {
                 // Stop the service. Wait for next alarm to fire to start it again.
                 stopSelf()
             }
@@ -171,15 +172,8 @@ class BackgroundUpdaterService : Service() {
 
     private fun setStaleMessages(widgetId : Int, updateMode : Ng.UpdateSettings.UpdateMode) {
         val manager = AppWidgetManager.getInstance(this)
-        setWidgetViews(this, getConfigFor(widgetId),
+        setWidgetViews(this, inMemoryState.getWidgetConfig(widgetId, prefs),
                            manager, prefs, widgetId)
-    }
-
-    private fun getConfigFor(widgetId: Int, refresh: Boolean = false) : Ng.WidgetConfiguration {
-        if (!widgetConfigs.containsKey(widgetId) || refresh) {
-            widgetConfigs[widgetId] = loadWidgetConfigOrDefault(prefs, widgetId)
-        }
-        return widgetConfigs[widgetId]!!
     }
 
     private fun shouldUpdate(widgetId : Int, updateSettings : Ng.UpdateSettings) : Boolean {
@@ -208,6 +202,7 @@ class BackgroundUpdaterService : Service() {
             return
         }
         timerTask = timerTask{
+            LOG.info("Running task at ${System.currentTimeMillis()}")
             mainHandler.post {
                 updateOnce()
             }
@@ -229,7 +224,7 @@ class BackgroundUpdaterService : Service() {
             timerTask = null
         }
         for (widgetId in widgetIdProvider()) {
-            val config = getConfigFor(widgetId)
+            val config = inMemoryState.getWidgetConfig(widgetId, prefs)
             val updateMode = config.updateSettings.updateMode
             if (updateMode == Ng.UpdateSettings.UpdateMode.ALWAYS_UPDATE_MODE) {
                 // Set something else here.
@@ -262,4 +257,7 @@ class BackgroundUpdaterService : Service() {
         throw IllegalStateException("not implemented!")
     }
 
+    fun runTimerTaskForTest() {
+        timerTask!!.run()
+    }
 }

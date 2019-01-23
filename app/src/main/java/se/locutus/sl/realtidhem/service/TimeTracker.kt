@@ -68,8 +68,8 @@ class TimeTracker(val context : Context) {
         return "$widgetId:wd:${isWeekDay(c)}:${c.get(Calendar.HOUR_OF_DAY)}:$minutes:${c.get(Calendar.DAY_OF_MONTH)}"
     }
 
-    private fun createPendingIntent(widgetId: Int, timeRecord: TimeRecord, triggerTime : Long) : PendingIntent {
-        val requestCode = widgetId + timeRecord.minute * 1000 + timeRecord.hour * 10000 + (if (timeRecord.weekday) 100000 else 0)
+    private fun createPendingIntent(widgetId: Int, timeRecord: TimeRecord, triggerTime : Long, day : Int) : PendingIntent {
+        val requestCode = widgetId + timeRecord.minute * 1000 + timeRecord.hour * 10000 + day * 100000
         val intent = Intent(context, BackgroundUpdaterService::class.java).apply {
             putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId)
             putExtra(EXTRA_UPDATE_TIME, triggerTime)
@@ -106,8 +106,8 @@ class TimeTracker(val context : Context) {
             LOG.info("Alarm set in the past, skipping for day $day")
             return
         }
-        val intent = createPendingIntent(widgetId, timeRecord, calendar.timeInMillis)
-        alarmManager.setWindow(AlarmManager.RTC, calendar.timeInMillis, 10*60*1000, intent)
+        val intent = createPendingIntent(widgetId, timeRecord, calendar.timeInMillis, day)
+        alarmManager.setWindow(AlarmManager.RTC_WAKEUP, calendar.timeInMillis, 10*60*1000, intent)
     }
 
     /**

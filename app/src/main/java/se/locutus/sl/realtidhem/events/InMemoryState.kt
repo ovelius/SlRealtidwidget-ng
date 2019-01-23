@@ -108,8 +108,8 @@ internal class InMemoryState {
         return touchCount[widgetId]!! >= TOUCH_TO_CONFIG
     }
 
-    fun getWidgetConfig(widgetId : Int, prefs : SharedPreferences) : Ng.WidgetConfiguration {
-        if (!widgetConfigs.containsKey(widgetId)) {
+    fun getWidgetConfig(widgetId : Int, prefs : SharedPreferences, reload : Boolean = false) : Ng.WidgetConfiguration {
+        if (!widgetConfigs.containsKey(widgetId) || reload) {
             WidgetTouchHandler.LOG.info("Loading config for widget $widgetId")
             widgetConfigs[widgetId] = loadWidgetConfigOrDefault(prefs, widgetId)
         }
