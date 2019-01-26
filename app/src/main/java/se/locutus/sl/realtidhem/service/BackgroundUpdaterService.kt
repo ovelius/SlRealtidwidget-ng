@@ -6,7 +6,6 @@ import java.util.logging.Logger
 import android.content.*
 import android.graphics.Color
 import android.os.*
-import android.widget.RemoteViews
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import se.locutus.proto.Ng
@@ -62,16 +61,20 @@ class BackgroundUpdaterService : Service() {
                 selfLearningTimeouts[id] = System.currentTimeMillis() + UPDATE_TIME_MILLIS - overtTime
             } else if (config.updateSettings.updateMode == Ng.UpdateSettings.UpdateMode.ALWAYS_UPDATE_MODE) {
                 LOG.info("Received extra widgetId $id for auto update widget manual extra ${intent.hasExtra(EXTRA_MANUAL_TOUCH)}")
+                setAutoUpdateSequence(id, config.updateSettings.updateSequenceLength)
                 if (intent.hasExtra(EXTRA_MANUAL_TOUCH)) {
                     if (inMemoryState.maybeIncrementTouchCountAndOpenConfig(id)) {
                         openWidgetConfig(this, null, id)
                     }
+                    // Trigger the update right away
+                    if (hasAutoUpdatesRunning()) {
+                        val touchHandler = widgetTouchProvider()
+                        touchHandler.widgetTouched(id, "", false)
+                    }
                 }
-                autoUpdateSequenceEndTime.remove(id)
             }
         }
         val allWidgetIds = widgetIdProvider()
-        LOG.info("Widget Ids ${allWidgetIds.toList()}")
         var updateAny = false
         for (widgetId in allWidgetIds) {
             val config = inMemoryState.getWidgetConfig(widgetId, prefs)
@@ -87,7 +90,7 @@ class BackgroundUpdaterService : Service() {
 
         // Start automatic updates right away.
         if (powerManager.isInteractive) {
-            startAutoUpdateSequence()
+            startAutoUpdateSequence(false)
         }
 
         val channelId =
@@ -101,6 +104,11 @@ class BackgroundUpdaterService : Service() {
         createForeGroundNotification(channelId, updateString)
 
         return START_STICKY
+    }
+
+    private fun setAutoUpdateSequence(widgetId: Int, sequenceLengthMinutes : Int) {
+        autoUpdateSequenceEndTime[widgetId] = System.currentTimeMillis() +
+                sequenceLengthMinutes * 60 * 1000L
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -157,7 +165,7 @@ class BackgroundUpdaterService : Service() {
                 touchHandler.widgetTouched(widgetId, "", false)
                 updatedAnyWidget = true
             } else {
-                setStaleMessages(widgetId, updateSetting.updateMode)
+                setStaleMessages(widgetId)
             }
         }
         if (!updatedAnyWidget) {
@@ -171,7 +179,7 @@ class BackgroundUpdaterService : Service() {
         }
     }
 
-    private fun setStaleMessages(widgetId : Int, updateMode : Ng.UpdateSettings.UpdateMode) {
+    private fun setStaleMessages(widgetId : Int) {
         val manager = AppWidgetManager.getInstance(this)
         setWidgetViews(this, inMemoryState.getWidgetConfig(widgetId, prefs),
                            manager, prefs, widgetId)
@@ -188,15 +196,14 @@ class BackgroundUpdaterService : Service() {
         }
         if (updateMode == Ng.UpdateSettings.UpdateMode.ALWAYS_UPDATE_MODE) {
             if (!autoUpdateSequenceEndTime.containsKey(widgetId)) {
-                autoUpdateSequenceEndTime[widgetId] =
-                        System.currentTimeMillis() + updateSettings.updateSequenceLength * 60 * 1000L
+                return false
             }
             return System.currentTimeMillis() <= autoUpdateSequenceEndTime[widgetId]!!
         }
         return false
     }
 
-    fun startAutoUpdateSequence() {
+    fun startAutoUpdateSequence(fromScreenOn : Boolean) {
         LOG.info("Starting automatic updates")
         if (timerTask != null) {
             LOG.warning("Already scheduled automatic updates")
@@ -207,8 +214,17 @@ class BackgroundUpdaterService : Service() {
                 updateOnce()
             }
         }
-        // Clear automatic update timeouts.
-        autoUpdateSequenceEndTime.clear()
+        if (fromScreenOn) {
+            // Clear widgets triggering from screen turning on.
+            for (widgetId in widgetIdProvider()) {
+                val config = inMemoryState.getWidgetConfig(widgetId, prefs)
+                val updateSetting = config.updateSettings
+                if (updateSetting.updateWhenScreenOn && updateSetting.updateMode == Ng.UpdateSettings.UpdateMode.ALWAYS_UPDATE_MODE) {
+                    // This widget should update from screen turning on!
+                    setAutoUpdateSequence(widgetId, config.updateSettings.updateSequenceLength)
+                }
+            }
+        }
         LOG.info("Scheduling automatic updates with $updateTimePeriodMillis millis period")
         timer.schedule(timerTask, 0, updateTimePeriodMillis)
     }
@@ -228,7 +244,7 @@ class BackgroundUpdaterService : Service() {
             val updateMode = config.updateSettings.updateMode
             if (updateMode == Ng.UpdateSettings.UpdateMode.ALWAYS_UPDATE_MODE) {
                 // Set something else here.
-                setStaleMessages(widgetId, updateMode)
+                setStaleMessages(widgetId)
             }
         }
     }

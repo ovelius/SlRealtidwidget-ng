@@ -23,9 +23,11 @@ import se.locutus.proto.Ng
 import se.locutus.sl.realtidhem.activity.WIDGET_CONFIG_PREFS
 import se.locutus.sl.realtidhem.events.TouchHandlerInterface
 import se.locutus.sl.realtidhem.service.BackgroundUpdaterService
+import se.locutus.sl.realtidhem.service.EXTRA_MANUAL_TOUCH
 import se.locutus.sl.realtidhem.service.EXTRA_UPDATE_TIME
 import se.locutus.sl.realtidhem.service.SERVICE_NOTIFICATION_ID
 import se.locutus.sl.realtidhem.widget.storeWidgetConfig
+import java.util.concurrent.ConcurrentHashMap
 
 @RunWith(RobolectricTestRunner::class)
 class BackgroundUpdaterTest {
@@ -124,8 +126,9 @@ class BackgroundUpdaterTest {
     @Test
     fun testRunSequenceOnScreenOn() {
         val widgetId = createWidgetConfig(createUpdateSettings(Ng.UpdateSettings.UpdateMode.ALWAYS_UPDATE_MODE,2, true))
+        val widgetId2 = createWidgetConfig(createUpdateSettings(Ng.UpdateSettings.UpdateMode.ALWAYS_UPDATE_MODE,2, false))
         service.widgetIdProvider = {
-            intArrayOf(widgetId)
+            intArrayOf(widgetId, widgetId2)
         }
         val intent = Intent().apply { putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId) }
         service.onStartCommand(intent, 0, 0)
@@ -134,7 +137,9 @@ class BackgroundUpdaterTest {
         // Runs update right away.
         shadowLooper.runOneTask()
         assertThat(touchHandler.updateCount, `is`(1))
+        assertThat(touchHandler.updateCountPerId, `is`(mapOf(widgetId to 1)))
 
+        // Simulate sequence timeout.
         service.autoUpdateSequenceEndTime[widgetId] = 0
         runOneTask()
 
@@ -144,6 +149,21 @@ class BackgroundUpdaterTest {
         val screenIntent = Intent(Intent.ACTION_SCREEN_ON)
         service.wakeLockReceiver.onReceive(context, screenIntent)
         assertThat(service.hasAutoUpdatesRunning(), `is`(true))
+        Thread.sleep(40)
+        shadowLooper.runOneTask()
+        assertThat(touchHandler.updateCount, `is`(2))
+        assertThat(touchHandler.updateCountPerId, `is`(mapOf(widgetId to 2)))
+
+        // Now trigger the other widget from touching it.
+        val intent2 = Intent().apply {
+            putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId2)
+            putExtra(EXTRA_MANUAL_TOUCH, true)
+        }
+        service.onStartCommand(intent2, 0, 0)
+        Thread.sleep(40)
+        shadowLooper.runOneTask()
+        assertThat(touchHandler.updateCount, `is`(3))
+        assertThat(touchHandler.updateCountPerId, `is`(mapOf(widgetId to 2, widgetId2 to 1)))
     }
 
     @Test
@@ -239,10 +259,15 @@ class BackgroundUpdaterTest {
     //val context: Context, val networkManager : NetworkInterface, val retryMillis : Long = UPDATE_AUTO_RETRY_MILLIS
     internal class FakeTouchHandler(context : Context) : TouchHandlerInterface {
         var updateCount = 0
+        var updateCountPerId = ConcurrentHashMap<Int, Int>()
         var lastUpdateAction : String? = ""
         override fun widgetTouched(widgetId: Int, action: String?, userTouch: Boolean) {
             lastUpdateAction = action
             updateCount++
+            if (!updateCountPerId.containsKey(widgetId)) {
+                updateCountPerId[widgetId] = 0
+            }
+            updateCountPerId[widgetId] = updateCountPerId[widgetId]!! + 1
         }
     }
 }

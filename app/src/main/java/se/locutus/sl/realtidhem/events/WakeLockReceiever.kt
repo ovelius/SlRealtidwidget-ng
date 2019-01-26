@@ -22,7 +22,7 @@ class WakeLockReceiever(val service : BackgroundUpdaterService) : BroadcastRecei
         if (Intent.ACTION_SCREEN_OFF == intent.action) {
             service.stopAutoUpdateSequence()
         } else {
-            service.startAutoUpdateSequence()
+            service.startAutoUpdateSequence(true)
         }
         LOG.info("Intent received $intent")
     }
