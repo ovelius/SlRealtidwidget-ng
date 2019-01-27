@@ -17,7 +17,6 @@ import java.util.*
 import java.util.concurrent.ConcurrentHashMap
 import kotlin.concurrent.timerTask
 
-const val DEFAULT_ALWAYS_UPDATE_TIMEOUT_MILLIS = 60 * 1000 * 5
 const val SERVICE_NOTIFICATION_ID = 1337
 // Update once every -1 second of being stale.
 const val UPDATE_PERIOD_MILLIS = STALE_MILLIS + 1000L
@@ -68,8 +67,7 @@ class BackgroundUpdaterService : Service() {
                     }
                     // Trigger the update right away
                     if (hasAutoUpdatesRunning()) {
-                        val touchHandler = widgetTouchProvider()
-                        touchHandler.widgetTouched(id, "", false)
+                        touchWidgetOnce(id, intent.action)
                     }
                 }
             }
@@ -93,15 +91,7 @@ class BackgroundUpdaterService : Service() {
             startAutoUpdateSequence(false)
         }
 
-        val channelId =
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                createNotificationChannel("my_service", "My Background Service")
-            } else {
-                // If earlier version channel ID is not used
-                // https://developer.android.com/reference/android/support/v4/app/NotificationCompat.Builder.html#NotificationCompat.Builder(android.content.Context)
-                ""
-            }
-        createForeGroundNotification(channelId, updateString)
+        createForeGroundNotification()
 
         return START_STICKY
     }
@@ -122,7 +112,17 @@ class BackgroundUpdaterService : Service() {
         return channelId
     }
 
-    private fun createForeGroundNotification(channelId : String, contentText : String?) {
+    private fun createForeGroundNotification(contentTitle : String = getString(R.string.auto_updates_running),
+                                             contentInfo : String? = null,
+                                             contentText : String? = null) {
+        val channelId =
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                createNotificationChannel("my_service", "My Background Service")
+            } else {
+                // If earlier version channel ID is not used
+                // https://developer.android.com/reference/android/support/v4/app/NotificationCompat.Builder.html#NotificationCompat.Builder(android.content.Context)
+                ""
+            }
         val disableI = Intent(this, BackgroundUpdaterService::class.java).apply { action = "test" }
         val pdisable = PendingIntent.getService(
             this, 0,
@@ -139,7 +139,10 @@ class BackgroundUpdaterService : Service() {
             .setSmallIcon(R.mipmap.ic_launcher)
             .addAction(R.mipmap.ic_launcher, "Disable", pdisable)
             .addAction(R.mipmap.ic_launcher, "Enable", penable)
-            .setContentTitle(getString(R.string.auto_updates_running))
+            .setContentTitle(contentTitle)
+        if (contentInfo != null) {
+            builder.setContentInfo(contentInfo)
+        }
             // .setContentIntent(pendingIntent)
         if (contentText != null) {
             builder.setContentText(contentText)
@@ -149,7 +152,6 @@ class BackgroundUpdaterService : Service() {
     }
 
     private fun updateOnce() {
-        val touchHandler = widgetTouchProvider()
         var updatedAnyWidget = false
         var hasAlwaysUpdateWidgetRequiringScreenOn = false
         LOG.info("Update once at ${System.currentTimeMillis()}")
@@ -162,7 +164,7 @@ class BackgroundUpdaterService : Service() {
             }
             if (shouldUpdate(widgetId, config.updateSettings)) {
                 LOG.info("Update of widget $widgetId with type ${config.updateSettings.updateMode} at ${System.currentTimeMillis()}")
-                touchHandler.widgetTouched(widgetId, "", false)
+                touchWidgetOnce(widgetId, "")
                 updatedAnyWidget = true
             } else {
                 setStaleMessages(widgetId)
@@ -176,6 +178,15 @@ class BackgroundUpdaterService : Service() {
                 LOG.info("Stopping self, no screen on event to listen for")
                 stopSelf()
             }
+        }
+    }
+
+    private fun touchWidgetOnce(widgetId : Int, action : String?) {
+        val touchHandler = widgetTouchProvider()
+        val config = inMemoryState.getWidgetConfig(widgetId, prefs)
+        touchHandler.widgetTouched(widgetId, action, false) { line1 : String, min : String, line2 : String ->
+            val stopConfig = config.getStopConfiguration(0)
+            createForeGroundNotification("$line1 $min", stopConfig.stopData.displayName, line2)
         }
     }
 
