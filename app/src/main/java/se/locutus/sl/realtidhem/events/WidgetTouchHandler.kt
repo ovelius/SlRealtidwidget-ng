@@ -41,7 +41,9 @@ const val CLEAR_TIME_MIN_MILLIS = 60 * 1000L
 const val CLEAR_TIME_MAX_MILLIS = 80 * 1000L
 
 interface TouchHandlerInterface {
-    fun widgetTouched(widgetId :  Int, action : String?, userTouch : Boolean = true)
+    fun widgetTouched(widgetId :  Int, action : String?, userTouch : Boolean = true,
+                      // Invoked with the lines we set on the widget.
+                      loadedLinesCallback : (String, String, String) -> Unit = {_, _,_ -> }) : Int
 }
 
 fun openWidgetConfig(context : Context, color : Int?, widgetId: Int) {
@@ -89,9 +91,9 @@ class WidgetTouchHandler(val context: Context, val networkManager : NetworkInter
     internal val inMemoryState = InMemoryState()
     val mainHandler = Handler(Looper.getMainLooper())
 
-    override fun widgetTouched(widgetId :  Int, action : String?, userTouch : Boolean) {
+    override fun widgetTouched(widgetId :  Int, action : String?, userTouch : Boolean, loadedLinesCallback : (String, String, String) -> Unit) : Int {
         val widgetConfig = inMemoryState.getWidgetConfig(widgetId, prefs)
-        var selectedStopIndex = cycleSelectedStop (action, prefs, widgetId, widgetConfig.stopConfigurationCount)
+        val selectedStopIndex = cycleSelectedStop (action, prefs, widgetId, widgetConfig.stopConfigurationCount)
 
         if (CYCLE_STOP_RIGHT.equals(action) ||  (CYCLE_STOP_LEFT.equals(action))) {
             configUpdated(widgetId, false)
@@ -102,14 +104,14 @@ class WidgetTouchHandler(val context: Context, val networkManager : NetworkInter
         val manager = AppWidgetManager.getInstance(context)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (maybeAbortDueToPowerSave(widgetId, manager)) {
-                return
+                return selectedStopIndex
             }
         }
 
         if (inMemoryState.sinceLastUpdate(widgetId) > STALE_MILLIS) {
             if (inMemoryState.sinceUpdateStarted(widgetId) > UPDATE_RETRY_MILLIS) {
                 LOG.info("Triggering update for config for widget $widgetId")
-                loadWidgetData(widgetId, manager, widgetConfig.getStopConfiguration(selectedStopIndex), 1, userTouch)
+                loadWidgetData(widgetId, manager, widgetConfig.getStopConfiguration(selectedStopIndex), 1, userTouch, loadedLinesCallback)
                 // Only record if this was an update from a users interaction.
                 if (userTouch) {
                     timeTracker.record(widgetId)
@@ -134,8 +136,8 @@ class WidgetTouchHandler(val context: Context, val networkManager : NetworkInter
         if (inMemoryState.maybeIncrementTouchCountAndOpenConfig(widgetId)) {
             val lastLoadedData = inMemoryState.lastLoadedData[widgetId]
             openWidgetConfig(context, lastLoadedData?.color, widgetId)
-            return
         }
+        return selectedStopIndex
     }
 
     @SuppressLint("NewApi")
@@ -217,7 +219,8 @@ class WidgetTouchHandler(val context: Context, val networkManager : NetworkInter
 
     }
 
-    fun loadWidgetData(widgetId :  Int, manager : AppWidgetManager, stopConfig : Ng.StopConfiguration, attempt : Int, userTouch : Boolean) {
+    fun loadWidgetData(widgetId :  Int, manager : AppWidgetManager, stopConfig : Ng.StopConfiguration, attempt : Int, userTouch : Boolean,
+                       loadedLinesCallback : (String, String, String) -> Unit) {
         inMemoryState.disposeScroller(widgetId)
         inMemoryState.updateStartedAt[widgetId] = System.currentTimeMillis()
         // Create new views here to make sure we don't overfill the previous views with actions.
@@ -236,7 +239,7 @@ class WidgetTouchHandler(val context: Context, val networkManager : NetworkInter
         val requestId = networkManager.doStopDataRequest(stopDataRequest) {
                 incomingRequestId : Int, responseData: Ng.ResponseData, e: Exception? ->
             LOG.info("Got response in ${System.currentTimeMillis() - time} ms")
-            handleLoadResponse(views, widgetId, incomingRequestId, responseData, e, stopConfig, userTouch)
+            handleLoadResponse(views, widgetId, incomingRequestId, responseData, e, stopConfig, userTouch, loadedLinesCallback)
         }
         inMemoryState.currentRequestId[widgetId] = requestId
 
@@ -244,13 +247,14 @@ class WidgetTouchHandler(val context: Context, val networkManager : NetworkInter
             mainHandler.postDelayed({
                 if (inMemoryState.shouldRetry(widgetId, retryMillis)) {
                     LOG.info("retrying update...")
-                    loadWidgetData(widgetId, manager, stopConfig , attempt + 1, userTouch)
+                    loadWidgetData(widgetId, manager, stopConfig , attempt + 1, userTouch, loadedLinesCallback)
                 }
             }, retryMillis * attempt)
         }
     }
 
-    fun handleLoadResponse(views : RemoteViews, widgetId : Int, incomingRequestId : Int, responseData: Ng.ResponseData, e: Exception?, stopConfig : Ng.StopConfiguration, userTouch : Boolean) {
+    private fun handleLoadResponse(views : RemoteViews, widgetId : Int, incomingRequestId : Int, responseData: Ng.ResponseData, e: Exception?, stopConfig : Ng.StopConfiguration, userTouch : Boolean,
+                           loadedLinesCallback : (String, String, String) -> Unit) {
         val currentRequestId = inMemoryState.currentRequestId[widgetId]
         if (currentRequestId != null && incomingRequestId != currentRequestId) {
             LOG.info("Not handling network response due to requestId mismatch got $incomingRequestId wanted $currentRequestId")
@@ -259,15 +263,16 @@ class WidgetTouchHandler(val context: Context, val networkManager : NetworkInter
         inMemoryState.updateStartedAt.remove(widgetId)
         val manager = AppWidgetManager.getInstance(context)
         if (e != null) {
-            handleException(views, widgetId, e)
+            handleException(views, widgetId, e, loadedLinesCallback)
         } else {
             if (responseData.hasErrorResponse() && responseData.errorResponse.errorType != Ng.ErrorType.UNKNOWN_ERROR) {
-                handleError(views, widgetId, responseData.errorResponse)
+                handleError(views, widgetId, responseData.errorResponse, loadedLinesCallback)
             } else {
                 val loadResponse = responseData.loadResponse
                 val time = System.currentTimeMillis()
                 if (loadResponse.line1.isNotEmpty()) {
                     setWidgetTextViews(views, loadResponse.line1, loadResponse.minutes, loadResponse.line2)
+                    loadedLinesCallback(loadResponse.line1, loadResponse.minutes, loadResponse.line2)
                     if (!stopConfig.themeData.colorConfig.overrideMainColor) {
                         views.setInt(R.id.widgetcolor, "setBackgroundColor", responseData.loadResponse.color)
                     }
@@ -281,6 +286,7 @@ class WidgetTouchHandler(val context: Context, val networkManager : NetworkInter
                         "",
                         context.getString(R.string.no_data_detail)
                     )
+                    loadedLinesCallback(context.getString(R.string.no_data), "", context.getString(R.string.no_data_detail))
                 }
                 inMemoryState.putLastLoadDataInMemory(prefs, widgetId, loadResponse)
                 inMemoryState.updatedAt[widgetId] = time
@@ -292,16 +298,19 @@ class WidgetTouchHandler(val context: Context, val networkManager : NetworkInter
         }
     }
 
-    private fun handleError(views : RemoteViews, widgetId: Int, e : Ng.LoadErrorResponse) {
+    private fun handleError(views : RemoteViews, widgetId: Int, e : Ng.LoadErrorResponse,
+                            loadedLinesCallback : (String, String, String) -> Unit) {
         LOG.warning("Error loading data $e")
 
         var line2 = context.getString(R.string.error_details_try_again)
+        var errorResource = R.string.error
         if (e.errorType == Ng.ErrorType.SL_API_ERROR) {
             line2 = context.getString(R.string.sl_api_error_detail, e.message)
-            setWidgetTextViews(views, context.getString(R.string.sl_api_error), "", line2)
-        } else {
-            setWidgetTextViews(views, context.getString(R.string.error), "", line2)
+            errorResource = R.string.sl_api_error
         }
+        setWidgetTextViews(views, context.getString(errorResource), "", line2)
+        loadedLinesCallback(context.getString(errorResource), "", line2)
+
         inMemoryState.putLastLoadDataInMemory(prefs, widgetId, Ng.WidgetLoadResponseData.getDefaultInstance())
         inMemoryState.updatedAt[widgetId] = System.currentTimeMillis() - UPDATE_FAIL_STALE
         inMemoryState.replaceAndStartThread(ScrollThread(
@@ -309,15 +318,18 @@ class WidgetTouchHandler(val context: Context, val networkManager : NetworkInter
         ))
     }
 
-    private fun handleException(views : RemoteViews, widgetId: Int, e : Exception) {
+    private fun handleException(views : RemoteViews, widgetId: Int, e : Exception,
+                                loadedLinesCallback : (String, String, String) -> Unit) {
         LOG.severe("Exception loading data $e")
         e.printStackTrace()
         val errorDetailString = context.getString(R.string.error_details_try_again)
+        var errorResource = R.string.error
         if (e is com.android.volley.TimeoutError || e is SocketTimeoutException) {
-            setWidgetTextViews(views, context.getString(R.string.error_timeout), "", errorDetailString)
-        } else {
-            setWidgetTextViews(views, context.getString(R.string.error), "", errorDetailString)
+            errorResource = R.string.error_timeout
         }
+        setWidgetTextViews(views, context.getString(errorResource), "", errorDetailString)
+        loadedLinesCallback(context.getString(errorResource), "", errorDetailString)
+
         inMemoryState.putLastLoadDataInMemory(prefs, widgetId, Ng.WidgetLoadResponseData.newBuilder()
             .setLine2(errorDetailString).build())
         inMemoryState.updatedAt[widgetId] = System.currentTimeMillis() - UPDATE_FAIL_STALE
