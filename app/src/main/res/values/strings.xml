@@ -98,23 +98,23 @@
     <string name="update_mode_tab">Widget settings</string>
     <string name="stop_list_tab">Stops to load</string>
     <string name="idle_line1_auto">Touch to start sequence</string>
-    <string name="idle_line2_auto">Will updating for %1$d minutes</string>
+    <string name="idle_line2_auto">Will update for %1$d minutes</string>
     <string name="update_on_sceen_on">Start update sequence when screen turns on</string>
     <string name="update_forever">Update sequence never stops</string>
     <string name="update_sequence_length">Update sequence length:</string>
     <string name="self_learning_periods">Learn at most these many periods:</string>
     <string name="current_self_learning_periods">Scheduled update periods:</string>
-    <string name="self_learning_threshold">Manual interations required to allocate a period:</string>
+    <string name="self_learning_threshold">Interactions required to allocate a period:</string>
     <string-array name="update_mode_array">
-        <item>Self-learning</item>
-        <item>Manual</item>
-        <item>Always</item>
+        <item>Learning update sequence</item>
+        <item>Manual one time update</item>
+        <item>Manual update sequence</item>
     </string-array>
     <string-array name="update_mode_help">
         <item>In this mode the widget will learn from your interactions and automatically be updated during times it
-            knows you usually use it. You can configure how many learning periods there are and how many interactions are required to create on.
+            knows you usually use it. It keeps a separate schedule for weekdays/weekends.
         </item>
-        <item>In this mode the widget will only update when you touch it.</item>
-        <item>In this mode the widget will always be updated as long as the screen is on. You can configure how long until the mode times out.</item>
+        <item>In this mode the widget will only update once when you touch it.</item>
+        <item>In this mode the widget will stay updated during a longer sequence. You can choose the length of the sequence and if a sequence should automatically start when the screen turns on.</item>
     </string-array>
 </resources>

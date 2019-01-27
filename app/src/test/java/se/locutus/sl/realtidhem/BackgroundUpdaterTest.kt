@@ -261,13 +261,14 @@ class BackgroundUpdaterTest {
         var updateCount = 0
         var updateCountPerId = ConcurrentHashMap<Int, Int>()
         var lastUpdateAction : String? = ""
-        override fun widgetTouched(widgetId: Int, action: String?, userTouch: Boolean) {
+        override fun widgetTouched(widgetId: Int, action: String?, userTouch: Boolean, loadedLinesCallback : (String, String, String) -> Unit) : Int {
             lastUpdateAction = action
             updateCount++
             if (!updateCountPerId.containsKey(widgetId)) {
                 updateCountPerId[widgetId] = 0
             }
             updateCountPerId[widgetId] = updateCountPerId[widgetId]!! + 1
+            return 0
         }
     }
 }

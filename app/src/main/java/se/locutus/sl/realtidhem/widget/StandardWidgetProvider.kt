@@ -13,6 +13,7 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.location.Location
+import android.os.Build
 import android.os.Bundle
 import androidx.core.content.ContextCompat
 import android.view.View
@@ -20,6 +21,7 @@ import se.locutus.proto.Ng
 import se.locutus.sl.realtidhem.activity.WIDGET_CONFIG_PREFS
 import se.locutus.sl.realtidhem.activity.getInteractionsToLearn
 import se.locutus.sl.realtidhem.activity.getLearningPeriods
+import se.locutus.sl.realtidhem.activity.getUpdateSequenceLength
 import se.locutus.sl.realtidhem.events.CYCLE_STOP_LEFT
 import se.locutus.sl.realtidhem.events.CYCLE_STOP_RIGHT
 import se.locutus.sl.realtidhem.events.WidgetBroadcastReceiver
@@ -45,7 +47,21 @@ class StandardWidgetProvider : AppWidgetProvider() {
             }
             if (targetService) {
                 intent.putExtra(EXTRA_MANUAL_TOUCH, true)
-                return PendingIntent.getService(context, widgetId, intent, PendingIntent.FLAG_UPDATE_CURRENT)
+                return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    PendingIntent.getForegroundService(
+                        context,
+                        widgetId,
+                        intent,
+                        PendingIntent.FLAG_UPDATE_CURRENT
+                    )
+                } else {
+                    PendingIntent.getService(
+                        context,
+                        widgetId,
+                        intent,
+                        PendingIntent.FLAG_UPDATE_CURRENT
+                    )
+                }
             }
             return PendingIntent.getBroadcast(context, widgetId, intent, PendingIntent.FLAG_UPDATE_CURRENT)
         }
@@ -203,7 +219,7 @@ fun setWidgetViews(context: Context,
     }
     val alwaysUpdate = widgetConfig.updateSettings.updateMode == Ng.UpdateSettings.UpdateMode.ALWAYS_UPDATE_MODE
     val line1 = if (alwaysUpdate) context.getString(R.string.idle_line1_auto) else context.getString(R.string.idle_line1)
-    val line2 = if (alwaysUpdate) context.getString(R.string.idle_line2_auto, widgetConfig.updateSettings.updateSequenceLength) else context.getString(R.string.idle_line2)
+    val line2 = if (alwaysUpdate) context.getString(R.string.idle_line2_auto, getUpdateSequenceLength(widgetConfig.updateSettings)) else context.getString(R.string.idle_line2)
     views.setTextViewText(R.id.widgettag, widgetText)
     views.setTextViewText(R.id.widgetline1, line1)
     views.setTextViewText(R.id.widgetmin, "")
