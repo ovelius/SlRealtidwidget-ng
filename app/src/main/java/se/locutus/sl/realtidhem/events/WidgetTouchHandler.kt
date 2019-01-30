@@ -43,7 +43,7 @@ const val CLEAR_TIME_MAX_MILLIS = 80 * 1000L
 interface TouchHandlerInterface {
     fun widgetTouched(widgetId :  Int, action : String?, userTouch : Boolean = true,
                       // Invoked with the lines we set on the widget.
-                      loadedLinesCallback : (String, String, String) -> Unit = {_, _,_ -> }) : Int
+                      loadedLinesCallback : (String, String, String) -> Unit = {_, _,_ -> })
 }
 
 fun openWidgetConfig(context : Context, color : Int?, widgetId: Int) {
@@ -58,8 +58,12 @@ fun openWidgetConfig(context : Context, color : Int?, widgetId: Int) {
     context.startActivity(intent)
 }
 
+fun getWidgetSelectedStopIndex(widgetId: Int, prefs: SharedPreferences) : Int {
+    return prefs.getInt(widgetKeySelectedStop(widgetId), 0)
+}
+
 fun cycleSelectedStop(action : String?, prefs : SharedPreferences, widgetId: Int, configCount : Int) : Int {
-    var selectedStopIndex = prefs.getInt(widgetKeySelectedStop(widgetId), 0)
+    var selectedStopIndex = getWidgetSelectedStopIndex(widgetId, prefs)
     if (CYCLE_STOP_LEFT.equals(action)) {
         selectedStopIndex--
         if (selectedStopIndex < 0) {
@@ -91,7 +95,7 @@ class WidgetTouchHandler(val context: Context, val networkManager : NetworkInter
     internal val inMemoryState = InMemoryState()
     val mainHandler = Handler(Looper.getMainLooper())
 
-    override fun widgetTouched(widgetId :  Int, action : String?, userTouch : Boolean, loadedLinesCallback : (String, String, String) -> Unit) : Int {
+    override fun widgetTouched(widgetId :  Int, action : String?, userTouch : Boolean, loadedLinesCallback : (String, String, String) -> Unit) {
         val widgetConfig = inMemoryState.getWidgetConfig(widgetId, prefs)
         val selectedStopIndex = cycleSelectedStop (action, prefs, widgetId, widgetConfig.stopConfigurationCount)
 
@@ -104,7 +108,7 @@ class WidgetTouchHandler(val context: Context, val networkManager : NetworkInter
         val manager = AppWidgetManager.getInstance(context)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (maybeAbortDueToPowerSave(widgetId, manager)) {
-                return selectedStopIndex
+                return
             }
         }
 
@@ -137,7 +141,7 @@ class WidgetTouchHandler(val context: Context, val networkManager : NetworkInter
             val lastLoadedData = inMemoryState.lastLoadedData[widgetId]
             openWidgetConfig(context, lastLoadedData?.color, widgetId)
         }
-        return selectedStopIndex
+        return
     }
 
     @SuppressLint("NewApi")

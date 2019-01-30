@@ -21,6 +21,7 @@ const val SERVICE_NOTIFICATION_ID = 1337
 // Update once every -1 second of being stale.
 const val UPDATE_PERIOD_MILLIS = STALE_MILLIS + 1000L
 const val EXTRA_MANUAL_TOUCH = "manual_touch"
+const val ACTION_STOP_UPATE_SEQUENCE = "stop_update_sequence"
 
 class BackgroundUpdaterService : Service() {
     companion object {
@@ -45,29 +46,32 @@ class BackgroundUpdaterService : Service() {
     internal var updateTimePeriodMillis = UPDATE_PERIOD_MILLIS
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-
         LOG.info("Received intent $intent")
-        var updateString : String? = null
+        var widgetId = -1
         if (intent?.hasExtra(AppWidgetManager.EXTRA_APPWIDGET_ID) == true) {
+            widgetId = intent!!.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, -1)
+        }
+        if (widgetId != -1) {
             // Typical case is a widget update intent alarm triggering.
-            val id = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, 0)
-            val config = inMemoryState.getWidgetConfig(id, prefs, true)
-            if (config.updateSettings.updateMode == Ng.UpdateSettings.UpdateMode.LEARNING_UPDATE_MODE) {
-                updateString = "Learning widget $id"
-                val triggerTime = intent.getLongExtra(EXTRA_UPDATE_TIME, System.currentTimeMillis())
+            val config = inMemoryState.getWidgetConfig(widgetId, prefs, true)
+            if (ACTION_STOP_UPATE_SEQUENCE == intent?.action) {
+                selfLearningTimeouts[widgetId] = 0
+                autoUpdateSequenceEndTime[widgetId] = 0
+            } else if (config.updateSettings.updateMode == Ng.UpdateSettings.UpdateMode.LEARNING_UPDATE_MODE) {
+                val triggerTime = intent!!.getLongExtra(EXTRA_UPDATE_TIME, System.currentTimeMillis())
                 val overtTime = System.currentTimeMillis() - triggerTime
-                LOG.info("Received extra widgetId $id for learning widget with overtime $overtTime")
-                selfLearningTimeouts[id] = System.currentTimeMillis() + UPDATE_TIME_MILLIS - overtTime
+                LOG.info("Received extra widgetId $widgetId for learning widget with overtime $overtTime")
+                selfLearningTimeouts[widgetId] = System.currentTimeMillis() + UPDATE_TIME_MILLIS - overtTime
             } else if (config.updateSettings.updateMode == Ng.UpdateSettings.UpdateMode.ALWAYS_UPDATE_MODE) {
-                LOG.info("Received extra widgetId $id for auto update widget manual extra ${intent.hasExtra(EXTRA_MANUAL_TOUCH)}")
-                setAutoUpdateSequence(id, config.updateSettings.updateSequenceLength)
-                if (intent.hasExtra(EXTRA_MANUAL_TOUCH)) {
-                    if (inMemoryState.maybeIncrementTouchCountAndOpenConfig(id)) {
-                        openWidgetConfig(this, null, id)
+                LOG.info("Received extra widgetId $widgetId for auto update widget manual extra ${intent?.hasExtra(EXTRA_MANUAL_TOUCH)}")
+                setAutoUpdateSequence(widgetId, config.updateSettings.updateSequenceLength)
+                if (intent!!.hasExtra(EXTRA_MANUAL_TOUCH)) {
+                    if (inMemoryState.maybeIncrementTouchCountAndOpenConfig(widgetId)) {
+                        openWidgetConfig(this, null, widgetId)
                     }
                     // Trigger the update right away
                     if (hasAutoUpdatesRunning()) {
-                        touchWidgetOnce(id, intent.action)
+                        touchWidgetOnce(widgetId, intent.action)
                     }
                 }
             }
@@ -91,7 +95,7 @@ class BackgroundUpdaterService : Service() {
             startAutoUpdateSequence(false)
         }
 
-        createForeGroundNotification()
+        createForeGroundNotification(widgetId)
 
         return START_STICKY
     }
@@ -112,7 +116,8 @@ class BackgroundUpdaterService : Service() {
         return channelId
     }
 
-    private fun createForeGroundNotification(contentTitle : String = getString(R.string.auto_updates_running),
+    private fun createForeGroundNotification(widgetId: Int,
+            contentTitle : String = getString(R.string.auto_updates_running),
                                              contentInfo : String? = null,
                                              contentText : String? = null) {
         val channelId =
@@ -123,27 +128,22 @@ class BackgroundUpdaterService : Service() {
                 // https://developer.android.com/reference/android/support/v4/app/NotificationCompat.Builder.html#NotificationCompat.Builder(android.content.Context)
                 ""
             }
-        val disableI = Intent(this, BackgroundUpdaterService::class.java).apply { action = "test" }
-        val pdisable = PendingIntent.getService(
+        val stopSequenceIntent = Intent(this, BackgroundUpdaterService::class.java).apply {
+            action = ACTION_STOP_UPATE_SEQUENCE
+            putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId)
+        }
+        val stopSequence = PendingIntent.getService(
             this, 0,
-            disableI, 0
-        )
-
-        val enableI = Intent(this, BackgroundUpdaterService::class.java).apply { action = "test2" }
-        val penable = PendingIntent.getService(
-            this, 0,
-            enableI, 0
+            stopSequenceIntent, 0
         )
 
         val builder = NotificationCompat.Builder(this, channelId)
             .setSmallIcon(R.mipmap.ic_launcher)
-            .addAction(R.mipmap.ic_launcher, "Disable", pdisable)
-            .addAction(R.mipmap.ic_launcher, "Enable", penable)
+            .addAction(R.mipmap.ic_launcher, getString(R.string.stop_sequence), stopSequence)
             .setContentTitle(contentTitle)
         if (contentInfo != null) {
-            builder.setContentInfo(contentInfo)
+            builder.setSubText(contentInfo)
         }
-            // .setContentIntent(pendingIntent)
         if (contentText != null) {
             builder.setContentText(contentText)
         }
@@ -185,8 +185,8 @@ class BackgroundUpdaterService : Service() {
         val touchHandler = widgetTouchProvider()
         val config = inMemoryState.getWidgetConfig(widgetId, prefs)
         touchHandler.widgetTouched(widgetId, action, false) { line1 : String, min : String, line2 : String ->
-            val stopConfig = config.getStopConfiguration(0)
-            createForeGroundNotification("$line1 $min", stopConfig.stopData.displayName, line2)
+            val stopConfig = config.getStopConfiguration(getWidgetSelectedStopIndex(widgetId, prefs))
+            createForeGroundNotification(widgetId,"$line1 $min", stopConfig.stopData.displayName, line2)
         }
     }
 

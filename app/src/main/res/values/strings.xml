@@ -105,6 +105,7 @@
     <string name="self_learning_periods">Learn at most these many periods:</string>
     <string name="current_self_learning_periods">Scheduled update periods:</string>
     <string name="self_learning_threshold">Interactions required to allocate a period:</string>
+    <string name="stop_sequence">Stop updating</string>
     <string-array name="update_mode_array">
         <item>Learning update sequence</item>
         <item>Manual one time update</item>
