@@ -14,7 +14,7 @@ import java.util.concurrent.ConcurrentHashMap
  * In memory state related to all widget.
  * Most state can be recovered from settings if needed.
  */
-internal class InMemoryState {
+class InMemoryState {
     private var scrollThread : WidgetTouchHandler.ScrollThread? = null
     var nextPowerSaveSettings = false
     var lastTouch = ConcurrentHashMap<Int, Long>()

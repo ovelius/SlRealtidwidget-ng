@@ -44,6 +44,7 @@ interface TouchHandlerInterface {
     fun widgetTouched(widgetId :  Int, action : String?, userTouch : Boolean = true,
                       // Invoked with the lines we set on the widget.
                       loadedLinesCallback : (String, String, String) -> Unit = {_, _,_ -> })
+    fun getInMemoryState() : InMemoryState
 }
 
 fun openWidgetConfig(context : Context, color : Int?, widgetId: Int) {
@@ -92,8 +93,12 @@ class WidgetTouchHandler(val context: Context, val networkManager : NetworkInter
     }
     internal val prefs = context.getSharedPreferences(WIDGET_CONFIG_PREFS, 0)
     internal val timeTracker = TimeTracker(context)
-    internal val inMemoryState = InMemoryState()
     val mainHandler = Handler(Looper.getMainLooper())
+    internal val inMemoryState = InMemoryState()
+
+    override fun getInMemoryState(): InMemoryState {
+        return inMemoryState
+    }
 
     override fun widgetTouched(widgetId :  Int, action : String?, userTouch : Boolean, loadedLinesCallback : (String, String, String) -> Unit) {
         val widgetConfig = inMemoryState.getWidgetConfig(widgetId, prefs)
@@ -369,7 +374,7 @@ class WidgetTouchHandler(val context: Context, val networkManager : NetworkInter
         }
     }
 
-    internal class ScrollThread(
+    class ScrollThread(
         val widgetId: Int,
         private val views : RemoteViews,
         private val theLine: String,

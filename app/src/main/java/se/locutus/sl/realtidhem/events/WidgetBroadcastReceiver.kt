@@ -22,8 +22,7 @@ class WidgetBroadcastReceiver  : BroadcastReceiver() {
         var widgetTouchHandler : WidgetTouchHandler? = null
         fun getTouchHandler(context : Context) : TouchHandlerInterface {
             if (widgetTouchHandler == null) {
-                LOG.info("Creating main widget handler")
-                widgetTouchHandler = WidgetTouchHandler(context!!, NetworkManager(context))
+                widgetTouchHandler = WidgetTouchHandler(context.applicationContext, NetworkManager(context))
             }
             return widgetTouchHandler!!
         }

@@ -21,12 +21,14 @@ import org.robolectric.shadows.ShadowPowerManager
 import org.robolectric.shadows.ShadowService
 import se.locutus.proto.Ng
 import se.locutus.sl.realtidhem.activity.WIDGET_CONFIG_PREFS
+import se.locutus.sl.realtidhem.events.InMemoryState
 import se.locutus.sl.realtidhem.events.TouchHandlerInterface
 import se.locutus.sl.realtidhem.service.BackgroundUpdaterService
 import se.locutus.sl.realtidhem.service.EXTRA_MANUAL_TOUCH
 import se.locutus.sl.realtidhem.service.EXTRA_UPDATE_TIME
 import se.locutus.sl.realtidhem.service.SERVICE_NOTIFICATION_ID
 import se.locutus.sl.realtidhem.widget.storeWidgetConfig
+import java.lang.RuntimeException
 import java.util.concurrent.ConcurrentHashMap
 
 @RunWith(RobolectricTestRunner::class)
@@ -258,6 +260,10 @@ class BackgroundUpdaterTest {
 
     //val context: Context, val networkManager : NetworkInterface, val retryMillis : Long = UPDATE_AUTO_RETRY_MILLIS
     internal class FakeTouchHandler(context : Context) : TouchHandlerInterface {
+        override fun getInMemoryState(): InMemoryState {
+            return InMemoryState()
+        }
+
         var updateCount = 0
         var updateCountPerId = ConcurrentHashMap<Int, Int>()
         var lastUpdateAction : String? = ""
