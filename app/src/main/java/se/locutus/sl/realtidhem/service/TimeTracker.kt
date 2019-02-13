@@ -74,7 +74,21 @@ class TimeTracker(val context : Context) {
             putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId)
             putExtra(EXTRA_UPDATE_TIME, triggerTime)
         }
-        return PendingIntent.getService(context, requestCode, intent, 0)
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            PendingIntent.getForegroundService(
+                context,
+                requestCode,
+                intent,
+                0
+            )
+        } else {
+            PendingIntent.getService(
+                context,
+                requestCode,
+                intent,
+                0
+            )
+        }
     }
 
     fun scheduleAlarmsFrom(widgetId: Int, records : List<TimeRecord>) {
