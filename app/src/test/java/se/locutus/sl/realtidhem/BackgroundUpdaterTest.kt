@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Looper
 import android.os.PowerManager
+import android.widget.RemoteViews
 import android.widget.TextView
 import androidx.test.core.app.ApplicationProvider
 import org.hamcrest.CoreMatchers.`is`
@@ -205,6 +206,8 @@ class BackgroundUpdaterTest {
         // Wait one update period
         runOneTask()
         assertThat(touchHandler.updateCount, `is`(2))
+        // Something got loaded
+        setWidgetLines(widgetId, "test", "test")
         // Simulate timeout
         service.selfLearningTimeouts[widgetId] = 0
         runOneTask()
@@ -246,6 +249,14 @@ class BackgroundUpdaterTest {
             .build()
         storeWidgetConfig(prefs, config)
         return widgetId
+    }
+
+    private fun setWidgetLines(widgetId: Int, line1 : String, line2 : String) {
+        val manager = AppWidgetManager.getInstance(service)
+        val views = RemoteViews(context.packageName,  R.layout.widgetlayout_base)
+        views.setTextViewText(R.id.widgetline1, line1)
+        views.setTextViewText(R.id.widgetline2, line2)
+        manager.updateAppWidget(widgetId, views)
     }
 
     fun assertViewText(widgetId : Int, viewId : Int, expectedText : String) {

@@ -13,6 +13,7 @@ import se.locutus.sl.realtidhem.R
 import se.locutus.sl.realtidhem.activity.WIDGET_CONFIG_PREFS
 import se.locutus.sl.realtidhem.events.*
 import se.locutus.sl.realtidhem.widget.*
+import java.lang.RuntimeException
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap
 import kotlin.concurrent.timerTask
@@ -253,7 +254,8 @@ class BackgroundUpdaterService : Service() {
         for (widgetId in widgetIdProvider()) {
             val config = widgetTouchProvider().getInMemoryState().getWidgetConfig(widgetId, prefs)
             val updateMode = config.updateSettings.updateMode
-            if (updateMode == Ng.UpdateSettings.UpdateMode.ALWAYS_UPDATE_MODE) {
+            if (updateMode == Ng.UpdateSettings.UpdateMode.ALWAYS_UPDATE_MODE ||
+                    updateMode == Ng.UpdateSettings.UpdateMode.LEARNING_UPDATE_MODE) {
                 // Set something else here.
                 setStaleMessages(widgetId)
             }
@@ -269,7 +271,7 @@ class BackgroundUpdaterService : Service() {
         intentFilter.addAction(Intent.ACTION_SCREEN_OFF)
         intentFilter.addAction(Intent.ACTION_USER_PRESENT)
         registerReceiver(wakeLockReceiver, intentFilter)
-
+        createForeGroundNotification(0)
         return super.onCreate()
     }
 
