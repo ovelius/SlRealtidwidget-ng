@@ -24,10 +24,7 @@ import se.locutus.proto.Ng
 import se.locutus.sl.realtidhem.activity.WIDGET_CONFIG_PREFS
 import se.locutus.sl.realtidhem.events.InMemoryState
 import se.locutus.sl.realtidhem.events.TouchHandlerInterface
-import se.locutus.sl.realtidhem.service.BackgroundUpdaterService
-import se.locutus.sl.realtidhem.service.EXTRA_MANUAL_TOUCH
-import se.locutus.sl.realtidhem.service.EXTRA_UPDATE_TIME
-import se.locutus.sl.realtidhem.service.SERVICE_NOTIFICATION_ID
+import se.locutus.sl.realtidhem.service.*
 import se.locutus.sl.realtidhem.widget.storeWidgetConfig
 import java.lang.RuntimeException
 import java.util.concurrent.ConcurrentHashMap
@@ -62,7 +59,7 @@ class BackgroundUpdaterTest {
 
     @Test
     fun testStopOnNoWidgets() {
-        assertThat(shadow.lastForegroundNotificationId, `is`(0))
+        assertThat(shadow.lastForegroundNotificationId, `is`(SERVICE_NOTIFICATION_ID))
         assertThat(shadow.isForegroundStopped, `is`(false))
 
         service.widgetIdProvider = {
@@ -72,7 +69,7 @@ class BackgroundUpdaterTest {
         service.onStartCommand(null, 0, 0)
 
         assertThat(shadow.isStoppedBySelf, `is`(true))
-        assertThat(shadow.lastForegroundNotificationId, `is`(0))
+        assertThat(shadow.lastForegroundNotificationId, `is`(SERVICE_NOTIFICATION_ID))
         assertThat(service.hasAutoUpdatesRunning(), `is`(false))
     }
 
@@ -87,7 +84,7 @@ class BackgroundUpdaterTest {
 
         // Still doesn't start.
         assertThat(shadow.isStoppedBySelf, `is`(true))
-        assertThat(shadow.lastForegroundNotificationId, `is`(0))
+        assertThat(shadow.lastForegroundNotificationId, `is`(SERVICE_NOTIFICATION_ID))
         assertThat(service.hasAutoUpdatesRunning(), `is`(false))
     }
 
@@ -208,13 +205,19 @@ class BackgroundUpdaterTest {
         assertThat(touchHandler.updateCount, `is`(2))
         // Something got loaded
         setWidgetLines(widgetId, "test", "test")
-        // Simulate timeout
-        service.selfLearningTimeouts[widgetId] = 0
+        // Simulate manual abort.
+        val stopSequenceIntent = Intent(context, BackgroundUpdaterService::class.java).apply {
+            action = ACTION_STOP_UPATE_SEQUENCE
+            putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId)
+        }
+        service.onStartCommand(stopSequenceIntent, 0,0)
         runOneTask()
         // No additional updates.
         assertThat(touchHandler.updateCount, `is`(2))
         assertViewText(widgetId, R.id.widgetline1, R.string.idle_line1)
         assertViewText(widgetId, R.id.widgetline2,  R.string.idle_line2)
+        // We stopped.
+        assertThat(shadow.isStoppedBySelf, `is`(true))
     }
 
     @Test

@@ -56,8 +56,9 @@ class BackgroundUpdaterService : Service() {
             val config = inMemoryState.getWidgetConfig(widgetId, prefs, true)
             if (ACTION_STOP_UPATE_SEQUENCE == intent?.action) {
                 inMemoryState.replaceAndStartThread(null, true)
-                selfLearningTimeouts[widgetId] = 0
-                autoUpdateSequenceEndTime[widgetId] = 0
+                selfLearningTimeouts.remove(widgetId)
+                autoUpdateSequenceEndTime.remove(widgetId)
+                LOG.info("Manually stopping sequence for $widgetId")
             } else if (config.updateSettings.updateMode == Ng.UpdateSettings.UpdateMode.LEARNING_UPDATE_MODE) {
                 val triggerTime = intent!!.getLongExtra(EXTRA_UPDATE_TIME, System.currentTimeMillis())
                 val overtTime = System.currentTimeMillis() - triggerTime
@@ -117,7 +118,7 @@ class BackgroundUpdaterService : Service() {
         return channelId
     }
 
-    private fun createForeGroundNotification(widgetId: Int,
+    private fun createForeGroundNotification(widgetId: Int?,
             contentTitle : String = getString(R.string.auto_updates_running),
                                              contentInfo : String? = null,
                                              contentText : String? = null) {
@@ -129,19 +130,23 @@ class BackgroundUpdaterService : Service() {
                 // https://developer.android.com/reference/android/support/v4/app/NotificationCompat.Builder.html#NotificationCompat.Builder(android.content.Context)
                 ""
             }
-        val stopSequenceIntent = Intent(this, BackgroundUpdaterService::class.java).apply {
-            action = ACTION_STOP_UPATE_SEQUENCE
-            putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId)
-        }
-        val stopSequence = PendingIntent.getService(
-            this, 0,
-            stopSequenceIntent, 0
-        )
 
         val builder = NotificationCompat.Builder(this, channelId)
             .setSmallIcon(R.mipmap.ic_launcher)
-            .addAction(R.mipmap.ic_launcher, getString(R.string.stop_sequence), stopSequence)
             .setContentTitle(contentTitle)
+
+        if (widgetId != null) {
+            val stopSequenceIntent = Intent(this, BackgroundUpdaterService::class.java).apply {
+                action = ACTION_STOP_UPATE_SEQUENCE
+                putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId)
+            }
+            val stopSequence = PendingIntent.getService(
+                this, widgetId,
+                stopSequenceIntent, 0
+            )
+            builder.addAction(R.mipmap.ic_launcher, getString(R.string.stop_sequence), stopSequence)
+        }
+
         if (contentInfo != null) {
             builder.setSubText(contentInfo)
         }
@@ -271,7 +276,7 @@ class BackgroundUpdaterService : Service() {
         intentFilter.addAction(Intent.ACTION_SCREEN_OFF)
         intentFilter.addAction(Intent.ACTION_USER_PRESENT)
         registerReceiver(wakeLockReceiver, intentFilter)
-        createForeGroundNotification(0)
+        createForeGroundNotification(null)
         return super.onCreate()
     }
 
