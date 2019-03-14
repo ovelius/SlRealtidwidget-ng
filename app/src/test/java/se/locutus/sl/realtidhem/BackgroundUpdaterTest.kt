@@ -172,9 +172,7 @@ class BackgroundUpdaterTest {
         service.widgetIdProvider = {
             intArrayOf(widgetId)
         }
-        val intent = Intent().apply {
-            putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId)
-        }
+        val intent = startIntent(widgetId, System.currentTimeMillis())
         // Change update mode.
         shadowPowerManager.setIsInteractive(false)
         service.onStartCommand(intent, 0 ,0)
@@ -221,19 +219,60 @@ class BackgroundUpdaterTest {
     }
 
     @Test
+    fun testStartSelfLearningUnschedule() {
+        val widgetId = createWidgetConfig(createUpdateSettings(Ng.UpdateSettings.UpdateMode.LEARNING_UPDATE_MODE))
+        service.widgetIdProvider = {
+            intArrayOf(widgetId)
+        }
+        val intent = startIntent(widgetId, System.currentTimeMillis())
+        service.onStartCommand(intent, 0 ,0)
+        assertThat(service.hasAutoUpdatesRunning(), `is`(true))
+
+        var alarmKeyValue = ""
+        service.unscheduleAlarmFunction = { _, alarmKey ->
+            alarmKeyValue = alarmKey
+        }
+
+        Thread.sleep(40)
+        shadowLooper.runOneTask()
+        assertThat(touchHandler.updateCount, `is`(1))
+
+        // Simulate manual abort.
+        val stopSequenceIntent = Intent(context, BackgroundUpdaterService::class.java).apply {
+            action = ACTION_STOP_UPATE_SEQUENCE_NEVER_UPDATE
+            putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId)
+        }
+        service.onStartCommand(stopSequenceIntent, 0,0)
+        runOneTask()
+        // No additional updates.
+        assertThat(touchHandler.updateCount, `is`(1))
+        // Alarm was removed.
+        assertThat(alarmKeyValue, `is`("alarm_key"))
+        assertViewText(widgetId, R.id.widgetline1, R.string.idle_line1)
+        assertViewText(widgetId, R.id.widgetline2,  R.string.idle_line2)
+        // We stopped.
+        assertThat(shadow.isStoppedBySelf, `is`(true))
+    }
+
+    @Test
     fun testStartSelfLearningWidgetsLateUpdate() {
         val widgetId = createWidgetConfig(createUpdateSettings(Ng.UpdateSettings.UpdateMode.LEARNING_UPDATE_MODE))
         service.widgetIdProvider = {
             intArrayOf(widgetId)
         }
-        val intent = Intent().apply {
-            putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId)
-            putExtra(EXTRA_UPDATE_TIME, 0L)
-        }
+        val intent = startIntent(widgetId, 0L)
         // Try again.
         shadowPowerManager.setIsInteractive(true)
         service.onStartCommand(intent, 0 ,0)
         assertThat(service.hasAutoUpdatesRunning(), `is`(false))
+    }
+
+    private fun startIntent(widgetId : Int, startTime : Long) : Intent {
+      return Intent().apply {
+          putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId)
+          putExtra(EXTRA_UPDATE_TIME, startTime)
+          putExtra(EXTRA_UPDATE_TIME_KEY, "alarm_key")
+      }
     }
 
     private fun createUpdateSettings(mode : Ng.UpdateSettings.UpdateMode, sequenceMinutes : Int = 1, listenForScreenOn : Boolean = false) : Ng.UpdateSettings {

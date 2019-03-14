@@ -14,6 +14,7 @@ import java.util.logging.Logger
 
 const val TIME_PREFS = "time_prefs"
 const val EXTRA_UPDATE_TIME = "update_time"
+const val EXTRA_UPDATE_TIME_KEY = "update_time_key"
 // Each timeslot will keep the widget updated for 15 minutes.
 const val UPDATE_TIME_MILLIS = 60 * 15 * 1000
 
@@ -30,6 +31,11 @@ fun sortRecordsByTimeAndCutoff(records : ArrayList<TimeTracker.TimeRecord> , cou
     }
     filteredRecords.sort()
     return filteredRecords
+}
+
+fun deleteAlarmKey(context : Context, key : String) {
+    val prefs = context.getSharedPreferences(TIME_PREFS, 0)
+    prefs.edit().remove(key).apply()
 }
 
 /**
@@ -59,6 +65,10 @@ class TimeTracker(val context : Context) {
         return "$widgetId:wd:$weekday:$hour:$min"
     }
 
+    private fun createAlarmKey(widgetId : Int, timeRecord: TimeRecord) : String {
+        return createAlarmKey(widgetId, timeRecord.hour, timeRecord.minute, timeRecord.weekday)
+    }
+
     fun createRecordKey(widgetId : Int, c : Calendar) : String {
         var minutes = translateMinutes(c.get(Calendar.MINUTE))
         if (minutes < 0) {
@@ -73,6 +83,7 @@ class TimeTracker(val context : Context) {
         val intent = Intent(context, BackgroundUpdaterService::class.java).apply {
             putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId)
             putExtra(EXTRA_UPDATE_TIME, triggerTime)
+            putExtra(EXTRA_UPDATE_TIME_KEY, createAlarmKey(widgetId, timeRecord))
         }
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             PendingIntent.getForegroundService(
