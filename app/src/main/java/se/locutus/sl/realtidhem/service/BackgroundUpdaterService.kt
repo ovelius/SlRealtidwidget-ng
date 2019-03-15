@@ -13,7 +13,6 @@ import se.locutus.sl.realtidhem.R
 import se.locutus.sl.realtidhem.activity.WIDGET_CONFIG_PREFS
 import se.locutus.sl.realtidhem.events.*
 import se.locutus.sl.realtidhem.widget.*
-import java.lang.RuntimeException
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap
 import kotlin.concurrent.timerTask
@@ -29,7 +28,8 @@ class BackgroundUpdaterService : Service() {
     companion object {
         val LOG = Logger.getLogger(BackgroundUpdaterService::class.java.name)
     }
-    internal var wakeLockReceiver: WakeLockReceiever = WakeLockReceiever(this)
+    internal var wakeLockReceiver: WakeLockReceiever =
+        WakeLockReceiever(this)
     private lateinit var timeTracker : TimeTracker
     private val mainHandler = Handler(Looper.getMainLooper())
     private var timerTask : TimerTask? = null

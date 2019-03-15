@@ -1,13 +1,12 @@
-package se.locutus.sl.realtidhem.events
+package se.locutus.sl.realtidhem.service
 
 import android.app.KeyguardManager
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import se.locutus.sl.realtidhem.service.BackgroundUpdaterService
 import java.util.logging.Logger
 
-class WakeLockReceiever(val service : BackgroundUpdaterService) : BroadcastReceiver() {
+internal class WakeLockReceiever(val service : BackgroundUpdaterService) : BroadcastReceiver() {
     companion object {
         val LOG = Logger.getLogger(WakeLockReceiever::class.java.name)
     }
