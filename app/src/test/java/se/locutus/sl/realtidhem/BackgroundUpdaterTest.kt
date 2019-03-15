@@ -29,6 +29,8 @@ import se.locutus.sl.realtidhem.widget.storeWidgetConfig
 import java.lang.RuntimeException
 import java.util.concurrent.ConcurrentHashMap
 
+const val ALARM_KEY = "alarm_key"
+
 @RunWith(RobolectricTestRunner::class)
 class BackgroundUpdaterTest {
     private val TEST_UPDATE_PERIOD = 10000000L
@@ -37,6 +39,7 @@ class BackgroundUpdaterTest {
     private val context = ApplicationProvider.getApplicationContext<android.app.Application>()
     private lateinit var shadowAppWidgetManager: ShadowAppWidgetManager
     private val prefs = context.getSharedPreferences(WIDGET_CONFIG_PREFS, 0)
+    private val timeTrackerPrefs = context.getSharedPreferences(TIME_PREFS, 0)
     private val shadowLooper = shadowOf(Looper.getMainLooper())
     private val touchHandler = FakeTouchHandler(context)
     private val shadowPowerManager: ShadowPowerManager = shadowOf(context.getSystemService(Context.POWER_SERVICE) as PowerManager)
@@ -50,6 +53,8 @@ class BackgroundUpdaterTest {
         service.updateTimePeriodMillis = TEST_UPDATE_PERIOD
         shadowAppWidgetManager = shadowOf(AppWidgetManager.getInstance(service))
         shadow = shadowOf(service)
+        // For self learning widgets an alarm key is required.
+        timeTrackerPrefs.edit().putInt(ALARM_KEY, 2).commit()
     }
 
     private fun runOneTask() {
@@ -247,7 +252,7 @@ class BackgroundUpdaterTest {
         // No additional updates.
         assertThat(touchHandler.updateCount, `is`(1))
         // Alarm was removed.
-        assertThat(alarmKeyValue, `is`("alarm_key"))
+        assertThat(alarmKeyValue, `is`(ALARM_KEY))
         assertViewText(widgetId, R.id.widgetline1, R.string.idle_line1)
         assertViewText(widgetId, R.id.widgetline2,  R.string.idle_line2)
         // We stopped.
@@ -267,11 +272,27 @@ class BackgroundUpdaterTest {
         assertThat(service.hasAutoUpdatesRunning(), `is`(false))
     }
 
+    @Test
+    fun testNoAlarmKeyForSelfLearning() {
+        val widgetId = createWidgetConfig(createUpdateSettings(Ng.UpdateSettings.UpdateMode.LEARNING_UPDATE_MODE))
+        service.widgetIdProvider = {
+            intArrayOf(widgetId)
+        }
+        val intent = startIntent(widgetId, System.currentTimeMillis())
+        shadowPowerManager.setIsInteractive(true)
+
+        // Removing the alarm key will not run the alarm sequence.
+        timeTrackerPrefs.edit().remove(ALARM_KEY).commit()
+
+        service.onStartCommand(intent, 0 ,0)
+        assertThat(service.hasAutoUpdatesRunning(), `is`(false))
+    }
+
     private fun startIntent(widgetId : Int, startTime : Long) : Intent {
       return Intent().apply {
           putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId)
           putExtra(EXTRA_UPDATE_TIME, startTime)
-          putExtra(EXTRA_UPDATE_TIME_KEY, "alarm_key")
+          putExtra(EXTRA_UPDATE_TIME_KEY, ALARM_KEY)
       }
     }
 

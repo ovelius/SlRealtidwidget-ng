@@ -17,6 +17,7 @@ const val EXTRA_UPDATE_TIME = "update_time"
 const val EXTRA_UPDATE_TIME_KEY = "update_time_key"
 // Each timeslot will keep the widget updated for 15 minutes.
 const val UPDATE_TIME_MILLIS = 60 * 15 * 1000
+const val ALARM_WINDOW_LENGTH = 10*60*1000L
 
 
 fun sortRecordsByTimeAndCutoff(records : ArrayList<TimeTracker.TimeRecord> , countCutoff : Int) : ArrayList<TimeTracker.TimeRecord> {
@@ -33,9 +34,24 @@ fun sortRecordsByTimeAndCutoff(records : ArrayList<TimeTracker.TimeRecord> , cou
     return filteredRecords
 }
 
-fun deleteAlarmKey(context : Context, key : String) {
+fun deleteAlarmKey(context : Context, key : String) : Int {
     val prefs = context.getSharedPreferences(TIME_PREFS, 0)
+    val current = prefs.getInt(key, -1)
     prefs.edit().remove(key).apply()
+    return current
+}
+
+fun restoreAlarmKey(context : Context, key : String, value : Int) {
+    val prefs = context.getSharedPreferences(TIME_PREFS, 0)
+    prefs.edit().putInt(key, value).commit()
+}
+
+fun createAlarmKey(widgetId : Int, timeRecord: TimeTracker.TimeRecord) : String {
+    return createAlarmKey(widgetId, timeRecord.hour, timeRecord.minute, timeRecord.weekday)
+}
+
+fun createAlarmKey(widgetId : Int, hour : Int, min : Int, weekday: Boolean) : String {
+    return "$widgetId:wd:$weekday:$hour:$min"
 }
 
 /**
@@ -61,14 +77,6 @@ class TimeTracker(val context : Context) {
         return base + if (rest5 == 0) - 10 else 0
     }
 
-    private fun createAlarmKey(widgetId : Int, hour : Int, min : Int, weekday: Boolean) : String {
-        return "$widgetId:wd:$weekday:$hour:$min"
-    }
-
-    private fun createAlarmKey(widgetId : Int, timeRecord: TimeRecord) : String {
-        return createAlarmKey(widgetId, timeRecord.hour, timeRecord.minute, timeRecord.weekday)
-    }
-
     fun createRecordKey(widgetId : Int, c : Calendar) : String {
         var minutes = translateMinutes(c.get(Calendar.MINUTE))
         if (minutes < 0) {
@@ -76,6 +84,10 @@ class TimeTracker(val context : Context) {
             c.add(Calendar.HOUR, -1)
         }
         return "$widgetId:wd:${isWeekDay(c)}:${c.get(Calendar.HOUR_OF_DAY)}:$minutes:${c.get(Calendar.DAY_OF_MONTH)}"
+    }
+
+    fun hasAlarmKey(key : String) : Boolean {
+        return prefs.getInt(key, -1) != -1
     }
 
     private fun createPendingIntent(widgetId: Int, timeRecord: TimeRecord, triggerTime : Long, day : Int) : PendingIntent {
@@ -132,7 +144,7 @@ class TimeTracker(val context : Context) {
             return
         }
         val intent = createPendingIntent(widgetId, timeRecord, calendar.timeInMillis, day)
-        alarmManager.setWindow(AlarmManager.RTC_WAKEUP, calendar.timeInMillis, 10*60*1000, intent)
+        alarmManager.setWindow(AlarmManager.RTC_WAKEUP, calendar.timeInMillis, ALARM_WINDOW_LENGTH, intent)
     }
 
     /**

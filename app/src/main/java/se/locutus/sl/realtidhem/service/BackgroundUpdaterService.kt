@@ -30,6 +30,7 @@ class BackgroundUpdaterService : Service() {
         val LOG = Logger.getLogger(BackgroundUpdaterService::class.java.name)
     }
     internal var wakeLockReceiver: WakeLockReceiever = WakeLockReceiever(this)
+    private lateinit var timeTracker : TimeTracker
     private val mainHandler = Handler(Looper.getMainLooper())
     private var timerTask : TimerTask? = null
     private val timer = Timer()
@@ -72,11 +73,16 @@ class BackgroundUpdaterService : Service() {
                     }
                 }
             } else if (config.updateSettings.updateMode == Ng.UpdateSettings.UpdateMode.LEARNING_UPDATE_MODE) {
-                val triggerTime = intent!!.getLongExtra(EXTRA_UPDATE_TIME, System.currentTimeMillis())
-                val overtTime = System.currentTimeMillis() - triggerTime
-                LOG.info("Received extra widgetId $widgetId for learning widget with overtime $overtTime")
-                selfLearningTimeouts[widgetId] = System.currentTimeMillis() + UPDATE_TIME_MILLIS - overtTime
-                selfLearningKey[widgetId] = intent!!.getStringExtra(EXTRA_UPDATE_TIME_KEY)
+                val alarmKey = intent!!.getStringExtra(EXTRA_UPDATE_TIME_KEY)
+                if (timeTracker.hasAlarmKey(alarmKey)) {
+                    val triggerTime = intent!!.getLongExtra(EXTRA_UPDATE_TIME, System.currentTimeMillis())
+                    val overtTime = System.currentTimeMillis() - triggerTime
+                    LOG.info("Received extra widgetId $widgetId for learning widget with overtime $overtTime")
+                    selfLearningTimeouts[widgetId] = System.currentTimeMillis() + UPDATE_TIME_MILLIS - overtTime
+                    selfLearningKey[widgetId] = alarmKey
+                } else {
+                    LOG.warning("Received alarm with missing alarm key for $widgetId not scheduling.")
+                }
             } else if (config.updateSettings.updateMode == Ng.UpdateSettings.UpdateMode.ALWAYS_UPDATE_MODE) {
                 LOG.info("Received extra widgetId $widgetId for auto update widget manual extra ${intent?.hasExtra(EXTRA_MANUAL_TOUCH)}")
                 setAutoUpdateSequence(widgetId, config.updateSettings.updateSequenceLength)
@@ -296,6 +302,7 @@ class BackgroundUpdaterService : Service() {
         LOG.info("OnCreate")
         prefs = getSharedPreferences(WIDGET_CONFIG_PREFS, 0)
         powerManager = getSystemService(Context.POWER_SERVICE) as PowerManager
+        timeTracker = TimeTracker(this)
         val intentFilter = IntentFilter()
         intentFilter.addAction(Intent.ACTION_SCREEN_ON)
         intentFilter.addAction(Intent.ACTION_SCREEN_OFF)

@@ -97,7 +97,6 @@ class WidgetConfigureActivity : AppCompatActivity() {
         setResult(Activity.RESULT_CANCELED)
         setContentView(R.layout.widget_configure_activty)
         setSupportActionBar(config_toolbar)
-        adapter = UpdatePeriodAdapter(this)
         viewSwitcher = findViewById(R.id.viewSwitcher1)
         findViewById<Button>(R.id.ok_btn_about).setOnClickListener {
             viewSwitcher.showPrevious()
@@ -112,6 +111,7 @@ class WidgetConfigureActivity : AppCompatActivity() {
                 AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID
             )
         }
+        adapter = UpdatePeriodAdapter(this, mAppWidgetId)
         mWidgetPrefs = getSharedPreferences(WIDGET_CONFIG_PREFS, 0)
 
         tabLayout = findViewById(R.id.tab_layout)
