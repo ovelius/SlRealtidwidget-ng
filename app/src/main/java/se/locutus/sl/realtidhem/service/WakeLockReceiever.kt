@@ -1,6 +1,5 @@
 package se.locutus.sl.realtidhem.service
 
-import android.app.KeyguardManager
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -11,16 +10,9 @@ internal class WakeLockReceiever(val service : BackgroundUpdaterService) : Broad
         val LOG = Logger.getLogger(WakeLockReceiever::class.java.name)
     }
     override fun onReceive(context: Context, intent: Intent) {
-        val km = context.getSystemService(Context.KEYGUARD_SERVICE) as KeyguardManager
-        if (Intent.ACTION_SCREEN_ON == intent.action) {
-            if (km.isKeyguardLocked) {
-                LOG.info("Intent received ${intent.action} but screen still locked")
-                return
-            }
-        }
         if (Intent.ACTION_SCREEN_OFF == intent.action) {
             service.stopAutoUpdateSequence()
-        } else {
+        } else if (Intent.ACTION_SCREEN_ON == intent.action) {
             service.startAutoUpdateSequence(true)
         }
         LOG.info("Intent received $intent")
