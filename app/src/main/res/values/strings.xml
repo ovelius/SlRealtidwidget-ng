@@ -95,13 +95,13 @@
     <string name="import_settings_btn_cancel">Cancel</string>
     <string name="failed_config">Invalid config string</string>
     <string name="loaded_config">Loaded config with %1$d stops</string>
-    <string name="update_mode_tab">Widget settings</string>
+    <string name="update_mode_tab">Update settings</string>
     <string name="stop_list_tab">Stops to load</string>
     <string name="idle_line1_auto">Touch to start sequence</string>
     <string name="idle_line2_auto">Will update for %1$d minutes</string>
-    <string name="update_on_sceen_on">Start update sequence when screen turns on</string>
+    <string name="update_on_sceen_on">Start update sequence when screen turns on (battery heavy) </string>
     <string name="update_forever">Update sequence never stops</string>
-    <string name="update_sequence_length">Update sequence length:</string>
+    <string name="update_sequence_length">Update sequence length (minutes):</string>
     <string name="self_learning_periods">Learn at most these many periods:</string>
     <string name="current_self_learning_periods">Scheduled update periods:</string>
     <string name="self_learning_threshold">Interactions required to allocate a period:</string>
@@ -114,10 +114,11 @@
         <item>Manual update sequence</item>
     </string-array>
     <string-array name="update_mode_help">
-        <item>In this mode the widget will learn from your interactions and automatically be updated during times it
-            knows you usually use it. It keeps a separate schedule for weekdays/weekends.
+        <item>The widget will learn from your usage and start updating automatically during
+            times it knows you use it. It keeps a separate schedule for weekdays/weekends.
         </item>
         <item>In this mode the widget will only update once when you touch it.</item>
-        <item>In this mode the widget will stay updated during a longer sequence. You can choose the length of the sequence and if a sequence should automatically start when the screen turns on.</item>
+        <item>In this mode the widget will stay updated during a longer period when touched.
+            You can choose the length of the sequence and if a sequence should automatically start when the screen turns on.</item>
     </string-array>
 </resources>

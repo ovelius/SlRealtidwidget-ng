@@ -23,6 +23,12 @@ fun widgetKeyLastData(widgetId : Int) : String {
 fun widgetKeySelectedStop(widgetId : Int) : String {
     return "widget_selected_stop$widgetId"
 }
+fun widgetKeyLastLocation(widgetId : Int) : String {
+    return "widget_last_location$widgetId"
+}
+fun widgetKeyLastDistance(widgetId : Int) : String {
+    return "widget_last_distance$widgetId"
+}
 
 fun widgetKeyStopSelectedAt(widgetId : Int) : String {
     return "widget_stop_selected_at$widgetId"
@@ -48,6 +54,8 @@ fun deleteWidget(prefs : SharedPreferences, widgetId : Int) {
         .remove(widgetKeySelectedStop(widgetId))
         .remove(widgetKeyLayout(widgetId))
         .remove(widgetKeyStopSelectedAt(widgetId))
+        .remove(widgetKeyLastLocation(widgetId))
+        .remove(widgetKeyLastDistance(widgetId))
         .apply()
 }
 
@@ -71,8 +79,22 @@ fun getLastLoadData(prefs : SharedPreferences, widgetId: Int) : Ng.WidgetLoadRes
     return null
 }
 
-fun setSelectedStopIndex(prefs : SharedPreferences, widgetId: Int, selected : Int) {
-    prefs.edit().putInt(widgetKeySelectedStop(widgetId),selected).apply()
+fun setSelectedStopIndex(prefs : SharedPreferences, widgetId: Int, selected : Int, location : Location? = null) {
+    prefs.edit().putInt(widgetKeySelectedStop(widgetId), selected).apply()
+}
+
+fun setSelectedStopIndexFromLocation(prefs : SharedPreferences, widgetId: Int, selected : Int,
+                                     location : Location, stopConfig: Ng.StopConfiguration) {
+    val stopLocation = Location("StopLocation").apply {
+        latitude = stopConfig.stopData.lat
+        longitude = stopConfig.stopData.lng
+    }
+    val distance = location.distanceTo(stopLocation)
+    prefs.edit()
+        .putInt(widgetKeySelectedStop(widgetId), selected)
+        .putLong(widgetKeyLastLocation(widgetId), location.time)
+        .putFloat(widgetKeyLastDistance(widgetId), distance)
+        .apply()
 }
 
 fun widgetConfigToString(config : Ng.WidgetConfiguration) : String {
