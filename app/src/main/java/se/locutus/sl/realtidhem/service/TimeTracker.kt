@@ -86,8 +86,8 @@ class TimeTracker(val context : Context) {
         return "$widgetId:wd:${isWeekDay(c)}:${c.get(Calendar.HOUR_OF_DAY)}:$minutes:${c.get(Calendar.DAY_OF_MONTH)}"
     }
 
-    fun hasAlarmKey(key : String) : Boolean {
-        return prefs.getInt(key, -1) != -1
+    fun getAlarmKeyValue(key : String) : Int {
+        return prefs.getInt(key, -1)
     }
 
     private fun createPendingIntent(widgetId: Int, timeRecord: TimeRecord, triggerTime : Long, day : Int) : PendingIntent {

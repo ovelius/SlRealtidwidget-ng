@@ -24,6 +24,9 @@ const val EXTRA_MANUAL_TOUCH = "manual_touch"
 const val ACTION_STOP_UPATE_SEQUENCE = "stop_update_sequence"
 const val ACTION_STOP_UPATE_SEQUENCE_NEVER_UPDATE = "stop_update_sequence_never_update"
 
+const val DISTANCE_NO_AUTO_UPDATES_METERS = 5 * 1000
+const val POSITION_AGE_NO_AUTO_UPDATES = 3600*1000
+
 class BackgroundUpdaterService : Service() {
     companion object {
         val LOG = Logger.getLogger(BackgroundUpdaterService::class.java.name)
@@ -74,14 +77,18 @@ class BackgroundUpdaterService : Service() {
                 }
             } else if (config.updateSettings.updateMode == Ng.UpdateSettings.UpdateMode.LEARNING_UPDATE_MODE) {
                 val alarmKey = intent!!.getStringExtra(EXTRA_UPDATE_TIME_KEY)
-                if (timeTracker.hasAlarmKey(alarmKey)) {
+                val alarmMinCount = config.updateSettings.interactionsToLearn
+                val alarmKeyValue = timeTracker.getAlarmKeyValue(alarmKey)
+                if (alarmKeyValue >= alarmMinCount) {
                     val triggerTime = intent!!.getLongExtra(EXTRA_UPDATE_TIME, System.currentTimeMillis())
                     val overtTime = System.currentTimeMillis() - triggerTime
                     LOG.info("Received extra widgetId $widgetId for learning widget with overtime $overtTime")
-                    selfLearningTimeouts[widgetId] = System.currentTimeMillis() + UPDATE_TIME_MILLIS - overtTime
-                    selfLearningKey[widgetId] = alarmKey
+                    if (verifyLocationSanity(widgetId)) {
+                        selfLearningTimeouts[widgetId] = System.currentTimeMillis() + UPDATE_TIME_MILLIS - overtTime
+                        selfLearningKey[widgetId] = alarmKey
+                    }
                 } else {
-                    LOG.warning("Received alarm with missing alarm key for $widgetId not scheduling.")
+                    LOG.warning("Received alarm with missing/too low alarm key for $widgetId - not scheduling.")
                 }
             } else if (config.updateSettings.updateMode == Ng.UpdateSettings.UpdateMode.ALWAYS_UPDATE_MODE) {
                 LOG.info("Received extra widgetId $widgetId for auto update widget manual extra ${intent?.hasExtra(EXTRA_MANUAL_TOUCH)}")
@@ -269,7 +276,10 @@ class BackgroundUpdaterService : Service() {
                 val updateSetting = config.updateSettings
                 if (updateSetting.updateWhenScreenOn && updateSetting.updateMode == Ng.UpdateSettings.UpdateMode.ALWAYS_UPDATE_MODE) {
                     // This widget should update from screen turning on!
-                    setAutoUpdateSequence(widgetId, config.updateSettings.updateSequenceLength)
+                    // But only if location makes sense...
+                    if (verifyLocationSanity(widgetId)) {
+                        setAutoUpdateSequence(widgetId, config.updateSettings.updateSequenceLength)
+                    }
                 }
             }
         }
@@ -324,5 +334,15 @@ class BackgroundUpdaterService : Service() {
 
     fun runTimerTaskForTest() {
         timerTask!!.run()
+    }
+
+    private fun verifyLocationSanity(widgetId: Int) : Boolean {
+        val distanceMeters = prefs.getFloat(widgetKeyLastDistance(widgetId), 1.0f)
+        val ageMillis = (System.currentTimeMillis() -  prefs.getLong(widgetKeyLastLocation(widgetId), 0))
+        // If a recent position says we are more than 30km away, don't update.
+        if (ageMillis < POSITION_AGE_NO_AUTO_UPDATES && distanceMeters > DISTANCE_NO_AUTO_UPDATES_METERS) {
+            return false
+        }
+        return true
     }
 }

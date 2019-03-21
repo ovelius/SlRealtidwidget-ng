@@ -26,10 +26,13 @@ import se.locutus.sl.realtidhem.events.InMemoryState
 import se.locutus.sl.realtidhem.events.TouchHandlerInterface
 import se.locutus.sl.realtidhem.service.*
 import se.locutus.sl.realtidhem.widget.storeWidgetConfig
+import se.locutus.sl.realtidhem.widget.widgetKeyLastDistance
+import se.locutus.sl.realtidhem.widget.widgetKeyLastLocation
 import java.lang.RuntimeException
 import java.util.concurrent.ConcurrentHashMap
 
 const val ALARM_KEY = "alarm_key"
+const val ALARM_INTERACTIONS_COUNT = 2
 
 @RunWith(RobolectricTestRunner::class)
 class BackgroundUpdaterTest {
@@ -54,7 +57,8 @@ class BackgroundUpdaterTest {
         shadowAppWidgetManager = shadowOf(AppWidgetManager.getInstance(service))
         shadow = shadowOf(service)
         // For self learning widgets an alarm key is required.
-        timeTrackerPrefs.edit().putInt(ALARM_KEY, 2).commit()
+        // TODO: Verify key is high enough to trigger alarm.
+        timeTrackerPrefs.edit().putInt(ALARM_KEY, ALARM_INTERACTIONS_COUNT).commit()
     }
 
     private fun runOneTask() {
@@ -273,8 +277,8 @@ class BackgroundUpdaterTest {
     }
 
     @Test
-    fun testNoAlarmKeyForSelfLearning() {
-        val widgetId = createWidgetConfig(createUpdateSettings(Ng.UpdateSettings.UpdateMode.LEARNING_UPDATE_MODE))
+    fun testTooLowAlarmKeyForSelfLearning() {
+        val widgetId = createWidgetConfig(createLearningUpdateSettings(ALARM_INTERACTIONS_COUNT + 1))
         service.widgetIdProvider = {
             intArrayOf(widgetId)
         }
@@ -282,7 +286,24 @@ class BackgroundUpdaterTest {
         shadowPowerManager.setIsInteractive(true)
 
         // Removing the alarm key will not run the alarm sequence.
-        timeTrackerPrefs.edit().remove(ALARM_KEY).commit()
+       //  timeTrackerPrefs.edit().remove(ALARM_KEY).commit()
+
+        service.onStartCommand(intent, 0 ,0)
+        assertThat(service.hasAutoUpdatesRunning(), `is`(false))
+    }
+
+    @Test
+    fun testTooFarAwayForSelfLearning() {
+        val widgetId = createWidgetConfig(createLearningUpdateSettings(1))
+        service.widgetIdProvider = {
+            intArrayOf(widgetId)
+        }
+        val intent = startIntent(widgetId, System.currentTimeMillis())
+        shadowPowerManager.setIsInteractive(true)
+
+        // Update distance data - we are now too far away for the alarm to make sense.
+        prefs.edit().putLong(widgetKeyLastLocation(widgetId), System.currentTimeMillis() - POSITION_AGE_NO_AUTO_UPDATES + 10000)
+            .putFloat(widgetKeyLastDistance(widgetId), DISTANCE_NO_AUTO_UPDATES_METERS + 1f).commit()
 
         service.onStartCommand(intent, 0 ,0)
         assertThat(service.hasAutoUpdatesRunning(), `is`(false))
@@ -301,6 +322,13 @@ class BackgroundUpdaterTest {
             .setUpdateMode(mode)
             .setUpdateSequenceLength(sequenceMinutes)
             .setUpdateWhenScreenOn(listenForScreenOn)
+            .build()
+    }
+
+    private fun createLearningUpdateSettings(minInteractions : Int) : Ng.UpdateSettings {
+        return Ng.UpdateSettings.newBuilder()
+            .setUpdateMode(Ng.UpdateSettings.UpdateMode.LEARNING_UPDATE_MODE)
+            .setInteractionsToLearn(minInteractions)
             .build()
     }
 
