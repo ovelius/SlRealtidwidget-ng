@@ -70,7 +70,7 @@ fun cycleSelectedStop(action : String?, prefs : SharedPreferences, widgetId: Int
         if (selectedStopIndex < 0) {
             selectedStopIndex += configCount
         }
-        setSelectedStopIndex(prefs, widgetId, selectedStopIndex)
+        setSelectedStopIndexManually(prefs, widgetId, selectedStopIndex)
     }
 
     if (CYCLE_STOP_RIGHT.equals(action)) {
@@ -78,7 +78,7 @@ fun cycleSelectedStop(action : String?, prefs : SharedPreferences, widgetId: Int
         if (selectedStopIndex >= configCount) {
             selectedStopIndex -= configCount
         }
-        setSelectedStopIndex(prefs, widgetId, selectedStopIndex)
+        setSelectedStopIndexManually(prefs, widgetId, selectedStopIndex)
     }
     if (selectedStopIndex >= configCount) {
         selectedStopIndex = 0

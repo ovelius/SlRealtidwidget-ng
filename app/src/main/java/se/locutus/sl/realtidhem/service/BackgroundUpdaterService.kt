@@ -278,7 +278,10 @@ class BackgroundUpdaterService : Service() {
                     // This widget should update from screen turning on!
                     // But only if location makes sense...
                     if (verifyLocationSanity(widgetId)) {
+                        LOG.info("Starting screen on sequence of length ${config.updateSettings.updateSequenceLength} for $widgetId")
                         setAutoUpdateSequence(widgetId, config.updateSettings.updateSequenceLength)
+                    } else {
+                        LOG.info("Not scheduling update for $widgetId as location data is too far off")
                     }
                 }
             }

@@ -79,8 +79,11 @@ fun getLastLoadData(prefs : SharedPreferences, widgetId: Int) : Ng.WidgetLoadRes
     return null
 }
 
-fun setSelectedStopIndex(prefs : SharedPreferences, widgetId: Int, selected : Int, location : Location? = null) {
-    prefs.edit().putInt(widgetKeySelectedStop(widgetId), selected).apply()
+fun setSelectedStopIndexManually(prefs : SharedPreferences, widgetId: Int, selected : Int) {
+    prefs.edit()
+        .putInt(widgetKeySelectedStop(widgetId), selected)
+        // We no longer consider this stop to be selected via location.
+        .remove(widgetKeyLastLocation(widgetId)).apply()
 }
 
 fun setSelectedStopIndexFromLocation(prefs : SharedPreferences, widgetId: Int, selected : Int,
