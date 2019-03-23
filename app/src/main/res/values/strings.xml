@@ -109,15 +109,15 @@
     <string name="stop_sequence_time">Remove scheduled update</string>
     <string name="will_not_update_undo">Update alarm removed</string>
     <string-array name="update_mode_array">
-        <item>Learning update sequence</item>
+        <item>Learning</item>
         <item>Manual one time update</item>
-        <item>Manual update sequence</item>
+        <item>Update sequence</item>
     </string-array>
     <string-array name="update_mode_help">
-        <item>The widget will learn from your usage and start updating automatically during
-            times it knows you use it. It keeps a separate schedule for weekdays/weekends.
+        <item>In this mode the widget will update once when you touch it. It will learn from your interactions and start updating automatically during
+            times you use it. It keeps a separate schedule for weekdays/weekends.
         </item>
-        <item>In this mode the widget will only update once when you touch it.</item>
+        <item>In this mode the widget will update once when you touch it.</item>
         <item>In this mode the widget will stay updated during a longer period when touched.
             You can choose the length of the sequence and if a sequence should automatically start when the screen turns on.</item>
     </string-array>

@@ -86,4 +86,24 @@
     <string name="import_settings_btn_cancel">Avbryt</string>
     <string name="failed_config">Ogiltig sträng</string>
     <string name="loaded_config">Laddad inställningar med %1$d hållplatser</string>
+
+    <string name="update_mode_tab">Uppdateringsinställningar</string>
+    <string name="stop_list_tab">Hållplatser att ladda</string>
+    <string name="idle_line1_auto">Tryck för att börja sekvens</string>
+    <string name="idle_line2_auto">Kommer uppdatera i %1$d minuter</string>
+    <string name="update_on_sceen_on">Börja uppdateringssekvens när skärmen sätts på (batteritungt) </string>
+    <string name="update_forever">Sekvensen pågår för alltid</string>
+    <string name="update_sequence_length">Längd på sekvens (minuter):</string>
+    <string name="self_learning_periods">Lär som mest såhär många perioder:</string>
+    <string name="current_self_learning_periods">Schemalagda perioder:</string>
+    <string name="self_learning_threshold">Interaktioner för att skapa en period:</string>
+    <string name="stop_sequence">Sluta uppdatera</string>
+    <string name="stop_sequence_time">Uppdatera aldrig denna tid</string>
+    <string name="will_not_update_undo">Uppdateringsperiod borttagen</string>
+    <string-array name="update_mode_array">
+        <item>Lärande</item>
+        <item>Manuel en gångs uppdatering</item>
+        <item>Uppdateringssekvens</item>
+    </string-array>
+
     --></resources>
