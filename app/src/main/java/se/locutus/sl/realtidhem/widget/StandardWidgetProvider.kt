@@ -28,6 +28,7 @@ import se.locutus.sl.realtidhem.events.WidgetBroadcastReceiver
 import se.locutus.sl.realtidhem.service.BackgroundUpdaterService
 import se.locutus.sl.realtidhem.service.EXTRA_MANUAL_TOUCH
 import se.locutus.sl.realtidhem.service.TimeTracker
+import se.locutus.sl.realtidhem.service.sortRecordsByTimeAndCutoff
 
 
 /**
@@ -94,14 +95,13 @@ class StandardWidgetProvider : AppWidgetProvider() {
     }
 
     private fun scheduleWidgetUpdates(widgetId: Int, updateSettings : Ng.UpdateSettings) {
-        var records = timeTracker.getRecords(widgetId, getInteractionsToLearn(updateSettings))
-        var filteredList : MutableList<TimeTracker.TimeRecord> = records
-        val learningPeriods = getLearningPeriods(updateSettings)
-        if (records.size > learningPeriods) {
-            filteredList = records.subList(0, learningPeriods)
-        }
-        LOG.info("Scheduling ${filteredList.size} update periods for $widgetId")
-        timeTracker.scheduleAlarmsFrom(widgetId, filteredList)
+        val recordsWithCutoff = timeTracker.getRecords(
+            widgetId, getInteractionsToLearn(updateSettings))
+        val filteredSortedList : MutableList<TimeTracker.TimeRecord> =
+            sortRecordsByTimeAndCutoff(
+                recordsWithCutoff, getInteractionsToLearn(updateSettings), getLearningPeriods(updateSettings))
+        LOG.info("Scheduling ${filteredSortedList.size} update periods for $widgetId")
+        timeTracker.scheduleAlarmsFrom(widgetId, filteredSortedList)
     }
 
     fun requestSingleLocationUpdate(context: Context,

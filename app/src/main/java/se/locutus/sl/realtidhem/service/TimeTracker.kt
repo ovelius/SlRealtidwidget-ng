@@ -20,7 +20,7 @@ const val UPDATE_TIME_MILLIS = 60 * 15 * 1000
 const val ALARM_WINDOW_LENGTH = 10*60*1000L
 
 
-fun sortRecordsByTimeAndCutoff(records : ArrayList<TimeTracker.TimeRecord> , countCutoff : Int) : ArrayList<TimeTracker.TimeRecord> {
+fun sortRecordsByTimeAndCutoff(records : ArrayList<TimeTracker.TimeRecord> , countCutoff : Int, recordsToReturn : Int) : ArrayList<TimeTracker.TimeRecord> {
     records.sortWith(Comparator { o1, o2 ->
         o2.count - o1.count
     })
@@ -31,7 +31,11 @@ fun sortRecordsByTimeAndCutoff(records : ArrayList<TimeTracker.TimeRecord> , cou
         }
     }
     filteredRecords.sort()
-    return filteredRecords
+    var finalFiltering = ArrayList<TimeTracker.TimeRecord>(filteredRecords)
+    if (finalFiltering.size > recordsToReturn) {
+        finalFiltering = ArrayList<TimeTracker.TimeRecord>(filteredRecords.subList(0, recordsToReturn))
+    }
+    return finalFiltering
 }
 
 fun deleteAlarmKey(context : Context, key : String) : Int {

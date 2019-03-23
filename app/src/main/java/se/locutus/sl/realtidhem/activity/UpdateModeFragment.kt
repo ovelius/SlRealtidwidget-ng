@@ -164,12 +164,9 @@ class UpdateModeFragment : androidx.fragment.app.Fragment() {
         widgetConfigureActivity.adapter.clear()
         val records = widgetConfigureActivity.getTimeRecords()
         val updateSettings = widgetConfigureActivity.widgetConfig.updateSettings
-        val sortedRecords = sortRecordsByTimeAndCutoff(records, getInteractionsToLearn(updateSettings))
-        for ((index, record) in sortedRecords.withIndex()) {
+        val sortedRecords = sortRecordsByTimeAndCutoff(records, getInteractionsToLearn(updateSettings), getLearningPeriods(updateSettings))
+        for (record in sortedRecords) {
             widgetConfigureActivity.adapter.add(record)
-            if (index >= getLearningPeriods(updateSettings)) {
-                break
-            }
         }
         widgetConfigureActivity.adapter.notifyDataSetChanged()
         setListSize()
