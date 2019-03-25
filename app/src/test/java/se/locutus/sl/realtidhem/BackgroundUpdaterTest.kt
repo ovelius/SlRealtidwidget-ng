@@ -116,7 +116,6 @@ class BackgroundUpdaterTest {
         shadowLooper.runOneTask()
         shadowLooper.runOneTask()
         assertThat(touchHandler.updateCount, `is`(1))
-
         runOneTask()
         // Did additional updates.
         assertThat(touchHandler.updateCount, `is`(2))
@@ -160,6 +159,9 @@ class BackgroundUpdaterTest {
         assertThat(service.hasAutoUpdatesRunning(), `is`(true))
         Thread.sleep(40)
         shadowLooper.runOneTask()
+        touchHandler.callback("one", "two", "three")
+        var shadowNotification = shadowOf(shadow.lastForegroundNotification)
+        assertThat(shadowNotification.contentText.toString(), `is`("three"))
         assertThat(touchHandler.updateCount, `is`(2))
         assertThat(touchHandler.updateCountPerId, `is`(mapOf(widgetId to 2)))
 
@@ -171,8 +173,12 @@ class BackgroundUpdaterTest {
         service.onStartCommand(intent2, 0, 0)
         Thread.sleep(40)
         shadowLooper.runOneTask()
+
         assertThat(touchHandler.updateCount, `is`(3))
         assertThat(touchHandler.updateCountPerId, `is`(mapOf(widgetId to 2, widgetId2 to 1)))
+
+        shadowNotification = shadowOf(shadow.lastForegroundNotification)
+        assertThat(shadowNotification.contentText, `is`(null as CharSequence?))
     }
 
     @Test
@@ -211,7 +217,13 @@ class BackgroundUpdaterTest {
         runOneTask()
         assertThat(touchHandler.updateCount, `is`(2))
         // Something got loaded
+        touchHandler.callback("test1", "min", "test2")
         setWidgetLines(widgetId, "test", "test")
+        // Notification was updated.
+        val shadowNotification = shadowOf(shadow.lastForegroundNotification)
+        assertThat(shadowNotification.contentText.toString(), `is`("test2"))
+        assertThat(shadowNotification.contentTitle.toString(), `is`("test1 min"))
+
         // Simulate manual abort.
         val stopSequenceIntent = Intent(context, BackgroundUpdaterService::class.java).apply {
             action = ACTION_STOP_UPATE_SEQUENCE
@@ -337,6 +349,8 @@ class BackgroundUpdaterTest {
         val config = Ng.WidgetConfiguration.newBuilder()
             .setUpdateSettings(updateSettings)
             .setWidgetId(widgetId.toLong())
+            .addStopConfiguration(Ng.StopConfiguration.newBuilder()
+                .setStopData(Ng.StoredStopData.newBuilder().setDisplayName("stop display name")))
             .build()
         storeWidgetConfig(prefs, config)
         return widgetId
@@ -369,6 +383,9 @@ class BackgroundUpdaterTest {
         var updateCount = 0
         var updateCountPerId = ConcurrentHashMap<Int, Int>()
         var lastUpdateAction : String? = ""
+        var callback : (String, String, String) -> Unit = {
+            _,_,_ ->
+        }
         override fun widgetTouched(widgetId: Int, action: String?, userTouch: Boolean, loadedLinesCallback : (String, String, String) -> Unit) {
             lastUpdateAction = action
             updateCount++
@@ -376,6 +393,7 @@ class BackgroundUpdaterTest {
                 updateCountPerId[widgetId] = 0
             }
             updateCountPerId[widgetId] = updateCountPerId[widgetId]!! + 1
+            callback = loadedLinesCallback
         }
     }
 }

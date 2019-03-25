@@ -221,6 +221,9 @@ class BackgroundUpdaterService : Service() {
                 // Stop the service. Wait for next alarm to fire to start it again.
                 LOG.info("Stopping self, no screen on event to listen for")
                 stopSelf()
+            } else {
+                // Reset to generic notification.
+                createForeGroundNotification(null, null)
             }
         }
     }
