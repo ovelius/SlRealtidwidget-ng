@@ -145,6 +145,7 @@ class BackgroundUpdaterTest {
         // Runs update right away.
         shadowLooper.runOneTask()
         assertThat(touchHandler.updateCount, `is`(1))
+        assertThat(touchHandler.userTouch, `is`(false))
         assertThat(touchHandler.updateCountPerId, `is`(mapOf(widgetId to 1)))
 
         // Simulate sequence timeout.
@@ -174,6 +175,7 @@ class BackgroundUpdaterTest {
         Thread.sleep(40)
         shadowLooper.runOneTask()
 
+        assertThat(touchHandler.userTouch, `is`(true))
         assertThat(touchHandler.updateCount, `is`(3))
         assertThat(touchHandler.updateCountPerId, `is`(mapOf(widgetId to 2, widgetId2 to 1)))
 
@@ -386,6 +388,7 @@ class BackgroundUpdaterTest {
         var callback : (String, String, String) -> Unit = {
             _,_,_ ->
         }
+        var userTouch = false
         override fun widgetTouched(widgetId: Int, action: String?, userTouch: Boolean, loadedLinesCallback : (String, String, String) -> Unit) {
             lastUpdateAction = action
             updateCount++
@@ -394,6 +397,7 @@ class BackgroundUpdaterTest {
             }
             updateCountPerId[widgetId] = updateCountPerId[widgetId]!! + 1
             callback = loadedLinesCallback
+            this.userTouch = userTouch
         }
     }
 }

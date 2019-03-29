@@ -129,7 +129,7 @@ class WidgetTouchHandler(val context: Context, val networkManager : NetworkInter
             } else {
                 stopTouchingMe(manager, widgetId)
             }
-        } else if (!inMemoryState.hasRunningThread(widgetId)) {
+        } else if (userTouch && !inMemoryState.hasRunningThread(widgetId)) {
             val lastLoadedData = inMemoryState.lastLoadedData[widgetId]
             if (lastLoadedData != null) {
                 inMemoryState.replaceAndStartThread(ScrollThread(
@@ -142,7 +142,7 @@ class WidgetTouchHandler(val context: Context, val networkManager : NetworkInter
             LOG.info("Updated and has running thread, not doing anything $widgetId")
         }
 
-        if (inMemoryState.maybeIncrementTouchCountAndOpenConfig(widgetId)) {
+        if (userTouch && inMemoryState.maybeIncrementTouchCountAndOpenConfig(widgetId)) {
             val lastLoadedData = inMemoryState.lastLoadedData[widgetId]
             openWidgetConfig(context, lastLoadedData?.color, widgetId)
         }
@@ -285,9 +285,14 @@ class WidgetTouchHandler(val context: Context, val networkManager : NetworkInter
                     if (!stopConfig.themeData.colorConfig.overrideMainColor) {
                         views.setInt(R.id.widgetcolor, "setBackgroundColor", responseData.loadResponse.color)
                     }
-                    inMemoryState.replaceAndStartThread(ScrollThread(
-                        widgetId, views, responseData.loadResponse.line2, context
-                    ))
+                    // Scroller only runs from user touching widget.
+                    if (userTouch) {
+                        inMemoryState.replaceAndStartThread(
+                            ScrollThread(
+                                widgetId, views, responseData.loadResponse.line2, context
+                            )
+                        )
+                    }
                 } else {
                     setWidgetTextViews(
                         views,

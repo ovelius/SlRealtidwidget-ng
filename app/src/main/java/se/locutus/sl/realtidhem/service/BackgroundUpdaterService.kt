@@ -57,6 +57,7 @@ class BackgroundUpdaterService : Service() {
         if (intent?.hasExtra(AppWidgetManager.EXTRA_APPWIDGET_ID) == true) {
             widgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, -1)
         }
+        var delay = false
         if (widgetId != -1) {
             // Typical case is a widget update intent alarm triggering.
             val inMemoryState = widgetTouchProvider().getInMemoryState()
@@ -98,8 +99,9 @@ class BackgroundUpdaterService : Service() {
                         openWidgetConfig(this, null, widgetId)
                     }
                     // Trigger the update right away
-                    if (hasAutoUpdatesRunning()) {
-                        touchWidgetOnce(widgetId, intent.action)
+                    touchWidgetOnce(widgetId, intent.action, true)
+                    if (!hasAutoUpdatesRunning()) {
+                        delay = true
                     }
                 }
             }
@@ -120,7 +122,7 @@ class BackgroundUpdaterService : Service() {
 
         // Start automatic updates right away.
         if (powerManager.isInteractive) {
-            startAutoUpdateSequence(false)
+            startAutoUpdateSequence(false, delay)
         }
 
         createForeGroundNotification(widgetId,
@@ -208,7 +210,7 @@ class BackgroundUpdaterService : Service() {
             }
             if (shouldUpdate(widgetId, config.updateSettings)) {
                 LOG.info("Update of widget $widgetId with type ${config.updateSettings.updateMode} at ${System.currentTimeMillis()}")
-                touchWidgetOnce(widgetId, "")
+                touchWidgetOnce(widgetId, "", false)
                 updatedAnyWidget = true
             } else {
                 setStaleMessages(widgetId)
@@ -228,10 +230,10 @@ class BackgroundUpdaterService : Service() {
         }
     }
 
-    private fun touchWidgetOnce(widgetId : Int, action : String?) {
+    private fun touchWidgetOnce(widgetId : Int, action : String?, userTouch : Boolean) {
         val touchHandler = widgetTouchProvider()
         val config = touchHandler.getInMemoryState().getWidgetConfig(widgetId, prefs)
-        touchHandler.widgetTouched(widgetId, action, false) { line1 : String, min : String, line2 : String ->
+        touchHandler.widgetTouched(widgetId, action, userTouch) { line1 : String, min : String, line2 : String ->
             val stopConfig = config.getStopConfiguration(getWidgetSelectedStopIndex(widgetId, prefs))
             createForeGroundNotification(widgetId, config,"$line1 $min", stopConfig.stopData.displayName, line2)
         }
@@ -261,7 +263,7 @@ class BackgroundUpdaterService : Service() {
         return false
     }
 
-    fun startAutoUpdateSequence(fromScreenOn : Boolean) {
+    fun startAutoUpdateSequence(fromScreenOn : Boolean, delay : Boolean) {
         LOG.info("Starting automatic updates")
         if (timerTask != null) {
             LOG.warning("Already scheduled automatic updates")
@@ -289,8 +291,8 @@ class BackgroundUpdaterService : Service() {
                 }
             }
         }
-        LOG.info("Scheduling automatic updates with $updateTimePeriodMillis millis period")
-        timer.schedule(timerTask, 0, updateTimePeriodMillis)
+        LOG.info("Scheduling automatic updates with $updateTimePeriodMillis millis period, initial update delayed $delay")
+        timer.schedule(timerTask, if (delay) updateTimePeriodMillis else 0, updateTimePeriodMillis)
     }
 
     fun hasAutoUpdatesRunning() : Boolean {

@@ -13,7 +13,7 @@ internal class WakeLockReceiever(val service : BackgroundUpdaterService) : Broad
         if (Intent.ACTION_SCREEN_OFF == intent.action) {
             service.stopAutoUpdateSequence()
         } else if (Intent.ACTION_SCREEN_ON == intent.action) {
-            service.startAutoUpdateSequence(true)
+            service.startAutoUpdateSequence(true, false)
         }
         LOG.info("Intent received $intent")
     }

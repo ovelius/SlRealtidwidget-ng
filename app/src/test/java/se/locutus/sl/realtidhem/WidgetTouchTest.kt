@@ -108,6 +108,26 @@ class WidgetTouchTest {
     }
 
     @Test
+    fun testTouchWidgetAndLoadAutomatedData() {
+        val widgetId = createWidgetConfig()
+        val touchHandler = createTouchHandler()
+
+        // Touch the widget.
+        touchHandler.widgetTouched(widgetId, null, false)
+
+        assertViewText(widgetId, R.id.widgetline1, R.string.updating)
+        assertViewText(widgetId, R.id.widgetline2, R.string.updating)
+
+        testNetwork.sendResponse(Ng.ResponseData.newBuilder()
+            .setLoadResponse(widgetLoadResponse("123 Hej", "1 min", "Mooore"))
+            .build(), null)
+
+        // Scroller is not active from automated load.
+        assertThat(touchHandler.inMemoryState.hasRunningThread(widgetId), `is`(false))
+    }
+
+
+    @Test
     fun testWidgetConfigUpdatedWithIdleMessage() {
         val widgetId = createWidgetConfig()
         val touchHandler = createTouchHandler()

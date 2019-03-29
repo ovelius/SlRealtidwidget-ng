@@ -90,7 +90,7 @@
     <string name="update_mode_tab">Uppdateringsinställningar</string>
     <string name="stop_list_tab">Hållplatser att ladda</string>
     <string name="idle_line1_auto">Tryck för att börja sekvens</string>
-    <string name="idle_line2_auto">Kommer uppdatera i %1$d minuter</string>
+    <string name="idle_line2_auto">Uppdaterar i %1$d minuter</string>
     <string name="update_on_sceen_on">Börja uppdateringssekvens när skärmen sätts på (batteritungt) </string>
     <string name="update_forever">Sekvensen pågår för alltid</string>
     <string name="update_sequence_length">Längd på sekvens (minuter):</string>
