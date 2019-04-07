@@ -107,14 +107,20 @@ class BackgroundUpdaterService : Service() {
             }
         }
         val allWidgetIds = widgetIdProvider()
+        var hasAlwaysUpdateWidgetRequiringScreenOn = false
         var updateAny = false
         for (widgetId in allWidgetIds) {
             val config = widgetTouchProvider().getInMemoryState().getWidgetConfig(widgetId, prefs)
+            val updateSetting = config.updateSettings
+            if (updateSetting.updateMode == Ng.UpdateSettings.UpdateMode.ALWAYS_UPDATE_MODE
+                && updateSetting.updateWhenScreenOn) {
+                hasAlwaysUpdateWidgetRequiringScreenOn = true
+            }
             if (shouldUpdate(widgetId, config.updateSettings)) {
                 updateAny = true
             }
         }
-        if (!updateAny) {
+        if (!updateAny && !hasAlwaysUpdateWidgetRequiringScreenOn) {
             LOG.warning("Service start without Widgets to update, stopping")
             stopSelf(startId)
             return START_STICKY
