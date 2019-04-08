@@ -88,11 +88,11 @@
     <string name="loaded_config">Laddad inställningar med %1$d hållplatser</string>
 
     <string name="update_mode_tab">Uppdateringsinställningar</string>
-    <string name="stop_list_tab">Hållplatser att ladda</string>
+    <string name="stop_list_tab">Hållplatser</string>
     <string name="idle_line1_auto">Tryck för att börja sekvens</string>
     <string name="idle_line2_auto">Uppdaterar i %1$d minuter</string>
     <string name="update_on_sceen_on">Börja uppdateringssekvens när skärmen sätts på (batteritungt) </string>
-    <string name="update_forever">Sekvensen pågår för alltid</string>
+    <string name="update_forever">Sekvensen pågår för alltid (eller tills skärmen stängs av) </string>
     <string name="update_sequence_length">Längd på sekvens (minuter):</string>
     <string name="self_learning_periods">Lär som mest såhär många perioder:</string>
     <string name="current_self_learning_periods">Schemalagda perioder:</string>
@@ -102,8 +102,16 @@
     <string name="will_not_update_undo">Uppdateringsperiod borttagen</string>
     <string-array name="update_mode_array">
         <item>Lärande</item>
-        <item>Manuel en gångs uppdatering</item>
+        <item>Manuel engångsuppdatering</item>
         <item>Uppdateringssekvens</item>
+    </string-array>
+    <string-array name="update_mode_help">
+        <item>Widgeten uppdateras när du rör den. Med tiden lär den sig av dina interaktioner och börjar uppdatera automatiskt vid relevanta tidpunkter.
+            Den bygger ett separat schema för helger och veckodagar.
+        </item>
+        <item>Widgeten uppdateras en gång när du rör den.</item>
+        <item>Widgeten håller sig uppdaterad under en längre period när du rör den.
+            Du kan välja hur länge en period varar och om den ska uppdateras när skärmen slås på.</item>
     </string-array>
 
     --></resources>

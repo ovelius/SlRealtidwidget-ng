@@ -96,11 +96,11 @@
     <string name="failed_config">Invalid config string</string>
     <string name="loaded_config">Loaded config with %1$d stops</string>
     <string name="update_mode_tab">Update settings</string>
-    <string name="stop_list_tab">Stops to load</string>
+    <string name="stop_list_tab">Stops</string>
     <string name="idle_line1_auto">Touch to start sequence</string>
     <string name="idle_line2_auto">Will update for %1$d minutes</string>
     <string name="update_on_sceen_on">Start update sequence when screen turns on (battery heavy) </string>
-    <string name="update_forever">Update sequence never stops</string>
+    <string name="update_forever">Update sequence never stops (unless screen is turned off) </string>
     <string name="update_sequence_length">Update sequence length (minutes):</string>
     <string name="self_learning_periods">Learn at most these many periods:</string>
     <string name="current_self_learning_periods">Scheduled update periods:</string>
@@ -114,11 +114,11 @@
         <item>Update sequence</item>
     </string-array>
     <string-array name="update_mode_help">
-        <item>In this mode the widget will update once when you touch it. It will learn from your interactions and start updating automatically during
+        <item>The widget will update once when you touch it. It will learn from your interactions and start updating automatically during
             times you use it. It keeps a separate schedule for weekdays/weekends.
         </item>
-        <item>In this mode the widget will update once when you touch it.</item>
-        <item>In this mode the widget will stay updated during a longer period when touched.
+        <item>The widget will update once when you touch it.</item>
+        <item>The widget will stay updated during a longer sequence when touched.
             You can choose the length of the sequence and if a sequence should automatically start when the screen turns on.</item>
     </string-array>
 </resources>
