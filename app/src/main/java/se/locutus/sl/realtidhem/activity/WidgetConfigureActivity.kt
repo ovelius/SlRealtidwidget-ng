@@ -44,6 +44,7 @@ const val ALL_DEPARTURES_DATA_KEY = "all_departures_data_key"
 const val STOP_INDEX_DATA_KEY = "stop_config_index_data_key"
 const val WIDGET_CONFIG_PREFS = "widget_configs"
 const val WIDGET_CONFIG_DATA_KEY = "widget_config_data_key"
+const val ACTION_UPDATE_SETTINGS = "action_update_settings"
 
 fun setColor(activity : AppCompatActivity, tabLayout : TabLayout?, color : Int) {
     val drawable = ColorDrawable(color)
@@ -172,6 +173,10 @@ class WidgetConfigureActivity : AppCompatActivity() {
                     LOCATION_ACCESS_REQUEST_CODE
                 )
             }
+        }
+
+        if (intent.action == ACTION_UPDATE_SETTINGS) {
+            viewPager.setCurrentItem(1)
         }
     }
 

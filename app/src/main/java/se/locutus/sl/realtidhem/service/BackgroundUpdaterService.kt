@@ -10,7 +10,9 @@ import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import se.locutus.proto.Ng
 import se.locutus.sl.realtidhem.R
+import se.locutus.sl.realtidhem.activity.ACTION_UPDATE_SETTINGS
 import se.locutus.sl.realtidhem.activity.WIDGET_CONFIG_PREFS
+import se.locutus.sl.realtidhem.activity.WidgetConfigureActivity
 import se.locutus.sl.realtidhem.events.*
 import se.locutus.sl.realtidhem.widget.*
 import java.util.*
@@ -22,7 +24,6 @@ const val SERVICE_NOTIFICATION_ID = 1337
 const val UPDATE_PERIOD_MILLIS = STALE_MILLIS + 1000L
 const val EXTRA_MANUAL_TOUCH = "manual_touch"
 const val ACTION_STOP_UPATE_SEQUENCE = "stop_update_sequence"
-const val ACTION_STOP_UPATE_SEQUENCE_NEVER_UPDATE = "stop_update_sequence_never_update"
 
 const val DISTANCE_NO_AUTO_UPDATES_METERS = 5 * 1000
 const val POSITION_AGE_NO_AUTO_UPDATES = 3600*1000
@@ -48,7 +49,6 @@ class BackgroundUpdaterService : Service() {
     internal var widgetTouchProvider : () -> TouchHandlerInterface = {
         WidgetBroadcastReceiver.getTouchHandler(this)
     }
-    internal var unscheduleAlarmFunction : (context: Context, alarmKey : String) -> Unit = { context, alarmKey -> deleteAlarmKey(context, alarmKey) }
     internal var updateTimePeriodMillis = UPDATE_PERIOD_MILLIS
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
@@ -62,20 +62,11 @@ class BackgroundUpdaterService : Service() {
             // Typical case is a widget update intent alarm triggering.
             val inMemoryState = widgetTouchProvider().getInMemoryState()
             val config = inMemoryState.getWidgetConfig(widgetId, prefs, true)
-            if (ACTION_STOP_UPATE_SEQUENCE == intent?.action
-                || ACTION_STOP_UPATE_SEQUENCE_NEVER_UPDATE == intent?.action) {
+            if (ACTION_STOP_UPATE_SEQUENCE == intent?.action) {
                 inMemoryState.replaceAndStartThread(null, true)
                 selfLearningTimeouts.remove(widgetId)
                 autoUpdateSequenceEndTime.remove(widgetId)
                 LOG.info("Manually stopping sequence for $widgetId")
-                if (ACTION_STOP_UPATE_SEQUENCE_NEVER_UPDATE == intent?.action) {
-                    val alarmKey = selfLearningKey[widgetId]
-                    if (alarmKey != null) {
-                        unscheduleAlarmFunction(this, alarmKey)
-                    } else {
-                        LOG.warning("Missing alarm key for $widgetId, can not unschedule alarm")
-                    }
-                }
             } else if (config.updateSettings.updateMode == Ng.UpdateSettings.UpdateMode.LEARNING_UPDATE_MODE) {
                 val alarmKey = intent!!.getStringExtra(EXTRA_UPDATE_TIME_KEY)
                 val alarmMinCount = config.updateSettings.interactionsToLearn
@@ -131,8 +122,7 @@ class BackgroundUpdaterService : Service() {
             startAutoUpdateSequence(false, delay)
         }
 
-        createForeGroundNotification(widgetId,
-            widgetTouchProvider().getInMemoryState().getWidgetConfig(widgetId, prefs))
+        createForeGroundNotification(widgetId)
 
         return START_STICKY
     }
@@ -153,7 +143,7 @@ class BackgroundUpdaterService : Service() {
         return channelId
     }
 
-    private fun createForeGroundNotification(widgetId: Int?, widgetConfig : Ng.WidgetConfiguration?,
+    private fun createForeGroundNotification(widgetId: Int?,
             contentTitle : String = getString(R.string.auto_updates_running),
                                              contentInfo : String? = null,
                                              contentText : String? = null) {
@@ -180,17 +170,16 @@ class BackgroundUpdaterService : Service() {
                 stopSequenceIntent, 0
             )
             builder.addAction(R.mipmap.ic_launcher, getString(R.string.stop_sequence), stopSequence)
-            if (widgetConfig!!.updateSettings.updateMode == Ng.UpdateSettings.UpdateMode.LEARNING_UPDATE_MODE) {
-                val stopSequenceIntent = Intent(this, BackgroundUpdaterService::class.java).apply {
-                    action = ACTION_STOP_UPATE_SEQUENCE_NEVER_UPDATE
+                // if (widgetConfig!!.updateSettings.updateMode == Ng.UpdateSettings.UpdateMode.LEARNING_UPDATE_MODE) {
+                val configureIntent = Intent(this, WidgetConfigureActivity::class.java).apply {
+                    action = ACTION_UPDATE_SETTINGS
                     putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId)
                 }
-                val stopSequence = PendingIntent.getService(
+                val configurePending = PendingIntent.getActivity(
                     this, widgetId * 10000,
-                    stopSequenceIntent, 0
+                    configureIntent, 0
                 )
-                builder.addAction(R.mipmap.ic_launcher, getString(R.string.stop_sequence_time), stopSequence)
-            }
+                builder.addAction(R.mipmap.ic_launcher, getString(R.string.settings), configurePending)
         }
 
         if (contentInfo != null) {
@@ -231,7 +220,7 @@ class BackgroundUpdaterService : Service() {
                 stopSelf()
             } else {
                 // Reset to generic notification.
-                createForeGroundNotification(null, null)
+                createForeGroundNotification(null)
             }
         }
     }
@@ -241,7 +230,7 @@ class BackgroundUpdaterService : Service() {
         val config = touchHandler.getInMemoryState().getWidgetConfig(widgetId, prefs)
         touchHandler.widgetTouched(widgetId, action, userTouch) { line1 : String, min : String, line2 : String ->
             val stopConfig = config.getStopConfiguration(getWidgetSelectedStopIndex(widgetId, prefs))
-            createForeGroundNotification(widgetId, config,"$line1 $min", stopConfig.stopData.displayName, line2)
+            createForeGroundNotification(widgetId, "$line1 $min", stopConfig.stopData.displayName, line2)
         }
     }
 
@@ -331,7 +320,7 @@ class BackgroundUpdaterService : Service() {
         intentFilter.addAction(Intent.ACTION_SCREEN_ON)
         intentFilter.addAction(Intent.ACTION_SCREEN_OFF)
         registerReceiver(wakeLockReceiver, intentFilter)
-        createForeGroundNotification(null, null)
+        createForeGroundNotification(null)
         return super.onCreate()
     }
 

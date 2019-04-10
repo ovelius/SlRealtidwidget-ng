@@ -108,6 +108,7 @@
     <string name="stop_sequence">Stop updating</string>
     <string name="stop_sequence_time">Remove scheduled update</string>
     <string name="will_not_update_undo">Update alarm removed</string>
+    <string name="settings">Setttings</string>
     <string-array name="update_mode_array">
         <item>Learning</item>
         <item>Manual one time update</item>

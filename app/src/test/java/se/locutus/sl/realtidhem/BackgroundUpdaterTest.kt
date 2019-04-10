@@ -251,26 +251,20 @@ class BackgroundUpdaterTest {
         service.onStartCommand(intent, 0 ,0)
         assertThat(service.hasAutoUpdatesRunning(), `is`(true))
 
-        var alarmKeyValue = ""
-        service.unscheduleAlarmFunction = { _, alarmKey ->
-            alarmKeyValue = alarmKey
-        }
-
         Thread.sleep(40)
         shadowLooper.runOneTask()
         assertThat(touchHandler.updateCount, `is`(1))
 
         // Simulate manual abort.
         val stopSequenceIntent = Intent(context, BackgroundUpdaterService::class.java).apply {
-            action = ACTION_STOP_UPATE_SEQUENCE_NEVER_UPDATE
+            action = ACTION_STOP_UPATE_SEQUENCE
             putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId)
         }
         service.onStartCommand(stopSequenceIntent, 0,0)
         runOneTask()
         // No additional updates.
         assertThat(touchHandler.updateCount, `is`(1))
-        // Alarm was removed.
-        assertThat(alarmKeyValue, `is`(ALARM_KEY))
+        // Alarm was stopped.
         assertViewText(widgetId, R.id.widgetline1, R.string.idle_line1)
         assertViewText(widgetId, R.id.widgetline2,  R.string.idle_line2)
         // We stopped.

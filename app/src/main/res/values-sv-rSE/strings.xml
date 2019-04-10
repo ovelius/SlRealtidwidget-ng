@@ -113,5 +113,6 @@
         <item>Widgeten håller sig uppdaterad under en längre period när du rör den.
             Du kan välja hur länge en period varar och om den ska uppdateras när skärmen slås på.</item>
     </string-array>
+    <string name="settings">Inställningar</string>
 
     --></resources>
