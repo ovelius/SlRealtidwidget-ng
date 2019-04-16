@@ -67,7 +67,11 @@ fun putLastLoadData(prefs : SharedPreferences, widgetId: Int, response : Ng.Widg
 }
 
 fun getWidgetLayoutId(prefs : SharedPreferences, widgetId: Int) : Int {
-    return prefs.getInt(widgetKeyLayout(widgetId), R.layout.widgetlayout_base)
+    val layoutId = prefs.getInt(widgetKeyLayout(widgetId), R.layout.widgetlayout_base)
+    if (layoutId != R.layout.widgetlayout_double && layoutId != R.layout.widgetlayout_base) {
+        return R.layout.widgetlayout_base
+    }
+    return layoutId
 }
 
 fun getLastLoadData(prefs : SharedPreferences, widgetId: Int) : Ng.WidgetLoadResponseData? {
