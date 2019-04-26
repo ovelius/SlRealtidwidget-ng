@@ -34,8 +34,13 @@ fun widgetKeyStopSelectedAt(widgetId : Int) : String {
     return "widget_stop_selected_at$widgetId"
 }
 
+@Deprecated("Should not be used", ReplaceWith("widgetLargeLayoutKey"))
 fun widgetKeyLayout(widgetId : Int) : String {
     return "widget_key_layout$widgetId"
+}
+
+fun widgetLargeLayoutKey(widgetId : Int) : String {
+    return "widget_large_layout_key$widgetId"
 }
 
 fun loadWidgetConfigOrDefault(prefs : SharedPreferences, widgetId : Int) : Ng.WidgetConfiguration {
@@ -53,6 +58,7 @@ fun deleteWidget(prefs : SharedPreferences, widgetId : Int) {
         .remove(widgetKeyLastData(widgetId))
         .remove(widgetKeySelectedStop(widgetId))
         .remove(widgetKeyLayout(widgetId))
+        .remove(widgetLargeLayoutKey(widgetId))
         .remove(widgetKeyStopSelectedAt(widgetId))
         .remove(widgetKeyLastLocation(widgetId))
         .remove(widgetKeyLastDistance(widgetId))
@@ -67,6 +73,15 @@ fun putLastLoadData(prefs : SharedPreferences, widgetId: Int, response : Ng.Widg
 }
 
 fun getWidgetLayoutId(prefs : SharedPreferences, widgetId: Int) : Int {
+    val largeLayoutKey = widgetLargeLayoutKey(widgetId)
+    if (prefs.contains(largeLayoutKey)) {
+        if (prefs.getBoolean(widgetLargeLayoutKey(widgetId), false)) {
+            return R.layout.widgetlayout_double
+        } else {
+            return R.layout.widgetlayout_base
+        }
+    }
+    // Legacy behavior.
     val layoutId = prefs.getInt(widgetKeyLayout(widgetId), R.layout.widgetlayout_base)
     if (layoutId != R.layout.widgetlayout_double && layoutId != R.layout.widgetlayout_base) {
         return R.layout.widgetlayout_base

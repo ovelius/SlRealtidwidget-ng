@@ -180,7 +180,7 @@ class StandardWidgetProvider : AppWidgetProvider() {
             layout = R.layout.widgetlayout_double
         }
         LOG.info("Widget $appWidgetId resize event cell $cells ")
-        prefs.edit().putInt(widgetKeyLayout(appWidgetId), layout).apply()
+        prefs.edit().putBoolean(widgetLargeLayoutKey(appWidgetId), layout == R.layout.widgetlayout_double).apply()
 
         sendWidgetUpdateBroadcast(context, appWidgetId, null)
 

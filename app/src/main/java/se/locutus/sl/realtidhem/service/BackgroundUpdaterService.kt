@@ -229,8 +229,12 @@ class BackgroundUpdaterService : Service() {
         val touchHandler = widgetTouchProvider()
         val config = touchHandler.getInMemoryState().getWidgetConfig(widgetId, prefs)
         touchHandler.widgetTouched(widgetId, action, userTouch) { line1 : String, min : String, line2 : String ->
-            val stopConfig = config.getStopConfiguration(getWidgetSelectedStopIndex(widgetId, prefs))
-            createForeGroundNotification(widgetId, "$line1 $min", stopConfig.stopData.displayName, line2)
+            val selectedStopIndex = getWidgetSelectedStopIndex(widgetId, prefs)
+            var stopNameString = ""
+            if (selectedStopIndex < config.stopConfigurationCount) {
+                stopNameString =  config.getStopConfiguration(selectedStopIndex).stopData.displayName
+            }
+            createForeGroundNotification(widgetId, "$line1 $min", stopNameString, line2)
         }
     }
 
