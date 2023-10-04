@@ -22,7 +22,7 @@ import androidx.core.content.ContextCompat
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayout
 import com.google.protobuf.InvalidProtocolBufferException
-import kotlinx.android.synthetic.main.widget_configure_activty.*
+import se.locutus.sl.realtidhem.databinding.WidgetConfigureActivtyBinding
 import se.locutus.proto.Ng.StopConfiguration
 import se.locutus.proto.Ng.WidgetConfiguration
 import se.locutus.sl.realtidhem.R
@@ -107,8 +107,9 @@ class WidgetConfigureActivity : AppCompatActivity() {
     public override fun onCreate(bundle: Bundle?) {
         super.onCreate(bundle)
         setResult(Activity.RESULT_CANCELED)
-        setContentView(R.layout.widget_configure_activty)
-        setSupportActionBar(config_toolbar)
+        val binding = WidgetConfigureActivtyBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        setSupportActionBar(binding.configToolbar)
         mListView = findViewById(R.id.stop_list_view)
         viewSwitcher = findViewById(R.id.viewSwitcher1)
         findViewById<Button>(R.id.ok_btn_about).setOnClickListener {
@@ -162,7 +163,7 @@ class WidgetConfigureActivity : AppCompatActivity() {
             startActivityForResult(intent, MODIFY_STOP_REQUEST_CODE)
         }
 
-        add_stop_button.setOnClickListener { _ ->
+        binding.addStopButton.setOnClickListener { _ ->
             val addIntent = Intent(this, AddStopActivity::class.java).apply {
                 if (color != null) {
                     putExtra(EXTRA_COLOR_THEME, color!!)
@@ -171,7 +172,7 @@ class WidgetConfigureActivity : AppCompatActivity() {
             startActivityForResult(addIntent, ADD_STOP_REQUEST_CODE)
         }
         if (color != null) {
-            add_stop_button.backgroundTintList= ColorStateList.valueOf(color!!)
+            binding.addStopButton.backgroundTintList= ColorStateList.valueOf(color!!)
         }
 
         if (ContextCompat.checkSelfPermission(this,
@@ -196,36 +197,7 @@ class WidgetConfigureActivity : AppCompatActivity() {
         }
     }
 
-    /*
-    fun configureUpdateModeSpinner() {
-        spinner = findViewById(R.id.update_mode_spinner)
-        val adapter = ArrayAdapter<String>(this,
-            android.R.layout.simple_spinner_item,
-            resources.getStringArray(R.array.update_mode_array))
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        spinner.adapter = adapter
-        spinner.setSelection(widgetConfig.updateSettings.updateModeValue)
-        spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
-                LOG.info("selected update mode $position")
-                val updateSettings = widgetConfig.updateSettings.toBuilder()
-                updateSettings.updateModeValue = position
-                widgetConfig = widgetConfig.toBuilder().setUpdateSettings(updateSettings).build()
-                val intent = Intent(applicationContext, BackgroundUpdaterService::class.java)
-                if (position == Ng.UpdateSettings.UpdateMode.ALWAYS_UPDATE_MODE_VALUE) {
-                    startService(intent)
-                } else {
-                    stopService(intent)
-                }
-
-            }
-            override fun onNothingSelected(parent: AdapterView<*>) {
-            }
-
-        }
-    }*/
-
-    override fun onSaveInstanceState(outState: Bundle?) {
+    override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         LOG.info("onSaveInstanceState")
         outState?.putByteArray(WIDGET_CONFIG_DATA_KEY, widgetConfig.toByteArray())

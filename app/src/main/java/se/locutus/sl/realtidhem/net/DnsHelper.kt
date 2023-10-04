@@ -10,7 +10,7 @@ const val URL = "http://$HOSTNAME/NG"
 const val DNS_REFRESH_TIME_MILLIS = 3 * 24 * 3600 * 1000
 
 fun getBackendIp(prefs : SharedPreferences) : String {
-    return prefs.getString(IP_ADDR_KEY, HOSTNAME)
+    return prefs.getString(IP_ADDR_KEY, HOSTNAME)!!
 }
 
 fun shouldUpdateBackendIp(prefs : SharedPreferences): Boolean{

@@ -6,11 +6,11 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
+import se.locutus.sl.realtidhem.databinding.ActivityAddStopBinding
 import com.android.volley.RequestQueue
 import com.android.volley.toolbox.Volley
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayout
-import kotlinx.android.synthetic.main.activity_add_stop.*
 import se.locutus.proto.Ng
 import se.locutus.proto.Ng.DeparturesFilter
 import se.locutus.sl.realtidhem.R
@@ -47,7 +47,8 @@ class AddStopActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_add_stop)
+        val binding = ActivityAddStopBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         if (savedInstanceState?.containsKey(STOP_CONFIG_DATA_KEY) == true) {
             val configBuilt = Ng.StopConfiguration.parseFrom(savedInstanceState.getByteArray(STOP_CONFIG_DATA_KEY))
             LOG.info("Got stop from saved bundle $configBuilt")
@@ -65,7 +66,7 @@ class AddStopActivity : AppCompatActivity() {
         if (intent.hasExtra(STOP_INDEX_DATA_KEY)) {
             stopIndex = intent.getIntExtra(STOP_INDEX_DATA_KEY, -1)
         }
-        setSupportActionBar(toolbar)
+        setSupportActionBar(binding.toolbar)
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
         supportActionBar!!.setDisplayShowHomeEnabled(true)
 
@@ -133,12 +134,12 @@ class AddStopActivity : AppCompatActivity() {
         })
     }
 
-    override fun onSaveInstanceState(outState: Bundle?) {
+    override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         LOG.info("onSaveInstanceState $outState")
-        outState?.putByteArray(STOP_CONFIG_DATA_KEY, config.build().toByteArray())
+        outState.putByteArray(STOP_CONFIG_DATA_KEY, config.build().toByteArray())
         if (allDeparturesResponse != null) {
-            outState?.putByteArray(ALL_DEPARTURES_DATA_KEY, allDeparturesResponse!!.toByteArray())
+            outState.putByteArray(ALL_DEPARTURES_DATA_KEY, allDeparturesResponse!!.toByteArray())
         }
     }
 
@@ -173,7 +174,7 @@ class AddStopActivity : AppCompatActivity() {
             .build()
         departureAdapter.clear()
         LOG.info("Loading departures for $siteId")
-        network.doStopDataRequest(request, true) { incomingRequestId: Int, responseData: Ng.ResponseData, e: Exception? ->
+        network.doStopDataRequest(request, true) { _: Int, responseData: Ng.ResponseData, e: Exception? ->
             if (responseData.hasErrorResponse() && responseData.errorResponse.errorType != Ng.ErrorType.UNKNOWN_ERROR) {
                 if (responseData.errorResponse.errorType == Ng.ErrorType.SL_API_ERROR) {
                     snackbarRetryError(R.string.sl_api_error, siteId)

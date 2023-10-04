@@ -16,7 +16,7 @@ import androidx.core.content.ContextCompat
 import se.locutus.sl.realtidhem.R
 import se.locutus.sl.realtidhem.events.EXTRA_COLOR_THEME
 import com.pes.androidmaterialcolorpickerdialog.ColorPicker
-import kotlinx.android.synthetic.main.activity_theme.*
+import se.locutus.sl.realtidhem.databinding.ActivityThemeBinding
 import se.locutus.proto.Ng
 import se.locutus.sl.realtidhem.activity.ALL_DEPARTURES_DATA_KEY
 import se.locutus.sl.realtidhem.activity.STOP_CONFIG_DATA_KEY
@@ -57,8 +57,9 @@ class ThemeActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_theme)
-        setSupportActionBar(theme_toolbar)
+        val binding = ActivityThemeBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        setSupportActionBar(binding.themeToolbar)
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
         supportActionBar!!.setDisplayShowHomeEnabled(true)
         line1Text = findViewById(R.id.widgetline1)

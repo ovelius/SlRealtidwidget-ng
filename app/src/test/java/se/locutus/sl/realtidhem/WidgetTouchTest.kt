@@ -234,7 +234,7 @@ class WidgetTouchTest {
         }
         assertThat(gotIntent.component, `is`(expectedIntent.component))
         assertThat(gotIntent.flags, `is`(expectedIntent.flags))
-        assertThat(gotIntent.extras[AppWidgetManager.EXTRA_APPWIDGET_ID], `is`(expectedIntent.extras[AppWidgetManager.EXTRA_APPWIDGET_ID]))
+        assertThat(gotIntent.extras?.get(AppWidgetManager.EXTRA_APPWIDGET_ID), `is`(expectedIntent.extras?.get(AppWidgetManager.EXTRA_APPWIDGET_ID)))
     }
 
     @Test
