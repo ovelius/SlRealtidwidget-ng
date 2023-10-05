@@ -21,7 +21,7 @@ class StopConfigureTabAdapter(var context : Context, fm : androidx.fragment.app.
         put(selectDeparturesFragment, R.string.select_departures_tab)
     }
 
-    override fun getItem(position: Int): androidx.fragment.app.Fragment? {
+    override fun getItem(position: Int): androidx.fragment.app.Fragment {
         return fragmentList[position]
     }
 

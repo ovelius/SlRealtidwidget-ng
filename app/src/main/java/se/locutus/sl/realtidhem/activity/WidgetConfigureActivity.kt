@@ -22,7 +22,7 @@ import androidx.core.content.ContextCompat
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayout
 import com.google.protobuf.InvalidProtocolBufferException
-import kotlinx.android.synthetic.main.widget_configure_activty.*
+import se.locutus.sl.realtidhem.databinding.WidgetConfigureActivtyBinding
 import se.locutus.proto.Ng.StopConfiguration
 import se.locutus.proto.Ng.WidgetConfiguration
 import se.locutus.sl.realtidhem.R
@@ -96,8 +96,10 @@ class WidgetConfigureActivity : AppCompatActivity() {
     public override fun onCreate(bundle: Bundle?) {
         super.onCreate(bundle)
         setResult(Activity.RESULT_CANCELED)
-        setContentView(R.layout.widget_configure_activty)
-        setSupportActionBar(config_toolbar)
+        val binding = WidgetConfigureActivtyBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        setSupportActionBar(binding.configToolbar)
+        mListView = findViewById(R.id.stop_list_view)
         viewSwitcher = findViewById(R.id.viewSwitcher1)
         findViewById<Button>(R.id.ok_btn_about).setOnClickListener {
             viewSwitcher.showPrevious()
@@ -153,6 +155,30 @@ class WidgetConfigureActivity : AppCompatActivity() {
             widgetConfig = loadWidgetConfigOrDefault(mWidgetPrefs, mAppWidgetId)
             LOG.info("Loaded config from prefs $widgetConfig")
         }
+        mStopListAdapter = StopListAdapter(this)
+        mListView.adapter = mStopListAdapter
+        mListView.setOnItemClickListener { _, _, position, _ ->
+            val intent = Intent(this, AddStopActivity::class.java).apply {
+                putExtra(STOP_CONFIG_DATA_KEY, widgetConfig.getStopConfiguration(position).toByteArray())
+                putExtra(STOP_INDEX_DATA_KEY, position)
+                if (color != null) {
+                    putExtra(EXTRA_COLOR_THEME, color!!)
+                }
+            }
+            startActivityForResult(intent, MODIFY_STOP_REQUEST_CODE)
+        }
+
+        binding.addStopButton.setOnClickListener { _ ->
+            val addIntent = Intent(this, AddStopActivity::class.java).apply {
+                if (color != null) {
+                    putExtra(EXTRA_COLOR_THEME, color!!)
+                }
+            }
+            startActivityForResult(addIntent, ADD_STOP_REQUEST_CODE)
+        }
+        if (color != null) {
+            binding.addStopButton.backgroundTintList= ColorStateList.valueOf(color!!)
+        }
 
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_COARSE_LOCATION)
@@ -174,7 +200,6 @@ class WidgetConfigureActivity : AppCompatActivity() {
                 )
             }
         }
-
         if (intent.action == ACTION_UPDATE_SETTINGS) {
             viewPager.setCurrentItem(1)
         }
@@ -184,7 +209,7 @@ class WidgetConfigureActivity : AppCompatActivity() {
         return timeTracker.getRecords(mAppWidgetId, 0)
     }
 
-    override fun onSaveInstanceState(outState: Bundle?) {
+    override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         LOG.info("onSaveInstanceState")
         outState?.putByteArray(WIDGET_CONFIG_DATA_KEY, widgetConfig.toByteArray())
