@@ -68,11 +68,11 @@ class BackgroundUpdaterService : Service() {
                 autoUpdateSequenceEndTime.remove(widgetId)
                 LOG.info("Manually stopping sequence for $widgetId")
             } else if (config.updateSettings.updateMode == Ng.UpdateSettings.UpdateMode.LEARNING_UPDATE_MODE) {
-                val alarmKey = intent!!.getStringExtra(EXTRA_UPDATE_TIME_KEY)
+                val alarmKey = intent!!.getStringExtra(EXTRA_UPDATE_TIME_KEY)!!
                 val alarmMinCount = config.updateSettings.interactionsToLearn
                 val alarmKeyValue = timeTracker.getAlarmKeyValue(alarmKey)
                 if (alarmKeyValue >= alarmMinCount) {
-                    val triggerTime = intent!!.getLongExtra(EXTRA_UPDATE_TIME, System.currentTimeMillis())
+                    val triggerTime = intent.getLongExtra(EXTRA_UPDATE_TIME, System.currentTimeMillis())
                     val overtTime = System.currentTimeMillis() - triggerTime
                     LOG.info("Received extra widgetId $widgetId for learning widget with overtime $overtTime")
                     if (verifyLocationSanity(widgetId)) {
@@ -167,7 +167,7 @@ class BackgroundUpdaterService : Service() {
             }
             val stopSequence = PendingIntent.getService(
                 this, widgetId,
-                stopSequenceIntent, 0
+                stopSequenceIntent, PendingIntent.FLAG_IMMUTABLE
             )
             builder.addAction(R.mipmap.ic_launcher, getString(R.string.stop_sequence), stopSequence)
                 // if (widgetConfig!!.updateSettings.updateMode == Ng.UpdateSettings.UpdateMode.LEARNING_UPDATE_MODE) {
@@ -177,7 +177,7 @@ class BackgroundUpdaterService : Service() {
                 }
                 val configurePending = PendingIntent.getActivity(
                     this, widgetId * 10000,
-                    configureIntent, 0
+                    configureIntent, PendingIntent.FLAG_IMMUTABLE
                 )
                 builder.addAction(R.mipmap.ic_launcher, getString(R.string.settings), configurePending)
         }

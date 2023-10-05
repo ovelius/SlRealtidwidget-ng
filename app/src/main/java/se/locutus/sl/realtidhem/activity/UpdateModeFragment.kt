@@ -174,7 +174,7 @@ class UpdateModeFragment : androidx.fragment.app.Fragment() {
 
  fun configureUpdateModeSpinner(mainView : View) {
      spinner = mainView.findViewById(R.id.update_mode_spinner)
-     val adapter = ArrayAdapter<String>(activity,
+     val adapter = ArrayAdapter<String>(requireActivity(),
          android.R.layout.simple_spinner_item,
          resources.getStringArray(R.array.update_mode_array))
      adapter.setDropDownViewResource(R.layout.spinner_item)
