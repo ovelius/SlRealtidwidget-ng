@@ -26,9 +26,10 @@ import se.locutus.sl.realtidhem.databinding.WidgetConfigureActivtyBinding
 import se.locutus.proto.Ng.StopConfiguration
 import se.locutus.proto.Ng.WidgetConfiguration
 import se.locutus.sl.realtidhem.R
-import se.locutus.sl.realtidhem.activity.add_stop.AddStopActivity
+import se.locutus.sl.realtidhem.activity.add_stop.*
 import se.locutus.sl.realtidhem.events.EXTRA_COLOR_THEME
 import se.locutus.sl.realtidhem.events.EXTRA_RECONFIGURE_WIDGET
+import se.locutus.sl.realtidhem.service.TimeTracker
 import se.locutus.sl.realtidhem.widget.*
 import java.lang.IllegalArgumentException
 import java.util.*
@@ -43,6 +44,7 @@ const val ALL_DEPARTURES_DATA_KEY = "all_departures_data_key"
 const val STOP_INDEX_DATA_KEY = "stop_config_index_data_key"
 const val WIDGET_CONFIG_PREFS = "widget_configs"
 const val WIDGET_CONFIG_DATA_KEY = "widget_config_data_key"
+const val ACTION_UPDATE_SETTINGS = "action_update_settings"
 
 fun setColor(activity : AppCompatActivity, tabLayout : TabLayout?, color : Int) {
     val drawable = ColorDrawable(color)
@@ -62,34 +64,21 @@ class WidgetConfigureActivity : AppCompatActivity() {
     }
     private var mAppWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID
     private lateinit var mWidgetPrefs : SharedPreferences
-    private lateinit var mListView : ListView
-
-    private lateinit var mAddStopHelperText : TextView
-    private lateinit var mStopListAdapter: StopListAdapter
+    private lateinit var stopListFragment : StopListFragment
+    private lateinit var updateModeFragment : UpdateModeFragment
     private lateinit var viewSwitcher : ViewSwitcher
-    private lateinit var spinner : Spinner
+    internal lateinit var tabLayout: TabLayout
+    internal lateinit var viewPager: androidx.viewpager.widget.ViewPager
+    private lateinit var widgetConfigureTabAdapter: WidgetConfigureTabAdapter
     internal var widgetConfig : WidgetConfiguration = WidgetConfiguration.getDefaultInstance()
     internal var color : Int? = null
+    private lateinit var timeTracker : TimeTracker
+    lateinit var adapter : UpdatePeriodAdapter
     private var isNewWidget = false
-
-    public override fun onResume() {
-        super.onResume()
-        maybeShowStopListView()
-    }
-
-    private fun maybeShowStopListView() {
-        if (widgetConfig.stopConfigurationCount == 0) {
-            mAddStopHelperText.visibility = View.VISIBLE
-            mListView.visibility = View.GONE
-        } else {
-            mListView.visibility = View.VISIBLE
-            mAddStopHelperText.visibility = View.GONE
-        }
-    }
 
     private fun showWidgetDialog() {
         for (widgetId in getAllWidgetIds(this)) {
-            sendWidgetUpdateBroadcast(this, widgetId)
+            sendWidgetUpdateBroadcast(this, widgetId, widgetConfig)
         }
         val url = "https://support.google.com/android/answer/2781850?hl=${Locale.getDefault().language}"
         val builder = AlertDialog.Builder(this)
@@ -119,14 +108,30 @@ class WidgetConfigureActivity : AppCompatActivity() {
             val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/ovelius/SlRealtidwidget-ng"))
             startActivity(browserIntent)
         }
+        timeTracker = TimeTracker(this)
         if (intent?.hasExtra(AppWidgetManager.EXTRA_APPWIDGET_ID) == true) {
             mAppWidgetId = intent!!.extras!!.getInt(
                 AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID
             )
         }
+        adapter = UpdatePeriodAdapter(this, mAppWidgetId)
         mWidgetPrefs = getSharedPreferences(WIDGET_CONFIG_PREFS, 0)
-        // configureUpdateModeSpinner()
-        mAddStopHelperText = findViewById(R.id.no_stops_help_text)
+
+        tabLayout = findViewById(R.id.tab_layout)
+        viewPager = findViewById(R.id.view_pager)
+        stopListFragment = (supportFragmentManager.findFragmentByTag(fragmentName(0))
+                ?: StopListFragment()) as StopListFragment
+        updateModeFragment = (supportFragmentManager.findFragmentByTag(fragmentName(1))
+                ?: UpdateModeFragment()) as UpdateModeFragment
+        // Create or recycle fragments.
+        widgetConfigureTabAdapter = WidgetConfigureTabAdapter(
+            this,
+            stopListFragment,
+            updateModeFragment,
+            supportFragmentManager
+        )
+        viewPager.adapter = widgetConfigureTabAdapter
+        tabLayout.setupWithViewPager(viewPager)
 
 
         if (mAppWidgetId == AppWidgetManager.INVALID_APPWIDGET_ID) {
@@ -137,7 +142,7 @@ class WidgetConfigureActivity : AppCompatActivity() {
         // Use the color extra to determine if this is a new widget.
         if (intent.hasExtra(EXTRA_COLOR_THEME)) {
             color = intent.getIntExtra(EXTRA_COLOR_THEME, 0)
-           setColor(this, null, color!!)
+           setColor(this, tabLayout, color!!)
         }
         isNewWidget = !intent.getBooleanExtra(EXTRA_RECONFIGURE_WIDGET, false)
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
@@ -181,7 +186,7 @@ class WidgetConfigureActivity : AppCompatActivity() {
 
             if (ActivityCompat.shouldShowRequestPermissionRationale(this,
                     Manifest.permission.ACCESS_COARSE_LOCATION)) {
-                Snackbar.make(mListView, getString(R.string.location_access_rationale), Snackbar.LENGTH_LONG)
+                Snackbar.make(viewPager, getString(R.string.location_access_rationale), Snackbar.LENGTH_LONG)
                     .setAction(R.string.location_access_give) {
                         ActivityCompat.requestPermissions(this,
                             arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION),
@@ -195,6 +200,13 @@ class WidgetConfigureActivity : AppCompatActivity() {
                 )
             }
         }
+        if (intent.action == ACTION_UPDATE_SETTINGS) {
+            viewPager.setCurrentItem(1)
+        }
+    }
+
+    fun getTimeRecords() : ArrayList<TimeTracker.TimeRecord> {
+        return timeTracker.getRecords(mAppWidgetId, 0)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -204,7 +216,7 @@ class WidgetConfigureActivity : AppCompatActivity() {
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        LOG.info("Activity result with request code $requestCode and data $data")
+        LOG.info("Activity result with request code $requestCode resultCode $resultCode and data $data")
         if (requestCode == ADD_WIDGET_REQUEST_CODE) {
             mAppWidgetId = data!!.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID)
             LOG.info("Found add widget callback with id $mAppWidgetId")
@@ -237,7 +249,7 @@ class WidgetConfigureActivity : AppCompatActivity() {
             } else {
                 widgetConfig = widgetConfig.toBuilder().addStopConfiguration(config).build()
             }
-            mStopListAdapter.update(widgetConfig)
+            stopListFragment.mStopListAdapter.update(widgetConfig)
         }
     }
 
@@ -291,14 +303,14 @@ class WidgetConfigureActivity : AppCompatActivity() {
     private fun finishSuccessFully() {
         LOG.info("Storing config for $mAppWidgetId")
         storeWidgetConfig(mWidgetPrefs, widgetConfig)
-        sendWidgetUpdateBroadcast(this, mAppWidgetId)
+        sendWidgetUpdateBroadcast(this, mAppWidgetId, widgetConfig)
         finishOk()
     }
 
     override fun onSupportNavigateUp(): Boolean {
         val message = getConfigErrorMessage()
         if (message != null) {
-            Snackbar.make(mListView, message, Snackbar.LENGTH_SHORT)
+            Snackbar.make(viewPager, message, Snackbar.LENGTH_SHORT)
                 .setAction("Action", null).show()
             return false
         } else {
@@ -319,16 +331,16 @@ class WidgetConfigureActivity : AppCompatActivity() {
             val settings = input.text.toString()
             try {
                 widgetConfig = fromUserInputString(settings, mAppWidgetId)
-                Snackbar.make(mListView, getString(R.string.loaded_config, widgetConfig.stopConfigurationCount),
+                Snackbar.make(viewPager, getString(R.string.loaded_config, widgetConfig.stopConfigurationCount),
                     Snackbar.LENGTH_LONG).show()
-                maybeShowStopListView()
-                mStopListAdapter.notifyDataSetChanged()
+                stopListFragment.maybeShowStopListView()
+                stopListFragment.mStopListAdapter.notifyDataSetChanged()
             } catch (e : IllegalArgumentException) {
                 LOG.warning("Invalid config string $settings")
-                Snackbar.make(mListView, getString(R.string.failed_config), Snackbar.LENGTH_LONG).show()
+                Snackbar.make(viewPager, getString(R.string.failed_config), Snackbar.LENGTH_LONG).show()
             } catch (e : InvalidProtocolBufferException) {
                 LOG.warning("Invalid config string $settings")
-                Snackbar.make(mListView, getString(R.string.failed_config), Snackbar.LENGTH_LONG).show()
+                Snackbar.make(viewPager, getString(R.string.failed_config), Snackbar.LENGTH_LONG).show()
             }
         }
         builder.setNegativeButton(R.string.import_settings_btn_cancel) { dialog, p1 ->

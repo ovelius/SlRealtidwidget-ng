@@ -11,6 +11,7 @@ import se.locutus.proto.Ng
 import se.locutus.sl.realtidhem.R
 import se.locutus.sl.realtidhem.events.WIDGET_CONFIG_UPDATED
 import se.locutus.sl.realtidhem.events.WidgetBroadcastReceiver
+import se.locutus.sl.realtidhem.service.BackgroundUpdaterService
 import java.lang.IllegalArgumentException
 
 fun widgetKey(widgetId : Int) : String {
@@ -22,13 +23,24 @@ fun widgetKeyLastData(widgetId : Int) : String {
 fun widgetKeySelectedStop(widgetId : Int) : String {
     return "widget_selected_stop$widgetId"
 }
+fun widgetKeyLastLocation(widgetId : Int) : String {
+    return "widget_last_location$widgetId"
+}
+fun widgetKeyLastDistance(widgetId : Int) : String {
+    return "widget_last_distance$widgetId"
+}
 
 fun widgetKeyStopSelectedAt(widgetId : Int) : String {
     return "widget_stop_selected_at$widgetId"
 }
 
+@Deprecated("Should not be used", ReplaceWith("widgetLargeLayoutKey"))
 fun widgetKeyLayout(widgetId : Int) : String {
     return "widget_key_layout$widgetId"
+}
+
+fun widgetLargeLayoutKey(widgetId : Int) : String {
+    return "widget_large_layout_key$widgetId"
 }
 
 fun loadWidgetConfigOrDefault(prefs : SharedPreferences, widgetId : Int) : Ng.WidgetConfiguration {
@@ -46,7 +58,10 @@ fun deleteWidget(prefs : SharedPreferences, widgetId : Int) {
         .remove(widgetKeyLastData(widgetId))
         .remove(widgetKeySelectedStop(widgetId))
         .remove(widgetKeyLayout(widgetId))
+        .remove(widgetLargeLayoutKey(widgetId))
         .remove(widgetKeyStopSelectedAt(widgetId))
+        .remove(widgetKeyLastLocation(widgetId))
+        .remove(widgetKeyLastDistance(widgetId))
         .apply()
 }
 
@@ -58,7 +73,20 @@ fun putLastLoadData(prefs : SharedPreferences, widgetId: Int, response : Ng.Widg
 }
 
 fun getWidgetLayoutId(prefs : SharedPreferences, widgetId: Int) : Int {
-    return prefs.getInt(widgetKeyLayout(widgetId), R.layout.widgetlayout_base)
+    val largeLayoutKey = widgetLargeLayoutKey(widgetId)
+    if (prefs.contains(largeLayoutKey)) {
+        if (prefs.getBoolean(widgetLargeLayoutKey(widgetId), false)) {
+            return R.layout.widgetlayout_double
+        } else {
+            return R.layout.widgetlayout_base
+        }
+    }
+    // Legacy behavior.
+    val layoutId = prefs.getInt(widgetKeyLayout(widgetId), R.layout.widgetlayout_base)
+    if (layoutId != R.layout.widgetlayout_double && layoutId != R.layout.widgetlayout_base) {
+        return R.layout.widgetlayout_base
+    }
+    return layoutId
 }
 
 fun getLastLoadData(prefs : SharedPreferences, widgetId: Int) : Ng.WidgetLoadResponseData? {
@@ -70,8 +98,25 @@ fun getLastLoadData(prefs : SharedPreferences, widgetId: Int) : Ng.WidgetLoadRes
     return null
 }
 
-fun setSelectedStopIndex(prefs : SharedPreferences, widgetId: Int, selected : Int) {
-    prefs.edit().putInt(widgetKeySelectedStop(widgetId),selected).apply()
+fun setSelectedStopIndexManually(prefs : SharedPreferences, widgetId: Int, selected : Int) {
+    prefs.edit()
+        .putInt(widgetKeySelectedStop(widgetId), selected)
+        // We no longer consider this stop to be selected via location.
+        .remove(widgetKeyLastLocation(widgetId)).apply()
+}
+
+fun setSelectedStopIndexFromLocation(prefs : SharedPreferences, widgetId: Int, selected : Int,
+                                     location : Location, stopConfig: Ng.StopConfiguration) {
+    val stopLocation = Location("StopLocation").apply {
+        latitude = stopConfig.stopData.lat
+        longitude = stopConfig.stopData.lng
+    }
+    val distance = location.distanceTo(stopLocation)
+    prefs.edit()
+        .putInt(widgetKeySelectedStop(widgetId), selected)
+        .putLong(widgetKeyLastLocation(widgetId), location.time)
+        .putFloat(widgetKeyLastDistance(widgetId), distance)
+        .apply()
 }
 
 fun widgetConfigToString(config : Ng.WidgetConfiguration) : String {
@@ -118,10 +163,16 @@ fun getAllWidgetIds(context : Context) : IntArray {
     return manager.getAppWidgetIds(component)
 }
 
-fun sendWidgetUpdateBroadcast(context : Context, widgetId : Int) {
+fun sendWidgetUpdateBroadcast(context : Context, widgetId : Int, widgetConfig : Ng.WidgetConfiguration?) {
     val intentUpdate = Intent(context, WidgetBroadcastReceiver::class.java).apply {
         action = WIDGET_CONFIG_UPDATED
         putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId)
+    }
+    if (widgetConfig != null &&
+        widgetConfig.updateSettings.updateMode == Ng.UpdateSettings.UpdateMode.ALWAYS_UPDATE_MODE) {
+        val intent = Intent(context, BackgroundUpdaterService::class.java)
+        context!!.stopService(intent)
+        context!!.startService(intent)
     }
     context.sendBroadcast(intentUpdate)
 }

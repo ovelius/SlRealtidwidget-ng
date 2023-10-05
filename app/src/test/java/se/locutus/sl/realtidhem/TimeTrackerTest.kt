@@ -72,6 +72,13 @@ class TimeTrackerTest {
     }
 
     @Test
+    fun testRecordTranslateMinutes() {
+        c.add(Calendar.MINUTE, 45)
+        tracker.recordUpdate(widgetId, c)
+        assertEquals(mapOf("123:wd:false:21:50:25" to 1), prefs.all)
+    }
+
+    @Test
     fun testRecordAndReadBack() {
         tracker.recordUpdate(widgetId, c)
         tracker.recordUpdate(widgetId, c)
@@ -80,7 +87,7 @@ class TimeTrackerTest {
         tracker.recordUpdate(widgetId, c)
         tracker.compactRecords(widgetId)
 
-        val records = tracker.getRecords(widgetId)
+        val records = tracker.getRecords(widgetId, 0)
         assertEquals(1, records.size)
         assertEquals(TimeTracker.TimeRecord(21, 10, false, 2), records[0])
     }

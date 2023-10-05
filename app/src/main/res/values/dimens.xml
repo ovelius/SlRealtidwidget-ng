@@ -6,4 +6,6 @@
     <dimen name="widget_margin">8dp</dimen>
     <dimen name="widget_double_text_margin_top">10dip</dimen>
     <dimen name="widget_double_text_size">20dip</dimen>
+
+    <dimen name="main_text_size">20dip</dimen>
 </resources>

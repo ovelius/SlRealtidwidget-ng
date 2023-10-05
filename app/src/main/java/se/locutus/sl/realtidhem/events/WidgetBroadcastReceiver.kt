@@ -11,8 +11,8 @@ import android.widget.RemoteViews
 import se.locutus.sl.realtidhem.R
 import se.locutus.sl.realtidhem.activity.WIDGET_CONFIG_PREFS
 import se.locutus.sl.realtidhem.net.NetworkManager
-import se.locutus.sl.realtidhem.widget.StandardWidgetProvider.Companion.setPendingIntents
 import se.locutus.sl.realtidhem.widget.getWidgetLayoutId
+import se.locutus.sl.realtidhem.widget.setPendingIntents
 
 const val WIDGET_CONFIG_UPDATED = "widget_config_updated"
 
@@ -20,10 +20,9 @@ class WidgetBroadcastReceiver  : BroadcastReceiver() {
 
     companion object {
         var widgetTouchHandler : WidgetTouchHandler? = null
-        fun getTouchHandler(context : Context) : WidgetTouchHandler {
+        fun getTouchHandler(context : Context) : TouchHandlerInterface {
             if (widgetTouchHandler == null) {
-                LOG.info("Creating main widget handler")
-                widgetTouchHandler = WidgetTouchHandler(context!!, NetworkManager(context))
+                widgetTouchHandler = WidgetTouchHandler(context.applicationContext, NetworkManager(context))
             }
             return widgetTouchHandler!!
         }

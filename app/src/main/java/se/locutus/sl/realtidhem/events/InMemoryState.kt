@@ -14,7 +14,7 @@ import java.util.concurrent.ConcurrentHashMap
  * In memory state related to all widget.
  * Most state can be recovered from settings if needed.
  */
-internal class InMemoryState {
+class InMemoryState {
     private var scrollThread : WidgetTouchHandler.ScrollThread? = null
     var nextPowerSaveSettings = false
     var lastTouch = ConcurrentHashMap<Int, Long>()
@@ -104,11 +104,12 @@ internal class InMemoryState {
         } else {
             touchCount[widgetId] = touchCount[widgetId]!! + 1
         }
+        this.lastTouch[widgetId] = System.currentTimeMillis()
         return touchCount[widgetId]!! >= TOUCH_TO_CONFIG
     }
 
-    fun getWidgetConfig(widgetId : Int, prefs : SharedPreferences) : Ng.WidgetConfiguration {
-        if (!widgetConfigs.containsKey(widgetId)) {
+    fun getWidgetConfig(widgetId : Int, prefs : SharedPreferences, reload : Boolean = false) : Ng.WidgetConfiguration {
+        if (!widgetConfigs.containsKey(widgetId) || reload) {
             WidgetTouchHandler.LOG.info("Loading config for widget $widgetId")
             widgetConfigs[widgetId] = loadWidgetConfigOrDefault(prefs, widgetId)
         }

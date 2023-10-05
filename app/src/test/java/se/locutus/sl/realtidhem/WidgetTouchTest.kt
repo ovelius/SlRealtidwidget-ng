@@ -27,6 +27,7 @@ import java.net.SocketTimeoutException
 import org.robolectric.shadows.ShadowPowerManager
 import se.locutus.sl.realtidhem.activity.WidgetConfigureActivity
 import se.locutus.sl.realtidhem.events.CYCLE_STOP_RIGHT
+import se.locutus.sl.realtidhem.events.InMemoryState
 import se.locutus.sl.realtidhem.widget.getLastLoadData
 import se.locutus.sl.realtidhem.widget.widgetKeySelectedStop
 
@@ -53,10 +54,14 @@ class WidgetTouchTest {
     private val shadowPowerManager: ShadowPowerManager = shadowOf(context.getSystemService(Context.POWER_SERVICE) as PowerManager)
     private val shadowContext : ShadowContextWrapper = shadowOf(context)
 
+    fun createTouchHandler() : WidgetTouchHandler {
+        return WidgetTouchHandler(context, testNetwork)
+    }
+
     @Test
     fun testTouchWidgetAndLoadData() {
         val widgetId = createWidgetConfig()
-        val touchHandler = WidgetTouchHandler(context, testNetwork)
+        val touchHandler = createTouchHandler()
 
         // Touch the widget.
         touchHandler.widgetTouched(widgetId, null)
@@ -103,9 +108,29 @@ class WidgetTouchTest {
     }
 
     @Test
+    fun testTouchWidgetAndLoadAutomatedData() {
+        val widgetId = createWidgetConfig()
+        val touchHandler = createTouchHandler()
+
+        // Touch the widget.
+        touchHandler.widgetTouched(widgetId, null, false)
+
+        assertViewText(widgetId, R.id.widgetline1, R.string.updating)
+        assertViewText(widgetId, R.id.widgetline2, R.string.updating)
+
+        testNetwork.sendResponse(Ng.ResponseData.newBuilder()
+            .setLoadResponse(widgetLoadResponse("123 Hej", "1 min", "Mooore"))
+            .build(), null)
+
+        // Scroller is not active from automated load.
+        assertThat(touchHandler.inMemoryState.hasRunningThread(widgetId), `is`(false))
+    }
+
+
+    @Test
     fun testWidgetConfigUpdatedWithIdleMessage() {
         val widgetId = createWidgetConfig()
-        val touchHandler = WidgetTouchHandler(context, testNetwork)
+        val touchHandler = createTouchHandler()
 
         // Touch the widget.
         touchHandler.widgetTouched(widgetId, null)
@@ -135,7 +160,7 @@ class WidgetTouchTest {
     @Test
     fun testWidgetChangeStop() {
         val widgetId = createWidgetConfig()
-        val touchHandler = WidgetTouchHandler(context, testNetwork)
+        val touchHandler = createTouchHandler()
         touchHandler.configUpdated(widgetId, false)
         assertThat(prefs.getInt(widgetKeySelectedStop(widgetId), 0), `is`(0))
         assertViewText(widgetId, R.id.widgetline1, R.string.idle_line1)
@@ -150,7 +175,7 @@ class WidgetTouchTest {
     @Test
     fun testTouchWidgetAndNoDepartures() {
         val widgetId = createWidgetConfig()
-        val touchHandler = WidgetTouchHandler(context, testNetwork)
+        val touchHandler = createTouchHandler()
 
         // Touch the widget.
         touchHandler.widgetTouched(widgetId, null)
@@ -168,7 +193,7 @@ class WidgetTouchTest {
     @Test
     fun testTouchWidgetAndExceptionLoadingData() {
         val widgetId = createWidgetConfig()
-        val touchHandler = WidgetTouchHandler(context, testNetwork)
+        val touchHandler = createTouchHandler()
 
         // Touch the widget.
         touchHandler.widgetTouched(widgetId, null)
@@ -193,7 +218,7 @@ class WidgetTouchTest {
     @Test
     fun testTouchWidgetAndErrorLoadingData() {
         val widgetId = createWidgetConfig()
-        val touchHandler = WidgetTouchHandler(context, testNetwork)
+        val touchHandler = createTouchHandler()
         // Touch the widget.
         touchHandler.widgetTouched(widgetId, null)
 
@@ -212,7 +237,7 @@ class WidgetTouchTest {
     @Test
     fun testTouchToConfig() {
         val widgetId = createWidgetConfig()
-        val touchHandler = WidgetTouchHandler(context, testNetwork)
+        val touchHandler = createTouchHandler()
         // Touch the widget once.
         touchHandler.widgetTouched(widgetId, null)
         // Nothing
@@ -240,7 +265,7 @@ class WidgetTouchTest {
     @Test
     fun testTouchWidgetPowerSave() {
         val widgetId = createWidgetConfig()
-        val touchHandler = WidgetTouchHandler(context, testNetwork)
+        val touchHandler = createTouchHandler()
         // Touch the widget in powersave mode.
         shadowPowerManager.setIsPowerSaveMode(true)
         touchHandler.widgetTouched(widgetId, null)

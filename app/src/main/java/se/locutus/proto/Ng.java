@@ -8680,6 +8680,34 @@ public final class Ng {
      * <code>optional .se.locutus.proto.UpdateSettings.UpdateMode update_mode = 1;</code>
      */
     se.locutus.proto.Ng.UpdateSettings.UpdateMode getUpdateMode();
+
+    /**
+     * <pre>
+     * Always update mode
+     * </pre>
+     *
+     * <code>optional bool update_when_screen_on = 2;</code>
+     */
+    boolean getUpdateWhenScreenOn();
+
+    /**
+     * <code>optional int32 update_sequence_length = 3;</code>
+     */
+    int getUpdateSequenceLength();
+
+    /**
+     * <pre>
+     *  Self-learning mode
+     * </pre>
+     *
+     * <code>optional int32 interactions_to_learn = 4;</code>
+     */
+    int getInteractionsToLearn();
+
+    /**
+     * <code>optional int32 learning_periods = 5;</code>
+     */
+    int getLearningPeriods();
   }
   /**
    * Protobuf type {@code se.locutus.proto.UpdateSettings}
@@ -8830,10 +8858,138 @@ public final class Ng {
       updateMode_ = 0;
     }
 
+    public static final int UPDATE_WHEN_SCREEN_ON_FIELD_NUMBER = 2;
+    private boolean updateWhenScreenOn_;
+    /**
+     * <pre>
+     * Always update mode
+     * </pre>
+     *
+     * <code>optional bool update_when_screen_on = 2;</code>
+     */
+    public boolean getUpdateWhenScreenOn() {
+      return updateWhenScreenOn_;
+    }
+    /**
+     * <pre>
+     * Always update mode
+     * </pre>
+     *
+     * <code>optional bool update_when_screen_on = 2;</code>
+     */
+    private void setUpdateWhenScreenOn(boolean value) {
+      
+      updateWhenScreenOn_ = value;
+    }
+    /**
+     * <pre>
+     * Always update mode
+     * </pre>
+     *
+     * <code>optional bool update_when_screen_on = 2;</code>
+     */
+    private void clearUpdateWhenScreenOn() {
+      
+      updateWhenScreenOn_ = false;
+    }
+
+    public static final int UPDATE_SEQUENCE_LENGTH_FIELD_NUMBER = 3;
+    private int updateSequenceLength_;
+    /**
+     * <code>optional int32 update_sequence_length = 3;</code>
+     */
+    public int getUpdateSequenceLength() {
+      return updateSequenceLength_;
+    }
+    /**
+     * <code>optional int32 update_sequence_length = 3;</code>
+     */
+    private void setUpdateSequenceLength(int value) {
+      
+      updateSequenceLength_ = value;
+    }
+    /**
+     * <code>optional int32 update_sequence_length = 3;</code>
+     */
+    private void clearUpdateSequenceLength() {
+      
+      updateSequenceLength_ = 0;
+    }
+
+    public static final int INTERACTIONS_TO_LEARN_FIELD_NUMBER = 4;
+    private int interactionsToLearn_;
+    /**
+     * <pre>
+     *  Self-learning mode
+     * </pre>
+     *
+     * <code>optional int32 interactions_to_learn = 4;</code>
+     */
+    public int getInteractionsToLearn() {
+      return interactionsToLearn_;
+    }
+    /**
+     * <pre>
+     *  Self-learning mode
+     * </pre>
+     *
+     * <code>optional int32 interactions_to_learn = 4;</code>
+     */
+    private void setInteractionsToLearn(int value) {
+      
+      interactionsToLearn_ = value;
+    }
+    /**
+     * <pre>
+     *  Self-learning mode
+     * </pre>
+     *
+     * <code>optional int32 interactions_to_learn = 4;</code>
+     */
+    private void clearInteractionsToLearn() {
+      
+      interactionsToLearn_ = 0;
+    }
+
+    public static final int LEARNING_PERIODS_FIELD_NUMBER = 5;
+    private int learningPeriods_;
+    /**
+     * <code>optional int32 learning_periods = 5;</code>
+     */
+    public int getLearningPeriods() {
+      return learningPeriods_;
+    }
+    /**
+     * <code>optional int32 learning_periods = 5;</code>
+     */
+    private void setLearningPeriods(int value) {
+      
+      learningPeriods_ = value;
+    }
+    /**
+     * <code>optional int32 learning_periods = 5;</code>
+     */
+    private void clearLearningPeriods() {
+      
+      learningPeriods_ = 0;
+    }
+
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
       if (updateMode_ != se.locutus.proto.Ng.UpdateSettings.UpdateMode.LEARNING_UPDATE_MODE.getNumber()) {
         output.writeEnum(1, updateMode_);
+      }
+      if (updateWhenScreenOn_ != false) {
+        output.writeBool(2, updateWhenScreenOn_);
+      }
+      if (updateSequenceLength_ != 0) {
+        output.writeInt32(3, updateSequenceLength_);
+      }
+      if (interactionsToLearn_ != 0) {
+        output.writeInt32(4, interactionsToLearn_);
+      }
+      if (learningPeriods_ != 0) {
+        output.writeInt32(5, learningPeriods_);
       }
     }
 
@@ -8845,6 +9001,22 @@ public final class Ng {
       if (updateMode_ != se.locutus.proto.Ng.UpdateSettings.UpdateMode.LEARNING_UPDATE_MODE.getNumber()) {
         size += com.google.protobuf.CodedOutputStream
           .computeEnumSize(1, updateMode_);
+      }
+      if (updateWhenScreenOn_ != false) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBoolSize(2, updateWhenScreenOn_);
+      }
+      if (updateSequenceLength_ != 0) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(3, updateSequenceLength_);
+      }
+      if (interactionsToLearn_ != 0) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(4, interactionsToLearn_);
+      }
+      if (learningPeriods_ != 0) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(5, learningPeriods_);
       }
       memoizedSerializedSize = size;
       return size;
@@ -8969,6 +9141,122 @@ public final class Ng {
         return this;
       }
 
+      /**
+       * <pre>
+       * Always update mode
+       * </pre>
+       *
+       * <code>optional bool update_when_screen_on = 2;</code>
+       */
+      public boolean getUpdateWhenScreenOn() {
+        return instance.getUpdateWhenScreenOn();
+      }
+      /**
+       * <pre>
+       * Always update mode
+       * </pre>
+       *
+       * <code>optional bool update_when_screen_on = 2;</code>
+       */
+      public Builder setUpdateWhenScreenOn(boolean value) {
+        copyOnWrite();
+        instance.setUpdateWhenScreenOn(value);
+        return this;
+      }
+      /**
+       * <pre>
+       * Always update mode
+       * </pre>
+       *
+       * <code>optional bool update_when_screen_on = 2;</code>
+       */
+      public Builder clearUpdateWhenScreenOn() {
+        copyOnWrite();
+        instance.clearUpdateWhenScreenOn();
+        return this;
+      }
+
+      /**
+       * <code>optional int32 update_sequence_length = 3;</code>
+       */
+      public int getUpdateSequenceLength() {
+        return instance.getUpdateSequenceLength();
+      }
+      /**
+       * <code>optional int32 update_sequence_length = 3;</code>
+       */
+      public Builder setUpdateSequenceLength(int value) {
+        copyOnWrite();
+        instance.setUpdateSequenceLength(value);
+        return this;
+      }
+      /**
+       * <code>optional int32 update_sequence_length = 3;</code>
+       */
+      public Builder clearUpdateSequenceLength() {
+        copyOnWrite();
+        instance.clearUpdateSequenceLength();
+        return this;
+      }
+
+      /**
+       * <pre>
+       *  Self-learning mode
+       * </pre>
+       *
+       * <code>optional int32 interactions_to_learn = 4;</code>
+       */
+      public int getInteractionsToLearn() {
+        return instance.getInteractionsToLearn();
+      }
+      /**
+       * <pre>
+       *  Self-learning mode
+       * </pre>
+       *
+       * <code>optional int32 interactions_to_learn = 4;</code>
+       */
+      public Builder setInteractionsToLearn(int value) {
+        copyOnWrite();
+        instance.setInteractionsToLearn(value);
+        return this;
+      }
+      /**
+       * <pre>
+       *  Self-learning mode
+       * </pre>
+       *
+       * <code>optional int32 interactions_to_learn = 4;</code>
+       */
+      public Builder clearInteractionsToLearn() {
+        copyOnWrite();
+        instance.clearInteractionsToLearn();
+        return this;
+      }
+
+      /**
+       * <code>optional int32 learning_periods = 5;</code>
+       */
+      public int getLearningPeriods() {
+        return instance.getLearningPeriods();
+      }
+      /**
+       * <code>optional int32 learning_periods = 5;</code>
+       */
+      public Builder setLearningPeriods(int value) {
+        copyOnWrite();
+        instance.setLearningPeriods(value);
+        return this;
+      }
+      /**
+       * <code>optional int32 learning_periods = 5;</code>
+       */
+      public Builder clearLearningPeriods() {
+        copyOnWrite();
+        instance.clearLearningPeriods();
+        return this;
+      }
+
       // @@protoc_insertion_point(builder_scope:se.locutus.proto.UpdateSettings)
     }
     protected final Object dynamicMethod(
@@ -8991,6 +9279,14 @@ public final class Ng {
           Visitor visitor = (Visitor) arg0;
           se.locutus.proto.Ng.UpdateSettings other = (se.locutus.proto.Ng.UpdateSettings) arg1;
           updateMode_ = visitor.visitInt(updateMode_ != 0, updateMode_,    other.updateMode_ != 0, other.updateMode_);
+          updateWhenScreenOn_ = visitor.visitBoolean(updateWhenScreenOn_ != false, updateWhenScreenOn_,
+              other.updateWhenScreenOn_ != false, other.updateWhenScreenOn_);
+          updateSequenceLength_ = visitor.visitInt(updateSequenceLength_ != 0, updateSequenceLength_,
+              other.updateSequenceLength_ != 0, other.updateSequenceLength_);
+          interactionsToLearn_ = visitor.visitInt(interactionsToLearn_ != 0, interactionsToLearn_,
+              other.interactionsToLearn_ != 0, other.interactionsToLearn_);
+          learningPeriods_ = visitor.visitInt(learningPeriods_ != 0, learningPeriods_,
+              other.learningPeriods_ != 0, other.learningPeriods_);
           if (visitor == com.google.protobuf.GeneratedMessageLite.MergeFromVisitor
               .INSTANCE) {
           }
@@ -9019,6 +9315,26 @@ public final class Ng {
                   int rawValue = input.readEnum();
 
                   updateMode_ = rawValue;
+                  break;
+                }
+                case 16: {
+
+                  updateWhenScreenOn_ = input.readBool();
+                  break;
+                }
+                case 24: {
+
+                  updateSequenceLength_ = input.readInt32();
+                  break;
+                }
+                case 32: {
+
+                  interactionsToLearn_ = input.readInt32();
+                  break;
+                }
+                case 40: {
+
+                  learningPeriods_ = input.readInt32();
                   break;
                 }
               }
