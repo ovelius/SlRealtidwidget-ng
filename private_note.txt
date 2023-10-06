@@ -1,0 +1,2 @@
+This app collects no personal data.
+It uses device location to show the closest configured stop.
