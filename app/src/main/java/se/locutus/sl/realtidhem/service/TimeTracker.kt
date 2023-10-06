@@ -8,6 +8,7 @@ import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 import android.app.AlarmManager
+import android.app.PendingIntent.FLAG_IMMUTABLE
 import android.os.Build
 import java.util.logging.Logger
 
@@ -106,14 +107,14 @@ class TimeTracker(val context : Context) {
                 context,
                 requestCode,
                 intent,
-                0
+                FLAG_IMMUTABLE
             )
         } else {
             PendingIntent.getService(
                 context,
                 requestCode,
                 intent,
-                0
+                FLAG_IMMUTABLE
             )
         }
     }
