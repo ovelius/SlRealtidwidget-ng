@@ -139,7 +139,7 @@ class WidgetTouchHandler(val context: Context, val networkManager : NetworkInter
                 ))
             }
         } else {
-            LOG.info("Updated and has running thread, not doing anything $widgetId")
+            LOG.info("Widget information not stale, not doing anything $widgetId")
         }
 
         if (userTouch && inMemoryState.maybeIncrementTouchCountAndOpenConfig(widgetId)) {

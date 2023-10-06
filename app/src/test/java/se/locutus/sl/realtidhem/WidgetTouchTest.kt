@@ -14,6 +14,7 @@ import androidx.test.core.app.ApplicationProvider
 import android.widget.TextView
 import org.hamcrest.CoreMatchers.*
 import org.robolectric.Shadows.shadowOf
+import org.robolectric.annotation.Config
 import se.locutus.proto.Ng
 import se.locutus.sl.realtidhem.net.NetworkInterface
 import se.locutus.sl.realtidhem.activity.WIDGET_CONFIG_PREFS
@@ -31,13 +32,8 @@ import se.locutus.sl.realtidhem.events.InMemoryState
 import se.locutus.sl.realtidhem.widget.getLastLoadData
 import se.locutus.sl.realtidhem.widget.widgetKeySelectedStop
 
-
-/**
- * Example local unit test, which will execute on the development machine (host).
- *
- * See [testing documentation](http://d.android.com/tools/testing).
- */
 @RunWith(RobolectricTestRunner::class)
+@Config(sdk = [31])
 class WidgetTouchTest {
     private val testNetwork = TestNetworkInterface()
     private val context = ApplicationProvider.getApplicationContext<android.app.Application>()

@@ -309,7 +309,9 @@ class BackgroundUpdaterService : Service() {
             val updateMode = config.updateSettings.updateMode
             if (updateMode == Ng.UpdateSettings.UpdateMode.ALWAYS_UPDATE_MODE ||
                     updateMode == Ng.UpdateSettings.UpdateMode.LEARNING_UPDATE_MODE) {
-                // Set something else here.
+                // Explicitly reset the timers so that any event will update
+                // the widgets again.
+                widgetTouchProvider().getInMemoryState().resetTimers(widgetId)
                 setStaleMessages(widgetId)
             }
         }

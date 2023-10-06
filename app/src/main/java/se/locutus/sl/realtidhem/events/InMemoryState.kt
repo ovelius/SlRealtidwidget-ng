@@ -90,6 +90,11 @@ class InMemoryState {
         return System.currentTimeMillis() - updatedAt[widgetId]!!
     }
 
+    fun resetTimers(widgetId : Int) {
+        updatedAt.remove(widgetId)
+        updateStartedAt.remove(widgetId)
+    }
+
     fun sinceUpdateStarted(widgetId : Int) : Long {
         if (!updateStartedAt.containsKey(widgetId)) {
             return Long.MAX_VALUE

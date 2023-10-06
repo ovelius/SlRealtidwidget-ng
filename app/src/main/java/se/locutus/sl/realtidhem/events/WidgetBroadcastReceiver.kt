@@ -13,6 +13,7 @@ import se.locutus.sl.realtidhem.activity.WIDGET_CONFIG_PREFS
 import se.locutus.sl.realtidhem.net.NetworkManager
 import se.locutus.sl.realtidhem.widget.getWidgetLayoutId
 import se.locutus.sl.realtidhem.widget.setPendingIntents
+import se.locutus.sl.realtidhem.widget.setWidgetViews
 
 const val WIDGET_CONFIG_UPDATED = "widget_config_updated"
 
@@ -63,14 +64,12 @@ class ResetWidget : JobService() {
 
     override fun onStartJob(params: JobParameters?): Boolean {
         val widgetId: Int = params!!.extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID)
+        val prefs = getSharedPreferences(WIDGET_CONFIG_PREFS, 0)
         WidgetBroadcastReceiver.LOG.info("job started, clearing widget $widgetId!")
         val manager = getSystemService(Context.APPWIDGET_SERVICE) as AppWidgetManager
-        val views = getRemoveViews(widgetId)
-        views.setTextViewText(R.id.widgetline2,  getString(R.string.idle_line2))
-        views.setTextViewText(R.id.widgetline1, getString(R.string.idle_line1))
-        views.setTextViewText(R.id.widgetmin, "")
-        setPendingIntents(this, views, widgetId, false)
-        manager.updateAppWidget(widgetId, views)
+        val handler = WidgetBroadcastReceiver.widgetTouchHandler
+        setWidgetViews(this, handler!!.getInMemoryState().getWidgetConfig(widgetId, prefs),
+            manager, prefs, widgetId)
         return false
     }
 

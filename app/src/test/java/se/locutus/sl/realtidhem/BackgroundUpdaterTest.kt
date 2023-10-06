@@ -17,6 +17,7 @@ import org.junit.runner.RunWith
 import org.robolectric.Robolectric
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.Shadows.shadowOf
+import org.robolectric.annotation.Config
 import org.robolectric.shadows.ShadowAppWidgetManager
 import org.robolectric.shadows.ShadowPowerManager
 import org.robolectric.shadows.ShadowService
@@ -35,6 +36,7 @@ const val ALARM_KEY = "alarm_key"
 const val ALARM_INTERACTIONS_COUNT = 2
 
 @RunWith(RobolectricTestRunner::class)
+@Config(sdk = [31])
 class BackgroundUpdaterTest {
     private val TEST_UPDATE_PERIOD = 10000000L
     private lateinit var service : BackgroundUpdaterService
@@ -117,11 +119,13 @@ class BackgroundUpdaterTest {
         shadowLooper.runOneTask()
         assertThat(touchHandler.updateCount, `is`(1))
         runOneTask()
+        shadowLooper.runOneTask()
         // Did additional updates.
         assertThat(touchHandler.updateCount, `is`(2))
 
         service.autoUpdateSequenceEndTime[widgetId] = 0
         runOneTask()
+        shadowLooper.runOneTask()
         // Did not update.
         assertThat(touchHandler.updateCount, `is`(2))
         assertViewText(widgetId, R.id.widgetline1, R.string.idle_line1_auto)
@@ -151,6 +155,7 @@ class BackgroundUpdaterTest {
         // Simulate sequence timeout.
         service.autoUpdateSequenceEndTime[widgetId] = 0
         runOneTask()
+        shadowLooper.runOneTask()
 
         assertThat(service.hasAutoUpdatesRunning(), `is`(false))
         assertThat(shadow.isStoppedBySelf, `is`(false))
@@ -217,6 +222,7 @@ class BackgroundUpdaterTest {
         assertThat(touchHandler.updateCount, `is`(1))
         // Wait one update period
         runOneTask()
+        shadowLooper.runOneTask()
         assertThat(touchHandler.updateCount, `is`(2))
         // Something got loaded
         touchHandler.callback("test1", "min", "test2")
@@ -233,6 +239,7 @@ class BackgroundUpdaterTest {
         }
         service.onStartCommand(stopSequenceIntent, 0,0)
         runOneTask()
+        shadowLooper.runOneTask()
         // No additional updates.
         assertThat(touchHandler.updateCount, `is`(2))
         assertViewText(widgetId, R.id.widgetline1, R.string.idle_line1)
