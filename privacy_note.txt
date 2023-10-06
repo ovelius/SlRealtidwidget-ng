@@ -1,0 +1,2 @@
+This app collects or shared no personal data.
+Location is only used within the app to determine the closest configured stop to show.  
