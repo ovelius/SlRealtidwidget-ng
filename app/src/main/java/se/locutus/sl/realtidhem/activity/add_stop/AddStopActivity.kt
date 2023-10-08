@@ -182,6 +182,7 @@ class AddStopActivity : AppCompatActivity() {
                     snackbarRetryError(R.string.error, siteId)
                 }
             } else if (e != null) {
+                LOG.warning("Got error response $e")
                 snackbarRetryError(R.string.error, siteId)
             } else {
                 LOG.info("Got response with ${responseData.allDepaturesResponse.depatureDataCount} departures")

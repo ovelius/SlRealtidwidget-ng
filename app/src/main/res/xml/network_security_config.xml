@@ -2,5 +2,7 @@
 <network-security-config>
     <domain-config cleartextTrafficPermitted="true">
         <domain includeSubdomains="true">anka.locutus.se</domain>
+        <domain includeSubdomains="true">localhost</domain>
+        <domain includeSubdomains="true">ASnjima.lan</domain>
     </domain-config>
 </network-security-config>

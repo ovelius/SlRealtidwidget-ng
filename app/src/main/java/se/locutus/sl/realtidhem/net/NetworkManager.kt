@@ -39,7 +39,7 @@ class NetworkManager(var context : Context) : NetworkInterface {
             LOG.info("Sending request using UDP")
             sendRequestWithUDP(request, callback)
         } else {
-            LOG.info("Sending request using HTTP")
+            LOG.info("Sending request using HTTP URL $URL")
             sendRequestWithHTTP(request, callback)
             if (udpSocket.ready() && !forceHttp) {
                 udpSocket.bringBackToLife()
@@ -101,8 +101,8 @@ class ProtoRequest
     }
 
     override fun parseNetworkResponse(response: NetworkResponse): Response<ResponseData> {
-        if (response.statusCode == 200) {
-
+        if (response.statusCode != 200) {
+            NetworkManager.LOG.warning("HTTP error: ${response.statusCode} - response ${response}")
         }
         val responseData = ResponseData.parseFrom(response.data)
         return Response.success(responseData, HttpHeaderParser.parseCacheHeaders(response))
