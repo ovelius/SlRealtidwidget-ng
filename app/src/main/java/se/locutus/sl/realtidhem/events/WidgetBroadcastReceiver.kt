@@ -67,8 +67,8 @@ class ResetWidget : JobService() {
         val prefs = getSharedPreferences(WIDGET_CONFIG_PREFS, 0)
         WidgetBroadcastReceiver.LOG.info("job started, clearing widget $widgetId!")
         val manager = getSystemService(Context.APPWIDGET_SERVICE) as AppWidgetManager
-        val handler = WidgetBroadcastReceiver.widgetTouchHandler
-        setWidgetViews(this, handler!!.getInMemoryState().getWidgetConfig(widgetId, prefs),
+        val handler = WidgetBroadcastReceiver.getTouchHandler(this)
+        setWidgetViews(this, handler.getInMemoryState().getWidgetConfig(widgetId, prefs),
             manager, prefs, widgetId)
         return false
     }
