@@ -1,4 +1,4 @@
 This app collects no personal data.
-It uses device location to show the closest configured stop.
+If you allow it it will use your device location to show the closest configured stop. No location data ever leaves the app.
 
-The source code is available here: https://github.com/ovelius/SlRealtidwidget-ng
+Source code and issue tracker is avaliable here: https://github.com/ovelius/SlRealtidwidget-ng
