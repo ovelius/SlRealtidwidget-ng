@@ -25,6 +25,8 @@ message RequestData {
   PingRequestResponse ping_request = 2;
   // Request to load data from a particular stop.
   StopDataRequest stop_data_request = 3;
+  // Search for stops.
+  StopSearchRequest stop_search_request = 4;
 }
 
 // Base response message.
@@ -38,7 +40,18 @@ message ResponseData {
   PingRequestResponse ping_response = 4;
   // Error response, set if we could handle the error
   LoadErrorResponse error_response = 5;
+  // Return list of stops that matched our search.
+  StopSearchResponse stop_search_response = 6;
 }
+
+message StopSearchRequest {
+  string query = 1;
+}
+
+message StopSearchResponse {
+  repeated StopData stop_data = 1;
+}
+
 
 // Response message suitable to put in the widget.
 message WidgetLoadResponseData {
@@ -102,10 +115,18 @@ message DepartureData {
   NgTrafficType traffic_type = 5;
 }
 
+message SiteId {
+  int64 site_id = 1;
+  string str_site_id = 2;
+}
+
 // Data about a stop.
 message StopData {
   // Unique siteId.
   int64 site_id = 1;
+  // Use this instead!
+  SiteId site = 6;
+  
   // Unique canonical name, such as "Kista (Stockholm)".
   string canonical_name = 2;
   // Short display name, such as "Kista".
@@ -168,7 +189,9 @@ message UpdateSettings {
 }
 
 message StoredStopData {
-  int64 site_id = 1;
+  int64 site_id = 1 [deprecated = true];
+  SiteId site = 6;
+
   string canonical_name = 2;
   string display_name = 3;
   double lat = 4;
@@ -176,7 +199,9 @@ message StoredStopData {
 }
 
 message StopDataRequest {
-  int64 site_id = 1;
+  int64 site_id = 1 [deprecated = true];
+  SiteId site = 4;
+
   DeparturesFilter departures_filter = 2;
   repeated LineFilter line_filter = 3;
   // Give all the data for the step if empty.
