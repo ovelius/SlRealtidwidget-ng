@@ -1,0 +1,848 @@
+https://api.trafikinfo.trafikverket.se/Console
+
+<REQUEST>
+      <LOGIN authenticationkey="openapiconsolekey" />
+      <QUERY objecttype="TrainStation" schemaversion="1">
+            <FILTER>
+                 
+                  <LIKE name="AdvertisedLocationName" value="Nykö*" />
+            </FILTER>
+            <INCLUDE>AdvertisedLocationName</INCLUDE>
+            <INCLUDE>LocationSignature</INCLUDE>
+            <INCLUDE>Geometry.WGS84</INCLUDE>
+      </QUERY>
+</REQUEST>
+
+
+{
+  "RESPONSE": {
+    "RESULT": [
+      {
+        "TrainStation": [
+          {
+            "AdvertisedLocationName": "Nyköping södra",
+            "Geometry": {
+              "WGS84": "POINT (17.000752309621905 58.747626269926464)"
+            },
+            "LocationSignature": "Nks"
+          },
+          {
+            "AdvertisedLocationName": "Nykvarn",
+            "Geometry": {
+              "WGS84": "POINT (17.432080395575703 59.1787322753928)"
+            },
+            "LocationSignature": "Nkv"
+          },
+          {
+            "AdvertisedLocationName": "Nyköping C",
+            "Geometry": {
+              "WGS84": "POINT (16.997084943083745 58.75661275367473)"
+            },
+            "LocationSignature": "Nk"
+          },
+          {
+            "AdvertisedLocationName": "Nykroppa",
+            "Geometry": {
+              "WGS84": "POINT (14.308436065558167 59.622480175289546)"
+            },
+            "LocationSignature": "Nka"
+          }
+        ]
+      }
+    ]
+  }
+}
+
+
+<REQUEST>
+      <LOGIN authenticationkey="openapiconsolekey" />
+      <QUERY objecttype="TrainAnnouncement" schemaversion="1.8" orderby="AdvertisedTimeAtLocation">
+            <FILTER>
+                  <AND>
+                        <EQ name="ActivityType" value="Avgang" />
+                        <EQ name="LocationSignature" value="Nr" />
+                        <OR>
+                              <AND>
+                                    <GT name="AdvertisedTimeAtLocation" value="$dateadd(-00:15:00)" />
+                                    <LT name="AdvertisedTimeAtLocation" value="$dateadd(14:00:00)" />
+                              </AND>
+                              <AND>
+                                    <LT name="AdvertisedTimeAtLocation" value="$dateadd(00:30:00)" />
+                                    <GT name="EstimatedTimeAtLocation" value="$dateadd(-00:15:00)" />
+                              </AND>
+                        </OR>
+                  </AND>
+            </FILTER>
+            <INCLUDE>AdvertisedTrainIdent</INCLUDE>
+            <INCLUDE>AdvertisedTimeAtLocation</INCLUDE>
+            <INCLUDE>EstimatedTimeAtLocation</INCLUDE>
+            <INCLUDE>TrainOwner</INCLUDE>
+            <INCLUDE>ToLocation.LocationName</INCLUDE>
+            <INCLUDE>ProductInformation.Description</INCLUDE>
+            <INCLUDE>TimeAtLocationWithSeconds</INCLUDE>
+            <INCLUDE>FromLocation.LocationName</INCLUDE>
+      </QUERY>
+</REQUEST>
+{
+  "RESPONSE": {
+    "RESULT": [
+      {
+        "TrainAnnouncement": [
+          {
+            "AdvertisedTimeAtLocation": "2023-10-21T20:22:00.000+02:00",
+            "AdvertisedTrainIdent": "40727",
+            "EstimatedTimeAtLocation": "2023-10-21T22:30:49.000+02:00"
+          },
+          {
+            "AdvertisedTimeAtLocation": "2023-10-21T22:18:00.000+02:00",
+            "AdvertisedTrainIdent": "8773",
+            "FromLocation": [
+              {
+                "LocationName": "Nr"
+              }
+            ],
+            "ProductInformation": [
+              {
+                "Description": "Östgötapendel"
+              }
+            ],
+            "ToLocation": [
+              {
+                "LocationName": "Mot"
+              }
+            ],
+            "TrainOwner": "ÖTRAF"
+          },
+          {
+            "AdvertisedTimeAtLocation": "2023-10-21T23:18:00.000+02:00",
+            "AdvertisedTrainIdent": "8777",
+            "FromLocation": [
+              {
+                "LocationName": "Nr"
+              }
+            ],
+            "ProductInformation": [
+              {
+                "Description": "Östgötapendel"
+              }
+            ],
+            "ToLocation": [
+              {
+                "LocationName": "Mot"
+              }
+            ],
+            "TrainOwner": "ÖTRAF"
+          },
+          {
+            "AdvertisedTimeAtLocation": "2023-10-22T00:18:00.000+02:00",
+            "AdvertisedTrainIdent": "8781",
+            "FromLocation": [
+              {
+                "LocationName": "Nr"
+              }
+            ],
+            "ProductInformation": [
+              {
+                "Description": "Östgötapendel"
+              }
+            ],
+            "ToLocation": [
+              {
+                "LocationName": "Mot"
+              }
+            ],
+            "TrainOwner": "ÖTRAF"
+          },
+          {
+            "AdvertisedTimeAtLocation": "2023-10-22T01:18:00.000+02:00",
+            "AdvertisedTrainIdent": "8785",
+            "FromLocation": [
+              {
+                "LocationName": "Nr"
+              }
+            ],
+            "ProductInformation": [
+              {
+                "Description": "Östgötapendel"
+              }
+            ],
+            "ToLocation": [
+              {
+                "LocationName": "Mot"
+              }
+            ],
+            "TrainOwner": "ÖTRAF"
+          },
+          {
+            "AdvertisedTimeAtLocation": "2023-10-22T02:18:00.000+02:00",
+            "AdvertisedTrainIdent": "8789",
+            "FromLocation": [
+              {
+                "LocationName": "Nr"
+              }
+            ],
+            "ProductInformation": [
+              {
+                "Description": "Östgötapendel"
+              }
+            ],
+            "ToLocation": [
+              {
+                "LocationName": "Mot"
+              }
+            ],
+            "TrainOwner": "ÖTRAF"
+          },
+          {
+            "AdvertisedTimeAtLocation": "2023-10-22T05:58:00.000+02:00",
+            "AdvertisedTrainIdent": "8701",
+            "FromLocation": [
+              {
+                "LocationName": "Nr"
+              }
+            ],
+            "ProductInformation": [
+              {
+                "Description": "Östgötapendel"
+              }
+            ],
+            "ToLocation": [
+              {
+                "LocationName": "Mot"
+              }
+            ],
+            "TrainOwner": "ÖTRAF"
+          },
+          {
+            "AdvertisedTimeAtLocation": "2023-10-22T07:18:00.000+02:00",
+            "AdvertisedTrainIdent": "8713",
+            "FromLocation": [
+              {
+                "LocationName": "Nr"
+              }
+            ],
+            "ProductInformation": [
+              {
+                "Description": "Östgötapendel"
+              }
+            ],
+            "ToLocation": [
+              {
+                "LocationName": "Mot"
+              }
+            ],
+            "TrainOwner": "ÖTRAF"
+          },
+          {
+            "AdvertisedTimeAtLocation": "2023-10-22T07:34:00.000+02:00",
+            "AdvertisedTrainIdent": "222",
+            "FromLocation": [
+              {
+                "LocationName": "Nr"
+              }
+            ],
+            "ProductInformation": [
+              {
+                "Description": "Mälartåg"
+              }
+            ],
+            "ToLocation": [
+              {
+                "LocationName": "Cst"
+              }
+            ],
+            "TrainOwner": "MÄLAB"
+          },
+          {
+            "AdvertisedTimeAtLocation": "2023-10-22T07:55:00.000+02:00",
+            "AdvertisedTrainIdent": "266",
+            "FromLocation": [
+              {
+                "LocationName": "Lp"
+              }
+            ],
+            "ProductInformation": [
+              {
+                "Description": "SJ InterCity"
+              }
+            ],
+            "ToLocation": [
+              {
+                "LocationName": "Gä"
+              }
+            ],
+            "TrainOwner": "SJ"
+          },
+          {
+            "AdvertisedTimeAtLocation": "2023-10-22T08:18:00.000+02:00",
+            "AdvertisedTrainIdent": "8717",
+            "FromLocation": [
+              {
+                "LocationName": "Nr"
+              }
+            ],
+            "ProductInformation": [
+              {
+                "Description": "Östgötapendel"
+              }
+            ],
+            "ToLocation": [
+              {
+                "LocationName": "Mot"
+              }
+            ],
+            "TrainOwner": "ÖTRAF"
+          },
+          {
+            "AdvertisedTimeAtLocation": "2023-10-22T08:33:00.000+02:00",
+            "AdvertisedTrainIdent": "523",
+            "FromLocation": [
+              {
+                "LocationName": "Cst"
+              }
+            ],
+            "ProductInformation": [
+              {
+                "Description": "SJ Snabbtåg"
+              }
+            ],
+            "ToLocation": [
+              {
+                "LocationName": "Dk.kh"
+              }
+            ],
+            "TrainOwner": "SJ"
+          },
+          {
+            "AdvertisedTimeAtLocation": "2023-10-22T08:34:00.000+02:00",
+            "AdvertisedTrainIdent": "224",
+            "FromLocation": [
+              {
+                "LocationName": "Nr"
+              }
+            ],
+            "ProductInformation": [
+              {
+                "Description": "Mälartåg"
+              }
+            ],
+            "ToLocation": [
+              {
+                "LocationName": "Cst"
+              }
+            ],
+            "TrainOwner": "MÄLAB"
+          },
+          {
+            "AdvertisedTimeAtLocation": "2023-10-22T08:38:00.000+02:00",
+            "AdvertisedTrainIdent": "12120",
+            "FromLocation": [
+              {
+                "LocationName": "Lp"
+              }
+            ],
+            "ProductInformation": [
+              {
+                "Description": "Mälartåg"
+              }
+            ],
+            "ToLocation": [
+              {
+                "LocationName": "Vå"
+              }
+            ],
+            "TrainOwner": "MÄLAB"
+          },
+          {
+            "AdvertisedTimeAtLocation": "2023-10-22T09:18:00.000+02:00",
+            "AdvertisedTrainIdent": "8721",
+            "FromLocation": [
+              {
+                "LocationName": "Nr"
+              }
+            ],
+            "ProductInformation": [
+              {
+                "Description": "Östgötapendel"
+              }
+            ],
+            "ToLocation": [
+              {
+                "LocationName": "Mot"
+              }
+            ],
+            "TrainOwner": "ÖTRAF"
+          },
+          {
+            "AdvertisedTimeAtLocation": "2023-10-22T09:24:00.000+02:00",
+            "AdvertisedTrainIdent": "12111",
+            "FromLocation": [
+              {
+                "LocationName": "Vå"
+              }
+            ],
+            "ProductInformation": [
+              {
+                "Description": "Mälartåg"
+              }
+            ],
+            "ToLocation": [
+              {
+                "LocationName": "Lp"
+              }
+            ],
+            "TrainOwner": "MÄLAB"
+          },
+          {
+            "AdvertisedTimeAtLocation": "2023-10-22T09:33:00.000+02:00",
+            "AdvertisedTrainIdent": "525",
+            "FromLocation": [
+              {
+                "LocationName": "Cst"
+              }
+            ],
+            "ProductInformation": [
+              {
+                "Description": "SJ Snabbtåg"
+              }
+            ],
+            "ToLocation": [
+              {
+                "LocationName": "M"
+              }
+            ],
+            "TrainOwner": "SJ"
+          },
+          {
+            "AdvertisedTimeAtLocation": "2023-10-22T09:48:00.000+02:00",
+            "AdvertisedTrainIdent": "8723",
+            "FromLocation": [
+              {
+                "LocationName": "Nr"
+              }
+            ],
+            "ProductInformation": [
+              {
+                "Description": "Östgötapendel"
+              }
+            ],
+            "ToLocation": [
+              {
+                "LocationName": "Mot"
+              }
+            ],
+            "TrainOwner": "ÖTRAF"
+          },
+          {
+            "AdvertisedTimeAtLocation": "2023-10-22T10:18:00.000+02:00",
+            "AdvertisedTrainIdent": "8725",
+            "FromLocation": [
+              {
+                "LocationName": "Nr"
+              }
+            ],
+            "ProductInformation": [
+              {
+                "Description": "Östgötapendel"
+              }
+            ],
+            "ToLocation": [
+              {
+                "LocationName": "Mot"
+              }
+            ],
+            "TrainOwner": "ÖTRAF"
+          },
+          {
+            "AdvertisedTimeAtLocation": "2023-10-22T10:22:00.000+02:00",
+            "AdvertisedTrainIdent": "526",
+            "FromLocation": [
+              {
+                "LocationName": "M"
+              }
+            ],
+            "ProductInformation": [
+              {
+                "Description": "SJ Snabbtåg"
+              }
+            ],
+            "ToLocation": [
+              {
+                "LocationName": "Cst"
+              }
+            ],
+            "TrainOwner": "SJ"
+          }
+        ]
+      }
+    ]
+  }
+}
+
+
+<REQUEST>
+      <LOGIN authenticationkey="openapiconsolekey" />
+      <QUERY objecttype="TrainAnnouncement" schemaversion="1.3" orderby="AdvertisedTimeAtLocation">
+            <FILTER>
+                  <AND>
+                        <EQ name="ActivityType" value="Avgang" />
+                        <EQ name="LocationSignature" value="Nr" />
+                        <OR>
+                              <AND>
+                                    <GT name="AdvertisedTimeAtLocation" value="$dateadd(-00:15:00)" />
+                                    <LT name="AdvertisedTimeAtLocation" value="$dateadd(14:00:00)" />
+                              </AND>
+                              <AND>
+                                    <LT name="AdvertisedTimeAtLocation" value="$dateadd(00:30:00)" />
+                                    <GT name="EstimatedTimeAtLocation" value="$dateadd(-00:15:00)" />
+                              </AND>
+                        </OR>
+                  </AND>
+            </FILTER>
+            <INCLUDE>AdvertisedTrainIdent</INCLUDE>
+            <INCLUDE>AdvertisedTimeAtLocation</INCLUDE>
+            <INCLUDE>EstimatedTimeAtLocation</INCLUDE>
+            <INCLUDE>InformationOwner</INCLUDE>
+            <INCLUDE>ToLocation</INCLUDE>
+            <INCLUDE>FromLocation.LocationName</INCLUDE>
+      </QUERY>
+</REQUEST>
+
+{
+  "RESPONSE": {
+    "RESULT": [
+      {
+        "TrainAnnouncement": [
+          {
+            "AdvertisedTimeAtLocation": "2023-10-21T20:22:00.000+02:00",
+            "AdvertisedTrainIdent": "40727",
+            "EstimatedTimeAtLocation": "2023-10-21T22:14:42.000+02:00"
+          },
+          {
+            "AdvertisedTimeAtLocation": "2023-10-21T20:34:00.000+02:00",
+            "AdvertisedTrainIdent": "248",
+            "FromLocation": [
+              {
+                "LocationName": "Nr"
+              }
+            ],
+            "InformationOwner": "Mälardalstrafik AB",
+            "ToLocation": [
+              {
+                "LocationName": "Cst",
+                "Priority": 1,
+                "Order": 0
+              }
+            ]
+          },
+          {
+            "AdvertisedTimeAtLocation": "2023-10-21T20:38:00.000+02:00",
+            "AdvertisedTrainIdent": "2168",
+            "FromLocation": [
+              {
+                "LocationName": "Lp"
+              }
+            ],
+            "InformationOwner": "Mälardalstrafik AB",
+            "ToLocation": [
+              {
+                "LocationName": "Vå",
+                "Priority": 1,
+                "Order": 0
+              }
+            ]
+          },
+          {
+            "AdvertisedTimeAtLocation": "2023-10-21T21:18:00.000+02:00",
+            "AdvertisedTrainIdent": "8769",
+            "FromLocation": [
+              {
+                "LocationName": "Nr"
+              }
+            ],
+            "InformationOwner": "ÖstgötaTrafiken",
+            "ToLocation": [
+              {
+                "LocationName": "Mot",
+                "Priority": 1,
+                "Order": 0
+              }
+            ]
+          },
+          {
+            "AdvertisedTimeAtLocation": "2023-10-21T21:24:00.000+02:00",
+            "AdvertisedTrainIdent": "12159",
+            "FromLocation": [
+              {
+                "LocationName": "Vå"
+              }
+            ],
+            "InformationOwner": "Mälardalstrafik AB",
+            "ToLocation": [
+              {
+                "LocationName": "Lp",
+                "Priority": 1,
+                "Order": 0
+              }
+            ]
+          },
+          {
+            "AdvertisedTimeAtLocation": "2023-10-21T22:18:00.000+02:00",
+            "AdvertisedTrainIdent": "8773",
+            "FromLocation": [
+              {
+                "LocationName": "Nr"
+              }
+            ],
+            "InformationOwner": "ÖstgötaTrafiken",
+            "ToLocation": [
+              {
+                "LocationName": "Mot",
+                "Priority": 1,
+                "Order": 0
+              }
+            ]
+          },
+          {
+            "AdvertisedTimeAtLocation": "2023-10-21T23:18:00.000+02:00",
+            "AdvertisedTrainIdent": "8777",
+            "FromLocation": [
+              {
+                "LocationName": "Nr"
+              }
+            ],
+            "InformationOwner": "ÖstgötaTrafiken",
+            "ToLocation": [
+              {
+                "LocationName": "Mot",
+                "Priority": 1,
+                "Order": 0
+              }
+            ]
+          },
+          {
+            "AdvertisedTimeAtLocation": "2023-10-22T00:18:00.000+02:00",
+            "AdvertisedTrainIdent": "8781",
+            "FromLocation": [
+              {
+                "LocationName": "Nr"
+              }
+            ],
+            "InformationOwner": "ÖstgötaTrafiken",
+            "ToLocation": [
+              {
+                "LocationName": "Mot",
+                "Priority": 1,
+                "Order": 0
+              }
+            ]
+          },
+          {
+            "AdvertisedTimeAtLocation": "2023-10-22T01:18:00.000+02:00",
+            "AdvertisedTrainIdent": "8785",
+            "FromLocation": [
+              {
+                "LocationName": "Nr"
+              }
+            ],
+            "InformationOwner": "ÖstgötaTrafiken",
+            "ToLocation": [
+              {
+                "LocationName": "Mot",
+                "Priority": 1,
+                "Order": 0
+              }
+            ]
+          },
+          {
+            "AdvertisedTimeAtLocation": "2023-10-22T02:18:00.000+02:00",
+            "AdvertisedTrainIdent": "8789",
+            "FromLocation": [
+              {
+                "LocationName": "Nr"
+              }
+            ],
+            "InformationOwner": "ÖstgötaTrafiken",
+            "ToLocation": [
+              {
+                "LocationName": "Mot",
+                "Priority": 1,
+                "Order": 0
+              }
+            ]
+          },
+          {
+            "AdvertisedTimeAtLocation": "2023-10-22T05:58:00.000+02:00",
+            "AdvertisedTrainIdent": "8701",
+            "FromLocation": [
+              {
+                "LocationName": "Nr"
+              }
+            ],
+            "InformationOwner": "ÖstgötaTrafiken",
+            "ToLocation": [
+              {
+                "LocationName": "Mot",
+                "Priority": 1,
+                "Order": 0
+              }
+            ]
+          },
+          {
+            "AdvertisedTimeAtLocation": "2023-10-22T07:18:00.000+02:00",
+            "AdvertisedTrainIdent": "8713",
+            "FromLocation": [
+              {
+                "LocationName": "Nr"
+              }
+            ],
+            "InformationOwner": "ÖstgötaTrafiken",
+            "ToLocation": [
+              {
+                "LocationName": "Mot",
+                "Priority": 1,
+                "Order": 0
+              }
+            ]
+          },
+          {
+            "AdvertisedTimeAtLocation": "2023-10-22T07:34:00.000+02:00",
+            "AdvertisedTrainIdent": "222",
+            "FromLocation": [
+              {
+                "LocationName": "Nr"
+              }
+            ],
+            "InformationOwner": "Mälardalstrafik AB",
+            "ToLocation": [
+              {
+                "LocationName": "Cst",
+                "Priority": 1,
+                "Order": 0
+              }
+            ]
+          },
+          {
+            "AdvertisedTimeAtLocation": "2023-10-22T07:55:00.000+02:00",
+            "AdvertisedTrainIdent": "266",
+            "FromLocation": [
+              {
+                "LocationName": "Lp"
+              }
+            ],
+            "InformationOwner": "SJ",
+            "ToLocation": [
+              {
+                "LocationName": "Gä",
+                "Priority": 1,
+                "Order": 0
+              }
+            ]
+          },
+          {
+            "AdvertisedTimeAtLocation": "2023-10-22T08:18:00.000+02:00",
+            "AdvertisedTrainIdent": "8717",
+            "FromLocation": [
+              {
+                "LocationName": "Nr"
+              }
+            ],
+            "InformationOwner": "ÖstgötaTrafiken",
+            "ToLocation": [
+              {
+                "LocationName": "Mot",
+                "Priority": 1,
+                "Order": 0
+              }
+            ]
+          },
+          {
+            "AdvertisedTimeAtLocation": "2023-10-22T08:33:00.000+02:00",
+            "AdvertisedTrainIdent": "523",
+            "FromLocation": [
+              {
+                "LocationName": "Cst"
+              }
+            ],
+            "InformationOwner": "SJ",
+            "ToLocation": [
+              {
+                "LocationName": "Dk.kh",
+                "Priority": 1,
+                "Order": 0
+              }
+            ]
+          },
+          {
+            "AdvertisedTimeAtLocation": "2023-10-22T08:34:00.000+02:00",
+            "AdvertisedTrainIdent": "224",
+            "FromLocation": [
+              {
+                "LocationName": "Nr"
+              }
+            ],
+            "InformationOwner": "Mälardalstrafik AB",
+            "ToLocation": [
+              {
+                "LocationName": "Cst",
+                "Priority": 1,
+                "Order": 0
+              }
+            ]
+          },
+          {
+            "AdvertisedTimeAtLocation": "2023-10-22T08:38:00.000+02:00",
+            "AdvertisedTrainIdent": "12120",
+            "FromLocation": [
+              {
+                "LocationName": "Lp"
+              }
+            ],
+            "InformationOwner": "Mälardalstrafik AB",
+            "ToLocation": [
+              {
+                "LocationName": "Vå",
+                "Priority": 1,
+                "Order": 0
+              }
+            ]
+          },
+          {
+            "AdvertisedTimeAtLocation": "2023-10-22T09:18:00.000+02:00",
+            "AdvertisedTrainIdent": "8721",
+            "FromLocation": [
+              {
+                "LocationName": "Nr"
+              }
+            ],
+            "InformationOwner": "ÖstgötaTrafiken",
+            "ToLocation": [
+              {
+                "LocationName": "Mot",
+                "Priority": 1,
+                "Order": 0
+              }
+            ]
+          },
+          {
+            "AdvertisedTimeAtLocation": "2023-10-22T09:24:00.000+02:00",
+            "AdvertisedTrainIdent": "12111",
+            "FromLocation": [
+              {
+                "LocationName": "Vå"
+              }
+            ],
+            "InformationOwner": "Mälardalstrafik AB",
+            "ToLocation": [
+              {
+                "LocationName": "Lp",
+                "Priority": 1,
+                "Order": 0
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

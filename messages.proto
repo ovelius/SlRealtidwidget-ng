@@ -148,6 +148,7 @@ message PingRequestResponse {
 // A filter based on line and direction.
 message LineFilter {
   // Group of line, such as the red subway line.
+  // Renamed to lineId internally.
   int32 group_of_line_id = 1;
   // Direction of this line we're interested in.
   int32 direction_id = 2;
@@ -156,6 +157,8 @@ message LineFilter {
 // Specific departures filter.
 message DeparturesFilter {
   repeated string departures = 1;
+  // Can specificy hash instead.
+  repeated int32 departures_hash = 2;
 }
 
 // Configuration for a single widget.
@@ -232,4 +235,21 @@ message StopConfiguration {
   DeparturesFilter departures_filter = 2;
   repeated LineFilter line_filter = 3;
   ThemeData theme_data = 4;
+}
+
+message TrafficMetaData {
+  int32 color = 1;
+}
+
+message VariableSetting {
+  int32 int_value = 1;
+  string str_value = 2;
+}
+
+// Message stored/parsed in server.
+message ServerSideConfig {
+  // Key composite of NgTrafficType, LineId, Operator.
+  map<string, TrafficMetaData> traffic_meta_data = 1;
+  // Whatever variable needs to be store & parsed server side.
+  map<string, VariableSetting> variable_settings = 2;
 }
