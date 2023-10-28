@@ -27,6 +27,8 @@ message RequestData {
   StopDataRequest stop_data_request = 3;
   // Search for stops.
   StopSearchRequest stop_search_request = 4;
+  // Request from client to set departure metadata.
+  SetDepartureMetaData set_depature_meta_data = 5;
 }
 
 // Base response message.
@@ -42,6 +44,11 @@ message ResponseData {
   LoadErrorResponse error_response = 5;
   // Return list of stops that matched our search.
   StopSearchResponse stop_search_response = 6;
+}
+
+message SetDepartureMetaData {
+  // Update with the data avaliable here.
+  DepartureData departure_data = 1;
 }
 
 message StopSearchRequest {
@@ -102,6 +109,28 @@ enum NgTrafficType {
   BOAT = 5;
 }
 
+// From https://www.trafiklab.se/sv/api/trafiklab-apis/resrobot-v21/common/
+enum ResRobotOperatorEnum {
+  UKNOWN_OPERATOR = 0;
+  SJ = 74;
+  SORMLANDSTRAFIKEN = 252;
+  VARMLANDSTRAFIK = 265;
+  SL = 275;
+  SKANETRAFIKEN = 276;
+  FLYGBUSSSARNA = 277;
+  VASTTRAFIK = 279;
+  ARLANDA_EXPRESS = 287;
+  LANSTRAFIKEN_OREBRO = 289;
+  ORESUNDSTAG = 300;
+  MALARTAG = 313;
+  VARMLANDSTRAFIK_TRAIN = 317;
+  BAS4YOU = 327;
+  SNALLTAGET = 380;
+  VY_NATTAG = 512;
+  KARLSTADSBUSS = 601;
+  FLIXBUS = 838;
+}
+
 // Data about depature from a stop.
 message DepartureData {
   // String representing this unique departure, such as "11 Akalla".
@@ -113,6 +142,10 @@ message DepartureData {
   // Direction, subway usually have two directions per stop.
   int32 direction_id = 4;
   NgTrafficType traffic_type = 5;
+  // Name of traffic operator.
+  ResRobotOperatorEnum operator = 6;
+  // Actual text representation of operator.
+  string operator_name = 7;
 }
 
 message SiteId {
@@ -239,6 +272,7 @@ message StopConfiguration {
 
 message TrafficMetaData {
   int32 color = 1;
+  bool has_realtime_data = 2;
 }
 
 message VariableSetting {
@@ -248,8 +282,6 @@ message VariableSetting {
 
 // Message stored/parsed in server.
 message ServerSideConfig {
-  // Key composite of NgTrafficType, LineId, Operator.
-  map<string, TrafficMetaData> traffic_meta_data = 1;
   // Whatever variable needs to be store & parsed server side.
   map<string, VariableSetting> variable_settings = 2;
 }
