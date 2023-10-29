@@ -30,6 +30,7 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import org.json.JSONArray
 import org.json.JSONObject
+import se.locutus.proto.Ng.SiteId
 import se.locutus.sl.realtidhem.R
 import java.util.*
 import java.util.logging.Logger
@@ -48,7 +49,7 @@ class SelectStopFragment : androidx.fragment.app.Fragment() {
     internal lateinit var addStopActivity : AddStopActivity
     private lateinit var mapContainer : View
     internal var map : GoogleMap? = null
-    internal var nameToSiteIDs : HashMap<String, Int> = HashMap()
+    internal var nameToSiteIDs : HashMap<String, SiteId> = HashMap()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -99,7 +100,7 @@ class SelectStopFragment : androidx.fragment.app.Fragment() {
             }
         }
         val adapter = ArrayAdapter<String>(
-            this.activity!!,
+            this.requireActivity(),
             android.R.layout.simple_dropdown_item_1line, ArrayList()
         )
         mAutoCompleteTextView.setAdapter(adapter)
@@ -109,7 +110,7 @@ class SelectStopFragment : androidx.fragment.app.Fragment() {
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
             }
             override fun onTextChanged(p: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                var siteId : Int? = nameToSiteIDs[p.toString()]
+                var siteId : SiteId? = nameToSiteIDs[p.toString()]
 
                 val configuredName = addStopActivity.config.stopData.canonicalName
                 if (addStopActivity.config.stopData.siteId != 0L && configuredName == p.toString()) {
@@ -154,7 +155,7 @@ class SelectStopFragment : androidx.fragment.app.Fragment() {
                                     adapter.add(name)
                                     autoCompleteSet.add(name)
                                 }
-                                nameToSiteIDs[name] = siteId
+                                nameToSiteIDs[name] = SiteId.newBuilder().setSiteId(siteId.toLong()).build()
                             }
                             mAutoCompleteTextView.performCompletion()
                         },

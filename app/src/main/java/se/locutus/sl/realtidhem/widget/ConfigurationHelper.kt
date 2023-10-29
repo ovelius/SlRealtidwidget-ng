@@ -8,6 +8,10 @@ import android.content.SharedPreferences
 import android.location.Location
 import android.util.Base64
 import se.locutus.proto.Ng
+import se.locutus.proto.Ng.SiteId
+import se.locutus.proto.Ng.StopConfiguration
+import se.locutus.proto.Ng.StopConfigurationOrBuilder
+import se.locutus.proto.Ng.StopData
 import se.locutus.sl.realtidhem.R
 import se.locutus.sl.realtidhem.events.WIDGET_CONFIG_UPDATED
 import se.locutus.sl.realtidhem.events.WidgetBroadcastReceiver
@@ -43,11 +47,33 @@ fun widgetLargeLayoutKey(widgetId : Int) : String {
     return "widget_large_layout_key$widgetId"
 }
 
+fun convertFromLegacyFormat(config : Ng.WidgetConfiguration) :  Ng.WidgetConfiguration {
+    val configBuilder = Ng.WidgetConfiguration.newBuilder(config)
+    configBuilder.clearStopConfiguration()
+    for (stopConfig in config.stopConfigurationList) {
+        val stopBuilder = StopConfiguration.newBuilder(stopConfig)
+        if (!stopConfig.stopData.hasSite()) {
+            val stopDataBuilder = Ng.StoredStopData.newBuilder(stopBuilder.stopData)
+
+            stopDataBuilder.setSite(SiteId.newBuilder()
+                .setSiteId(stopConfig.stopData.siteId))
+            stopBuilder.setStopData(stopDataBuilder)
+        }
+        configBuilder.addStopConfiguration(stopBuilder)
+    }
+    return configBuilder.build()
+}
+
+fun isSiteConfigured(stop : StopConfigurationOrBuilder) : Boolean {
+    val stopData = stop.stopData
+    return stopData.site.siteId != 0L || stopData.site.strSiteId.isNotEmpty()
+}
+
 fun loadWidgetConfigOrDefault(prefs : SharedPreferences, widgetId : Int) : Ng.WidgetConfiguration {
     val widgetKey = widgetKey(widgetId)
     if (prefs.contains(widgetKey)) {
         val bytes = Base64.decode(prefs.getString(widgetKey, ""), 0)
-        return Ng.WidgetConfiguration.parseFrom(bytes)
+        return convertFromLegacyFormat(Ng.WidgetConfiguration.parseFrom(bytes))
     }
     return Ng.WidgetConfiguration.newBuilder().setWidgetId(widgetId.toLong()).build()
 }

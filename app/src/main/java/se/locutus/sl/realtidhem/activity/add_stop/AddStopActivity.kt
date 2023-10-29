@@ -13,6 +13,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayout
 import se.locutus.proto.Ng
 import se.locutus.proto.Ng.DeparturesFilter
+import se.locutus.proto.Ng.SiteId
 import se.locutus.sl.realtidhem.R
 import se.locutus.sl.realtidhem.activity.*
 import se.locutus.sl.realtidhem.activity.theme.ThemeActivity
@@ -20,6 +21,7 @@ import se.locutus.sl.realtidhem.events.EXTRA_COLOR_THEME
 import se.locutus.sl.realtidhem.events.EXTRA_THEME_CONFIG
 import se.locutus.sl.realtidhem.net.NetworkInterface
 import se.locutus.sl.realtidhem.net.NetworkManager
+import se.locutus.sl.realtidhem.widget.isSiteConfigured
 import java.util.*
 import java.util.logging.Logger
 
@@ -104,8 +106,8 @@ class AddStopActivity : AppCompatActivity() {
         viewPager.adapter = stopConfigureTabAdapter
         tabLayout.setupWithViewPager(viewPager)
 
-        if (config.stopData.siteId != 0L /* && allDeparturesResponse == null */) {
-            loadDepsFor(config.stopData.siteId.toInt())
+        if (isSiteConfigured(config)) {
+            loadDepsFor(config.stopData.site)
         }
 
         viewPager.addOnPageChangeListener(object : androidx.viewpager.widget.ViewPager.OnPageChangeListener {
@@ -157,20 +159,21 @@ class AddStopActivity : AppCompatActivity() {
         config.clearLineFilter()
     }
 
-    private fun snackbarRetryError(error_id : Int, siteId : Int) {
+    private fun snackbarRetryError(error_id : Int, siteId : SiteId) {
         Snackbar.make(tabLayout, error_id , Snackbar.LENGTH_INDEFINITE)
             .setAction(R.string.retry_load) {
                 loadDepsFor(siteId)
             }.show()
     }
 
-    fun hasLoadedDeparturesFor(siteId : Int) : Boolean {
-        return allDeparturesResponse?.stopData?.siteId == siteId.toLong()
+    fun hasLoadedDeparturesFor(siteId : SiteId) : Boolean {
+        return allDeparturesResponse?.stopData?.site == siteId
     }
 
-    fun loadDepsFor (siteId : Int) {
+    fun loadDepsFor (siteId : SiteId) {
         val request = Ng.StopDataRequest.newBuilder()
-            .setSiteId(siteId.toLong())
+            .setSiteId(siteId.siteId.toLong())
+            .setSite(siteId)
             .build()
         departureAdapter.clear()
         LOG.info("Loading departures for $siteId")
