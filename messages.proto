@@ -29,6 +29,8 @@ message RequestData {
   StopSearchRequest stop_search_request = 4;
   // Request from client to set departure metadata.
   SetDepartureMetaData set_depature_meta_data = 5;
+  // Request operator config.
+  repeated ResRobotOperatorEnum request_operator_config = 6;
 }
 
 // Base response message.
@@ -44,6 +46,8 @@ message ResponseData {
   LoadErrorResponse error_response = 5;
   // Return list of stops that matched our search.
   StopSearchResponse stop_search_response = 6;
+  // Returns list of operator configs.
+  repeated OperatorConfig operator_config = 7;
 }
 
 message SetDepartureMetaData {
