@@ -113,9 +113,12 @@ enum NgTrafficType {
 enum ResRobotOperatorEnum {
   UKNOWN_OPERATOR = 0;
   SJ = 74;
+  UL = 251;
   SORMLANDSTRAFIKEN = 252;
+  OSTGOTATRAFIKEN = 253;
   HALLANDSTRAFIKEN = 261;
   VARMLANDSTRAFIK = 265;
+  X_TRAFIK = 268;
   LANSTRAFIKEN_VASTERBOTTEN = 272;
   SL = 275;
   SKANETRAFIKEN = 276;
@@ -130,6 +133,7 @@ enum ResRobotOperatorEnum {
   SNALLTAGET = 380;
   VY_NATTAG = 512;
   KARLSTADSBUSS = 601;
+  LULEA_LOKALTRAFIK = 602;
   FLIXBUS = 838;
 }
 
@@ -282,8 +286,15 @@ message VariableSetting {
   string str_value = 2;
 }
 
+message OperatorConfig {
+  ResRobotOperatorEnum operator = 1;
+  string favicon_url = 2;
+}
+
 // Message stored/parsed in server.
 message ServerSideConfig {
   // Whatever variable needs to be store & parsed server side.
-  map<string, VariableSetting> variable_settings = 2;
+  map<string, VariableSetting> variable_settings = 1;
+  // ResRobotOperatorEnum to OperatorConfig
+  repeated OperatorConfig operator_config = 2;
 }
