@@ -136,11 +136,13 @@ enum ResRobotOperatorEnum {
   VARMLANDSTRAFIK_TRAIN = 317;
   FLIXTRAIN = 324;
   BAS4YOU = 327;
+  VY_EXPRESS = 328;
   ORESUNDSLINJEN = 370;
   SNALLTAGET = 380;
   VY_NATTAG = 512;
   KARLSTADSBUSS = 601;
   LULEA_LOKALTRAFIK = 602;
+  MTRX = 812;
   FLIXBUS = 838;
 }
 
@@ -301,8 +303,13 @@ message VariableSetting {
 
 message OperatorConfig {
   ResRobotOperatorEnum operator = 1;
+  // URL for fetching Favicon.
   string favicon_url = 2;
+  // Bytes of favicon in PNG format.
   bytes favicon_bytes_png = 3;
+
+  // MetaData about departures.
+  map<string, TrafficMetaData> departure_metadata = 4;
 }
 
 // Message stored/parsed in server.
