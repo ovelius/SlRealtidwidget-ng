@@ -249,9 +249,17 @@ public final class Ng {
      */
     SJ(74),
     /**
+     * <code>UL = 251;</code>
+     */
+    UL(251),
+    /**
      * <code>SORMLANDSTRAFIKEN = 252;</code>
      */
     SORMLANDSTRAFIKEN(252),
+    /**
+     * <code>OSTGOTATRAFIKEN = 253;</code>
+     */
+    OSTGOTATRAFIKEN(253),
     /**
      * <code>HALLANDSTRAFIKEN = 261;</code>
      */
@@ -260,6 +268,14 @@ public final class Ng {
      * <code>VARMLANDSTRAFIK = 265;</code>
      */
     VARMLANDSTRAFIK(265),
+    /**
+     * <code>DALATRAFIK = 267;</code>
+     */
+    DALATRAFIK(267),
+    /**
+     * <code>X_TRAFIK = 268;</code>
+     */
+    X_TRAFIK(268),
     /**
      * <code>LANSTRAFIKEN_VASTERBOTTEN = 272;</code>
      */
@@ -301,9 +317,21 @@ public final class Ng {
      */
     VARMLANDSTRAFIK_TRAIN(317),
     /**
-     * <code>BAS4YOU = 327;</code>
+     * <code>FLIXTRAIN = 324;</code>
      */
-    BAS4YOU(327),
+    FLIXTRAIN(324),
+    /**
+     * <code>BUS4YOU = 327;</code>
+     */
+    BUS4YOU(327),
+    /**
+     * <code>VY_EXPRESS = 328;</code>
+     */
+    VY_EXPRESS(328),
+    /**
+     * <code>ORESUNDSLINJEN = 370;</code>
+     */
+    ORESUNDSLINJEN(370),
     /**
      * <code>SNALLTAGET = 380;</code>
      */
@@ -316,6 +344,14 @@ public final class Ng {
      * <code>KARLSTADSBUSS = 601;</code>
      */
     KARLSTADSBUSS(601),
+    /**
+     * <code>LULEA_LOKALTRAFIK = 602;</code>
+     */
+    LULEA_LOKALTRAFIK(602),
+    /**
+     * <code>MTRX = 812;</code>
+     */
+    MTRX(812),
     /**
      * <code>FLIXBUS = 838;</code>
      */
@@ -332,9 +368,17 @@ public final class Ng {
      */
     public static final int SJ_VALUE = 74;
     /**
+     * <code>UL = 251;</code>
+     */
+    public static final int UL_VALUE = 251;
+    /**
      * <code>SORMLANDSTRAFIKEN = 252;</code>
      */
     public static final int SORMLANDSTRAFIKEN_VALUE = 252;
+    /**
+     * <code>OSTGOTATRAFIKEN = 253;</code>
+     */
+    public static final int OSTGOTATRAFIKEN_VALUE = 253;
     /**
      * <code>HALLANDSTRAFIKEN = 261;</code>
      */
@@ -343,6 +387,14 @@ public final class Ng {
      * <code>VARMLANDSTRAFIK = 265;</code>
      */
     public static final int VARMLANDSTRAFIK_VALUE = 265;
+    /**
+     * <code>DALATRAFIK = 267;</code>
+     */
+    public static final int DALATRAFIK_VALUE = 267;
+    /**
+     * <code>X_TRAFIK = 268;</code>
+     */
+    public static final int X_TRAFIK_VALUE = 268;
     /**
      * <code>LANSTRAFIKEN_VASTERBOTTEN = 272;</code>
      */
@@ -384,9 +436,21 @@ public final class Ng {
      */
     public static final int VARMLANDSTRAFIK_TRAIN_VALUE = 317;
     /**
-     * <code>BAS4YOU = 327;</code>
+     * <code>FLIXTRAIN = 324;</code>
      */
-    public static final int BAS4YOU_VALUE = 327;
+    public static final int FLIXTRAIN_VALUE = 324;
+    /**
+     * <code>BUS4YOU = 327;</code>
+     */
+    public static final int BUS4YOU_VALUE = 327;
+    /**
+     * <code>VY_EXPRESS = 328;</code>
+     */
+    public static final int VY_EXPRESS_VALUE = 328;
+    /**
+     * <code>ORESUNDSLINJEN = 370;</code>
+     */
+    public static final int ORESUNDSLINJEN_VALUE = 370;
     /**
      * <code>SNALLTAGET = 380;</code>
      */
@@ -399,6 +463,14 @@ public final class Ng {
      * <code>KARLSTADSBUSS = 601;</code>
      */
     public static final int KARLSTADSBUSS_VALUE = 601;
+    /**
+     * <code>LULEA_LOKALTRAFIK = 602;</code>
+     */
+    public static final int LULEA_LOKALTRAFIK_VALUE = 602;
+    /**
+     * <code>MTRX = 812;</code>
+     */
+    public static final int MTRX_VALUE = 812;
     /**
      * <code>FLIXBUS = 838;</code>
      */
@@ -428,9 +500,13 @@ public final class Ng {
       switch (value) {
         case 0: return UKNOWN_OPERATOR;
         case 74: return SJ;
+        case 251: return UL;
         case 252: return SORMLANDSTRAFIKEN;
+        case 253: return OSTGOTATRAFIKEN;
         case 261: return HALLANDSTRAFIKEN;
         case 265: return VARMLANDSTRAFIK;
+        case 267: return DALATRAFIK;
+        case 268: return X_TRAFIK;
         case 272: return LANSTRAFIKEN_VASTERBOTTEN;
         case 275: return SL;
         case 276: return SKANETRAFIKEN;
@@ -441,10 +517,15 @@ public final class Ng {
         case 300: return ORESUNDSTAG;
         case 313: return MALARTAG;
         case 317: return VARMLANDSTRAFIK_TRAIN;
-        case 327: return BAS4YOU;
+        case 324: return FLIXTRAIN;
+        case 327: return BUS4YOU;
+        case 328: return VY_EXPRESS;
+        case 370: return ORESUNDSLINJEN;
         case 380: return SNALLTAGET;
         case 512: return VY_NATTAG;
         case 601: return KARLSTADSBUSS;
+        case 602: return LULEA_LOKALTRAFIK;
+        case 812: return MTRX;
         case 838: return FLIXBUS;
         default: return null;
       }
@@ -870,6 +951,16 @@ public final class Ng {
      * @return The id.
      */
     int getId();
+
+    /**
+     * <pre>
+     * VersionCode from server.
+     * </pre>
+     *
+     * <code>int32 server_version = 2;</code>
+     * @return The serverVersion.
+     */
+    int getServerVersion();
   }
   /**
    * <pre>
@@ -921,6 +1012,44 @@ public final class Ng {
     private void clearId() {
 
       id_ = 0;
+    }
+
+    public static final int SERVER_VERSION_FIELD_NUMBER = 2;
+    private int serverVersion_;
+    /**
+     * <pre>
+     * VersionCode from server.
+     * </pre>
+     *
+     * <code>int32 server_version = 2;</code>
+     * @return The serverVersion.
+     */
+    @java.lang.Override
+    public int getServerVersion() {
+      return serverVersion_;
+    }
+    /**
+     * <pre>
+     * VersionCode from server.
+     * </pre>
+     *
+     * <code>int32 server_version = 2;</code>
+     * @param value The serverVersion to set.
+     */
+    private void setServerVersion(int value) {
+      
+      serverVersion_ = value;
+    }
+    /**
+     * <pre>
+     * VersionCode from server.
+     * </pre>
+     *
+     * <code>int32 server_version = 2;</code>
+     */
+    private void clearServerVersion() {
+
+      serverVersion_ = 0;
     }
 
     public static se.locutus.proto.Ng.ResponseHeader parseFrom(
@@ -1064,6 +1193,46 @@ public final class Ng {
         return this;
       }
 
+      /**
+       * <pre>
+       * VersionCode from server.
+       * </pre>
+       *
+       * <code>int32 server_version = 2;</code>
+       * @return The serverVersion.
+       */
+      @java.lang.Override
+      public int getServerVersion() {
+        return instance.getServerVersion();
+      }
+      /**
+       * <pre>
+       * VersionCode from server.
+       * </pre>
+       *
+       * <code>int32 server_version = 2;</code>
+       * @param value The serverVersion to set.
+       * @return This builder for chaining.
+       */
+      public Builder setServerVersion(int value) {
+        copyOnWrite();
+        instance.setServerVersion(value);
+        return this;
+      }
+      /**
+       * <pre>
+       * VersionCode from server.
+       * </pre>
+       *
+       * <code>int32 server_version = 2;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearServerVersion() {
+        copyOnWrite();
+        instance.clearServerVersion();
+        return this;
+      }
+
       // @@protoc_insertion_point(builder_scope:se.locutus.proto.ResponseHeader)
     }
     @java.lang.Override
@@ -1081,9 +1250,11 @@ public final class Ng {
         case BUILD_MESSAGE_INFO: {
             java.lang.Object[] objects = new java.lang.Object[] {
               "id_",
+              "serverVersion_",
             };
             java.lang.String info =
-                "\u0000\u0001\u0000\u0000\u0001\u0001\u0001\u0000\u0000\u0000\u0001\u0004";
+                "\u0000\u0002\u0000\u0000\u0001\u0002\u0002\u0000\u0000\u0000\u0001\u0004\u0002\u0004" +
+                "";
             return newMessageInfo(DEFAULT_INSTANCE, info, objects);
         }
         // fall through
@@ -1228,6 +1399,55 @@ public final class Ng {
      * @return The setDepatureMetaData.
      */
     se.locutus.proto.Ng.SetDepartureMetaData getSetDepatureMetaData();
+
+    /**
+     * <pre>
+     * Request operator config.
+     * </pre>
+     *
+     * <code>repeated .se.locutus.proto.ResRobotOperatorEnum request_operator_config = 6;</code>
+     * @return A list containing the requestOperatorConfig.
+     */
+    java.util.List<se.locutus.proto.Ng.ResRobotOperatorEnum> getRequestOperatorConfigList();
+    /**
+     * <pre>
+     * Request operator config.
+     * </pre>
+     *
+     * <code>repeated .se.locutus.proto.ResRobotOperatorEnum request_operator_config = 6;</code>
+     * @return The count of requestOperatorConfig.
+     */
+    int getRequestOperatorConfigCount();
+    /**
+     * <pre>
+     * Request operator config.
+     * </pre>
+     *
+     * <code>repeated .se.locutus.proto.ResRobotOperatorEnum request_operator_config = 6;</code>
+     * @param index The index of the element to return.
+     * @return The requestOperatorConfig at the given index.
+     */
+    se.locutus.proto.Ng.ResRobotOperatorEnum getRequestOperatorConfig(int index);
+    /**
+     * <pre>
+     * Request operator config.
+     * </pre>
+     *
+     * <code>repeated .se.locutus.proto.ResRobotOperatorEnum request_operator_config = 6;</code>
+     * @return A list containing the enum numeric values on the wire for requestOperatorConfig.
+     */
+    java.util.List<java.lang.Integer>
+    getRequestOperatorConfigValueList();
+    /**
+     * <pre>
+     * Request operator config.
+     * </pre>
+     *
+     * <code>repeated .se.locutus.proto.ResRobotOperatorEnum request_operator_config = 6;</code>
+     * @param index The index of the value to return.
+     * @return The enum numeric value on the wire of requestOperatorConfig at the given index.
+     */
+    int getRequestOperatorConfigValue(int index);
   }
   /**
    * <pre>
@@ -1242,6 +1462,7 @@ public final class Ng {
       // @@protoc_insertion_point(message_implements:se.locutus.proto.RequestData)
       RequestDataOrBuilder {
     private RequestData() {
+      requestOperatorConfig_ = emptyIntList();
     }
     private int bitField0_;
     public static final int REQUEST_HEADER_FIELD_NUMBER = 1;
@@ -1552,6 +1773,185 @@ public final class Ng {
      */
     private void clearSetDepatureMetaData() {  setDepatureMetaData_ = null;
       bitField0_ = (bitField0_ & ~0x00000010);
+    }
+
+    public static final int REQUEST_OPERATOR_CONFIG_FIELD_NUMBER = 6;
+    private com.google.protobuf.Internal.IntList requestOperatorConfig_;
+    private static final com.google.protobuf.Internal.ListAdapter.Converter<
+        java.lang.Integer, se.locutus.proto.Ng.ResRobotOperatorEnum> requestOperatorConfig_converter_ =
+            new com.google.protobuf.Internal.ListAdapter.Converter<
+                java.lang.Integer, se.locutus.proto.Ng.ResRobotOperatorEnum>() {
+              @java.lang.Override
+              public se.locutus.proto.Ng.ResRobotOperatorEnum convert(java.lang.Integer from) {
+                se.locutus.proto.Ng.ResRobotOperatorEnum result = se.locutus.proto.Ng.ResRobotOperatorEnum.forNumber(from);
+                return result == null ? se.locutus.proto.Ng.ResRobotOperatorEnum.UNRECOGNIZED : result;
+              }
+            };
+    /**
+     * <pre>
+     * Request operator config.
+     * </pre>
+     *
+     * <code>repeated .se.locutus.proto.ResRobotOperatorEnum request_operator_config = 6;</code>
+     * @return A list containing the requestOperatorConfig.
+     */
+    @java.lang.Override
+    public java.util.List<se.locutus.proto.Ng.ResRobotOperatorEnum> getRequestOperatorConfigList() {
+      return new com.google.protobuf.Internal.ListAdapter<
+          java.lang.Integer, se.locutus.proto.Ng.ResRobotOperatorEnum>(requestOperatorConfig_, requestOperatorConfig_converter_);
+    }
+    /**
+     * <pre>
+     * Request operator config.
+     * </pre>
+     *
+     * <code>repeated .se.locutus.proto.ResRobotOperatorEnum request_operator_config = 6;</code>
+     * @return The count of requestOperatorConfig.
+     */
+    @java.lang.Override
+    public int getRequestOperatorConfigCount() {
+      return requestOperatorConfig_.size();
+    }
+    /**
+     * <pre>
+     * Request operator config.
+     * </pre>
+     *
+     * <code>repeated .se.locutus.proto.ResRobotOperatorEnum request_operator_config = 6;</code>
+     * @param index The index of the element to return.
+     * @return The requestOperatorConfig at the given index.
+     */
+    @java.lang.Override
+    public se.locutus.proto.Ng.ResRobotOperatorEnum getRequestOperatorConfig(int index) {
+      se.locutus.proto.Ng.ResRobotOperatorEnum result = se.locutus.proto.Ng.ResRobotOperatorEnum.forNumber(requestOperatorConfig_.getInt(index));
+      return result == null ? se.locutus.proto.Ng.ResRobotOperatorEnum.UNRECOGNIZED : result;
+    }
+    /**
+     * <pre>
+     * Request operator config.
+     * </pre>
+     *
+     * <code>repeated .se.locutus.proto.ResRobotOperatorEnum request_operator_config = 6;</code>
+     * @return A list containing the enum numeric values on the wire for requestOperatorConfig.
+     */
+    @java.lang.Override
+    public java.util.List<java.lang.Integer>
+    getRequestOperatorConfigValueList() {
+      return requestOperatorConfig_;
+    }
+    /**
+     * <pre>
+     * Request operator config.
+     * </pre>
+     *
+     * <code>repeated .se.locutus.proto.ResRobotOperatorEnum request_operator_config = 6;</code>
+     * @param index The index of the value to return.
+     * @return The enum numeric value on the wire of requestOperatorConfig at the given index.
+     */
+    @java.lang.Override
+    public int getRequestOperatorConfigValue(int index) {
+      return requestOperatorConfig_.getInt(index);
+    }
+    private int requestOperatorConfigMemoizedSerializedSize;
+    private void ensureRequestOperatorConfigIsMutable() {
+      com.google.protobuf.Internal.IntList tmp = requestOperatorConfig_;
+      if (!tmp.isModifiable()) {
+        requestOperatorConfig_ =
+            com.google.protobuf.GeneratedMessageLite.mutableCopy(tmp);
+      }
+    }
+    /**
+     * <pre>
+     * Request operator config.
+     * </pre>
+     *
+     * <code>repeated .se.locutus.proto.ResRobotOperatorEnum request_operator_config = 6;</code>
+     * @param index The index to set the value at.
+     * @param value The requestOperatorConfig to set.
+     */
+    private void setRequestOperatorConfig(
+        int index, se.locutus.proto.Ng.ResRobotOperatorEnum value) {
+      value.getClass();
+  ensureRequestOperatorConfigIsMutable();
+      requestOperatorConfig_.setInt(index, value.getNumber());
+    }
+    /**
+     * <pre>
+     * Request operator config.
+     * </pre>
+     *
+     * <code>repeated .se.locutus.proto.ResRobotOperatorEnum request_operator_config = 6;</code>
+     * @param value The requestOperatorConfig to add.
+     */
+    private void addRequestOperatorConfig(se.locutus.proto.Ng.ResRobotOperatorEnum value) {
+      value.getClass();
+  ensureRequestOperatorConfigIsMutable();
+      requestOperatorConfig_.addInt(value.getNumber());
+    }
+    /**
+     * <pre>
+     * Request operator config.
+     * </pre>
+     *
+     * <code>repeated .se.locutus.proto.ResRobotOperatorEnum request_operator_config = 6;</code>
+     * @param values The requestOperatorConfig to add.
+     */
+    private void addAllRequestOperatorConfig(
+        java.lang.Iterable<? extends se.locutus.proto.Ng.ResRobotOperatorEnum> values) {
+      ensureRequestOperatorConfigIsMutable();
+      for (se.locutus.proto.Ng.ResRobotOperatorEnum value : values) {
+        requestOperatorConfig_.addInt(value.getNumber());
+      }
+    }
+    /**
+     * <pre>
+     * Request operator config.
+     * </pre>
+     *
+     * <code>repeated .se.locutus.proto.ResRobotOperatorEnum request_operator_config = 6;</code>
+     */
+    private void clearRequestOperatorConfig() {
+      requestOperatorConfig_ = emptyIntList();
+    }
+    /**
+     * <pre>
+     * Request operator config.
+     * </pre>
+     *
+     * <code>repeated .se.locutus.proto.ResRobotOperatorEnum request_operator_config = 6;</code>
+     * @param value The enum numeric value on the wire for requestOperatorConfig to set.
+     */
+    private void setRequestOperatorConfigValue(
+        int index, int value) {
+      ensureRequestOperatorConfigIsMutable();
+      requestOperatorConfig_.setInt(index, value);
+    }
+    /**
+     * <pre>
+     * Request operator config.
+     * </pre>
+     *
+     * <code>repeated .se.locutus.proto.ResRobotOperatorEnum request_operator_config = 6;</code>
+     * @param value The enum numeric value on the wire for requestOperatorConfig to add.
+     */
+    private void addRequestOperatorConfigValue(int value) {
+      ensureRequestOperatorConfigIsMutable();
+      requestOperatorConfig_.addInt(value);
+    }
+    /**
+     * <pre>
+     * Request operator config.
+     * </pre>
+     *
+     * <code>repeated .se.locutus.proto.ResRobotOperatorEnum request_operator_config = 6;</code>
+     * @param values The enum numeric values on the wire for requestOperatorConfig to add.
+     */
+    private void addAllRequestOperatorConfigValue(
+        java.lang.Iterable<java.lang.Integer> values) {
+      ensureRequestOperatorConfigIsMutable();
+      for (int value : values) {
+        requestOperatorConfig_.addInt(value);
+      }
     }
 
     public static se.locutus.proto.Ng.RequestData parseFrom(
@@ -1986,6 +2386,173 @@ public final class Ng {
         return this;
       }
 
+      /**
+       * <pre>
+       * Request operator config.
+       * </pre>
+       *
+       * <code>repeated .se.locutus.proto.ResRobotOperatorEnum request_operator_config = 6;</code>
+       * @return A list containing the requestOperatorConfig.
+       */
+      @java.lang.Override
+      public java.util.List<se.locutus.proto.Ng.ResRobotOperatorEnum> getRequestOperatorConfigList() {
+        return instance.getRequestOperatorConfigList();
+      }
+      /**
+       * <pre>
+       * Request operator config.
+       * </pre>
+       *
+       * <code>repeated .se.locutus.proto.ResRobotOperatorEnum request_operator_config = 6;</code>
+       * @return The count of requestOperatorConfig.
+       */
+      @java.lang.Override
+      public int getRequestOperatorConfigCount() {
+        return instance.getRequestOperatorConfigCount();
+      }
+      /**
+       * <pre>
+       * Request operator config.
+       * </pre>
+       *
+       * <code>repeated .se.locutus.proto.ResRobotOperatorEnum request_operator_config = 6;</code>
+       * @param index The index of the element to return.
+       * @return The requestOperatorConfig at the given index.
+       */
+      @java.lang.Override
+      public se.locutus.proto.Ng.ResRobotOperatorEnum getRequestOperatorConfig(int index) {
+        return instance.getRequestOperatorConfig(index);
+      }
+      /**
+       * <pre>
+       * Request operator config.
+       * </pre>
+       *
+       * <code>repeated .se.locutus.proto.ResRobotOperatorEnum request_operator_config = 6;</code>
+       * @param index The index to set the value at.
+       * @param value The requestOperatorConfig to set.
+       * @return This builder for chaining.
+       */
+      public Builder setRequestOperatorConfig(
+          int index, se.locutus.proto.Ng.ResRobotOperatorEnum value) {
+        copyOnWrite();
+        instance.setRequestOperatorConfig(index, value);
+        return this;
+      }
+      /**
+       * <pre>
+       * Request operator config.
+       * </pre>
+       *
+       * <code>repeated .se.locutus.proto.ResRobotOperatorEnum request_operator_config = 6;</code>
+       * @param value The requestOperatorConfig to add.
+       * @return This builder for chaining.
+       */
+      public Builder addRequestOperatorConfig(se.locutus.proto.Ng.ResRobotOperatorEnum value) {
+        copyOnWrite();
+        instance.addRequestOperatorConfig(value);
+        return this;
+      }
+      /**
+       * <pre>
+       * Request operator config.
+       * </pre>
+       *
+       * <code>repeated .se.locutus.proto.ResRobotOperatorEnum request_operator_config = 6;</code>
+       * @param values The requestOperatorConfig to add.
+       * @return This builder for chaining.
+       */
+      public Builder addAllRequestOperatorConfig(
+          java.lang.Iterable<? extends se.locutus.proto.Ng.ResRobotOperatorEnum> values) {
+        copyOnWrite();
+        instance.addAllRequestOperatorConfig(values);  return this;
+      }
+      /**
+       * <pre>
+       * Request operator config.
+       * </pre>
+       *
+       * <code>repeated .se.locutus.proto.ResRobotOperatorEnum request_operator_config = 6;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearRequestOperatorConfig() {
+        copyOnWrite();
+        instance.clearRequestOperatorConfig();
+        return this;
+      }
+      /**
+       * <pre>
+       * Request operator config.
+       * </pre>
+       *
+       * <code>repeated .se.locutus.proto.ResRobotOperatorEnum request_operator_config = 6;</code>
+       * @return A list containing the enum numeric values on the wire for requestOperatorConfig.
+       */
+      @java.lang.Override
+      public java.util.List<java.lang.Integer>
+      getRequestOperatorConfigValueList() {
+        return java.util.Collections.unmodifiableList(
+            instance.getRequestOperatorConfigValueList());
+      }
+      /**
+       * <pre>
+       * Request operator config.
+       * </pre>
+       *
+       * <code>repeated .se.locutus.proto.ResRobotOperatorEnum request_operator_config = 6;</code>
+       * @param index The index of the value to return.
+       * @return The enum numeric value on the wire of requestOperatorConfig at the given index.
+       */
+      @java.lang.Override
+      public int getRequestOperatorConfigValue(int index) {
+        return instance.getRequestOperatorConfigValue(index);
+      }
+      /**
+       * <pre>
+       * Request operator config.
+       * </pre>
+       *
+       * <code>repeated .se.locutus.proto.ResRobotOperatorEnum request_operator_config = 6;</code>
+       * @param index The index to set the value at.
+       * @param value The enum numeric value on the wire for requestOperatorConfig to set.
+       * @return This builder for chaining.
+       */
+      public Builder setRequestOperatorConfigValue(
+          int index, int value) {
+        copyOnWrite();
+        instance.setRequestOperatorConfigValue(index, value);
+        return this;
+      }
+      /**
+       * <pre>
+       * Request operator config.
+       * </pre>
+       *
+       * <code>repeated .se.locutus.proto.ResRobotOperatorEnum request_operator_config = 6;</code>
+       * @param value The enum numeric value on the wire for requestOperatorConfig to add.
+       * @return This builder for chaining.
+       */
+      public Builder addRequestOperatorConfigValue(int value) {
+        copyOnWrite();
+        instance.addRequestOperatorConfigValue(value);
+        return this;
+      }
+      /**
+       * <pre>
+       * Request operator config.
+       * </pre>
+       *
+       * <code>repeated .se.locutus.proto.ResRobotOperatorEnum request_operator_config = 6;</code>
+       * @param values The enum numeric values on the wire for requestOperatorConfig to add.
+       * @return This builder for chaining.
+       */
+      public Builder addAllRequestOperatorConfigValue(
+          java.lang.Iterable<java.lang.Integer> values) {
+        copyOnWrite();
+        instance.addAllRequestOperatorConfigValue(values);
+        return this;
+      }
+
       // @@protoc_insertion_point(builder_scope:se.locutus.proto.RequestData)
     }
     @java.lang.Override
@@ -2008,10 +2575,11 @@ public final class Ng {
               "stopDataRequest_",
               "stopSearchRequest_",
               "setDepatureMetaData_",
+              "requestOperatorConfig_",
             };
             java.lang.String info =
-                "\u0000\u0005\u0000\u0001\u0001\u0005\u0005\u0000\u0000\u0000\u0001\u1009\u0000\u0002" +
-                "\u1009\u0001\u0003\u1009\u0002\u0004\u1009\u0003\u0005\u1009\u0004";
+                "\u0000\u0006\u0000\u0001\u0001\u0006\u0006\u0000\u0001\u0000\u0001\u1009\u0000\u0002" +
+                "\u1009\u0001\u0003\u1009\u0002\u0004\u1009\u0003\u0005\u1009\u0004\u0006,";
             return newMessageInfo(DEFAULT_INSTANCE, info, objects);
         }
         // fall through
@@ -2175,6 +2743,32 @@ public final class Ng {
      * @return The stopSearchResponse.
      */
     se.locutus.proto.Ng.StopSearchResponse getStopSearchResponse();
+
+    /**
+     * <pre>
+     * Returns list of operator configs.
+     * </pre>
+     *
+     * <code>repeated .se.locutus.proto.OperatorConfig operator_config = 7;</code>
+     */
+    java.util.List<se.locutus.proto.Ng.OperatorConfig> 
+        getOperatorConfigList();
+    /**
+     * <pre>
+     * Returns list of operator configs.
+     * </pre>
+     *
+     * <code>repeated .se.locutus.proto.OperatorConfig operator_config = 7;</code>
+     */
+    se.locutus.proto.Ng.OperatorConfig getOperatorConfig(int index);
+    /**
+     * <pre>
+     * Returns list of operator configs.
+     * </pre>
+     *
+     * <code>repeated .se.locutus.proto.OperatorConfig operator_config = 7;</code>
+     */
+    int getOperatorConfigCount();
   }
   /**
    * <pre>
@@ -2189,6 +2783,7 @@ public final class Ng {
       // @@protoc_insertion_point(message_implements:se.locutus.proto.ResponseData)
       ResponseDataOrBuilder {
     private ResponseData() {
+      operatorConfig_ = emptyProtobufList();
     }
     private int bitField0_;
     public static final int RESPONSE_HEADER_FIELD_NUMBER = 1;
@@ -2565,6 +3160,144 @@ public final class Ng {
      */
     private void clearStopSearchResponse() {  stopSearchResponse_ = null;
       bitField0_ = (bitField0_ & ~0x00000020);
+    }
+
+    public static final int OPERATOR_CONFIG_FIELD_NUMBER = 7;
+    private com.google.protobuf.Internal.ProtobufList<se.locutus.proto.Ng.OperatorConfig> operatorConfig_;
+    /**
+     * <pre>
+     * Returns list of operator configs.
+     * </pre>
+     *
+     * <code>repeated .se.locutus.proto.OperatorConfig operator_config = 7;</code>
+     */
+    @java.lang.Override
+    public java.util.List<se.locutus.proto.Ng.OperatorConfig> getOperatorConfigList() {
+      return operatorConfig_;
+    }
+    /**
+     * <pre>
+     * Returns list of operator configs.
+     * </pre>
+     *
+     * <code>repeated .se.locutus.proto.OperatorConfig operator_config = 7;</code>
+     */
+    public java.util.List<? extends se.locutus.proto.Ng.OperatorConfigOrBuilder> 
+        getOperatorConfigOrBuilderList() {
+      return operatorConfig_;
+    }
+    /**
+     * <pre>
+     * Returns list of operator configs.
+     * </pre>
+     *
+     * <code>repeated .se.locutus.proto.OperatorConfig operator_config = 7;</code>
+     */
+    @java.lang.Override
+    public int getOperatorConfigCount() {
+      return operatorConfig_.size();
+    }
+    /**
+     * <pre>
+     * Returns list of operator configs.
+     * </pre>
+     *
+     * <code>repeated .se.locutus.proto.OperatorConfig operator_config = 7;</code>
+     */
+    @java.lang.Override
+    public se.locutus.proto.Ng.OperatorConfig getOperatorConfig(int index) {
+      return operatorConfig_.get(index);
+    }
+    /**
+     * <pre>
+     * Returns list of operator configs.
+     * </pre>
+     *
+     * <code>repeated .se.locutus.proto.OperatorConfig operator_config = 7;</code>
+     */
+    public se.locutus.proto.Ng.OperatorConfigOrBuilder getOperatorConfigOrBuilder(
+        int index) {
+      return operatorConfig_.get(index);
+    }
+    private void ensureOperatorConfigIsMutable() {
+      com.google.protobuf.Internal.ProtobufList<se.locutus.proto.Ng.OperatorConfig> tmp = operatorConfig_;
+      if (!tmp.isModifiable()) {
+        operatorConfig_ =
+            com.google.protobuf.GeneratedMessageLite.mutableCopy(tmp);
+       }
+    }
+
+    /**
+     * <pre>
+     * Returns list of operator configs.
+     * </pre>
+     *
+     * <code>repeated .se.locutus.proto.OperatorConfig operator_config = 7;</code>
+     */
+    private void setOperatorConfig(
+        int index, se.locutus.proto.Ng.OperatorConfig value) {
+      value.getClass();
+  ensureOperatorConfigIsMutable();
+      operatorConfig_.set(index, value);
+    }
+    /**
+     * <pre>
+     * Returns list of operator configs.
+     * </pre>
+     *
+     * <code>repeated .se.locutus.proto.OperatorConfig operator_config = 7;</code>
+     */
+    private void addOperatorConfig(se.locutus.proto.Ng.OperatorConfig value) {
+      value.getClass();
+  ensureOperatorConfigIsMutable();
+      operatorConfig_.add(value);
+    }
+    /**
+     * <pre>
+     * Returns list of operator configs.
+     * </pre>
+     *
+     * <code>repeated .se.locutus.proto.OperatorConfig operator_config = 7;</code>
+     */
+    private void addOperatorConfig(
+        int index, se.locutus.proto.Ng.OperatorConfig value) {
+      value.getClass();
+  ensureOperatorConfigIsMutable();
+      operatorConfig_.add(index, value);
+    }
+    /**
+     * <pre>
+     * Returns list of operator configs.
+     * </pre>
+     *
+     * <code>repeated .se.locutus.proto.OperatorConfig operator_config = 7;</code>
+     */
+    private void addAllOperatorConfig(
+        java.lang.Iterable<? extends se.locutus.proto.Ng.OperatorConfig> values) {
+      ensureOperatorConfigIsMutable();
+      com.google.protobuf.AbstractMessageLite.addAll(
+          values, operatorConfig_);
+    }
+    /**
+     * <pre>
+     * Returns list of operator configs.
+     * </pre>
+     *
+     * <code>repeated .se.locutus.proto.OperatorConfig operator_config = 7;</code>
+     */
+    private void clearOperatorConfig() {
+      operatorConfig_ = emptyProtobufList();
+    }
+    /**
+     * <pre>
+     * Returns list of operator configs.
+     * </pre>
+     *
+     * <code>repeated .se.locutus.proto.OperatorConfig operator_config = 7;</code>
+     */
+    private void removeOperatorConfig(int index) {
+      ensureOperatorConfigIsMutable();
+      operatorConfig_.remove(index);
     }
 
     public static se.locutus.proto.Ng.ResponseData parseFrom(
@@ -3070,6 +3803,156 @@ public final class Ng {
         return this;
       }
 
+      /**
+       * <pre>
+       * Returns list of operator configs.
+       * </pre>
+       *
+       * <code>repeated .se.locutus.proto.OperatorConfig operator_config = 7;</code>
+       */
+      @java.lang.Override
+      public java.util.List<se.locutus.proto.Ng.OperatorConfig> getOperatorConfigList() {
+        return java.util.Collections.unmodifiableList(
+            instance.getOperatorConfigList());
+      }
+      /**
+       * <pre>
+       * Returns list of operator configs.
+       * </pre>
+       *
+       * <code>repeated .se.locutus.proto.OperatorConfig operator_config = 7;</code>
+       */
+      @java.lang.Override
+      public int getOperatorConfigCount() {
+        return instance.getOperatorConfigCount();
+      }/**
+       * <pre>
+       * Returns list of operator configs.
+       * </pre>
+       *
+       * <code>repeated .se.locutus.proto.OperatorConfig operator_config = 7;</code>
+       */
+      @java.lang.Override
+      public se.locutus.proto.Ng.OperatorConfig getOperatorConfig(int index) {
+        return instance.getOperatorConfig(index);
+      }
+      /**
+       * <pre>
+       * Returns list of operator configs.
+       * </pre>
+       *
+       * <code>repeated .se.locutus.proto.OperatorConfig operator_config = 7;</code>
+       */
+      public Builder setOperatorConfig(
+          int index, se.locutus.proto.Ng.OperatorConfig value) {
+        copyOnWrite();
+        instance.setOperatorConfig(index, value);
+        return this;
+      }
+      /**
+       * <pre>
+       * Returns list of operator configs.
+       * </pre>
+       *
+       * <code>repeated .se.locutus.proto.OperatorConfig operator_config = 7;</code>
+       */
+      public Builder setOperatorConfig(
+          int index, se.locutus.proto.Ng.OperatorConfig.Builder builderForValue) {
+        copyOnWrite();
+        instance.setOperatorConfig(index,
+            builderForValue.build());
+        return this;
+      }
+      /**
+       * <pre>
+       * Returns list of operator configs.
+       * </pre>
+       *
+       * <code>repeated .se.locutus.proto.OperatorConfig operator_config = 7;</code>
+       */
+      public Builder addOperatorConfig(se.locutus.proto.Ng.OperatorConfig value) {
+        copyOnWrite();
+        instance.addOperatorConfig(value);
+        return this;
+      }
+      /**
+       * <pre>
+       * Returns list of operator configs.
+       * </pre>
+       *
+       * <code>repeated .se.locutus.proto.OperatorConfig operator_config = 7;</code>
+       */
+      public Builder addOperatorConfig(
+          int index, se.locutus.proto.Ng.OperatorConfig value) {
+        copyOnWrite();
+        instance.addOperatorConfig(index, value);
+        return this;
+      }
+      /**
+       * <pre>
+       * Returns list of operator configs.
+       * </pre>
+       *
+       * <code>repeated .se.locutus.proto.OperatorConfig operator_config = 7;</code>
+       */
+      public Builder addOperatorConfig(
+          se.locutus.proto.Ng.OperatorConfig.Builder builderForValue) {
+        copyOnWrite();
+        instance.addOperatorConfig(builderForValue.build());
+        return this;
+      }
+      /**
+       * <pre>
+       * Returns list of operator configs.
+       * </pre>
+       *
+       * <code>repeated .se.locutus.proto.OperatorConfig operator_config = 7;</code>
+       */
+      public Builder addOperatorConfig(
+          int index, se.locutus.proto.Ng.OperatorConfig.Builder builderForValue) {
+        copyOnWrite();
+        instance.addOperatorConfig(index,
+            builderForValue.build());
+        return this;
+      }
+      /**
+       * <pre>
+       * Returns list of operator configs.
+       * </pre>
+       *
+       * <code>repeated .se.locutus.proto.OperatorConfig operator_config = 7;</code>
+       */
+      public Builder addAllOperatorConfig(
+          java.lang.Iterable<? extends se.locutus.proto.Ng.OperatorConfig> values) {
+        copyOnWrite();
+        instance.addAllOperatorConfig(values);
+        return this;
+      }
+      /**
+       * <pre>
+       * Returns list of operator configs.
+       * </pre>
+       *
+       * <code>repeated .se.locutus.proto.OperatorConfig operator_config = 7;</code>
+       */
+      public Builder clearOperatorConfig() {
+        copyOnWrite();
+        instance.clearOperatorConfig();
+        return this;
+      }
+      /**
+       * <pre>
+       * Returns list of operator configs.
+       * </pre>
+       *
+       * <code>repeated .se.locutus.proto.OperatorConfig operator_config = 7;</code>
+       */
+      public Builder removeOperatorConfig(int index) {
+        copyOnWrite();
+        instance.removeOperatorConfig(index);
+        return this;
+      }
+
       // @@protoc_insertion_point(builder_scope:se.locutus.proto.ResponseData)
     }
     @java.lang.Override
@@ -3093,11 +3976,13 @@ public final class Ng {
               "pingResponse_",
               "errorResponse_",
               "stopSearchResponse_",
+              "operatorConfig_",
+              se.locutus.proto.Ng.OperatorConfig.class,
             };
             java.lang.String info =
-                "\u0000\u0006\u0000\u0001\u0001\u0006\u0006\u0000\u0000\u0000\u0001\u1009\u0000\u0002" +
+                "\u0000\u0007\u0000\u0001\u0001\u0007\u0007\u0000\u0001\u0000\u0001\u1009\u0000\u0002" +
                 "\u1009\u0001\u0003\u1009\u0002\u0004\u1009\u0003\u0005\u1009\u0004\u0006\u1009\u0005" +
-                "";
+                "\u0007\u001b";
             return newMessageInfo(DEFAULT_INSTANCE, info, objects);
         }
         // fall through
@@ -8031,6 +8916,65 @@ public final class Ng {
      * @return The lng.
      */
     double getLng();
+
+    /**
+     * <pre>
+     * What we know about traffic at this stop.
+     * </pre>
+     *
+     * <code>repeated .se.locutus.proto.NgTrafficType traffic_type = 7;</code>
+     * @return A list containing the trafficType.
+     */
+    java.util.List<se.locutus.proto.Ng.NgTrafficType> getTrafficTypeList();
+    /**
+     * <pre>
+     * What we know about traffic at this stop.
+     * </pre>
+     *
+     * <code>repeated .se.locutus.proto.NgTrafficType traffic_type = 7;</code>
+     * @return The count of trafficType.
+     */
+    int getTrafficTypeCount();
+    /**
+     * <pre>
+     * What we know about traffic at this stop.
+     * </pre>
+     *
+     * <code>repeated .se.locutus.proto.NgTrafficType traffic_type = 7;</code>
+     * @param index The index of the element to return.
+     * @return The trafficType at the given index.
+     */
+    se.locutus.proto.Ng.NgTrafficType getTrafficType(int index);
+    /**
+     * <pre>
+     * What we know about traffic at this stop.
+     * </pre>
+     *
+     * <code>repeated .se.locutus.proto.NgTrafficType traffic_type = 7;</code>
+     * @return A list containing the enum numeric values on the wire for trafficType.
+     */
+    java.util.List<java.lang.Integer>
+    getTrafficTypeValueList();
+    /**
+     * <pre>
+     * What we know about traffic at this stop.
+     * </pre>
+     *
+     * <code>repeated .se.locutus.proto.NgTrafficType traffic_type = 7;</code>
+     * @param index The index of the value to return.
+     * @return The enum numeric value on the wire of trafficType at the given index.
+     */
+    int getTrafficTypeValue(int index);
+
+    /**
+     * <pre>
+     * Combined stop?
+     * </pre>
+     *
+     * <code>bool meta_stop = 8;</code>
+     * @return The metaStop.
+     */
+    boolean getMetaStop();
   }
   /**
    * <pre>
@@ -8047,6 +8991,7 @@ public final class Ng {
     private StopData() {
       canonicalName_ = "";
       displayName_ = "";
+      trafficType_ = emptyIntList();
     }
     private int bitField0_;
     public static final int SITE_ID_FIELD_NUMBER = 1;
@@ -8361,6 +9306,223 @@ public final class Ng {
     private void clearLng() {
 
       lng_ = 0D;
+    }
+
+    public static final int TRAFFIC_TYPE_FIELD_NUMBER = 7;
+    private com.google.protobuf.Internal.IntList trafficType_;
+    private static final com.google.protobuf.Internal.ListAdapter.Converter<
+        java.lang.Integer, se.locutus.proto.Ng.NgTrafficType> trafficType_converter_ =
+            new com.google.protobuf.Internal.ListAdapter.Converter<
+                java.lang.Integer, se.locutus.proto.Ng.NgTrafficType>() {
+              @java.lang.Override
+              public se.locutus.proto.Ng.NgTrafficType convert(java.lang.Integer from) {
+                se.locutus.proto.Ng.NgTrafficType result = se.locutus.proto.Ng.NgTrafficType.forNumber(from);
+                return result == null ? se.locutus.proto.Ng.NgTrafficType.UNRECOGNIZED : result;
+              }
+            };
+    /**
+     * <pre>
+     * What we know about traffic at this stop.
+     * </pre>
+     *
+     * <code>repeated .se.locutus.proto.NgTrafficType traffic_type = 7;</code>
+     * @return A list containing the trafficType.
+     */
+    @java.lang.Override
+    public java.util.List<se.locutus.proto.Ng.NgTrafficType> getTrafficTypeList() {
+      return new com.google.protobuf.Internal.ListAdapter<
+          java.lang.Integer, se.locutus.proto.Ng.NgTrafficType>(trafficType_, trafficType_converter_);
+    }
+    /**
+     * <pre>
+     * What we know about traffic at this stop.
+     * </pre>
+     *
+     * <code>repeated .se.locutus.proto.NgTrafficType traffic_type = 7;</code>
+     * @return The count of trafficType.
+     */
+    @java.lang.Override
+    public int getTrafficTypeCount() {
+      return trafficType_.size();
+    }
+    /**
+     * <pre>
+     * What we know about traffic at this stop.
+     * </pre>
+     *
+     * <code>repeated .se.locutus.proto.NgTrafficType traffic_type = 7;</code>
+     * @param index The index of the element to return.
+     * @return The trafficType at the given index.
+     */
+    @java.lang.Override
+    public se.locutus.proto.Ng.NgTrafficType getTrafficType(int index) {
+      se.locutus.proto.Ng.NgTrafficType result = se.locutus.proto.Ng.NgTrafficType.forNumber(trafficType_.getInt(index));
+      return result == null ? se.locutus.proto.Ng.NgTrafficType.UNRECOGNIZED : result;
+    }
+    /**
+     * <pre>
+     * What we know about traffic at this stop.
+     * </pre>
+     *
+     * <code>repeated .se.locutus.proto.NgTrafficType traffic_type = 7;</code>
+     * @return A list containing the enum numeric values on the wire for trafficType.
+     */
+    @java.lang.Override
+    public java.util.List<java.lang.Integer>
+    getTrafficTypeValueList() {
+      return trafficType_;
+    }
+    /**
+     * <pre>
+     * What we know about traffic at this stop.
+     * </pre>
+     *
+     * <code>repeated .se.locutus.proto.NgTrafficType traffic_type = 7;</code>
+     * @param index The index of the value to return.
+     * @return The enum numeric value on the wire of trafficType at the given index.
+     */
+    @java.lang.Override
+    public int getTrafficTypeValue(int index) {
+      return trafficType_.getInt(index);
+    }
+    private int trafficTypeMemoizedSerializedSize;
+    private void ensureTrafficTypeIsMutable() {
+      com.google.protobuf.Internal.IntList tmp = trafficType_;
+      if (!tmp.isModifiable()) {
+        trafficType_ =
+            com.google.protobuf.GeneratedMessageLite.mutableCopy(tmp);
+      }
+    }
+    /**
+     * <pre>
+     * What we know about traffic at this stop.
+     * </pre>
+     *
+     * <code>repeated .se.locutus.proto.NgTrafficType traffic_type = 7;</code>
+     * @param index The index to set the value at.
+     * @param value The trafficType to set.
+     */
+    private void setTrafficType(
+        int index, se.locutus.proto.Ng.NgTrafficType value) {
+      value.getClass();
+  ensureTrafficTypeIsMutable();
+      trafficType_.setInt(index, value.getNumber());
+    }
+    /**
+     * <pre>
+     * What we know about traffic at this stop.
+     * </pre>
+     *
+     * <code>repeated .se.locutus.proto.NgTrafficType traffic_type = 7;</code>
+     * @param value The trafficType to add.
+     */
+    private void addTrafficType(se.locutus.proto.Ng.NgTrafficType value) {
+      value.getClass();
+  ensureTrafficTypeIsMutable();
+      trafficType_.addInt(value.getNumber());
+    }
+    /**
+     * <pre>
+     * What we know about traffic at this stop.
+     * </pre>
+     *
+     * <code>repeated .se.locutus.proto.NgTrafficType traffic_type = 7;</code>
+     * @param values The trafficType to add.
+     */
+    private void addAllTrafficType(
+        java.lang.Iterable<? extends se.locutus.proto.Ng.NgTrafficType> values) {
+      ensureTrafficTypeIsMutable();
+      for (se.locutus.proto.Ng.NgTrafficType value : values) {
+        trafficType_.addInt(value.getNumber());
+      }
+    }
+    /**
+     * <pre>
+     * What we know about traffic at this stop.
+     * </pre>
+     *
+     * <code>repeated .se.locutus.proto.NgTrafficType traffic_type = 7;</code>
+     */
+    private void clearTrafficType() {
+      trafficType_ = emptyIntList();
+    }
+    /**
+     * <pre>
+     * What we know about traffic at this stop.
+     * </pre>
+     *
+     * <code>repeated .se.locutus.proto.NgTrafficType traffic_type = 7;</code>
+     * @param value The enum numeric value on the wire for trafficType to set.
+     */
+    private void setTrafficTypeValue(
+        int index, int value) {
+      ensureTrafficTypeIsMutable();
+      trafficType_.setInt(index, value);
+    }
+    /**
+     * <pre>
+     * What we know about traffic at this stop.
+     * </pre>
+     *
+     * <code>repeated .se.locutus.proto.NgTrafficType traffic_type = 7;</code>
+     * @param value The enum numeric value on the wire for trafficType to add.
+     */
+    private void addTrafficTypeValue(int value) {
+      ensureTrafficTypeIsMutable();
+      trafficType_.addInt(value);
+    }
+    /**
+     * <pre>
+     * What we know about traffic at this stop.
+     * </pre>
+     *
+     * <code>repeated .se.locutus.proto.NgTrafficType traffic_type = 7;</code>
+     * @param values The enum numeric values on the wire for trafficType to add.
+     */
+    private void addAllTrafficTypeValue(
+        java.lang.Iterable<java.lang.Integer> values) {
+      ensureTrafficTypeIsMutable();
+      for (int value : values) {
+        trafficType_.addInt(value);
+      }
+    }
+
+    public static final int META_STOP_FIELD_NUMBER = 8;
+    private boolean metaStop_;
+    /**
+     * <pre>
+     * Combined stop?
+     * </pre>
+     *
+     * <code>bool meta_stop = 8;</code>
+     * @return The metaStop.
+     */
+    @java.lang.Override
+    public boolean getMetaStop() {
+      return metaStop_;
+    }
+    /**
+     * <pre>
+     * Combined stop?
+     * </pre>
+     *
+     * <code>bool meta_stop = 8;</code>
+     * @param value The metaStop to set.
+     */
+    private void setMetaStop(boolean value) {
+      
+      metaStop_ = value;
+    }
+    /**
+     * <pre>
+     * Combined stop?
+     * </pre>
+     *
+     * <code>bool meta_stop = 8;</code>
+     */
+    private void clearMetaStop() {
+
+      metaStop_ = false;
     }
 
     public static se.locutus.proto.Ng.StopData parseFrom(
@@ -8793,6 +9955,213 @@ public final class Ng {
         return this;
       }
 
+      /**
+       * <pre>
+       * What we know about traffic at this stop.
+       * </pre>
+       *
+       * <code>repeated .se.locutus.proto.NgTrafficType traffic_type = 7;</code>
+       * @return A list containing the trafficType.
+       */
+      @java.lang.Override
+      public java.util.List<se.locutus.proto.Ng.NgTrafficType> getTrafficTypeList() {
+        return instance.getTrafficTypeList();
+      }
+      /**
+       * <pre>
+       * What we know about traffic at this stop.
+       * </pre>
+       *
+       * <code>repeated .se.locutus.proto.NgTrafficType traffic_type = 7;</code>
+       * @return The count of trafficType.
+       */
+      @java.lang.Override
+      public int getTrafficTypeCount() {
+        return instance.getTrafficTypeCount();
+      }
+      /**
+       * <pre>
+       * What we know about traffic at this stop.
+       * </pre>
+       *
+       * <code>repeated .se.locutus.proto.NgTrafficType traffic_type = 7;</code>
+       * @param index The index of the element to return.
+       * @return The trafficType at the given index.
+       */
+      @java.lang.Override
+      public se.locutus.proto.Ng.NgTrafficType getTrafficType(int index) {
+        return instance.getTrafficType(index);
+      }
+      /**
+       * <pre>
+       * What we know about traffic at this stop.
+       * </pre>
+       *
+       * <code>repeated .se.locutus.proto.NgTrafficType traffic_type = 7;</code>
+       * @param index The index to set the value at.
+       * @param value The trafficType to set.
+       * @return This builder for chaining.
+       */
+      public Builder setTrafficType(
+          int index, se.locutus.proto.Ng.NgTrafficType value) {
+        copyOnWrite();
+        instance.setTrafficType(index, value);
+        return this;
+      }
+      /**
+       * <pre>
+       * What we know about traffic at this stop.
+       * </pre>
+       *
+       * <code>repeated .se.locutus.proto.NgTrafficType traffic_type = 7;</code>
+       * @param value The trafficType to add.
+       * @return This builder for chaining.
+       */
+      public Builder addTrafficType(se.locutus.proto.Ng.NgTrafficType value) {
+        copyOnWrite();
+        instance.addTrafficType(value);
+        return this;
+      }
+      /**
+       * <pre>
+       * What we know about traffic at this stop.
+       * </pre>
+       *
+       * <code>repeated .se.locutus.proto.NgTrafficType traffic_type = 7;</code>
+       * @param values The trafficType to add.
+       * @return This builder for chaining.
+       */
+      public Builder addAllTrafficType(
+          java.lang.Iterable<? extends se.locutus.proto.Ng.NgTrafficType> values) {
+        copyOnWrite();
+        instance.addAllTrafficType(values);  return this;
+      }
+      /**
+       * <pre>
+       * What we know about traffic at this stop.
+       * </pre>
+       *
+       * <code>repeated .se.locutus.proto.NgTrafficType traffic_type = 7;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearTrafficType() {
+        copyOnWrite();
+        instance.clearTrafficType();
+        return this;
+      }
+      /**
+       * <pre>
+       * What we know about traffic at this stop.
+       * </pre>
+       *
+       * <code>repeated .se.locutus.proto.NgTrafficType traffic_type = 7;</code>
+       * @return A list containing the enum numeric values on the wire for trafficType.
+       */
+      @java.lang.Override
+      public java.util.List<java.lang.Integer>
+      getTrafficTypeValueList() {
+        return java.util.Collections.unmodifiableList(
+            instance.getTrafficTypeValueList());
+      }
+      /**
+       * <pre>
+       * What we know about traffic at this stop.
+       * </pre>
+       *
+       * <code>repeated .se.locutus.proto.NgTrafficType traffic_type = 7;</code>
+       * @param index The index of the value to return.
+       * @return The enum numeric value on the wire of trafficType at the given index.
+       */
+      @java.lang.Override
+      public int getTrafficTypeValue(int index) {
+        return instance.getTrafficTypeValue(index);
+      }
+      /**
+       * <pre>
+       * What we know about traffic at this stop.
+       * </pre>
+       *
+       * <code>repeated .se.locutus.proto.NgTrafficType traffic_type = 7;</code>
+       * @param index The index to set the value at.
+       * @param value The enum numeric value on the wire for trafficType to set.
+       * @return This builder for chaining.
+       */
+      public Builder setTrafficTypeValue(
+          int index, int value) {
+        copyOnWrite();
+        instance.setTrafficTypeValue(index, value);
+        return this;
+      }
+      /**
+       * <pre>
+       * What we know about traffic at this stop.
+       * </pre>
+       *
+       * <code>repeated .se.locutus.proto.NgTrafficType traffic_type = 7;</code>
+       * @param value The enum numeric value on the wire for trafficType to add.
+       * @return This builder for chaining.
+       */
+      public Builder addTrafficTypeValue(int value) {
+        copyOnWrite();
+        instance.addTrafficTypeValue(value);
+        return this;
+      }
+      /**
+       * <pre>
+       * What we know about traffic at this stop.
+       * </pre>
+       *
+       * <code>repeated .se.locutus.proto.NgTrafficType traffic_type = 7;</code>
+       * @param values The enum numeric values on the wire for trafficType to add.
+       * @return This builder for chaining.
+       */
+      public Builder addAllTrafficTypeValue(
+          java.lang.Iterable<java.lang.Integer> values) {
+        copyOnWrite();
+        instance.addAllTrafficTypeValue(values);
+        return this;
+      }
+
+      /**
+       * <pre>
+       * Combined stop?
+       * </pre>
+       *
+       * <code>bool meta_stop = 8;</code>
+       * @return The metaStop.
+       */
+      @java.lang.Override
+      public boolean getMetaStop() {
+        return instance.getMetaStop();
+      }
+      /**
+       * <pre>
+       * Combined stop?
+       * </pre>
+       *
+       * <code>bool meta_stop = 8;</code>
+       * @param value The metaStop to set.
+       * @return This builder for chaining.
+       */
+      public Builder setMetaStop(boolean value) {
+        copyOnWrite();
+        instance.setMetaStop(value);
+        return this;
+      }
+      /**
+       * <pre>
+       * Combined stop?
+       * </pre>
+       *
+       * <code>bool meta_stop = 8;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearMetaStop() {
+        copyOnWrite();
+        instance.clearMetaStop();
+        return this;
+      }
+
       // @@protoc_insertion_point(builder_scope:se.locutus.proto.StopData)
     }
     @java.lang.Override
@@ -8816,10 +10185,12 @@ public final class Ng {
               "lat_",
               "lng_",
               "site_",
+              "trafficType_",
+              "metaStop_",
             };
             java.lang.String info =
-                "\u0000\u0006\u0000\u0001\u0001\u0006\u0006\u0000\u0000\u0000\u0001\u0002\u0002\u0208" +
-                "\u0003\u0208\u0004\u0000\u0005\u0000\u0006\u1009\u0000";
+                "\u0000\b\u0000\u0001\u0001\b\b\u0000\u0001\u0000\u0001\u0002\u0002\u0208\u0003\u0208" +
+                "\u0004\u0000\u0005\u0000\u0006\u1009\u0000\u0007,\b\u0007";
             return newMessageInfo(DEFAULT_INSTANCE, info, objects);
         }
         // fall through
@@ -11693,7 +13064,7 @@ public final class Ng {
     /**
      * <code>int64 site_id = 1 [deprecated = true];</code>
      * @deprecated se.locutus.proto.StoredStopData.site_id is deprecated.
-     *     See messages.proto;l=229
+     *     See messages.proto;l=250
      * @return The siteId.
      */
     @java.lang.Deprecated long getSiteId();
@@ -11763,7 +13134,7 @@ public final class Ng {
     /**
      * <code>int64 site_id = 1 [deprecated = true];</code>
      * @deprecated se.locutus.proto.StoredStopData.site_id is deprecated.
-     *     See messages.proto;l=229
+     *     See messages.proto;l=250
      * @return The siteId.
      */
     @java.lang.Override
@@ -11773,7 +13144,7 @@ public final class Ng {
     /**
      * <code>int64 site_id = 1 [deprecated = true];</code>
      * @deprecated se.locutus.proto.StoredStopData.site_id is deprecated.
-     *     See messages.proto;l=229
+     *     See messages.proto;l=250
      * @param value The siteId to set.
      */
     private void setSiteId(long value) {
@@ -11783,7 +13154,7 @@ public final class Ng {
     /**
      * <code>int64 site_id = 1 [deprecated = true];</code>
      * @deprecated se.locutus.proto.StoredStopData.site_id is deprecated.
-     *     See messages.proto;l=229
+     *     See messages.proto;l=250
      */
     private void clearSiteId() {
 
@@ -12082,7 +13453,7 @@ public final class Ng {
       /**
        * <code>int64 site_id = 1 [deprecated = true];</code>
        * @deprecated se.locutus.proto.StoredStopData.site_id is deprecated.
-       *     See messages.proto;l=229
+       *     See messages.proto;l=250
        * @return The siteId.
        */
       @java.lang.Override
@@ -12092,7 +13463,7 @@ public final class Ng {
       /**
        * <code>int64 site_id = 1 [deprecated = true];</code>
        * @deprecated se.locutus.proto.StoredStopData.site_id is deprecated.
-       *     See messages.proto;l=229
+       *     See messages.proto;l=250
        * @param value The siteId to set.
        * @return This builder for chaining.
        */
@@ -12104,7 +13475,7 @@ public final class Ng {
       /**
        * <code>int64 site_id = 1 [deprecated = true];</code>
        * @deprecated se.locutus.proto.StoredStopData.site_id is deprecated.
-       *     See messages.proto;l=229
+       *     See messages.proto;l=250
        * @return This builder for chaining.
        */
       @java.lang.Deprecated public Builder clearSiteId() {
@@ -12402,7 +13773,7 @@ public final class Ng {
     /**
      * <code>int64 site_id = 1 [deprecated = true];</code>
      * @deprecated se.locutus.proto.StopDataRequest.site_id is deprecated.
-     *     See messages.proto;l=239
+     *     See messages.proto;l=260
      * @return The siteId.
      */
     @java.lang.Deprecated long getSiteId();
@@ -12472,7 +13843,7 @@ public final class Ng {
     /**
      * <code>int64 site_id = 1 [deprecated = true];</code>
      * @deprecated se.locutus.proto.StopDataRequest.site_id is deprecated.
-     *     See messages.proto;l=239
+     *     See messages.proto;l=260
      * @return The siteId.
      */
     @java.lang.Override
@@ -12482,7 +13853,7 @@ public final class Ng {
     /**
      * <code>int64 site_id = 1 [deprecated = true];</code>
      * @deprecated se.locutus.proto.StopDataRequest.site_id is deprecated.
-     *     See messages.proto;l=239
+     *     See messages.proto;l=260
      * @param value The siteId to set.
      */
     private void setSiteId(long value) {
@@ -12492,7 +13863,7 @@ public final class Ng {
     /**
      * <code>int64 site_id = 1 [deprecated = true];</code>
      * @deprecated se.locutus.proto.StopDataRequest.site_id is deprecated.
-     *     See messages.proto;l=239
+     *     See messages.proto;l=260
      */
     private void clearSiteId() {
 
@@ -12829,7 +14200,7 @@ public final class Ng {
       /**
        * <code>int64 site_id = 1 [deprecated = true];</code>
        * @deprecated se.locutus.proto.StopDataRequest.site_id is deprecated.
-       *     See messages.proto;l=239
+       *     See messages.proto;l=260
        * @return The siteId.
        */
       @java.lang.Override
@@ -12839,7 +14210,7 @@ public final class Ng {
       /**
        * <code>int64 site_id = 1 [deprecated = true];</code>
        * @deprecated se.locutus.proto.StopDataRequest.site_id is deprecated.
-       *     See messages.proto;l=239
+       *     See messages.proto;l=260
        * @param value The siteId to set.
        * @return This builder for chaining.
        */
@@ -12851,7 +14222,7 @@ public final class Ng {
       /**
        * <code>int64 site_id = 1 [deprecated = true];</code>
        * @deprecated se.locutus.proto.StopDataRequest.site_id is deprecated.
-       *     See messages.proto;l=239
+       *     See messages.proto;l=260
        * @return This builder for chaining.
        */
       @java.lang.Deprecated public Builder clearSiteId() {
@@ -16002,6 +17373,841 @@ java.lang.String defaultValue) {
     }
   }
 
+  public interface OperatorConfigOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:se.locutus.proto.OperatorConfig)
+      com.google.protobuf.MessageLiteOrBuilder {
+
+    /**
+     * <code>.se.locutus.proto.ResRobotOperatorEnum operator = 1;</code>
+     * @return The enum numeric value on the wire for operator.
+     */
+    int getOperatorValue();
+    /**
+     * <code>.se.locutus.proto.ResRobotOperatorEnum operator = 1;</code>
+     * @return The operator.
+     */
+    se.locutus.proto.Ng.ResRobotOperatorEnum getOperator();
+
+    /**
+     * <pre>
+     * URL for fetching Favicon.
+     * </pre>
+     *
+     * <code>string favicon_url = 2;</code>
+     * @return The faviconUrl.
+     */
+    java.lang.String getFaviconUrl();
+    /**
+     * <pre>
+     * URL for fetching Favicon.
+     * </pre>
+     *
+     * <code>string favicon_url = 2;</code>
+     * @return The bytes for faviconUrl.
+     */
+    com.google.protobuf.ByteString
+        getFaviconUrlBytes();
+
+    /**
+     * <pre>
+     * Bytes of favicon in PNG format.
+     * </pre>
+     *
+     * <code>bytes favicon_bytes_png = 3;</code>
+     * @return The faviconBytesPng.
+     */
+    com.google.protobuf.ByteString getFaviconBytesPng();
+
+    /**
+     * <pre>
+     * MetaData about departures.
+     * </pre>
+     *
+     * <code>map&lt;string, .se.locutus.proto.TrafficMetaData&gt; departure_metadata = 4;</code>
+     */
+    int getDepartureMetadataCount();
+    /**
+     * <pre>
+     * MetaData about departures.
+     * </pre>
+     *
+     * <code>map&lt;string, .se.locutus.proto.TrafficMetaData&gt; departure_metadata = 4;</code>
+     */
+    boolean containsDepartureMetadata(
+        java.lang.String key);
+    /**
+     * Use {@link #getDepartureMetadataMap()} instead.
+     */
+    @java.lang.Deprecated
+    java.util.Map<java.lang.String, se.locutus.proto.Ng.TrafficMetaData>
+    getDepartureMetadata();
+    /**
+     * <pre>
+     * MetaData about departures.
+     * </pre>
+     *
+     * <code>map&lt;string, .se.locutus.proto.TrafficMetaData&gt; departure_metadata = 4;</code>
+     */
+    java.util.Map<java.lang.String, se.locutus.proto.Ng.TrafficMetaData>
+    getDepartureMetadataMap();
+    /**
+     * <pre>
+     * MetaData about departures.
+     * </pre>
+     *
+     * <code>map&lt;string, .se.locutus.proto.TrafficMetaData&gt; departure_metadata = 4;</code>
+     */
+
+    /* nullable */
+se.locutus.proto.Ng.TrafficMetaData getDepartureMetadataOrDefault(
+        java.lang.String key,
+        /* nullable */
+se.locutus.proto.Ng.TrafficMetaData defaultValue);
+    /**
+     * <pre>
+     * MetaData about departures.
+     * </pre>
+     *
+     * <code>map&lt;string, .se.locutus.proto.TrafficMetaData&gt; departure_metadata = 4;</code>
+     */
+
+    se.locutus.proto.Ng.TrafficMetaData getDepartureMetadataOrThrow(
+        java.lang.String key);
+  }
+  /**
+   * Protobuf type {@code se.locutus.proto.OperatorConfig}
+   */
+  public  static final class OperatorConfig extends
+      com.google.protobuf.GeneratedMessageLite<
+          OperatorConfig, OperatorConfig.Builder> implements
+      // @@protoc_insertion_point(message_implements:se.locutus.proto.OperatorConfig)
+      OperatorConfigOrBuilder {
+    private OperatorConfig() {
+      faviconUrl_ = "";
+      faviconBytesPng_ = com.google.protobuf.ByteString.EMPTY;
+    }
+    public static final int OPERATOR_FIELD_NUMBER = 1;
+    private int operator_;
+    /**
+     * <code>.se.locutus.proto.ResRobotOperatorEnum operator = 1;</code>
+     * @return The enum numeric value on the wire for operator.
+     */
+    @java.lang.Override
+    public int getOperatorValue() {
+      return operator_;
+    }
+    /**
+     * <code>.se.locutus.proto.ResRobotOperatorEnum operator = 1;</code>
+     * @return The operator.
+     */
+    @java.lang.Override
+    public se.locutus.proto.Ng.ResRobotOperatorEnum getOperator() {
+      se.locutus.proto.Ng.ResRobotOperatorEnum result = se.locutus.proto.Ng.ResRobotOperatorEnum.forNumber(operator_);
+      return result == null ? se.locutus.proto.Ng.ResRobotOperatorEnum.UNRECOGNIZED : result;
+    }
+    /**
+     * <code>.se.locutus.proto.ResRobotOperatorEnum operator = 1;</code>
+     * @param value The enum numeric value on the wire for operator to set.
+     */
+    private void setOperatorValue(int value) {
+        operator_ = value;
+    }
+    /**
+     * <code>.se.locutus.proto.ResRobotOperatorEnum operator = 1;</code>
+     * @param value The operator to set.
+     */
+    private void setOperator(se.locutus.proto.Ng.ResRobotOperatorEnum value) {
+      operator_ = value.getNumber();
+
+    }
+    /**
+     * <code>.se.locutus.proto.ResRobotOperatorEnum operator = 1;</code>
+     */
+    private void clearOperator() {
+
+      operator_ = 0;
+    }
+
+    public static final int FAVICON_URL_FIELD_NUMBER = 2;
+    private java.lang.String faviconUrl_;
+    /**
+     * <pre>
+     * URL for fetching Favicon.
+     * </pre>
+     *
+     * <code>string favicon_url = 2;</code>
+     * @return The faviconUrl.
+     */
+    @java.lang.Override
+    public java.lang.String getFaviconUrl() {
+      return faviconUrl_;
+    }
+    /**
+     * <pre>
+     * URL for fetching Favicon.
+     * </pre>
+     *
+     * <code>string favicon_url = 2;</code>
+     * @return The bytes for faviconUrl.
+     */
+    @java.lang.Override
+    public com.google.protobuf.ByteString
+        getFaviconUrlBytes() {
+      return com.google.protobuf.ByteString.copyFromUtf8(faviconUrl_);
+    }
+    /**
+     * <pre>
+     * URL for fetching Favicon.
+     * </pre>
+     *
+     * <code>string favicon_url = 2;</code>
+     * @param value The faviconUrl to set.
+     */
+    private void setFaviconUrl(
+        java.lang.String value) {
+      java.lang.Class<?> valueClass = value.getClass();
+  
+      faviconUrl_ = value;
+    }
+    /**
+     * <pre>
+     * URL for fetching Favicon.
+     * </pre>
+     *
+     * <code>string favicon_url = 2;</code>
+     */
+    private void clearFaviconUrl() {
+
+      faviconUrl_ = getDefaultInstance().getFaviconUrl();
+    }
+    /**
+     * <pre>
+     * URL for fetching Favicon.
+     * </pre>
+     *
+     * <code>string favicon_url = 2;</code>
+     * @param value The bytes for faviconUrl to set.
+     */
+    private void setFaviconUrlBytes(
+        com.google.protobuf.ByteString value) {
+      checkByteStringIsUtf8(value);
+      faviconUrl_ = value.toStringUtf8();
+
+    }
+
+    public static final int FAVICON_BYTES_PNG_FIELD_NUMBER = 3;
+    private com.google.protobuf.ByteString faviconBytesPng_;
+    /**
+     * <pre>
+     * Bytes of favicon in PNG format.
+     * </pre>
+     *
+     * <code>bytes favicon_bytes_png = 3;</code>
+     * @return The faviconBytesPng.
+     */
+    @java.lang.Override
+    public com.google.protobuf.ByteString getFaviconBytesPng() {
+      return faviconBytesPng_;
+    }
+    /**
+     * <pre>
+     * Bytes of favicon in PNG format.
+     * </pre>
+     *
+     * <code>bytes favicon_bytes_png = 3;</code>
+     * @param value The faviconBytesPng to set.
+     */
+    private void setFaviconBytesPng(com.google.protobuf.ByteString value) {
+      java.lang.Class<?> valueClass = value.getClass();
+  
+      faviconBytesPng_ = value;
+    }
+    /**
+     * <pre>
+     * Bytes of favicon in PNG format.
+     * </pre>
+     *
+     * <code>bytes favicon_bytes_png = 3;</code>
+     */
+    private void clearFaviconBytesPng() {
+
+      faviconBytesPng_ = getDefaultInstance().getFaviconBytesPng();
+    }
+
+    public static final int DEPARTURE_METADATA_FIELD_NUMBER = 4;
+    private static final class DepartureMetadataDefaultEntryHolder {
+      static final com.google.protobuf.MapEntryLite<
+          java.lang.String, se.locutus.proto.Ng.TrafficMetaData> defaultEntry =
+              com.google.protobuf.MapEntryLite
+              .<java.lang.String, se.locutus.proto.Ng.TrafficMetaData>newDefaultInstance(
+                  com.google.protobuf.WireFormat.FieldType.STRING,
+                  "",
+                  com.google.protobuf.WireFormat.FieldType.MESSAGE,
+                  se.locutus.proto.Ng.TrafficMetaData.getDefaultInstance());
+    }
+    private com.google.protobuf.MapFieldLite<
+        java.lang.String, se.locutus.proto.Ng.TrafficMetaData> departureMetadata_ =
+            com.google.protobuf.MapFieldLite.emptyMapField();
+    private com.google.protobuf.MapFieldLite<java.lang.String, se.locutus.proto.Ng.TrafficMetaData>
+    internalGetDepartureMetadata() {
+      return departureMetadata_;
+    }
+    private com.google.protobuf.MapFieldLite<java.lang.String, se.locutus.proto.Ng.TrafficMetaData>
+    internalGetMutableDepartureMetadata() {
+      if (!departureMetadata_.isMutable()) {
+        departureMetadata_ = departureMetadata_.mutableCopy();
+      }
+      return departureMetadata_;
+    }
+    @java.lang.Override
+
+    public int getDepartureMetadataCount() {
+      return internalGetDepartureMetadata().size();
+    }
+    /**
+     * <pre>
+     * MetaData about departures.
+     * </pre>
+     *
+     * <code>map&lt;string, .se.locutus.proto.TrafficMetaData&gt; departure_metadata = 4;</code>
+     */
+    @java.lang.Override
+
+    public boolean containsDepartureMetadata(
+        java.lang.String key) {
+      java.lang.Class<?> keyClass = key.getClass();
+      return internalGetDepartureMetadata().containsKey(key);
+    }
+    /**
+     * Use {@link #getDepartureMetadataMap()} instead.
+     */
+    @java.lang.Override
+    @java.lang.Deprecated
+    public java.util.Map<java.lang.String, se.locutus.proto.Ng.TrafficMetaData> getDepartureMetadata() {
+      return getDepartureMetadataMap();
+    }
+    /**
+     * <pre>
+     * MetaData about departures.
+     * </pre>
+     *
+     * <code>map&lt;string, .se.locutus.proto.TrafficMetaData&gt; departure_metadata = 4;</code>
+     */
+    @java.lang.Override
+
+    public java.util.Map<java.lang.String, se.locutus.proto.Ng.TrafficMetaData> getDepartureMetadataMap() {
+      return java.util.Collections.unmodifiableMap(
+          internalGetDepartureMetadata());
+    }
+    /**
+     * <pre>
+     * MetaData about departures.
+     * </pre>
+     *
+     * <code>map&lt;string, .se.locutus.proto.TrafficMetaData&gt; departure_metadata = 4;</code>
+     */
+    @java.lang.Override
+
+    public /* nullable */
+se.locutus.proto.Ng.TrafficMetaData getDepartureMetadataOrDefault(
+        java.lang.String key,
+        /* nullable */
+se.locutus.proto.Ng.TrafficMetaData defaultValue) {
+      java.lang.Class<?> keyClass = key.getClass();
+      java.util.Map<java.lang.String, se.locutus.proto.Ng.TrafficMetaData> map =
+          internalGetDepartureMetadata();
+      return map.containsKey(key) ? map.get(key) : defaultValue;
+    }
+    /**
+     * <pre>
+     * MetaData about departures.
+     * </pre>
+     *
+     * <code>map&lt;string, .se.locutus.proto.TrafficMetaData&gt; departure_metadata = 4;</code>
+     */
+    @java.lang.Override
+
+    public se.locutus.proto.Ng.TrafficMetaData getDepartureMetadataOrThrow(
+        java.lang.String key) {
+      java.lang.Class<?> keyClass = key.getClass();
+      java.util.Map<java.lang.String, se.locutus.proto.Ng.TrafficMetaData> map =
+          internalGetDepartureMetadata();
+      if (!map.containsKey(key)) {
+        throw new java.lang.IllegalArgumentException();
+      }
+      return map.get(key);
+    }
+    /**
+     * <pre>
+     * MetaData about departures.
+     * </pre>
+     *
+     * <code>map&lt;string, .se.locutus.proto.TrafficMetaData&gt; departure_metadata = 4;</code>
+     */
+    private java.util.Map<java.lang.String, se.locutus.proto.Ng.TrafficMetaData>
+    getMutableDepartureMetadataMap() {
+      return internalGetMutableDepartureMetadata();
+    }
+
+    public static se.locutus.proto.Ng.OperatorConfig parseFrom(
+        java.nio.ByteBuffer data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data);
+    }
+    public static se.locutus.proto.Ng.OperatorConfig parseFrom(
+        java.nio.ByteBuffer data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data, extensionRegistry);
+    }
+    public static se.locutus.proto.Ng.OperatorConfig parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data);
+    }
+    public static se.locutus.proto.Ng.OperatorConfig parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data, extensionRegistry);
+    }
+    public static se.locutus.proto.Ng.OperatorConfig parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data);
+    }
+    public static se.locutus.proto.Ng.OperatorConfig parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data, extensionRegistry);
+    }
+    public static se.locutus.proto.Ng.OperatorConfig parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, input);
+    }
+    public static se.locutus.proto.Ng.OperatorConfig parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, input, extensionRegistry);
+    }
+
+    public static se.locutus.proto.Ng.OperatorConfig parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return parseDelimitedFrom(DEFAULT_INSTANCE, input);
+    }
+
+    public static se.locutus.proto.Ng.OperatorConfig parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return parseDelimitedFrom(DEFAULT_INSTANCE, input, extensionRegistry);
+    }
+    public static se.locutus.proto.Ng.OperatorConfig parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, input);
+    }
+    public static se.locutus.proto.Ng.OperatorConfig parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, input, extensionRegistry);
+    }
+
+    public static Builder newBuilder() {
+      return (Builder) DEFAULT_INSTANCE.createBuilder();
+    }
+    public static Builder newBuilder(se.locutus.proto.Ng.OperatorConfig prototype) {
+      return DEFAULT_INSTANCE.createBuilder(prototype);
+    }
+
+    /**
+     * Protobuf type {@code se.locutus.proto.OperatorConfig}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessageLite.Builder<
+          se.locutus.proto.Ng.OperatorConfig, Builder> implements
+        // @@protoc_insertion_point(builder_implements:se.locutus.proto.OperatorConfig)
+        se.locutus.proto.Ng.OperatorConfigOrBuilder {
+      // Construct using se.locutus.proto.Ng.OperatorConfig.newBuilder()
+      private Builder() {
+        super(DEFAULT_INSTANCE);
+      }
+
+
+      /**
+       * <code>.se.locutus.proto.ResRobotOperatorEnum operator = 1;</code>
+       * @return The enum numeric value on the wire for operator.
+       */
+      @java.lang.Override
+      public int getOperatorValue() {
+        return instance.getOperatorValue();
+      }
+      /**
+       * <code>.se.locutus.proto.ResRobotOperatorEnum operator = 1;</code>
+       * @param value The operator to set.
+       * @return This builder for chaining.
+       */
+      public Builder setOperatorValue(int value) {
+        copyOnWrite();
+        instance.setOperatorValue(value);
+        return this;
+      }
+      /**
+       * <code>.se.locutus.proto.ResRobotOperatorEnum operator = 1;</code>
+       * @return The operator.
+       */
+      @java.lang.Override
+      public se.locutus.proto.Ng.ResRobotOperatorEnum getOperator() {
+        return instance.getOperator();
+      }
+      /**
+       * <code>.se.locutus.proto.ResRobotOperatorEnum operator = 1;</code>
+       * @param value The enum numeric value on the wire for operator to set.
+       * @return This builder for chaining.
+       */
+      public Builder setOperator(se.locutus.proto.Ng.ResRobotOperatorEnum value) {
+        copyOnWrite();
+        instance.setOperator(value);
+        return this;
+      }
+      /**
+       * <code>.se.locutus.proto.ResRobotOperatorEnum operator = 1;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearOperator() {
+        copyOnWrite();
+        instance.clearOperator();
+        return this;
+      }
+
+      /**
+       * <pre>
+       * URL for fetching Favicon.
+       * </pre>
+       *
+       * <code>string favicon_url = 2;</code>
+       * @return The faviconUrl.
+       */
+      @java.lang.Override
+      public java.lang.String getFaviconUrl() {
+        return instance.getFaviconUrl();
+      }
+      /**
+       * <pre>
+       * URL for fetching Favicon.
+       * </pre>
+       *
+       * <code>string favicon_url = 2;</code>
+       * @return The bytes for faviconUrl.
+       */
+      @java.lang.Override
+      public com.google.protobuf.ByteString
+          getFaviconUrlBytes() {
+        return instance.getFaviconUrlBytes();
+      }
+      /**
+       * <pre>
+       * URL for fetching Favicon.
+       * </pre>
+       *
+       * <code>string favicon_url = 2;</code>
+       * @param value The faviconUrl to set.
+       * @return This builder for chaining.
+       */
+      public Builder setFaviconUrl(
+          java.lang.String value) {
+        copyOnWrite();
+        instance.setFaviconUrl(value);
+        return this;
+      }
+      /**
+       * <pre>
+       * URL for fetching Favicon.
+       * </pre>
+       *
+       * <code>string favicon_url = 2;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearFaviconUrl() {
+        copyOnWrite();
+        instance.clearFaviconUrl();
+        return this;
+      }
+      /**
+       * <pre>
+       * URL for fetching Favicon.
+       * </pre>
+       *
+       * <code>string favicon_url = 2;</code>
+       * @param value The bytes for faviconUrl to set.
+       * @return This builder for chaining.
+       */
+      public Builder setFaviconUrlBytes(
+          com.google.protobuf.ByteString value) {
+        copyOnWrite();
+        instance.setFaviconUrlBytes(value);
+        return this;
+      }
+
+      /**
+       * <pre>
+       * Bytes of favicon in PNG format.
+       * </pre>
+       *
+       * <code>bytes favicon_bytes_png = 3;</code>
+       * @return The faviconBytesPng.
+       */
+      @java.lang.Override
+      public com.google.protobuf.ByteString getFaviconBytesPng() {
+        return instance.getFaviconBytesPng();
+      }
+      /**
+       * <pre>
+       * Bytes of favicon in PNG format.
+       * </pre>
+       *
+       * <code>bytes favicon_bytes_png = 3;</code>
+       * @param value The faviconBytesPng to set.
+       * @return This builder for chaining.
+       */
+      public Builder setFaviconBytesPng(com.google.protobuf.ByteString value) {
+        copyOnWrite();
+        instance.setFaviconBytesPng(value);
+        return this;
+      }
+      /**
+       * <pre>
+       * Bytes of favicon in PNG format.
+       * </pre>
+       *
+       * <code>bytes favicon_bytes_png = 3;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearFaviconBytesPng() {
+        copyOnWrite();
+        instance.clearFaviconBytesPng();
+        return this;
+      }
+
+      @java.lang.Override
+
+      public int getDepartureMetadataCount() {
+        return instance.getDepartureMetadataMap().size();
+      }
+      /**
+       * <pre>
+       * MetaData about departures.
+       * </pre>
+       *
+       * <code>map&lt;string, .se.locutus.proto.TrafficMetaData&gt; departure_metadata = 4;</code>
+       */
+      @java.lang.Override
+
+      public boolean containsDepartureMetadata(
+          java.lang.String key) {
+        java.lang.Class<?> keyClass = key.getClass();
+        return instance.getDepartureMetadataMap().containsKey(key);
+      }
+
+      public Builder clearDepartureMetadata() {
+        copyOnWrite();
+        instance.getMutableDepartureMetadataMap().clear();
+        return this;
+      }
+      /**
+       * <pre>
+       * MetaData about departures.
+       * </pre>
+       *
+       * <code>map&lt;string, .se.locutus.proto.TrafficMetaData&gt; departure_metadata = 4;</code>
+       */
+
+      public Builder removeDepartureMetadata(
+          java.lang.String key) {
+        java.lang.Class<?> keyClass = key.getClass();
+        copyOnWrite();
+        instance.getMutableDepartureMetadataMap().remove(key);
+        return this;
+      }
+      /**
+       * Use {@link #getDepartureMetadataMap()} instead.
+       */
+      @java.lang.Override
+      @java.lang.Deprecated
+      public java.util.Map<java.lang.String, se.locutus.proto.Ng.TrafficMetaData> getDepartureMetadata() {
+        return getDepartureMetadataMap();
+      }
+      /**
+       * <pre>
+       * MetaData about departures.
+       * </pre>
+       *
+       * <code>map&lt;string, .se.locutus.proto.TrafficMetaData&gt; departure_metadata = 4;</code>
+       */
+      @java.lang.Override
+      public java.util.Map<java.lang.String, se.locutus.proto.Ng.TrafficMetaData> getDepartureMetadataMap() {
+        return java.util.Collections.unmodifiableMap(
+            instance.getDepartureMetadataMap());
+      }
+      /**
+       * <pre>
+       * MetaData about departures.
+       * </pre>
+       *
+       * <code>map&lt;string, .se.locutus.proto.TrafficMetaData&gt; departure_metadata = 4;</code>
+       */
+      @java.lang.Override
+
+      public /* nullable */
+se.locutus.proto.Ng.TrafficMetaData getDepartureMetadataOrDefault(
+          java.lang.String key,
+          /* nullable */
+se.locutus.proto.Ng.TrafficMetaData defaultValue) {
+        java.lang.Class<?> keyClass = key.getClass();
+        java.util.Map<java.lang.String, se.locutus.proto.Ng.TrafficMetaData> map =
+            instance.getDepartureMetadataMap();
+        return map.containsKey(key) ? map.get(key) : defaultValue;
+      }
+      /**
+       * <pre>
+       * MetaData about departures.
+       * </pre>
+       *
+       * <code>map&lt;string, .se.locutus.proto.TrafficMetaData&gt; departure_metadata = 4;</code>
+       */
+      @java.lang.Override
+
+      public se.locutus.proto.Ng.TrafficMetaData getDepartureMetadataOrThrow(
+          java.lang.String key) {
+        java.lang.Class<?> keyClass = key.getClass();
+        java.util.Map<java.lang.String, se.locutus.proto.Ng.TrafficMetaData> map =
+            instance.getDepartureMetadataMap();
+        if (!map.containsKey(key)) {
+          throw new java.lang.IllegalArgumentException();
+        }
+        return map.get(key);
+      }
+      /**
+       * <pre>
+       * MetaData about departures.
+       * </pre>
+       *
+       * <code>map&lt;string, .se.locutus.proto.TrafficMetaData&gt; departure_metadata = 4;</code>
+       */
+      public Builder putDepartureMetadata(
+          java.lang.String key,
+          se.locutus.proto.Ng.TrafficMetaData value) {
+        java.lang.Class<?> keyClass = key.getClass();
+        java.lang.Class<?> valueClass = value.getClass();
+        copyOnWrite();
+        instance.getMutableDepartureMetadataMap().put(key, value);
+        return this;
+      }
+      /**
+       * <pre>
+       * MetaData about departures.
+       * </pre>
+       *
+       * <code>map&lt;string, .se.locutus.proto.TrafficMetaData&gt; departure_metadata = 4;</code>
+       */
+      public Builder putAllDepartureMetadata(
+          java.util.Map<java.lang.String, se.locutus.proto.Ng.TrafficMetaData> values) {
+        copyOnWrite();
+        instance.getMutableDepartureMetadataMap().putAll(values);
+        return this;
+      }
+
+      // @@protoc_insertion_point(builder_scope:se.locutus.proto.OperatorConfig)
+    }
+    @java.lang.Override
+    @java.lang.SuppressWarnings({"unchecked", "fallthrough"})
+    protected final java.lang.Object dynamicMethod(
+        com.google.protobuf.GeneratedMessageLite.MethodToInvoke method,
+        java.lang.Object arg0, java.lang.Object arg1) {
+      switch (method) {
+        case NEW_MUTABLE_INSTANCE: {
+          return new se.locutus.proto.Ng.OperatorConfig();
+        }
+        case NEW_BUILDER: {
+          return new Builder();
+        }
+        case BUILD_MESSAGE_INFO: {
+            java.lang.Object[] objects = new java.lang.Object[] {
+              "operator_",
+              "faviconUrl_",
+              "faviconBytesPng_",
+              "departureMetadata_",
+              DepartureMetadataDefaultEntryHolder.defaultEntry,
+            };
+            java.lang.String info =
+                "\u0000\u0004\u0000\u0000\u0001\u0004\u0004\u0001\u0000\u0000\u0001\f\u0002\u0208" +
+                "\u0003\n\u00042";
+            return newMessageInfo(DEFAULT_INSTANCE, info, objects);
+        }
+        // fall through
+        case GET_DEFAULT_INSTANCE: {
+          return DEFAULT_INSTANCE;
+        }
+        case GET_PARSER: {
+          com.google.protobuf.Parser<se.locutus.proto.Ng.OperatorConfig> parser = PARSER;
+          if (parser == null) {
+            synchronized (se.locutus.proto.Ng.OperatorConfig.class) {
+              parser = PARSER;
+              if (parser == null) {
+                parser =
+                    new DefaultInstanceBasedParser<se.locutus.proto.Ng.OperatorConfig>(
+                        DEFAULT_INSTANCE);
+                PARSER = parser;
+              }
+            }
+          }
+          return parser;
+      }
+      case GET_MEMOIZED_IS_INITIALIZED: {
+        return (byte) 1;
+      }
+      case SET_MEMOIZED_IS_INITIALIZED: {
+        return null;
+      }
+      }
+      throw new UnsupportedOperationException();
+    }
+
+
+    // @@protoc_insertion_point(class_scope:se.locutus.proto.OperatorConfig)
+    private static final se.locutus.proto.Ng.OperatorConfig DEFAULT_INSTANCE;
+    static {
+      OperatorConfig defaultInstance = new OperatorConfig();
+      // New instances are implicitly immutable so no need to make
+      // immutable.
+      DEFAULT_INSTANCE = defaultInstance;
+      com.google.protobuf.GeneratedMessageLite.registerDefaultInstance(
+        OperatorConfig.class, defaultInstance);
+    }
+
+    public static se.locutus.proto.Ng.OperatorConfig getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    private static volatile com.google.protobuf.Parser<OperatorConfig> PARSER;
+
+    public static com.google.protobuf.Parser<OperatorConfig> parser() {
+      return DEFAULT_INSTANCE.getParserForType();
+    }
+  }
+
   public interface ServerSideConfigOrBuilder extends
       // @@protoc_insertion_point(interface_extends:se.locutus.proto.ServerSideConfig)
       com.google.protobuf.MessageLiteOrBuilder {
@@ -16011,7 +18217,7 @@ java.lang.String defaultValue) {
      * Whatever variable needs to be store &amp; parsed server side.
      * </pre>
      *
-     * <code>map&lt;string, .se.locutus.proto.VariableSetting&gt; variable_settings = 2;</code>
+     * <code>map&lt;string, .se.locutus.proto.VariableSetting&gt; variable_settings = 1;</code>
      */
     int getVariableSettingsCount();
     /**
@@ -16019,7 +18225,7 @@ java.lang.String defaultValue) {
      * Whatever variable needs to be store &amp; parsed server side.
      * </pre>
      *
-     * <code>map&lt;string, .se.locutus.proto.VariableSetting&gt; variable_settings = 2;</code>
+     * <code>map&lt;string, .se.locutus.proto.VariableSetting&gt; variable_settings = 1;</code>
      */
     boolean containsVariableSettings(
         java.lang.String key);
@@ -16034,7 +18240,7 @@ java.lang.String defaultValue) {
      * Whatever variable needs to be store &amp; parsed server side.
      * </pre>
      *
-     * <code>map&lt;string, .se.locutus.proto.VariableSetting&gt; variable_settings = 2;</code>
+     * <code>map&lt;string, .se.locutus.proto.VariableSetting&gt; variable_settings = 1;</code>
      */
     java.util.Map<java.lang.String, se.locutus.proto.Ng.VariableSetting>
     getVariableSettingsMap();
@@ -16043,7 +18249,7 @@ java.lang.String defaultValue) {
      * Whatever variable needs to be store &amp; parsed server side.
      * </pre>
      *
-     * <code>map&lt;string, .se.locutus.proto.VariableSetting&gt; variable_settings = 2;</code>
+     * <code>map&lt;string, .se.locutus.proto.VariableSetting&gt; variable_settings = 1;</code>
      */
 
     /* nullable */
@@ -16056,11 +18262,123 @@ se.locutus.proto.Ng.VariableSetting defaultValue);
      * Whatever variable needs to be store &amp; parsed server side.
      * </pre>
      *
-     * <code>map&lt;string, .se.locutus.proto.VariableSetting&gt; variable_settings = 2;</code>
+     * <code>map&lt;string, .se.locutus.proto.VariableSetting&gt; variable_settings = 1;</code>
      */
 
     se.locutus.proto.Ng.VariableSetting getVariableSettingsOrThrow(
         java.lang.String key);
+
+    /**
+     * <pre>
+     * ResRobotOperatorEnum to URL. 
+     * </pre>
+     *
+     * <code>map&lt;string, string&gt; operator_icon_urls = 2;</code>
+     */
+    int getOperatorIconUrlsCount();
+    /**
+     * <pre>
+     * ResRobotOperatorEnum to URL. 
+     * </pre>
+     *
+     * <code>map&lt;string, string&gt; operator_icon_urls = 2;</code>
+     */
+    boolean containsOperatorIconUrls(
+        java.lang.String key);
+    /**
+     * Use {@link #getOperatorIconUrlsMap()} instead.
+     */
+    @java.lang.Deprecated
+    java.util.Map<java.lang.String, java.lang.String>
+    getOperatorIconUrls();
+    /**
+     * <pre>
+     * ResRobotOperatorEnum to URL. 
+     * </pre>
+     *
+     * <code>map&lt;string, string&gt; operator_icon_urls = 2;</code>
+     */
+    java.util.Map<java.lang.String, java.lang.String>
+    getOperatorIconUrlsMap();
+    /**
+     * <pre>
+     * ResRobotOperatorEnum to URL. 
+     * </pre>
+     *
+     * <code>map&lt;string, string&gt; operator_icon_urls = 2;</code>
+     */
+
+    /* nullable */
+java.lang.String getOperatorIconUrlsOrDefault(
+        java.lang.String key,
+        /* nullable */
+java.lang.String defaultValue);
+    /**
+     * <pre>
+     * ResRobotOperatorEnum to URL. 
+     * </pre>
+     *
+     * <code>map&lt;string, string&gt; operator_icon_urls = 2;</code>
+     */
+
+    java.lang.String getOperatorIconUrlsOrThrow(
+        java.lang.String key);
+
+    /**
+     * <pre>
+     * Map SID to siteString.
+     * </pre>
+     *
+     * <code>map&lt;int64, string&gt; legacy_stop_mapping = 3;</code>
+     */
+    int getLegacyStopMappingCount();
+    /**
+     * <pre>
+     * Map SID to siteString.
+     * </pre>
+     *
+     * <code>map&lt;int64, string&gt; legacy_stop_mapping = 3;</code>
+     */
+    boolean containsLegacyStopMapping(
+        long key);
+    /**
+     * Use {@link #getLegacyStopMappingMap()} instead.
+     */
+    @java.lang.Deprecated
+    java.util.Map<java.lang.Long, java.lang.String>
+    getLegacyStopMapping();
+    /**
+     * <pre>
+     * Map SID to siteString.
+     * </pre>
+     *
+     * <code>map&lt;int64, string&gt; legacy_stop_mapping = 3;</code>
+     */
+    java.util.Map<java.lang.Long, java.lang.String>
+    getLegacyStopMappingMap();
+    /**
+     * <pre>
+     * Map SID to siteString.
+     * </pre>
+     *
+     * <code>map&lt;int64, string&gt; legacy_stop_mapping = 3;</code>
+     */
+
+    /* nullable */
+java.lang.String getLegacyStopMappingOrDefault(
+        long key,
+        /* nullable */
+java.lang.String defaultValue);
+    /**
+     * <pre>
+     * Map SID to siteString.
+     * </pre>
+     *
+     * <code>map&lt;int64, string&gt; legacy_stop_mapping = 3;</code>
+     */
+
+    java.lang.String getLegacyStopMappingOrThrow(
+        long key);
   }
   /**
    * <pre>
@@ -16076,7 +18394,7 @@ se.locutus.proto.Ng.VariableSetting defaultValue);
       ServerSideConfigOrBuilder {
     private ServerSideConfig() {
     }
-    public static final int VARIABLE_SETTINGS_FIELD_NUMBER = 2;
+    public static final int VARIABLE_SETTINGS_FIELD_NUMBER = 1;
     private static final class VariableSettingsDefaultEntryHolder {
       static final com.google.protobuf.MapEntryLite<
           java.lang.String, se.locutus.proto.Ng.VariableSetting> defaultEntry =
@@ -16111,7 +18429,7 @@ se.locutus.proto.Ng.VariableSetting defaultValue);
      * Whatever variable needs to be store &amp; parsed server side.
      * </pre>
      *
-     * <code>map&lt;string, .se.locutus.proto.VariableSetting&gt; variable_settings = 2;</code>
+     * <code>map&lt;string, .se.locutus.proto.VariableSetting&gt; variable_settings = 1;</code>
      */
     @java.lang.Override
 
@@ -16133,7 +18451,7 @@ se.locutus.proto.Ng.VariableSetting defaultValue);
      * Whatever variable needs to be store &amp; parsed server side.
      * </pre>
      *
-     * <code>map&lt;string, .se.locutus.proto.VariableSetting&gt; variable_settings = 2;</code>
+     * <code>map&lt;string, .se.locutus.proto.VariableSetting&gt; variable_settings = 1;</code>
      */
     @java.lang.Override
 
@@ -16146,7 +18464,7 @@ se.locutus.proto.Ng.VariableSetting defaultValue);
      * Whatever variable needs to be store &amp; parsed server side.
      * </pre>
      *
-     * <code>map&lt;string, .se.locutus.proto.VariableSetting&gt; variable_settings = 2;</code>
+     * <code>map&lt;string, .se.locutus.proto.VariableSetting&gt; variable_settings = 1;</code>
      */
     @java.lang.Override
 
@@ -16165,7 +18483,7 @@ se.locutus.proto.Ng.VariableSetting defaultValue) {
      * Whatever variable needs to be store &amp; parsed server side.
      * </pre>
      *
-     * <code>map&lt;string, .se.locutus.proto.VariableSetting&gt; variable_settings = 2;</code>
+     * <code>map&lt;string, .se.locutus.proto.VariableSetting&gt; variable_settings = 1;</code>
      */
     @java.lang.Override
 
@@ -16184,11 +18502,241 @@ se.locutus.proto.Ng.VariableSetting defaultValue) {
      * Whatever variable needs to be store &amp; parsed server side.
      * </pre>
      *
-     * <code>map&lt;string, .se.locutus.proto.VariableSetting&gt; variable_settings = 2;</code>
+     * <code>map&lt;string, .se.locutus.proto.VariableSetting&gt; variable_settings = 1;</code>
      */
     private java.util.Map<java.lang.String, se.locutus.proto.Ng.VariableSetting>
     getMutableVariableSettingsMap() {
       return internalGetMutableVariableSettings();
+    }
+
+    public static final int OPERATOR_ICON_URLS_FIELD_NUMBER = 2;
+    private static final class OperatorIconUrlsDefaultEntryHolder {
+      static final com.google.protobuf.MapEntryLite<
+          java.lang.String, java.lang.String> defaultEntry =
+              com.google.protobuf.MapEntryLite
+              .<java.lang.String, java.lang.String>newDefaultInstance(
+                  com.google.protobuf.WireFormat.FieldType.STRING,
+                  "",
+                  com.google.protobuf.WireFormat.FieldType.STRING,
+                  "");
+    }
+    private com.google.protobuf.MapFieldLite<
+        java.lang.String, java.lang.String> operatorIconUrls_ =
+            com.google.protobuf.MapFieldLite.emptyMapField();
+    private com.google.protobuf.MapFieldLite<java.lang.String, java.lang.String>
+    internalGetOperatorIconUrls() {
+      return operatorIconUrls_;
+    }
+    private com.google.protobuf.MapFieldLite<java.lang.String, java.lang.String>
+    internalGetMutableOperatorIconUrls() {
+      if (!operatorIconUrls_.isMutable()) {
+        operatorIconUrls_ = operatorIconUrls_.mutableCopy();
+      }
+      return operatorIconUrls_;
+    }
+    @java.lang.Override
+
+    public int getOperatorIconUrlsCount() {
+      return internalGetOperatorIconUrls().size();
+    }
+    /**
+     * <pre>
+     * ResRobotOperatorEnum to URL. 
+     * </pre>
+     *
+     * <code>map&lt;string, string&gt; operator_icon_urls = 2;</code>
+     */
+    @java.lang.Override
+
+    public boolean containsOperatorIconUrls(
+        java.lang.String key) {
+      java.lang.Class<?> keyClass = key.getClass();
+      return internalGetOperatorIconUrls().containsKey(key);
+    }
+    /**
+     * Use {@link #getOperatorIconUrlsMap()} instead.
+     */
+    @java.lang.Override
+    @java.lang.Deprecated
+    public java.util.Map<java.lang.String, java.lang.String> getOperatorIconUrls() {
+      return getOperatorIconUrlsMap();
+    }
+    /**
+     * <pre>
+     * ResRobotOperatorEnum to URL. 
+     * </pre>
+     *
+     * <code>map&lt;string, string&gt; operator_icon_urls = 2;</code>
+     */
+    @java.lang.Override
+
+    public java.util.Map<java.lang.String, java.lang.String> getOperatorIconUrlsMap() {
+      return java.util.Collections.unmodifiableMap(
+          internalGetOperatorIconUrls());
+    }
+    /**
+     * <pre>
+     * ResRobotOperatorEnum to URL. 
+     * </pre>
+     *
+     * <code>map&lt;string, string&gt; operator_icon_urls = 2;</code>
+     */
+    @java.lang.Override
+
+    public /* nullable */
+java.lang.String getOperatorIconUrlsOrDefault(
+        java.lang.String key,
+        /* nullable */
+java.lang.String defaultValue) {
+      java.lang.Class<?> keyClass = key.getClass();
+      java.util.Map<java.lang.String, java.lang.String> map =
+          internalGetOperatorIconUrls();
+      return map.containsKey(key) ? map.get(key) : defaultValue;
+    }
+    /**
+     * <pre>
+     * ResRobotOperatorEnum to URL. 
+     * </pre>
+     *
+     * <code>map&lt;string, string&gt; operator_icon_urls = 2;</code>
+     */
+    @java.lang.Override
+
+    public java.lang.String getOperatorIconUrlsOrThrow(
+        java.lang.String key) {
+      java.lang.Class<?> keyClass = key.getClass();
+      java.util.Map<java.lang.String, java.lang.String> map =
+          internalGetOperatorIconUrls();
+      if (!map.containsKey(key)) {
+        throw new java.lang.IllegalArgumentException();
+      }
+      return map.get(key);
+    }
+    /**
+     * <pre>
+     * ResRobotOperatorEnum to URL. 
+     * </pre>
+     *
+     * <code>map&lt;string, string&gt; operator_icon_urls = 2;</code>
+     */
+    private java.util.Map<java.lang.String, java.lang.String>
+    getMutableOperatorIconUrlsMap() {
+      return internalGetMutableOperatorIconUrls();
+    }
+
+    public static final int LEGACY_STOP_MAPPING_FIELD_NUMBER = 3;
+    private static final class LegacyStopMappingDefaultEntryHolder {
+      static final com.google.protobuf.MapEntryLite<
+          java.lang.Long, java.lang.String> defaultEntry =
+              com.google.protobuf.MapEntryLite
+              .<java.lang.Long, java.lang.String>newDefaultInstance(
+                  com.google.protobuf.WireFormat.FieldType.INT64,
+                  0L,
+                  com.google.protobuf.WireFormat.FieldType.STRING,
+                  "");
+    }
+    private com.google.protobuf.MapFieldLite<
+        java.lang.Long, java.lang.String> legacyStopMapping_ =
+            com.google.protobuf.MapFieldLite.emptyMapField();
+    private com.google.protobuf.MapFieldLite<java.lang.Long, java.lang.String>
+    internalGetLegacyStopMapping() {
+      return legacyStopMapping_;
+    }
+    private com.google.protobuf.MapFieldLite<java.lang.Long, java.lang.String>
+    internalGetMutableLegacyStopMapping() {
+      if (!legacyStopMapping_.isMutable()) {
+        legacyStopMapping_ = legacyStopMapping_.mutableCopy();
+      }
+      return legacyStopMapping_;
+    }
+    @java.lang.Override
+
+    public int getLegacyStopMappingCount() {
+      return internalGetLegacyStopMapping().size();
+    }
+    /**
+     * <pre>
+     * Map SID to siteString.
+     * </pre>
+     *
+     * <code>map&lt;int64, string&gt; legacy_stop_mapping = 3;</code>
+     */
+    @java.lang.Override
+
+    public boolean containsLegacyStopMapping(
+        long key) {
+
+      return internalGetLegacyStopMapping().containsKey(key);
+    }
+    /**
+     * Use {@link #getLegacyStopMappingMap()} instead.
+     */
+    @java.lang.Override
+    @java.lang.Deprecated
+    public java.util.Map<java.lang.Long, java.lang.String> getLegacyStopMapping() {
+      return getLegacyStopMappingMap();
+    }
+    /**
+     * <pre>
+     * Map SID to siteString.
+     * </pre>
+     *
+     * <code>map&lt;int64, string&gt; legacy_stop_mapping = 3;</code>
+     */
+    @java.lang.Override
+
+    public java.util.Map<java.lang.Long, java.lang.String> getLegacyStopMappingMap() {
+      return java.util.Collections.unmodifiableMap(
+          internalGetLegacyStopMapping());
+    }
+    /**
+     * <pre>
+     * Map SID to siteString.
+     * </pre>
+     *
+     * <code>map&lt;int64, string&gt; legacy_stop_mapping = 3;</code>
+     */
+    @java.lang.Override
+
+    public /* nullable */
+java.lang.String getLegacyStopMappingOrDefault(
+        long key,
+        /* nullable */
+java.lang.String defaultValue) {
+
+      java.util.Map<java.lang.Long, java.lang.String> map =
+          internalGetLegacyStopMapping();
+      return map.containsKey(key) ? map.get(key) : defaultValue;
+    }
+    /**
+     * <pre>
+     * Map SID to siteString.
+     * </pre>
+     *
+     * <code>map&lt;int64, string&gt; legacy_stop_mapping = 3;</code>
+     */
+    @java.lang.Override
+
+    public java.lang.String getLegacyStopMappingOrThrow(
+        long key) {
+
+      java.util.Map<java.lang.Long, java.lang.String> map =
+          internalGetLegacyStopMapping();
+      if (!map.containsKey(key)) {
+        throw new java.lang.IllegalArgumentException();
+      }
+      return map.get(key);
+    }
+    /**
+     * <pre>
+     * Map SID to siteString.
+     * </pre>
+     *
+     * <code>map&lt;int64, string&gt; legacy_stop_mapping = 3;</code>
+     */
+    private java.util.Map<java.lang.Long, java.lang.String>
+    getMutableLegacyStopMappingMap() {
+      return internalGetMutableLegacyStopMapping();
     }
 
     public static se.locutus.proto.Ng.ServerSideConfig parseFrom(
@@ -16302,7 +18850,7 @@ se.locutus.proto.Ng.VariableSetting defaultValue) {
        * Whatever variable needs to be store &amp; parsed server side.
        * </pre>
        *
-       * <code>map&lt;string, .se.locutus.proto.VariableSetting&gt; variable_settings = 2;</code>
+       * <code>map&lt;string, .se.locutus.proto.VariableSetting&gt; variable_settings = 1;</code>
        */
       @java.lang.Override
 
@@ -16322,7 +18870,7 @@ se.locutus.proto.Ng.VariableSetting defaultValue) {
        * Whatever variable needs to be store &amp; parsed server side.
        * </pre>
        *
-       * <code>map&lt;string, .se.locutus.proto.VariableSetting&gt; variable_settings = 2;</code>
+       * <code>map&lt;string, .se.locutus.proto.VariableSetting&gt; variable_settings = 1;</code>
        */
 
       public Builder removeVariableSettings(
@@ -16345,7 +18893,7 @@ se.locutus.proto.Ng.VariableSetting defaultValue) {
        * Whatever variable needs to be store &amp; parsed server side.
        * </pre>
        *
-       * <code>map&lt;string, .se.locutus.proto.VariableSetting&gt; variable_settings = 2;</code>
+       * <code>map&lt;string, .se.locutus.proto.VariableSetting&gt; variable_settings = 1;</code>
        */
       @java.lang.Override
       public java.util.Map<java.lang.String, se.locutus.proto.Ng.VariableSetting> getVariableSettingsMap() {
@@ -16357,7 +18905,7 @@ se.locutus.proto.Ng.VariableSetting defaultValue) {
        * Whatever variable needs to be store &amp; parsed server side.
        * </pre>
        *
-       * <code>map&lt;string, .se.locutus.proto.VariableSetting&gt; variable_settings = 2;</code>
+       * <code>map&lt;string, .se.locutus.proto.VariableSetting&gt; variable_settings = 1;</code>
        */
       @java.lang.Override
 
@@ -16376,7 +18924,7 @@ se.locutus.proto.Ng.VariableSetting defaultValue) {
        * Whatever variable needs to be store &amp; parsed server side.
        * </pre>
        *
-       * <code>map&lt;string, .se.locutus.proto.VariableSetting&gt; variable_settings = 2;</code>
+       * <code>map&lt;string, .se.locutus.proto.VariableSetting&gt; variable_settings = 1;</code>
        */
       @java.lang.Override
 
@@ -16395,7 +18943,7 @@ se.locutus.proto.Ng.VariableSetting defaultValue) {
        * Whatever variable needs to be store &amp; parsed server side.
        * </pre>
        *
-       * <code>map&lt;string, .se.locutus.proto.VariableSetting&gt; variable_settings = 2;</code>
+       * <code>map&lt;string, .se.locutus.proto.VariableSetting&gt; variable_settings = 1;</code>
        */
       public Builder putVariableSettings(
           java.lang.String key,
@@ -16411,12 +18959,268 @@ se.locutus.proto.Ng.VariableSetting defaultValue) {
        * Whatever variable needs to be store &amp; parsed server side.
        * </pre>
        *
-       * <code>map&lt;string, .se.locutus.proto.VariableSetting&gt; variable_settings = 2;</code>
+       * <code>map&lt;string, .se.locutus.proto.VariableSetting&gt; variable_settings = 1;</code>
        */
       public Builder putAllVariableSettings(
           java.util.Map<java.lang.String, se.locutus.proto.Ng.VariableSetting> values) {
         copyOnWrite();
         instance.getMutableVariableSettingsMap().putAll(values);
+        return this;
+      }
+
+      @java.lang.Override
+
+      public int getOperatorIconUrlsCount() {
+        return instance.getOperatorIconUrlsMap().size();
+      }
+      /**
+       * <pre>
+       * ResRobotOperatorEnum to URL. 
+       * </pre>
+       *
+       * <code>map&lt;string, string&gt; operator_icon_urls = 2;</code>
+       */
+      @java.lang.Override
+
+      public boolean containsOperatorIconUrls(
+          java.lang.String key) {
+        java.lang.Class<?> keyClass = key.getClass();
+        return instance.getOperatorIconUrlsMap().containsKey(key);
+      }
+
+      public Builder clearOperatorIconUrls() {
+        copyOnWrite();
+        instance.getMutableOperatorIconUrlsMap().clear();
+        return this;
+      }
+      /**
+       * <pre>
+       * ResRobotOperatorEnum to URL. 
+       * </pre>
+       *
+       * <code>map&lt;string, string&gt; operator_icon_urls = 2;</code>
+       */
+
+      public Builder removeOperatorIconUrls(
+          java.lang.String key) {
+        java.lang.Class<?> keyClass = key.getClass();
+        copyOnWrite();
+        instance.getMutableOperatorIconUrlsMap().remove(key);
+        return this;
+      }
+      /**
+       * Use {@link #getOperatorIconUrlsMap()} instead.
+       */
+      @java.lang.Override
+      @java.lang.Deprecated
+      public java.util.Map<java.lang.String, java.lang.String> getOperatorIconUrls() {
+        return getOperatorIconUrlsMap();
+      }
+      /**
+       * <pre>
+       * ResRobotOperatorEnum to URL. 
+       * </pre>
+       *
+       * <code>map&lt;string, string&gt; operator_icon_urls = 2;</code>
+       */
+      @java.lang.Override
+      public java.util.Map<java.lang.String, java.lang.String> getOperatorIconUrlsMap() {
+        return java.util.Collections.unmodifiableMap(
+            instance.getOperatorIconUrlsMap());
+      }
+      /**
+       * <pre>
+       * ResRobotOperatorEnum to URL. 
+       * </pre>
+       *
+       * <code>map&lt;string, string&gt; operator_icon_urls = 2;</code>
+       */
+      @java.lang.Override
+
+      public /* nullable */
+java.lang.String getOperatorIconUrlsOrDefault(
+          java.lang.String key,
+          /* nullable */
+java.lang.String defaultValue) {
+        java.lang.Class<?> keyClass = key.getClass();
+        java.util.Map<java.lang.String, java.lang.String> map =
+            instance.getOperatorIconUrlsMap();
+        return map.containsKey(key) ? map.get(key) : defaultValue;
+      }
+      /**
+       * <pre>
+       * ResRobotOperatorEnum to URL. 
+       * </pre>
+       *
+       * <code>map&lt;string, string&gt; operator_icon_urls = 2;</code>
+       */
+      @java.lang.Override
+
+      public java.lang.String getOperatorIconUrlsOrThrow(
+          java.lang.String key) {
+        java.lang.Class<?> keyClass = key.getClass();
+        java.util.Map<java.lang.String, java.lang.String> map =
+            instance.getOperatorIconUrlsMap();
+        if (!map.containsKey(key)) {
+          throw new java.lang.IllegalArgumentException();
+        }
+        return map.get(key);
+      }
+      /**
+       * <pre>
+       * ResRobotOperatorEnum to URL. 
+       * </pre>
+       *
+       * <code>map&lt;string, string&gt; operator_icon_urls = 2;</code>
+       */
+      public Builder putOperatorIconUrls(
+          java.lang.String key,
+          java.lang.String value) {
+        java.lang.Class<?> keyClass = key.getClass();
+        java.lang.Class<?> valueClass = value.getClass();
+        copyOnWrite();
+        instance.getMutableOperatorIconUrlsMap().put(key, value);
+        return this;
+      }
+      /**
+       * <pre>
+       * ResRobotOperatorEnum to URL. 
+       * </pre>
+       *
+       * <code>map&lt;string, string&gt; operator_icon_urls = 2;</code>
+       */
+      public Builder putAllOperatorIconUrls(
+          java.util.Map<java.lang.String, java.lang.String> values) {
+        copyOnWrite();
+        instance.getMutableOperatorIconUrlsMap().putAll(values);
+        return this;
+      }
+
+      @java.lang.Override
+
+      public int getLegacyStopMappingCount() {
+        return instance.getLegacyStopMappingMap().size();
+      }
+      /**
+       * <pre>
+       * Map SID to siteString.
+       * </pre>
+       *
+       * <code>map&lt;int64, string&gt; legacy_stop_mapping = 3;</code>
+       */
+      @java.lang.Override
+
+      public boolean containsLegacyStopMapping(
+          long key) {
+
+        return instance.getLegacyStopMappingMap().containsKey(key);
+      }
+
+      public Builder clearLegacyStopMapping() {
+        copyOnWrite();
+        instance.getMutableLegacyStopMappingMap().clear();
+        return this;
+      }
+      /**
+       * <pre>
+       * Map SID to siteString.
+       * </pre>
+       *
+       * <code>map&lt;int64, string&gt; legacy_stop_mapping = 3;</code>
+       */
+
+      public Builder removeLegacyStopMapping(
+          long key) {
+
+        copyOnWrite();
+        instance.getMutableLegacyStopMappingMap().remove(key);
+        return this;
+      }
+      /**
+       * Use {@link #getLegacyStopMappingMap()} instead.
+       */
+      @java.lang.Override
+      @java.lang.Deprecated
+      public java.util.Map<java.lang.Long, java.lang.String> getLegacyStopMapping() {
+        return getLegacyStopMappingMap();
+      }
+      /**
+       * <pre>
+       * Map SID to siteString.
+       * </pre>
+       *
+       * <code>map&lt;int64, string&gt; legacy_stop_mapping = 3;</code>
+       */
+      @java.lang.Override
+      public java.util.Map<java.lang.Long, java.lang.String> getLegacyStopMappingMap() {
+        return java.util.Collections.unmodifiableMap(
+            instance.getLegacyStopMappingMap());
+      }
+      /**
+       * <pre>
+       * Map SID to siteString.
+       * </pre>
+       *
+       * <code>map&lt;int64, string&gt; legacy_stop_mapping = 3;</code>
+       */
+      @java.lang.Override
+
+      public /* nullable */
+java.lang.String getLegacyStopMappingOrDefault(
+          long key,
+          /* nullable */
+java.lang.String defaultValue) {
+
+        java.util.Map<java.lang.Long, java.lang.String> map =
+            instance.getLegacyStopMappingMap();
+        return map.containsKey(key) ? map.get(key) : defaultValue;
+      }
+      /**
+       * <pre>
+       * Map SID to siteString.
+       * </pre>
+       *
+       * <code>map&lt;int64, string&gt; legacy_stop_mapping = 3;</code>
+       */
+      @java.lang.Override
+
+      public java.lang.String getLegacyStopMappingOrThrow(
+          long key) {
+
+        java.util.Map<java.lang.Long, java.lang.String> map =
+            instance.getLegacyStopMappingMap();
+        if (!map.containsKey(key)) {
+          throw new java.lang.IllegalArgumentException();
+        }
+        return map.get(key);
+      }
+      /**
+       * <pre>
+       * Map SID to siteString.
+       * </pre>
+       *
+       * <code>map&lt;int64, string&gt; legacy_stop_mapping = 3;</code>
+       */
+      public Builder putLegacyStopMapping(
+          long key,
+          java.lang.String value) {
+
+        java.lang.Class<?> valueClass = value.getClass();
+        copyOnWrite();
+        instance.getMutableLegacyStopMappingMap().put(key, value);
+        return this;
+      }
+      /**
+       * <pre>
+       * Map SID to siteString.
+       * </pre>
+       *
+       * <code>map&lt;int64, string&gt; legacy_stop_mapping = 3;</code>
+       */
+      public Builder putAllLegacyStopMapping(
+          java.util.Map<java.lang.Long, java.lang.String> values) {
+        copyOnWrite();
+        instance.getMutableLegacyStopMappingMap().putAll(values);
         return this;
       }
 
@@ -16438,9 +19242,14 @@ se.locutus.proto.Ng.VariableSetting defaultValue) {
             java.lang.Object[] objects = new java.lang.Object[] {
               "variableSettings_",
               VariableSettingsDefaultEntryHolder.defaultEntry,
+              "operatorIconUrls_",
+              OperatorIconUrlsDefaultEntryHolder.defaultEntry,
+              "legacyStopMapping_",
+              LegacyStopMappingDefaultEntryHolder.defaultEntry,
             };
             java.lang.String info =
-                "\u0000\u0001\u0000\u0000\u0002\u0002\u0001\u0001\u0000\u0000\u00022";
+                "\u0000\u0003\u0000\u0000\u0001\u0003\u0003\u0003\u0000\u0000\u00012\u00022\u0003" +
+                "2";
             return newMessageInfo(DEFAULT_INSTANCE, info, objects);
         }
         // fall through

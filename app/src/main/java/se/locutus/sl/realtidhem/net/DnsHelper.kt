@@ -6,6 +6,7 @@ import java.net.InetAddress
 const val IP_ADDR_KEY = "server_ip_addr"
 const val IP_ADDR_TIME_KEY = "server_ip_addr_time"
 const val HOSTNAME = "anka.locutus.se"
+const val NEW_URL = "http://$HOSTNAME:8989/"
 const val URL = "http://$HOSTNAME/NG"
 const val DNS_REFRESH_TIME_MILLIS = 3 * 24 * 3600 * 1000
 

@@ -116,7 +116,7 @@ class AddStopActivity : AppCompatActivity() {
             override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
             }
             override fun onPageSelected(position: Int) {
-                if (config.stopData.siteId == 0L && position != 0) {
+                if (!isSiteConfigured(config) && position != 0) {
                     viewPager.setCurrentItem(0, true)
                 }  else if (position != 0) {
                     val imm = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
@@ -203,6 +203,7 @@ class AddStopActivity : AppCompatActivity() {
             .setLat(stopDataResponse.lat)
             .setLng(stopDataResponse.lng)
             .setDisplayName(getDisplayText())
+            .setSite(stopDataResponse.site)
             .setSiteId(stopDataResponse.siteId)
         config.stopData = stopData.build()
 
@@ -229,7 +230,7 @@ class AddStopActivity : AppCompatActivity() {
     }
 
     private fun getConfigErrorMessage() : Int? {
-        if (config.stopData.siteId == 0L) {
+        if (!isSiteConfigured(config)) {
             return R.string.no_stop_selected
         }
         if (departureAdapter.getCheckedItems().isEmpty() && !linesAdapter.isSelected()) {

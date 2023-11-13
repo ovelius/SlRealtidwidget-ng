@@ -9,11 +9,13 @@ import com.android.volley.toolbox.Volley
 import se.locutus.proto.Ng
 import se.locutus.proto.Ng.ResponseData
 import se.locutus.proto.Ng.RequestData
+import se.locutus.sl.realtidhem.widget.getUseNewBackend
 import java.lang.Exception
 import java.util.logging.Logger
 
 interface NetworkInterface {
     fun doStopDataRequest(request : Ng.StopDataRequest, forceHttp : Boolean = false, callBack : (Int, ResponseData, Exception?) -> Unit) : Int
+    fun doGenericRequest(request : Ng.RequestData, forceHttp : Boolean = false, callBack : (Int, ResponseData, Exception?) -> Unit) : Int
 }
 
 class NetworkManager(var context : Context) : NetworkInterface {
@@ -22,26 +24,46 @@ class NetworkManager(var context : Context) : NetworkInterface {
     }
     val requestQueue = Volley.newRequestQueue(context)
     val prefs = context.getSharedPreferences(null, 0)
+    val useNewBackend = getUseNewBackend(prefs)
     val udpSocket = UpdClient(context, prefs).apply { start() }
     private var requestId = 1
 
-    override fun doStopDataRequest(request : Ng.StopDataRequest, forceHttp : Boolean, callBack : (Int, ResponseData, Exception?) -> Unit) : Int {
+    fun buildHeader() : Ng.RequestHeader {
         val api = context.packageManager.getPackageInfo(context.packageName, 0).versionCode
+
+        return Ng.RequestHeader.newBuilder()
+            .setApi(api)
+            .setId(requestId)
+            .build()
+    }
+    override fun doStopDataRequest(request : Ng.StopDataRequest, forceHttp : Boolean, callBack : (Int, ResponseData, Exception?) -> Unit) : Int {
         doRequest(RequestData.newBuilder().setStopDataRequest(request)
-            .setRequestHeader(Ng.RequestHeader.newBuilder()
-                .setApi(api)
-                .setId(requestId)).build(),  forceHttp, callBack)
+            .setRequestHeader(buildHeader()).build(),  forceHttp, callBack)
+        return requestId++
+    }
+
+    override fun doGenericRequest(
+        request: RequestData,
+        forceHttp: Boolean,
+        callBack: (Int, ResponseData, Exception?) -> Unit
+    ): Int {
+        check(useNewBackend) {"Only new backend supports generic requests... crashing!"}
+        val requestBuilder = request.toBuilder().setRequestHeader(buildHeader())
+        doRequest(requestBuilder.build(),  forceHttp, callBack)
         return requestId++
     }
 
     private fun doRequest(request : RequestData, forceHttp : Boolean, callback : (Int, ResponseData, Exception?) -> Unit) {
-        if (udpSocket.ready() && udpSocket.responsive && !forceHttp) {
+        // New backend doesn't have UDP yet.
+        var forceRequestHttp = forceHttp || useNewBackend
+
+        if (udpSocket.ready() && udpSocket.responsive && !forceRequestHttp) {
             LOG.info("Sending request using UDP")
             sendRequestWithUDP(request, callback)
         } else {
             LOG.info("Sending request using HTTP URL $URL")
             sendRequestWithHTTP(request, callback)
-            if (udpSocket.ready() && !forceHttp) {
+            if (udpSocket.ready() && !forceRequestHttp) {
                 udpSocket.bringBackToLife()
             }
         }
@@ -52,7 +74,7 @@ class NetworkManager(var context : Context) : NetworkInterface {
     }
 
     private fun sendRequestWithHTTP(request : RequestData, callback : (Int, ResponseData, Exception?) -> Unit) {
-        val protoRequest = ProtoRequest(request,
+        val protoRequest = ProtoRequest(if (useNewBackend) NEW_URL else null, request,
             Response.Listener { response ->
                 LOG.fine("Got data $response")
                 callback(request.requestHeader.id, response, null)
@@ -65,10 +87,11 @@ class NetworkManager(var context : Context) : NetworkInterface {
 }
 
 class ProtoRequest
-    (val requestData : RequestData,
+    (val urlOverride: String?,
+     val requestData : RequestData,
      var mListener: Response.Listener<ResponseData>?,
     errorListener: Response.ErrorListener?
-) : Request<ResponseData>(Request.Method.POST, URL, errorListener) {
+) : Request<ResponseData>(Request.Method.POST, urlOverride ?: URL, errorListener) {
 
 
     override fun getHeaders(): MutableMap<String, String> {

@@ -16,6 +16,8 @@ message RequestHeader {
 message ResponseHeader {
  // ID from the incoming request.
  int32 id = 1;
+ // VersionCode from server.
+ int32 server_version = 2;
 }
 
 // Base request message.

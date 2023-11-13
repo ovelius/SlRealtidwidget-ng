@@ -13,6 +13,7 @@ fun createWidgetId(shadowAppWidgetManager : ShadowAppWidgetManager) : Int {
 internal class TestNetworkInterface : NetworkInterface {
     var dataRequestCounts = 0
     var request : Ng.StopDataRequest? = null
+    var genericRequest : Ng.RequestData? = null
     var callback : ((Int, Ng.ResponseData, Exception?) -> Unit) = { _, _, _ -> }
     override fun doStopDataRequest(
         request: Ng.StopDataRequest,
@@ -24,6 +25,18 @@ internal class TestNetworkInterface : NetworkInterface {
         dataRequestCounts++
         return 0
     }
+
+    override fun doGenericRequest(
+        request: Ng.RequestData,
+        forceHttp: Boolean,
+        callBack: (Int, Ng.ResponseData, Exception?) -> Unit
+    ): Int {
+        this.genericRequest = request
+        this.callback = callback
+        dataRequestCounts++
+        return 0
+    }
+
     fun sendResponse(response : Ng.ResponseData, e : Exception?) {
         callback(0, response, e)
     }

@@ -12,7 +12,10 @@ import se.locutus.proto.Ng.SiteId
 import se.locutus.proto.Ng.StopConfiguration
 import se.locutus.proto.Ng.StopConfigurationOrBuilder
 import se.locutus.proto.Ng.StopData
+import se.locutus.proto.Ng.StoredStopData
+import se.locutus.proto.Ng.StoredStopDataOrBuilder
 import se.locutus.sl.realtidhem.R
+import se.locutus.sl.realtidhem.activity.WIDGET_CONFIG_PREFS
 import se.locutus.sl.realtidhem.events.WIDGET_CONFIG_UPDATED
 import se.locutus.sl.realtidhem.events.WidgetBroadcastReceiver
 import se.locutus.sl.realtidhem.service.BackgroundUpdaterService
@@ -47,6 +50,16 @@ fun widgetLargeLayoutKey(widgetId : Int) : String {
     return "widget_large_layout_key$widgetId"
 }
 
+
+private const val NEW_BACKEND_KEY = "use_new_backend"
+fun setUseNewBackend(prefs : SharedPreferences, useIt : Boolean) {
+    prefs.edit().putBoolean(NEW_BACKEND_KEY, useIt).apply()
+}
+
+fun getUseNewBackend(prefs : SharedPreferences) : Boolean {
+    return prefs.getBoolean(NEW_BACKEND_KEY, false)
+}
+
 fun convertFromLegacyFormat(config : Ng.WidgetConfiguration) :  Ng.WidgetConfiguration {
     val configBuilder = Ng.WidgetConfiguration.newBuilder(config)
     configBuilder.clearStopConfiguration()
@@ -65,8 +78,10 @@ fun convertFromLegacyFormat(config : Ng.WidgetConfiguration) :  Ng.WidgetConfigu
 }
 
 fun isSiteConfigured(stop : StopConfigurationOrBuilder) : Boolean {
-    val stopData = stop.stopData
-    return stopData.site.siteId != 0L || stopData.site.strSiteId.isNotEmpty()
+    return isSiteConfigured(stop.stopData)
+}
+fun isSiteConfigured(stopData : StoredStopDataOrBuilder) : Boolean {
+    return stopData.siteId != 0L || stopData.site.siteId != 0L || stopData.site.strSiteId.isNotEmpty()
 }
 
 fun loadWidgetConfigOrDefault(prefs : SharedPreferences, widgetId : Int) : Ng.WidgetConfiguration {

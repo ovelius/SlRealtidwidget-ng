@@ -114,5 +114,6 @@
             Du kan välja hur länge en period varar och om den ska uppdateras när skärmen slås på.</item>
     </string-array>
     <string name="settings">Inställningar</string>
+    <string name="use_new_backend">(Experimental) Use new backend</string>
 
     --></resources>

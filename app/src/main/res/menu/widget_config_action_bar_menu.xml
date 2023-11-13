@@ -14,4 +14,11 @@
           android:title="@string/export_settings"
           android:orderInCategory="100"
           app:showAsAction="never"/>
+
+    <item android:id="@+id/use_new_backend"
+            android:title="@string/use_new_backend"
+            android:icon="@android:drawable/ic_menu_compass"
+            app:actionViewClass="android.widget.CheckBox"
+            android:checkable="true">
+    </item>
 </menu>
