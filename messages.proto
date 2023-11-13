@@ -135,7 +135,7 @@ enum ResRobotOperatorEnum {
   MALARTAG = 313;
   VARMLANDSTRAFIK_TRAIN = 317;
   FLIXTRAIN = 324;
-  BAS4YOU = 327;
+  BUS4YOU = 327;
   VY_EXPRESS = 328;
   ORESUNDSLINJEN = 370;
   SNALLTAGET = 380;
@@ -316,8 +316,8 @@ message OperatorConfig {
 message ServerSideConfig {
   // Whatever variable needs to be store & parsed server side.
   map<string, VariableSetting> variable_settings = 1;
-  // ResRobotOperatorEnum to OperatorConfig
-  repeated OperatorConfig operator_config = 2;
+  // ResRobotOperatorEnum to URL. 
+  map<string, string> operator_icon_urls = 2;
   // Map SID to siteString.
   map<int64, string> legacy_stop_mapping = 3;
 }
