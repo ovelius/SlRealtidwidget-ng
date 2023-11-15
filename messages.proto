@@ -113,6 +113,8 @@ enum NgTrafficType {
   TRAIN = 3;
   TRAM = 4;
   BOAT = 5;
+  SPEED_TRAIN = 6;
+  REGIONAL_TRAIN = 7;
 }
 
 // From https://www.trafiklab.se/sv/api/trafiklab-apis/resrobot-v21/common/
@@ -139,11 +141,13 @@ enum ResRobotOperatorEnum {
   FLIXTRAIN = 324;
   BUS4YOU = 327;
   VY_EXPRESS = 328;
+  HARJEDALINGEN = 365;
   ORESUNDSLINJEN = 370;
   SNALLTAGET = 380;
   VY_NATTAG = 512;
   KARLSTADSBUSS = 601;
   LULEA_LOKALTRAFIK = 602;
+  TROSABUSSEN = 604;
   MTRX = 812;
   FLIXBUS = 838;
 }
