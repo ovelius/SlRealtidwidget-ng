@@ -129,6 +129,7 @@ enum ResRobotOperatorEnum {
   DALATRAFIK = 267;
   X_TRAFIK = 268;
   LANSTRAFIKEN_VASTERBOTTEN = 272;
+  LANSTRAFIKEN_NORRBOTTEN = 273;
   SL = 275;
   SKANETRAFIKEN = 276;
   FLYGBUSSSARNA = 277;
@@ -326,4 +327,6 @@ message ServerSideConfig {
   map<string, string> operator_icon_urls = 2;
   // Map SID to siteString.
   map<int64, string> legacy_stop_mapping = 3;
+  // Map known colors values, operator_trafficType_lineNumber -> 32 bit color value.
+  map<string, int32> hardcoded_color_mappings = 4;
 }
