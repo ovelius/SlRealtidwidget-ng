@@ -62,9 +62,19 @@ class DepartureListAdapter(private val activity: AddStopActivity, private val de
         val colorView = root.findViewById<ImageView>(R.id.line_list_color)
         val departureName = departureList[position].canonicalName
         val iconView = root.findViewById<ImageView>(R.id.line_list_icon)
+        val operatorView = root.findViewById<ImageView>(R.id.line_list_operator_icon)
+
+        val data = departureList[position]
+        val operatorDrawable = activity.operatorDrawables[data.operator]
+        if (operatorDrawable != null) {
+            operatorView.setImageDrawable(operatorDrawable)
+            operatorView.visibility = View.VISIBLE
+        } else {
+            operatorView.visibility = View.GONE
+        }
 
         setImageViewIconAndColor(
-            departureList[position],
+            data,
             colorView,
             iconView,
             root,

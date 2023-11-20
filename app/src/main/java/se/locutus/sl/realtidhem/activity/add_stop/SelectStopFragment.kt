@@ -152,7 +152,7 @@ class SelectStopFragment : androidx.fragment.app.Fragment() {
                         doNewStopSearchRequest(p, adapter)
                     } else {
                         val stringRequest = buildLegacyStringRequest(p, adapter)
-                        addStopActivity.requestQueue.add(stringRequest)
+                        addStopActivity.requestQueue?.add(stringRequest)
                     }
                 }
             }

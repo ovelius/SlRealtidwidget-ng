@@ -3,6 +3,7 @@ package se.locutus.sl.realtidhem.net
 import android.content.Context
 import com.android.volley.NetworkResponse
 import com.android.volley.Request
+import com.android.volley.RequestQueue
 import com.android.volley.Response
 import com.android.volley.toolbox.HttpHeaderParser
 import com.android.volley.toolbox.Volley
@@ -18,11 +19,11 @@ interface NetworkInterface {
     fun doGenericRequest(request : Ng.RequestData, forceHttp : Boolean = false, callBack : (Int, ResponseData, Exception?) -> Unit) : Int
 }
 
-class NetworkManager(var context : Context) : NetworkInterface {
+class NetworkManager(var context : Context,
+                     val requestQueue : RequestQueue = Volley.newRequestQueue(context)) : NetworkInterface {
     companion object {
         val LOG = Logger.getLogger(NetworkManager::class.java.name)
     }
-    val requestQueue = Volley.newRequestQueue(context)
     val prefs = context.getSharedPreferences(null, 0)
     val useNewBackend = getUseNewBackend(prefs)
     val udpSocket = UpdClient(context, prefs).apply { start() }
@@ -58,10 +59,8 @@ class NetworkManager(var context : Context) : NetworkInterface {
         var forceRequestHttp = forceHttp || useNewBackend
 
         if (udpSocket.ready() && udpSocket.responsive && !forceRequestHttp) {
-            LOG.info("Sending request using UDP")
             sendRequestWithUDP(request, callback)
         } else {
-            LOG.info("Sending request using HTTP URL $URL")
             sendRequestWithHTTP(request, callback)
             if (udpSocket.ready() && !forceRequestHttp) {
                 udpSocket.bringBackToLife()

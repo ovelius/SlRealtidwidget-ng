@@ -14,11 +14,12 @@ import java.lang.IllegalArgumentException
 import java.lang.StringBuilder
 
 fun setImageViewIconAndColor(item : Ng.DepartureData, colorView : ImageView,  iconView : ImageView, root : View, directionView : ImageView?) {
-    val trafficType = item.trafficType
-    val iconResource = when (trafficType) {
+    val iconResource = when (item.trafficType) {
         Ng.NgTrafficType.BUS -> R.drawable.ic_icon_transportation_bus
         Ng.NgTrafficType.METRO -> R.drawable.ic_icon_transportation_subway
         Ng.NgTrafficType.TRAIN -> R.drawable.ic_icon_transportation_train
+        Ng.NgTrafficType.REGIONAL_TRAIN -> R.drawable.ic_icon_transportation_train
+        Ng.NgTrafficType.SPEED_TRAIN -> R.drawable.ic_icon_transportation_train
         Ng.NgTrafficType.TRAM -> R.drawable.ic_icon_transportation_tram
         else -> R.drawable.ic_icon_transportation_bus
     }
@@ -37,6 +38,8 @@ fun setImageViewIconAndColor(item : Ng.DepartureData, colorView : ImageView,  ic
 val trafficToWeight = HashMap<Ng.NgTrafficType, Int>().apply{
     put(Ng.NgTrafficType.METRO, 500)
     put(Ng.NgTrafficType.TRAIN, 400)
+    put(Ng.NgTrafficType.SPEED_TRAIN, 50)
+    put(Ng.NgTrafficType.REGIONAL_TRAIN, 250)
     put(Ng.NgTrafficType.TRAM, 300)
     put(Ng.NgTrafficType.BUS, 200)
     put(Ng.NgTrafficType.BOAT, 100)
@@ -125,8 +128,19 @@ class LineListAdapter(private val activity: AddStopActivity, private val lineLis
         val colorView = root.findViewById<ImageView>(R.id.line_list_color)
         val iconView = root.findViewById<ImageView>(R.id.line_list_icon)
         val directionView = root.findViewById<ImageView>(R.id.line_list_direction_icon)
+        val operatorView = root.findViewById<ImageView>(R.id.line_list_operator_icon)
+
+        val data = getItem(position)[0]
+        val operatorDrawable = activity.operatorDrawables[data.operator]
+        if (operatorDrawable != null) {
+            operatorView.setImageDrawable(operatorDrawable)
+            operatorView.visibility = View.VISIBLE
+        } else {
+            operatorView.visibility = View.GONE
+        }
+
         setImageViewIconAndColor(
-            getItem(position)[0],
+            data,
             colorView,
             iconView,
             root,

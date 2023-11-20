@@ -45,5 +45,13 @@
             android:layout_gravity="center_vertical|end"
             android:src="@drawable/ic_icon_transportation_bus"
             android:layout_height="wrap_content"/>
+    <ImageView
+            android:id="@+id/line_list_operator_icon"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_margin="@dimen/fab_margin"
+            android:visibility="gone"
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/ic_icon_transportation_bus" />
 
 </LinearLayout>

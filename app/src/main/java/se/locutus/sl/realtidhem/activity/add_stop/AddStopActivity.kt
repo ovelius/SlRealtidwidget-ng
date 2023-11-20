@@ -2,6 +2,8 @@ package se.locutus.sl.realtidhem.activity.add_stop
 
 import android.app.Activity
 import android.content.Intent
+import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.Menu
 import android.view.inputmethod.InputMethodManager
@@ -13,6 +15,8 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayout
 import se.locutus.proto.Ng
 import se.locutus.proto.Ng.DeparturesFilter
+import se.locutus.proto.Ng.OperatorConfig
+import se.locutus.proto.Ng.ResRobotOperatorEnum
 import se.locutus.proto.Ng.SiteId
 import se.locutus.sl.realtidhem.R
 import se.locutus.sl.realtidhem.activity.*
@@ -22,11 +26,11 @@ import se.locutus.sl.realtidhem.events.EXTRA_THEME_CONFIG
 import se.locutus.sl.realtidhem.net.NetworkInterface
 import se.locutus.sl.realtidhem.net.NetworkManager
 import se.locutus.sl.realtidhem.widget.isSiteConfigured
+import java.io.ByteArrayInputStream
 import java.util.*
 import java.util.logging.Logger
 
 const val MODIFY_THEME_REQUEST_CODE = 12
-
 
 fun fragmentName(index: Int): String {
     return "android:switcher:${R.id.view_pager}:$index"
@@ -38,7 +42,9 @@ class AddStopActivity : AppCompatActivity() {
     }
     internal var config : Ng.StopConfiguration.Builder = Ng.StopConfiguration.newBuilder()
     internal var stopIndex : Int = -1
-    internal lateinit var requestQueue : RequestQueue
+    internal var operatorConfigs : MutableMap<ResRobotOperatorEnum, OperatorConfig> = mutableMapOf()
+    internal var operatorDrawables : MutableMap<ResRobotOperatorEnum, Drawable> = mutableMapOf()
+    internal var requestQueue : RequestQueue? = null
     internal lateinit var stopConfigureTabAdapter : StopConfigureTabAdapter
     internal lateinit var departureAdapter : DepartureListAdapter
     internal lateinit var linesAdapter : LineListAdapter
@@ -72,8 +78,10 @@ class AddStopActivity : AppCompatActivity() {
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
         supportActionBar!!.setDisplayShowHomeEnabled(true)
 
-        requestQueue = Volley.newRequestQueue(this)
-        network = NetworkManager(this)
+        if (requestQueue == null) {
+            requestQueue = Volley.newRequestQueue(this)
+        }
+        network = NetworkManager(this, requestQueue!!)
 
         departureAdapter = DepartureListAdapter(
             this,
@@ -205,7 +213,25 @@ class AddStopActivity : AppCompatActivity() {
             .setDisplayName(getDisplayText())
             .setSite(stopDataResponse.site)
             .setSiteId(stopDataResponse.siteId)
+
+        // Update from legacy format.
+        if (stopData.siteId != 0L && stopData.site.siteId != stopData.siteId) {
+            stopData.site = SiteId.newBuilder(stopData.site).setSiteId(stopData.siteId).build()
+        }
         config.stopData = stopData.build()
+        operatorConfigs.clear()
+        for (operator in response.operatorConfigList) {
+            operatorConfigs[operator.operator] = operator
+            if (operator.faviconBytesPng?.isEmpty == false) {
+                var byteArray = operator.faviconBytesPng.toByteArray()
+                var inputStream = ByteArrayInputStream(byteArray)
+                val drawable = BitmapDrawable.createFromStream(inputStream, "icon.png")
+                if (drawable != null) {
+                    operatorDrawables[operator.operator] = drawable
+                }
+            }
+        }
+        LOG.info("Identified ${operatorConfigs.size} operators in response with ${operatorDrawables.size} icons.")
 
         stopConfigureTabAdapter.selectStopFragment.mapTo(stopDataResponse.lat, stopDataResponse.lng)
 
@@ -223,6 +249,7 @@ class AddStopActivity : AppCompatActivity() {
         }
 
         val colorMap = createColorMap(response.allDepaturesResponse)
+        LOG.info("Mapped ${colorMap.size} colors.")
         stopConfigureTabAdapter.selectLinesFragment.indexDepartures(colorMap, response.allDepaturesResponse, linesAdapter, config.lineFilterList)
         departureAdapter.sort(colorMap)
         departureAdapter.notifyDataSetChanged()
@@ -326,5 +353,9 @@ class AddStopActivity : AppCompatActivity() {
         }
         setResult(Activity.RESULT_OK, resultIntent)
         finish()
+    }
+
+    fun overrideRequestQueue(requestQue : RequestQueue) {
+        this.requestQueue = requestQue
     }
 }

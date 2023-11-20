@@ -299,6 +299,10 @@ public final class Ng {
      */
     LANSTRAFIKEN_VASTERBOTTEN(272),
     /**
+     * <code>LANSTRAFIKEN_NORRBOTTEN = 273;</code>
+     */
+    LANSTRAFIKEN_NORRBOTTEN(273),
+    /**
      * <code>SL = 275;</code>
      */
     SL(275),
@@ -346,6 +350,14 @@ public final class Ng {
      * <code>VY_EXPRESS = 328;</code>
      */
     VY_EXPRESS(328),
+    /**
+     * <code>MASEXPRESSEN = 361;</code>
+     */
+    MASEXPRESSEN(361),
+    /**
+     * <code>SILVERLINJEN = 364;</code>
+     */
+    SILVERLINJEN(364),
     /**
      * <code>HARJEDALINGEN = 365;</code>
      */
@@ -426,6 +438,10 @@ public final class Ng {
      */
     public static final int LANSTRAFIKEN_VASTERBOTTEN_VALUE = 272;
     /**
+     * <code>LANSTRAFIKEN_NORRBOTTEN = 273;</code>
+     */
+    public static final int LANSTRAFIKEN_NORRBOTTEN_VALUE = 273;
+    /**
      * <code>SL = 275;</code>
      */
     public static final int SL_VALUE = 275;
@@ -473,6 +489,14 @@ public final class Ng {
      * <code>VY_EXPRESS = 328;</code>
      */
     public static final int VY_EXPRESS_VALUE = 328;
+    /**
+     * <code>MASEXPRESSEN = 361;</code>
+     */
+    public static final int MASEXPRESSEN_VALUE = 361;
+    /**
+     * <code>SILVERLINJEN = 364;</code>
+     */
+    public static final int SILVERLINJEN_VALUE = 364;
     /**
      * <code>HARJEDALINGEN = 365;</code>
      */
@@ -542,6 +566,7 @@ public final class Ng {
         case 267: return DALATRAFIK;
         case 268: return X_TRAFIK;
         case 272: return LANSTRAFIKEN_VASTERBOTTEN;
+        case 273: return LANSTRAFIKEN_NORRBOTTEN;
         case 275: return SL;
         case 276: return SKANETRAFIKEN;
         case 277: return FLYGBUSSSARNA;
@@ -554,6 +579,8 @@ public final class Ng {
         case 324: return FLIXTRAIN;
         case 327: return BUS4YOU;
         case 328: return VY_EXPRESS;
+        case 361: return MASEXPRESSEN;
+        case 364: return SILVERLINJEN;
         case 365: return HARJEDALINGEN;
         case 370: return ORESUNDSLINJEN;
         case 380: return SNALLTAGET;
@@ -13100,7 +13127,7 @@ public final class Ng {
     /**
      * <code>int64 site_id = 1 [deprecated = true];</code>
      * @deprecated se.locutus.proto.StoredStopData.site_id is deprecated.
-     *     See messages.proto;l=254
+     *     See messages.proto;l=257
      * @return The siteId.
      */
     @java.lang.Deprecated long getSiteId();
@@ -13170,7 +13197,7 @@ public final class Ng {
     /**
      * <code>int64 site_id = 1 [deprecated = true];</code>
      * @deprecated se.locutus.proto.StoredStopData.site_id is deprecated.
-     *     See messages.proto;l=254
+     *     See messages.proto;l=257
      * @return The siteId.
      */
     @java.lang.Override
@@ -13180,7 +13207,7 @@ public final class Ng {
     /**
      * <code>int64 site_id = 1 [deprecated = true];</code>
      * @deprecated se.locutus.proto.StoredStopData.site_id is deprecated.
-     *     See messages.proto;l=254
+     *     See messages.proto;l=257
      * @param value The siteId to set.
      */
     private void setSiteId(long value) {
@@ -13190,7 +13217,7 @@ public final class Ng {
     /**
      * <code>int64 site_id = 1 [deprecated = true];</code>
      * @deprecated se.locutus.proto.StoredStopData.site_id is deprecated.
-     *     See messages.proto;l=254
+     *     See messages.proto;l=257
      */
     private void clearSiteId() {
 
@@ -13489,7 +13516,7 @@ public final class Ng {
       /**
        * <code>int64 site_id = 1 [deprecated = true];</code>
        * @deprecated se.locutus.proto.StoredStopData.site_id is deprecated.
-       *     See messages.proto;l=254
+       *     See messages.proto;l=257
        * @return The siteId.
        */
       @java.lang.Override
@@ -13499,7 +13526,7 @@ public final class Ng {
       /**
        * <code>int64 site_id = 1 [deprecated = true];</code>
        * @deprecated se.locutus.proto.StoredStopData.site_id is deprecated.
-       *     See messages.proto;l=254
+       *     See messages.proto;l=257
        * @param value The siteId to set.
        * @return This builder for chaining.
        */
@@ -13511,7 +13538,7 @@ public final class Ng {
       /**
        * <code>int64 site_id = 1 [deprecated = true];</code>
        * @deprecated se.locutus.proto.StoredStopData.site_id is deprecated.
-       *     See messages.proto;l=254
+       *     See messages.proto;l=257
        * @return This builder for chaining.
        */
       @java.lang.Deprecated public Builder clearSiteId() {
@@ -13809,7 +13836,7 @@ public final class Ng {
     /**
      * <code>int64 site_id = 1 [deprecated = true];</code>
      * @deprecated se.locutus.proto.StopDataRequest.site_id is deprecated.
-     *     See messages.proto;l=264
+     *     See messages.proto;l=267
      * @return The siteId.
      */
     @java.lang.Deprecated long getSiteId();
@@ -13879,7 +13906,7 @@ public final class Ng {
     /**
      * <code>int64 site_id = 1 [deprecated = true];</code>
      * @deprecated se.locutus.proto.StopDataRequest.site_id is deprecated.
-     *     See messages.proto;l=264
+     *     See messages.proto;l=267
      * @return The siteId.
      */
     @java.lang.Override
@@ -13889,7 +13916,7 @@ public final class Ng {
     /**
      * <code>int64 site_id = 1 [deprecated = true];</code>
      * @deprecated se.locutus.proto.StopDataRequest.site_id is deprecated.
-     *     See messages.proto;l=264
+     *     See messages.proto;l=267
      * @param value The siteId to set.
      */
     private void setSiteId(long value) {
@@ -13899,7 +13926,7 @@ public final class Ng {
     /**
      * <code>int64 site_id = 1 [deprecated = true];</code>
      * @deprecated se.locutus.proto.StopDataRequest.site_id is deprecated.
-     *     See messages.proto;l=264
+     *     See messages.proto;l=267
      */
     private void clearSiteId() {
 
@@ -14236,7 +14263,7 @@ public final class Ng {
       /**
        * <code>int64 site_id = 1 [deprecated = true];</code>
        * @deprecated se.locutus.proto.StopDataRequest.site_id is deprecated.
-       *     See messages.proto;l=264
+       *     See messages.proto;l=267
        * @return The siteId.
        */
       @java.lang.Override
@@ -14246,7 +14273,7 @@ public final class Ng {
       /**
        * <code>int64 site_id = 1 [deprecated = true];</code>
        * @deprecated se.locutus.proto.StopDataRequest.site_id is deprecated.
-       *     See messages.proto;l=264
+       *     See messages.proto;l=267
        * @param value The siteId to set.
        * @return This builder for chaining.
        */
@@ -14258,7 +14285,7 @@ public final class Ng {
       /**
        * <code>int64 site_id = 1 [deprecated = true];</code>
        * @deprecated se.locutus.proto.StopDataRequest.site_id is deprecated.
-       *     See messages.proto;l=264
+       *     See messages.proto;l=267
        * @return This builder for chaining.
        */
       @java.lang.Deprecated public Builder clearSiteId() {
@@ -18415,6 +18442,60 @@ java.lang.String defaultValue);
 
     java.lang.String getLegacyStopMappingOrThrow(
         long key);
+
+    /**
+     * <pre>
+     * Map known colors values, operator_trafficType_lineNumber -&gt; 32 bit color value.
+     * </pre>
+     *
+     * <code>map&lt;string, int32&gt; hardcoded_color_mappings = 4;</code>
+     */
+    int getHardcodedColorMappingsCount();
+    /**
+     * <pre>
+     * Map known colors values, operator_trafficType_lineNumber -&gt; 32 bit color value.
+     * </pre>
+     *
+     * <code>map&lt;string, int32&gt; hardcoded_color_mappings = 4;</code>
+     */
+    boolean containsHardcodedColorMappings(
+        java.lang.String key);
+    /**
+     * Use {@link #getHardcodedColorMappingsMap()} instead.
+     */
+    @java.lang.Deprecated
+    java.util.Map<java.lang.String, java.lang.Integer>
+    getHardcodedColorMappings();
+    /**
+     * <pre>
+     * Map known colors values, operator_trafficType_lineNumber -&gt; 32 bit color value.
+     * </pre>
+     *
+     * <code>map&lt;string, int32&gt; hardcoded_color_mappings = 4;</code>
+     */
+    java.util.Map<java.lang.String, java.lang.Integer>
+    getHardcodedColorMappingsMap();
+    /**
+     * <pre>
+     * Map known colors values, operator_trafficType_lineNumber -&gt; 32 bit color value.
+     * </pre>
+     *
+     * <code>map&lt;string, int32&gt; hardcoded_color_mappings = 4;</code>
+     */
+
+    int getHardcodedColorMappingsOrDefault(
+        java.lang.String key,
+        int defaultValue);
+    /**
+     * <pre>
+     * Map known colors values, operator_trafficType_lineNumber -&gt; 32 bit color value.
+     * </pre>
+     *
+     * <code>map&lt;string, int32&gt; hardcoded_color_mappings = 4;</code>
+     */
+
+    int getHardcodedColorMappingsOrThrow(
+        java.lang.String key);
   }
   /**
    * <pre>
@@ -18773,6 +18854,119 @@ java.lang.String defaultValue) {
     private java.util.Map<java.lang.Long, java.lang.String>
     getMutableLegacyStopMappingMap() {
       return internalGetMutableLegacyStopMapping();
+    }
+
+    public static final int HARDCODED_COLOR_MAPPINGS_FIELD_NUMBER = 4;
+    private static final class HardcodedColorMappingsDefaultEntryHolder {
+      static final com.google.protobuf.MapEntryLite<
+          java.lang.String, java.lang.Integer> defaultEntry =
+              com.google.protobuf.MapEntryLite
+              .<java.lang.String, java.lang.Integer>newDefaultInstance(
+                  com.google.protobuf.WireFormat.FieldType.STRING,
+                  "",
+                  com.google.protobuf.WireFormat.FieldType.INT32,
+                  0);
+    }
+    private com.google.protobuf.MapFieldLite<
+        java.lang.String, java.lang.Integer> hardcodedColorMappings_ =
+            com.google.protobuf.MapFieldLite.emptyMapField();
+    private com.google.protobuf.MapFieldLite<java.lang.String, java.lang.Integer>
+    internalGetHardcodedColorMappings() {
+      return hardcodedColorMappings_;
+    }
+    private com.google.protobuf.MapFieldLite<java.lang.String, java.lang.Integer>
+    internalGetMutableHardcodedColorMappings() {
+      if (!hardcodedColorMappings_.isMutable()) {
+        hardcodedColorMappings_ = hardcodedColorMappings_.mutableCopy();
+      }
+      return hardcodedColorMappings_;
+    }
+    @java.lang.Override
+
+    public int getHardcodedColorMappingsCount() {
+      return internalGetHardcodedColorMappings().size();
+    }
+    /**
+     * <pre>
+     * Map known colors values, operator_trafficType_lineNumber -&gt; 32 bit color value.
+     * </pre>
+     *
+     * <code>map&lt;string, int32&gt; hardcoded_color_mappings = 4;</code>
+     */
+    @java.lang.Override
+
+    public boolean containsHardcodedColorMappings(
+        java.lang.String key) {
+      java.lang.Class<?> keyClass = key.getClass();
+      return internalGetHardcodedColorMappings().containsKey(key);
+    }
+    /**
+     * Use {@link #getHardcodedColorMappingsMap()} instead.
+     */
+    @java.lang.Override
+    @java.lang.Deprecated
+    public java.util.Map<java.lang.String, java.lang.Integer> getHardcodedColorMappings() {
+      return getHardcodedColorMappingsMap();
+    }
+    /**
+     * <pre>
+     * Map known colors values, operator_trafficType_lineNumber -&gt; 32 bit color value.
+     * </pre>
+     *
+     * <code>map&lt;string, int32&gt; hardcoded_color_mappings = 4;</code>
+     */
+    @java.lang.Override
+
+    public java.util.Map<java.lang.String, java.lang.Integer> getHardcodedColorMappingsMap() {
+      return java.util.Collections.unmodifiableMap(
+          internalGetHardcodedColorMappings());
+    }
+    /**
+     * <pre>
+     * Map known colors values, operator_trafficType_lineNumber -&gt; 32 bit color value.
+     * </pre>
+     *
+     * <code>map&lt;string, int32&gt; hardcoded_color_mappings = 4;</code>
+     */
+    @java.lang.Override
+
+    public int getHardcodedColorMappingsOrDefault(
+        java.lang.String key,
+        int defaultValue) {
+      java.lang.Class<?> keyClass = key.getClass();
+      java.util.Map<java.lang.String, java.lang.Integer> map =
+          internalGetHardcodedColorMappings();
+      return map.containsKey(key) ? map.get(key) : defaultValue;
+    }
+    /**
+     * <pre>
+     * Map known colors values, operator_trafficType_lineNumber -&gt; 32 bit color value.
+     * </pre>
+     *
+     * <code>map&lt;string, int32&gt; hardcoded_color_mappings = 4;</code>
+     */
+    @java.lang.Override
+
+    public int getHardcodedColorMappingsOrThrow(
+        java.lang.String key) {
+      java.lang.Class<?> keyClass = key.getClass();
+      java.util.Map<java.lang.String, java.lang.Integer> map =
+          internalGetHardcodedColorMappings();
+      if (!map.containsKey(key)) {
+        throw new java.lang.IllegalArgumentException();
+      }
+      return map.get(key);
+    }
+    /**
+     * <pre>
+     * Map known colors values, operator_trafficType_lineNumber -&gt; 32 bit color value.
+     * </pre>
+     *
+     * <code>map&lt;string, int32&gt; hardcoded_color_mappings = 4;</code>
+     */
+    private java.util.Map<java.lang.String, java.lang.Integer>
+    getMutableHardcodedColorMappingsMap() {
+      return internalGetMutableHardcodedColorMappings();
     }
 
     public static se.locutus.proto.Ng.ServerSideConfig parseFrom(
@@ -19260,6 +19454,132 @@ java.lang.String defaultValue) {
         return this;
       }
 
+      @java.lang.Override
+
+      public int getHardcodedColorMappingsCount() {
+        return instance.getHardcodedColorMappingsMap().size();
+      }
+      /**
+       * <pre>
+       * Map known colors values, operator_trafficType_lineNumber -&gt; 32 bit color value.
+       * </pre>
+       *
+       * <code>map&lt;string, int32&gt; hardcoded_color_mappings = 4;</code>
+       */
+      @java.lang.Override
+
+      public boolean containsHardcodedColorMappings(
+          java.lang.String key) {
+        java.lang.Class<?> keyClass = key.getClass();
+        return instance.getHardcodedColorMappingsMap().containsKey(key);
+      }
+
+      public Builder clearHardcodedColorMappings() {
+        copyOnWrite();
+        instance.getMutableHardcodedColorMappingsMap().clear();
+        return this;
+      }
+      /**
+       * <pre>
+       * Map known colors values, operator_trafficType_lineNumber -&gt; 32 bit color value.
+       * </pre>
+       *
+       * <code>map&lt;string, int32&gt; hardcoded_color_mappings = 4;</code>
+       */
+
+      public Builder removeHardcodedColorMappings(
+          java.lang.String key) {
+        java.lang.Class<?> keyClass = key.getClass();
+        copyOnWrite();
+        instance.getMutableHardcodedColorMappingsMap().remove(key);
+        return this;
+      }
+      /**
+       * Use {@link #getHardcodedColorMappingsMap()} instead.
+       */
+      @java.lang.Override
+      @java.lang.Deprecated
+      public java.util.Map<java.lang.String, java.lang.Integer> getHardcodedColorMappings() {
+        return getHardcodedColorMappingsMap();
+      }
+      /**
+       * <pre>
+       * Map known colors values, operator_trafficType_lineNumber -&gt; 32 bit color value.
+       * </pre>
+       *
+       * <code>map&lt;string, int32&gt; hardcoded_color_mappings = 4;</code>
+       */
+      @java.lang.Override
+      public java.util.Map<java.lang.String, java.lang.Integer> getHardcodedColorMappingsMap() {
+        return java.util.Collections.unmodifiableMap(
+            instance.getHardcodedColorMappingsMap());
+      }
+      /**
+       * <pre>
+       * Map known colors values, operator_trafficType_lineNumber -&gt; 32 bit color value.
+       * </pre>
+       *
+       * <code>map&lt;string, int32&gt; hardcoded_color_mappings = 4;</code>
+       */
+      @java.lang.Override
+
+      public int getHardcodedColorMappingsOrDefault(
+          java.lang.String key,
+          int defaultValue) {
+        java.lang.Class<?> keyClass = key.getClass();
+        java.util.Map<java.lang.String, java.lang.Integer> map =
+            instance.getHardcodedColorMappingsMap();
+        return map.containsKey(key) ? map.get(key) : defaultValue;
+      }
+      /**
+       * <pre>
+       * Map known colors values, operator_trafficType_lineNumber -&gt; 32 bit color value.
+       * </pre>
+       *
+       * <code>map&lt;string, int32&gt; hardcoded_color_mappings = 4;</code>
+       */
+      @java.lang.Override
+
+      public int getHardcodedColorMappingsOrThrow(
+          java.lang.String key) {
+        java.lang.Class<?> keyClass = key.getClass();
+        java.util.Map<java.lang.String, java.lang.Integer> map =
+            instance.getHardcodedColorMappingsMap();
+        if (!map.containsKey(key)) {
+          throw new java.lang.IllegalArgumentException();
+        }
+        return map.get(key);
+      }
+      /**
+       * <pre>
+       * Map known colors values, operator_trafficType_lineNumber -&gt; 32 bit color value.
+       * </pre>
+       *
+       * <code>map&lt;string, int32&gt; hardcoded_color_mappings = 4;</code>
+       */
+      public Builder putHardcodedColorMappings(
+          java.lang.String key,
+          int value) {
+        java.lang.Class<?> keyClass = key.getClass();
+
+        copyOnWrite();
+        instance.getMutableHardcodedColorMappingsMap().put(key, value);
+        return this;
+      }
+      /**
+       * <pre>
+       * Map known colors values, operator_trafficType_lineNumber -&gt; 32 bit color value.
+       * </pre>
+       *
+       * <code>map&lt;string, int32&gt; hardcoded_color_mappings = 4;</code>
+       */
+      public Builder putAllHardcodedColorMappings(
+          java.util.Map<java.lang.String, java.lang.Integer> values) {
+        copyOnWrite();
+        instance.getMutableHardcodedColorMappingsMap().putAll(values);
+        return this;
+      }
+
       // @@protoc_insertion_point(builder_scope:se.locutus.proto.ServerSideConfig)
     }
     @java.lang.Override
@@ -19282,10 +19602,12 @@ java.lang.String defaultValue) {
               OperatorIconUrlsDefaultEntryHolder.defaultEntry,
               "legacyStopMapping_",
               LegacyStopMappingDefaultEntryHolder.defaultEntry,
+              "hardcodedColorMappings_",
+              HardcodedColorMappingsDefaultEntryHolder.defaultEntry,
             };
             java.lang.String info =
-                "\u0000\u0003\u0000\u0000\u0001\u0003\u0003\u0003\u0000\u0000\u00012\u00022\u0003" +
-                "2";
+                "\u0000\u0004\u0000\u0000\u0001\u0004\u0004\u0004\u0000\u0000\u00012\u00022\u0003" +
+                "2\u00042";
             return newMessageInfo(DEFAULT_INSTANCE, info, objects);
         }
         // fall through
