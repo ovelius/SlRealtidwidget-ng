@@ -8,15 +8,19 @@ import android.os.Looper
 import com.google.protobuf.ByteString
 import se.locutus.proto.Ng
 import se.locutus.sl.realtidhem.service.BackgroundUpdaterService
+import se.locutus.sl.realtidhem.widget.getUseNewBackend
 import java.lang.Exception
 import java.net.*
 import java.util.logging.Logger
 
 const val PORT = 1199
+const val NEW_PORT = 1701
 const val BUFFER = 8096
 const val READ_TIMEOUT_MILLIS = 5000
 
-class UpdClient(val context : Context, private val prefs : SharedPreferences) : HandlerThread("UdpHandler") {
+class UpdClient(val context : Context, private val prefs : SharedPreferences,
+                val useNewBackend : Boolean = getUseNewBackend(prefs)
+) : HandlerThread("UdpHandler") {
     companion object {
         val LOG = Logger.getLogger(BackgroundUpdaterService::class.java.name)
     }
@@ -90,8 +94,9 @@ class UpdClient(val context : Context, private val prefs : SharedPreferences) : 
     }
 
     fun send(message : Ng.RequestData) {
-        var bytes = message.toByteArray()
-        var p = DatagramPacket(bytes, bytes.size, address, PORT)
+        val port = if(useNewBackend) NEW_PORT else PORT
+        val bytes = message.toByteArray()
+        val p = DatagramPacket(bytes, bytes.size, address, port)
         LOG.fine("Sending UDP message of $message size ${bytes.size}")
         try {
             udpSocket.send(p)
@@ -102,8 +107,8 @@ class UpdClient(val context : Context, private val prefs : SharedPreferences) : 
     }
 
     fun receive(isPing : Boolean) : Ng.ResponseData? {
-        var bytes = ByteArray(BUFFER)
-        var p = DatagramPacket(bytes, bytes.size)
+        val bytes = ByteArray(BUFFER)
+        val p = DatagramPacket(bytes, bytes.size)
         try {
             udpSocket.receive(p)
         } catch (e : SocketTimeoutException) {
@@ -114,7 +119,7 @@ class UpdClient(val context : Context, private val prefs : SharedPreferences) : 
             }
             throw e
         }
-        var message = Ng.ResponseData.parseFrom(ByteString.copyFrom(bytes, 0, p.length))
+        val message = Ng.ResponseData.parseFrom(ByteString.copyFrom(bytes, 0, p.length))
         LOG.fine("Got UDP message of $message size ${p.length}")
         return message
     }

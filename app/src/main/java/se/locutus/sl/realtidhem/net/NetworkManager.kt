@@ -55,14 +55,11 @@ class NetworkManager(var context : Context,
     }
 
     private fun doRequest(request : RequestData, forceHttp : Boolean, callback : (Int, ResponseData, Exception?) -> Unit) {
-        // New backend doesn't have UDP yet.
-        var forceRequestHttp = forceHttp || useNewBackend
-
-        if (udpSocket.ready() && udpSocket.responsive && !forceRequestHttp) {
+        if (udpSocket.ready() && udpSocket.responsive && !forceHttp) {
             sendRequestWithUDP(request, callback)
         } else {
             sendRequestWithHTTP(request, callback)
-            if (udpSocket.ready() && !forceRequestHttp) {
+            if (udpSocket.ready() && !forceHttp) {
                 udpSocket.bringBackToLife()
             }
         }
