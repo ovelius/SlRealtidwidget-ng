@@ -233,7 +233,7 @@ class AddStopActivity : AppCompatActivity() {
         }
         LOG.info("Identified ${operatorConfigs.size} operators in response with ${operatorDrawables.size} icons.")
 
-        stopConfigureTabAdapter.selectStopFragment.mapTo(stopDataResponse.lat, stopDataResponse.lng)
+        stopConfigureTabAdapter.selectStopFragment.stopLoadingFinishedAtPosition(stopDataResponse.lat, stopDataResponse.lng)
 
         if (departures.isEmpty()) {
             Snackbar.make(tabLayout, R.string.error_no_departures , Snackbar.LENGTH_LONG)

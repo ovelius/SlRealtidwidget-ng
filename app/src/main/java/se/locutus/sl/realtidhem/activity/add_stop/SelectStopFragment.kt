@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
+import android.os.Build
 import android.os.Bundle
 import com.google.android.material.snackbar.Snackbar
 import androidx.core.content.ContextCompat
@@ -17,6 +18,7 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.EditText
+import android.widget.ProgressBar
 import android.widget.TextView
 import com.android.volley.Request
 import com.android.volley.Response
@@ -33,7 +35,6 @@ import org.json.JSONObject
 import se.locutus.proto.Ng
 import se.locutus.proto.Ng.SiteId
 import se.locutus.sl.realtidhem.R
-import se.locutus.sl.realtidhem.events.WidgetTouchHandler
 import se.locutus.sl.realtidhem.widget.getUseNewBackend
 import se.locutus.sl.realtidhem.widget.isSiteConfigured
 import java.lang.Exception
@@ -50,6 +51,8 @@ class SelectStopFragment : androidx.fragment.app.Fragment() {
     }
     val autoCompleteSet = HashSet<String>()
     internal lateinit var mAutoCompleteTextView : AutoCompleteTextView
+    internal lateinit var searchProgress : ProgressBar
+    internal lateinit var stopLoadProgressBar : ProgressBar
     internal lateinit var displayNameText : EditText
     internal lateinit var addStopActivity : AddStopActivity
     private var useNewBackend : Boolean = false
@@ -69,6 +72,8 @@ class SelectStopFragment : androidx.fragment.app.Fragment() {
 
         displayNameText = mainView.findViewById(R.id.stop_display_name_text)
         mAutoCompleteTextView = mainView.findViewById(R.id.stop_auto_complete)
+        searchProgress = mainView.findViewById(R.id.searchProgressBar)
+        stopLoadProgressBar = mainView.findViewById(R.id.stopLoadProgressBar)
         mapContainer = mainView.findViewById(R.id.map_container)
         mapContainer.visibility = View.GONE
         mAutoCompleteTextView.threshold = 1
@@ -103,7 +108,7 @@ class SelectStopFragment : androidx.fragment.app.Fragment() {
         mapFragment.getMapAsync{it ->
             map = it
             if (isSiteConfigured(addStopActivity.config)) {
-                mapTo(config.lat, config.lng)
+                stopLoadingFinishedAtPosition(config.lat, config.lng)
             }
         }
         val adapter = ArrayAdapter<String>(
@@ -144,10 +149,12 @@ class SelectStopFragment : androidx.fragment.app.Fragment() {
                     }
                     addStopActivity.updateStopDataDisplayText(displayNameText.text.toString())
                     addStopActivity.clearDeparturesList()
+                    stopLoadProgressBar.visibility = View.VISIBLE
                     addStopActivity.loadDepsFor(siteId)
                 } else {
                     mAutoCompleteTextView.setBackgroundColor((0x00000000).toInt())
                     LOG.info("Searching for $p")
+                    searchProgress.visibility = View.VISIBLE
                     if (useNewBackend) {
                         doNewStopSearchRequest(p, adapter)
                     } else {
@@ -168,6 +175,7 @@ class SelectStopFragment : androidx.fragment.app.Fragment() {
         addStopActivity.network.doGenericRequest(req, forceHttp = true) {
                 incomingRequestId : Int, responseData: Ng.ResponseData, e: Exception? ->
 
+            searchProgress.visibility = View.INVISIBLE
             if (e != null) {
                 Snackbar.make(
                     mAutoCompleteTextView,
@@ -183,7 +191,12 @@ class SelectStopFragment : androidx.fragment.app.Fragment() {
                     }
                     nameToSiteIDs[name] = stop.site
                 }
-                mAutoCompleteTextView.performCompletion()
+                LOG.info("Found ${responseData.stopSearchResponse.stopDataList.size} items")
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                    mAutoCompleteTextView.refreshAutoCompleteResults()
+                } else {
+                    mAutoCompleteTextView.performCompletion()
+                }
             }
         }
     }
@@ -205,10 +218,16 @@ class SelectStopFragment : androidx.fragment.app.Fragment() {
                     }
                     nameToSiteIDs[name] = SiteId.newBuilder().setSiteId(siteId.toLong()).build()
                 }
-                mAutoCompleteTextView.performCompletion()
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                    mAutoCompleteTextView.refreshAutoCompleteResults()
+                } else {
+                    mAutoCompleteTextView.performCompletion()
+                }
+                searchProgress.visibility = View.INVISIBLE
             },
             Response.ErrorListener {
                 LOG.severe("Error autocompleting $it")
+                searchProgress.visibility = View.INVISIBLE
                 try {
                     Snackbar.make(
                         mAutoCompleteTextView,
@@ -231,7 +250,7 @@ class SelectStopFragment : androidx.fragment.app.Fragment() {
         return BitmapDescriptorFactory.fromBitmap(bitmap)
 }
 
-    fun mapTo(lat : Double, lng : Double) {
+    fun stopLoadingFinishedAtPosition(lat : Double, lng : Double) {
         if (map != null) {
             mapContainer.visibility = View.VISIBLE
             val latLng = LatLng(lat, lng)
@@ -244,6 +263,7 @@ class SelectStopFragment : androidx.fragment.app.Fragment() {
             map!!.addMarker(marker)
             map!!.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 11.0f))
         }
+        stopLoadProgressBar.visibility = View.GONE
     }
 
     private fun hideKeyboard() {

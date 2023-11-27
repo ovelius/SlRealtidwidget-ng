@@ -17,12 +17,30 @@
             android:layout_marginLeft="@dimen/margin_search"
             android:text="@string/stop_name"
             android:layout_marginBottom="4dp"/>
-    <AutoCompleteTextView
-            android:id="@+id/stop_auto_complete"
-            android:layout_width="match_parent"
-            android:layout_marginLeft="@dimen/margin_search"
-            android:layout_height="wrap_content"
-            android:inputType="textNoSuggestions"/>
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:orientation="horizontal" android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        <AutoCompleteTextView
+                android:id="@+id/stop_auto_complete"
+                android:layout_width="0dp"
+                android:layout_weight=".80"
+                android:layout_marginLeft="@dimen/margin_search"
+                android:layout_height="wrap_content"
+                android:inputType="textNoSuggestions"/>
+
+        <ProgressBar
+                android:id="@+id/searchProgressBar"
+                android:layout_width="0dp"
+                android:layout_weight=".20"
+                android:indeterminate="true"
+                android:visibility="gone"
+                android:layout_height="wrap_content">
+        </ProgressBar>
+
+    </LinearLayout>
+
     <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -38,14 +56,28 @@
                 android:layout_height="wrap_content"
         />
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                  android:id="@+id/map_container"
-                  android:orientation="vertical" android:layout_width="match_parent"
+                  android:orientation="vertical"
+            android:layout_width="match_parent"
                   android:layout_height="match_parent">
+
+        <ProgressBar
+                android:id="@+id/stopLoadProgressBar"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical|center_horizontal"
+                android:visibility="gone"
+                android:indeterminate="true">
+        </ProgressBar>
+
+        <RelativeLayout  android:id="@+id/map_container" android:layout_height="match_parent" android:layout_width="match_parent">
         <fragment
                 android:id="@+id/map"
                 class="com.google.android.gms.maps.SupportMapFragment"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
+                android:layout_height="match_parent"
+                />
+        </RelativeLayout>
+
     </LinearLayout>
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
