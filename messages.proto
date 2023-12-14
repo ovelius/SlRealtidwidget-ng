@@ -91,6 +91,7 @@ enum ErrorType {
   UNKNOWN_ERROR = 0;
   NO_DEPARTURES = 1;
   SL_API_ERROR = 2;
+  RESROBOT_API_ERROR = 3;
 }
 
 message LoadErrorResponse {
@@ -162,8 +163,10 @@ enum ResRobotOperatorEnum {
   KARLSTADSBUSS = 601;
   LULEA_LOKALTRAFIK = 602;
   TROSABUSSEN = 604;
+  STADSBUSSARNA_OSTERSUND = 647;
   KROSATAGEN2 = 648;
   MTRX = 812;
+  VASTERVIK_EXPRESS = 821;
   FLIXBUS = 838;
 }
 
@@ -314,7 +317,10 @@ message StopConfiguration {
 
 message TrafficMetaData {
   int32 color = 1;
+  // If we have realtime data.
   bool has_realtime_data = 2;
+  // String that should be removed when displaying this departure.
+  string remove_string_in_departure_name = 3;
 }
 
 message VariableSetting {
@@ -330,6 +336,7 @@ message OperatorConfig {
   bytes favicon_bytes_png = 3;
 
   // MetaData about departures.
+  // Key by NgTrafficType_LineId.
   map<string, TrafficMetaData> departure_metadata = 4;
 }
 

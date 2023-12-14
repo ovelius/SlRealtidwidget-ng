@@ -2,15 +2,18 @@ package se.locutus.sl.realtidhem.activity.add_stop
 
 import android.app.Activity
 import android.content.Intent
+import android.content.res.ColorStateList
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.Menu
+import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
 import se.locutus.sl.realtidhem.databinding.ActivityAddStopBinding
 import com.android.volley.RequestQueue
 import com.android.volley.toolbox.Volley
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayout
 import se.locutus.proto.Ng
@@ -92,9 +95,6 @@ class AddStopActivity : AppCompatActivity() {
             ArrayList()
         )
         tabLayout = findViewById(R.id.tab_layout)
-        if (intent.hasExtra(EXTRA_COLOR_THEME)) {
-            setColor(this, tabLayout, intent.getIntExtra(EXTRA_COLOR_THEME, 0))
-        }
         viewPager = findViewById(R.id.view_pager)
 
         // Create or recycle fragments.
@@ -110,6 +110,11 @@ class AddStopActivity : AppCompatActivity() {
             lineFragment as SelectLinesFragment,
             departuresFragment as SelectDeparturesFragment
         )
+
+        if (intent.hasExtra(EXTRA_COLOR_THEME)) {
+            val color = intent.getIntExtra(EXTRA_COLOR_THEME, 0)
+            setColor(this, tabLayout, color)
+        }
 
         viewPager.adapter = stopConfigureTabAdapter
         tabLayout.setupWithViewPager(viewPager)
@@ -142,6 +147,16 @@ class AddStopActivity : AppCompatActivity() {
                 }
             }
         })
+    }
+
+    fun setColorsAndShowSaveButton(color : Int) {
+        if (color != 0) {
+            stopConfigureTabAdapter.selectLinesFragment.saveAndExit.backgroundTintList =
+                ColorStateList.valueOf(color)
+            stopConfigureTabAdapter.selectDeparturesFragment.saveAndExit.backgroundTintList = ColorStateList.valueOf(color)
+        }
+        stopConfigureTabAdapter.selectLinesFragment.saveAndExit.visibility = View.VISIBLE
+        stopConfigureTabAdapter.selectDeparturesFragment.saveAndExit.visibility = View.VISIBLE
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -343,7 +358,7 @@ class AddStopActivity : AppCompatActivity() {
         }
     }
 
-    private fun finishSuccessfully() {
+    fun finishSuccessfully() {
         updateConfigProto()
 
         val resultIntent = Intent()

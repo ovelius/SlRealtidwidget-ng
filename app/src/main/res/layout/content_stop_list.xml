@@ -35,4 +35,22 @@
             android:layout_margin="@dimen/fab_margin"
             app:srcCompat="@android:drawable/ic_menu_add"
             app:backgroundTint="@color/colorPrimary"/>
+
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+            android:id="@+id/save_widget_config"
+            android:layout_width="wrap_content"
+            android:visibility="invisible"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|center_horizontal"
+            android:minHeight="56dp"
+            android:gravity="center"
+            android:textAllCaps="true"
+            android:paddingStart="4dp"
+            android:paddingEnd="8dp"
+            android:layout_margin="@dimen/fab_margin"
+            app:backgroundTint="@color/colorPrimary"
+            android:text="@string/save_widget"
+            android:textColor="@color/buttonTextColor"
+            app:icon="@drawable/baseline_save_alt_24"
+            />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -25,6 +25,10 @@ public final class Ng {
      * <code>SL_API_ERROR = 2;</code>
      */
     SL_API_ERROR(2),
+    /**
+     * <code>RESROBOT_API_ERROR = 3;</code>
+     */
+    RESROBOT_API_ERROR(3),
     UNRECOGNIZED(-1),
     ;
 
@@ -40,6 +44,10 @@ public final class Ng {
      * <code>SL_API_ERROR = 2;</code>
      */
     public static final int SL_API_ERROR_VALUE = 2;
+    /**
+     * <code>RESROBOT_API_ERROR = 3;</code>
+     */
+    public static final int RESROBOT_API_ERROR_VALUE = 3;
 
 
     @java.lang.Override
@@ -66,6 +74,7 @@ public final class Ng {
         case 0: return UNKNOWN_ERROR;
         case 1: return NO_DEPARTURES;
         case 2: return SL_API_ERROR;
+        case 3: return RESROBOT_API_ERROR;
         default: return null;
       }
     }
@@ -431,6 +440,10 @@ public final class Ng {
      */
     TROSABUSSEN(604),
     /**
+     * <code>STADSBUSSARNA_OSTERSUND = 647;</code>
+     */
+    STADSBUSSARNA_OSTERSUND(647),
+    /**
      * <code>KROSATAGEN2 = 648;</code>
      */
     KROSATAGEN2(648),
@@ -438,6 +451,10 @@ public final class Ng {
      * <code>MTRX = 812;</code>
      */
     MTRX(812),
+    /**
+     * <code>VASTERVIK_EXPRESS = 821;</code>
+     */
+    VASTERVIK_EXPRESS(821),
     /**
      * <code>FLIXBUS = 838;</code>
      */
@@ -618,6 +635,10 @@ public final class Ng {
      */
     public static final int TROSABUSSEN_VALUE = 604;
     /**
+     * <code>STADSBUSSARNA_OSTERSUND = 647;</code>
+     */
+    public static final int STADSBUSSARNA_OSTERSUND_VALUE = 647;
+    /**
      * <code>KROSATAGEN2 = 648;</code>
      */
     public static final int KROSATAGEN2_VALUE = 648;
@@ -625,6 +646,10 @@ public final class Ng {
      * <code>MTRX = 812;</code>
      */
     public static final int MTRX_VALUE = 812;
+    /**
+     * <code>VASTERVIK_EXPRESS = 821;</code>
+     */
+    public static final int VASTERVIK_EXPRESS_VALUE = 821;
     /**
      * <code>FLIXBUS = 838;</code>
      */
@@ -695,8 +720,10 @@ public final class Ng {
         case 601: return KARLSTADSBUSS;
         case 602: return LULEA_LOKALTRAFIK;
         case 604: return TROSABUSSEN;
+        case 647: return STADSBUSSARNA_OSTERSUND;
         case 648: return KROSATAGEN2;
         case 812: return MTRX;
+        case 821: return VASTERVIK_EXPRESS;
         case 838: return FLIXBUS;
         default: return null;
       }
@@ -13235,7 +13262,7 @@ public final class Ng {
     /**
      * <code>int64 site_id = 1 [deprecated = true];</code>
      * @deprecated se.locutus.proto.StoredStopData.site_id is deprecated.
-     *     See messages.proto;l=269
+     *     See messages.proto;l=272
      * @return The siteId.
      */
     @java.lang.Deprecated long getSiteId();
@@ -13305,7 +13332,7 @@ public final class Ng {
     /**
      * <code>int64 site_id = 1 [deprecated = true];</code>
      * @deprecated se.locutus.proto.StoredStopData.site_id is deprecated.
-     *     See messages.proto;l=269
+     *     See messages.proto;l=272
      * @return The siteId.
      */
     @java.lang.Override
@@ -13315,7 +13342,7 @@ public final class Ng {
     /**
      * <code>int64 site_id = 1 [deprecated = true];</code>
      * @deprecated se.locutus.proto.StoredStopData.site_id is deprecated.
-     *     See messages.proto;l=269
+     *     See messages.proto;l=272
      * @param value The siteId to set.
      */
     private void setSiteId(long value) {
@@ -13325,7 +13352,7 @@ public final class Ng {
     /**
      * <code>int64 site_id = 1 [deprecated = true];</code>
      * @deprecated se.locutus.proto.StoredStopData.site_id is deprecated.
-     *     See messages.proto;l=269
+     *     See messages.proto;l=272
      */
     private void clearSiteId() {
 
@@ -13624,7 +13651,7 @@ public final class Ng {
       /**
        * <code>int64 site_id = 1 [deprecated = true];</code>
        * @deprecated se.locutus.proto.StoredStopData.site_id is deprecated.
-       *     See messages.proto;l=269
+       *     See messages.proto;l=272
        * @return The siteId.
        */
       @java.lang.Override
@@ -13634,7 +13661,7 @@ public final class Ng {
       /**
        * <code>int64 site_id = 1 [deprecated = true];</code>
        * @deprecated se.locutus.proto.StoredStopData.site_id is deprecated.
-       *     See messages.proto;l=269
+       *     See messages.proto;l=272
        * @param value The siteId to set.
        * @return This builder for chaining.
        */
@@ -13646,7 +13673,7 @@ public final class Ng {
       /**
        * <code>int64 site_id = 1 [deprecated = true];</code>
        * @deprecated se.locutus.proto.StoredStopData.site_id is deprecated.
-       *     See messages.proto;l=269
+       *     See messages.proto;l=272
        * @return This builder for chaining.
        */
       @java.lang.Deprecated public Builder clearSiteId() {
@@ -13944,7 +13971,7 @@ public final class Ng {
     /**
      * <code>int64 site_id = 1 [deprecated = true];</code>
      * @deprecated se.locutus.proto.StopDataRequest.site_id is deprecated.
-     *     See messages.proto;l=279
+     *     See messages.proto;l=282
      * @return The siteId.
      */
     @java.lang.Deprecated long getSiteId();
@@ -14014,7 +14041,7 @@ public final class Ng {
     /**
      * <code>int64 site_id = 1 [deprecated = true];</code>
      * @deprecated se.locutus.proto.StopDataRequest.site_id is deprecated.
-     *     See messages.proto;l=279
+     *     See messages.proto;l=282
      * @return The siteId.
      */
     @java.lang.Override
@@ -14024,7 +14051,7 @@ public final class Ng {
     /**
      * <code>int64 site_id = 1 [deprecated = true];</code>
      * @deprecated se.locutus.proto.StopDataRequest.site_id is deprecated.
-     *     See messages.proto;l=279
+     *     See messages.proto;l=282
      * @param value The siteId to set.
      */
     private void setSiteId(long value) {
@@ -14034,7 +14061,7 @@ public final class Ng {
     /**
      * <code>int64 site_id = 1 [deprecated = true];</code>
      * @deprecated se.locutus.proto.StopDataRequest.site_id is deprecated.
-     *     See messages.proto;l=279
+     *     See messages.proto;l=282
      */
     private void clearSiteId() {
 
@@ -14371,7 +14398,7 @@ public final class Ng {
       /**
        * <code>int64 site_id = 1 [deprecated = true];</code>
        * @deprecated se.locutus.proto.StopDataRequest.site_id is deprecated.
-       *     See messages.proto;l=279
+       *     See messages.proto;l=282
        * @return The siteId.
        */
       @java.lang.Override
@@ -14381,7 +14408,7 @@ public final class Ng {
       /**
        * <code>int64 site_id = 1 [deprecated = true];</code>
        * @deprecated se.locutus.proto.StopDataRequest.site_id is deprecated.
-       *     See messages.proto;l=279
+       *     See messages.proto;l=282
        * @param value The siteId to set.
        * @return This builder for chaining.
        */
@@ -14393,7 +14420,7 @@ public final class Ng {
       /**
        * <code>int64 site_id = 1 [deprecated = true];</code>
        * @deprecated se.locutus.proto.StopDataRequest.site_id is deprecated.
-       *     See messages.proto;l=279
+       *     See messages.proto;l=282
        * @return This builder for chaining.
        */
       @java.lang.Deprecated public Builder clearSiteId() {
@@ -16892,10 +16919,34 @@ java.lang.String defaultValue) {
     int getColor();
 
     /**
+     * <pre>
+     * If we have realtime data.
+     * </pre>
+     *
      * <code>bool has_realtime_data = 2;</code>
      * @return The hasRealtimeData.
      */
     boolean getHasRealtimeData();
+
+    /**
+     * <pre>
+     * String that should be removed when displaying this departure.
+     * </pre>
+     *
+     * <code>string remove_string_in_departure_name = 3;</code>
+     * @return The removeStringInDepartureName.
+     */
+    java.lang.String getRemoveStringInDepartureName();
+    /**
+     * <pre>
+     * String that should be removed when displaying this departure.
+     * </pre>
+     *
+     * <code>string remove_string_in_departure_name = 3;</code>
+     * @return The bytes for removeStringInDepartureName.
+     */
+    com.google.protobuf.ByteString
+        getRemoveStringInDepartureNameBytes();
   }
   /**
    * Protobuf type {@code se.locutus.proto.TrafficMetaData}
@@ -16906,6 +16957,7 @@ java.lang.String defaultValue) {
       // @@protoc_insertion_point(message_implements:se.locutus.proto.TrafficMetaData)
       TrafficMetaDataOrBuilder {
     private TrafficMetaData() {
+      removeStringInDepartureName_ = "";
     }
     public static final int COLOR_FIELD_NUMBER = 1;
     private int color_;
@@ -16936,6 +16988,10 @@ java.lang.String defaultValue) {
     public static final int HAS_REALTIME_DATA_FIELD_NUMBER = 2;
     private boolean hasRealtimeData_;
     /**
+     * <pre>
+     * If we have realtime data.
+     * </pre>
+     *
      * <code>bool has_realtime_data = 2;</code>
      * @return The hasRealtimeData.
      */
@@ -16944,6 +17000,10 @@ java.lang.String defaultValue) {
       return hasRealtimeData_;
     }
     /**
+     * <pre>
+     * If we have realtime data.
+     * </pre>
+     *
      * <code>bool has_realtime_data = 2;</code>
      * @param value The hasRealtimeData to set.
      */
@@ -16952,11 +17012,82 @@ java.lang.String defaultValue) {
       hasRealtimeData_ = value;
     }
     /**
+     * <pre>
+     * If we have realtime data.
+     * </pre>
+     *
      * <code>bool has_realtime_data = 2;</code>
      */
     private void clearHasRealtimeData() {
 
       hasRealtimeData_ = false;
+    }
+
+    public static final int REMOVE_STRING_IN_DEPARTURE_NAME_FIELD_NUMBER = 3;
+    private java.lang.String removeStringInDepartureName_;
+    /**
+     * <pre>
+     * String that should be removed when displaying this departure.
+     * </pre>
+     *
+     * <code>string remove_string_in_departure_name = 3;</code>
+     * @return The removeStringInDepartureName.
+     */
+    @java.lang.Override
+    public java.lang.String getRemoveStringInDepartureName() {
+      return removeStringInDepartureName_;
+    }
+    /**
+     * <pre>
+     * String that should be removed when displaying this departure.
+     * </pre>
+     *
+     * <code>string remove_string_in_departure_name = 3;</code>
+     * @return The bytes for removeStringInDepartureName.
+     */
+    @java.lang.Override
+    public com.google.protobuf.ByteString
+        getRemoveStringInDepartureNameBytes() {
+      return com.google.protobuf.ByteString.copyFromUtf8(removeStringInDepartureName_);
+    }
+    /**
+     * <pre>
+     * String that should be removed when displaying this departure.
+     * </pre>
+     *
+     * <code>string remove_string_in_departure_name = 3;</code>
+     * @param value The removeStringInDepartureName to set.
+     */
+    private void setRemoveStringInDepartureName(
+        java.lang.String value) {
+      java.lang.Class<?> valueClass = value.getClass();
+  
+      removeStringInDepartureName_ = value;
+    }
+    /**
+     * <pre>
+     * String that should be removed when displaying this departure.
+     * </pre>
+     *
+     * <code>string remove_string_in_departure_name = 3;</code>
+     */
+    private void clearRemoveStringInDepartureName() {
+
+      removeStringInDepartureName_ = getDefaultInstance().getRemoveStringInDepartureName();
+    }
+    /**
+     * <pre>
+     * String that should be removed when displaying this departure.
+     * </pre>
+     *
+     * <code>string remove_string_in_departure_name = 3;</code>
+     * @param value The bytes for removeStringInDepartureName to set.
+     */
+    private void setRemoveStringInDepartureNameBytes(
+        com.google.protobuf.ByteString value) {
+      checkByteStringIsUtf8(value);
+      removeStringInDepartureName_ = value.toStringUtf8();
+
     }
 
     public static se.locutus.proto.Ng.TrafficMetaData parseFrom(
@@ -17085,6 +17216,10 @@ java.lang.String defaultValue) {
       }
 
       /**
+       * <pre>
+       * If we have realtime data.
+       * </pre>
+       *
        * <code>bool has_realtime_data = 2;</code>
        * @return The hasRealtimeData.
        */
@@ -17093,6 +17228,10 @@ java.lang.String defaultValue) {
         return instance.getHasRealtimeData();
       }
       /**
+       * <pre>
+       * If we have realtime data.
+       * </pre>
+       *
        * <code>bool has_realtime_data = 2;</code>
        * @param value The hasRealtimeData to set.
        * @return This builder for chaining.
@@ -17103,12 +17242,85 @@ java.lang.String defaultValue) {
         return this;
       }
       /**
+       * <pre>
+       * If we have realtime data.
+       * </pre>
+       *
        * <code>bool has_realtime_data = 2;</code>
        * @return This builder for chaining.
        */
       public Builder clearHasRealtimeData() {
         copyOnWrite();
         instance.clearHasRealtimeData();
+        return this;
+      }
+
+      /**
+       * <pre>
+       * String that should be removed when displaying this departure.
+       * </pre>
+       *
+       * <code>string remove_string_in_departure_name = 3;</code>
+       * @return The removeStringInDepartureName.
+       */
+      @java.lang.Override
+      public java.lang.String getRemoveStringInDepartureName() {
+        return instance.getRemoveStringInDepartureName();
+      }
+      /**
+       * <pre>
+       * String that should be removed when displaying this departure.
+       * </pre>
+       *
+       * <code>string remove_string_in_departure_name = 3;</code>
+       * @return The bytes for removeStringInDepartureName.
+       */
+      @java.lang.Override
+      public com.google.protobuf.ByteString
+          getRemoveStringInDepartureNameBytes() {
+        return instance.getRemoveStringInDepartureNameBytes();
+      }
+      /**
+       * <pre>
+       * String that should be removed when displaying this departure.
+       * </pre>
+       *
+       * <code>string remove_string_in_departure_name = 3;</code>
+       * @param value The removeStringInDepartureName to set.
+       * @return This builder for chaining.
+       */
+      public Builder setRemoveStringInDepartureName(
+          java.lang.String value) {
+        copyOnWrite();
+        instance.setRemoveStringInDepartureName(value);
+        return this;
+      }
+      /**
+       * <pre>
+       * String that should be removed when displaying this departure.
+       * </pre>
+       *
+       * <code>string remove_string_in_departure_name = 3;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearRemoveStringInDepartureName() {
+        copyOnWrite();
+        instance.clearRemoveStringInDepartureName();
+        return this;
+      }
+      /**
+       * <pre>
+       * String that should be removed when displaying this departure.
+       * </pre>
+       *
+       * <code>string remove_string_in_departure_name = 3;</code>
+       * @param value The bytes for removeStringInDepartureName to set.
+       * @return This builder for chaining.
+       */
+      public Builder setRemoveStringInDepartureNameBytes(
+          com.google.protobuf.ByteString value) {
+        copyOnWrite();
+        instance.setRemoveStringInDepartureNameBytes(value);
         return this;
       }
 
@@ -17130,10 +17342,11 @@ java.lang.String defaultValue) {
             java.lang.Object[] objects = new java.lang.Object[] {
               "color_",
               "hasRealtimeData_",
+              "removeStringInDepartureName_",
             };
             java.lang.String info =
-                "\u0000\u0002\u0000\u0000\u0001\u0002\u0002\u0000\u0000\u0000\u0001\u0004\u0002\u0007" +
-                "";
+                "\u0000\u0003\u0000\u0000\u0001\u0003\u0003\u0000\u0000\u0000\u0001\u0004\u0002\u0007" +
+                "\u0003\u0208";
             return newMessageInfo(DEFAULT_INSTANCE, info, objects);
         }
         // fall through
@@ -17592,6 +17805,7 @@ java.lang.String defaultValue) {
     /**
      * <pre>
      * MetaData about departures.
+     * Key by NgTrafficType_LineId.
      * </pre>
      *
      * <code>map&lt;string, .se.locutus.proto.TrafficMetaData&gt; departure_metadata = 4;</code>
@@ -17600,6 +17814,7 @@ java.lang.String defaultValue) {
     /**
      * <pre>
      * MetaData about departures.
+     * Key by NgTrafficType_LineId.
      * </pre>
      *
      * <code>map&lt;string, .se.locutus.proto.TrafficMetaData&gt; departure_metadata = 4;</code>
@@ -17615,6 +17830,7 @@ java.lang.String defaultValue) {
     /**
      * <pre>
      * MetaData about departures.
+     * Key by NgTrafficType_LineId.
      * </pre>
      *
      * <code>map&lt;string, .se.locutus.proto.TrafficMetaData&gt; departure_metadata = 4;</code>
@@ -17624,6 +17840,7 @@ java.lang.String defaultValue) {
     /**
      * <pre>
      * MetaData about departures.
+     * Key by NgTrafficType_LineId.
      * </pre>
      *
      * <code>map&lt;string, .se.locutus.proto.TrafficMetaData&gt; departure_metadata = 4;</code>
@@ -17637,6 +17854,7 @@ se.locutus.proto.Ng.TrafficMetaData defaultValue);
     /**
      * <pre>
      * MetaData about departures.
+     * Key by NgTrafficType_LineId.
      * </pre>
      *
      * <code>map&lt;string, .se.locutus.proto.TrafficMetaData&gt; departure_metadata = 4;</code>
@@ -17838,6 +18056,7 @@ se.locutus.proto.Ng.TrafficMetaData defaultValue);
     /**
      * <pre>
      * MetaData about departures.
+     * Key by NgTrafficType_LineId.
      * </pre>
      *
      * <code>map&lt;string, .se.locutus.proto.TrafficMetaData&gt; departure_metadata = 4;</code>
@@ -17860,6 +18079,7 @@ se.locutus.proto.Ng.TrafficMetaData defaultValue);
     /**
      * <pre>
      * MetaData about departures.
+     * Key by NgTrafficType_LineId.
      * </pre>
      *
      * <code>map&lt;string, .se.locutus.proto.TrafficMetaData&gt; departure_metadata = 4;</code>
@@ -17873,6 +18093,7 @@ se.locutus.proto.Ng.TrafficMetaData defaultValue);
     /**
      * <pre>
      * MetaData about departures.
+     * Key by NgTrafficType_LineId.
      * </pre>
      *
      * <code>map&lt;string, .se.locutus.proto.TrafficMetaData&gt; departure_metadata = 4;</code>
@@ -17892,6 +18113,7 @@ se.locutus.proto.Ng.TrafficMetaData defaultValue) {
     /**
      * <pre>
      * MetaData about departures.
+     * Key by NgTrafficType_LineId.
      * </pre>
      *
      * <code>map&lt;string, .se.locutus.proto.TrafficMetaData&gt; departure_metadata = 4;</code>
@@ -17911,6 +18133,7 @@ se.locutus.proto.Ng.TrafficMetaData defaultValue) {
     /**
      * <pre>
      * MetaData about departures.
+     * Key by NgTrafficType_LineId.
      * </pre>
      *
      * <code>map&lt;string, .se.locutus.proto.TrafficMetaData&gt; departure_metadata = 4;</code>
@@ -18180,6 +18403,7 @@ se.locutus.proto.Ng.TrafficMetaData defaultValue) {
       /**
        * <pre>
        * MetaData about departures.
+       * Key by NgTrafficType_LineId.
        * </pre>
        *
        * <code>map&lt;string, .se.locutus.proto.TrafficMetaData&gt; departure_metadata = 4;</code>
@@ -18200,6 +18424,7 @@ se.locutus.proto.Ng.TrafficMetaData defaultValue) {
       /**
        * <pre>
        * MetaData about departures.
+       * Key by NgTrafficType_LineId.
        * </pre>
        *
        * <code>map&lt;string, .se.locutus.proto.TrafficMetaData&gt; departure_metadata = 4;</code>
@@ -18223,6 +18448,7 @@ se.locutus.proto.Ng.TrafficMetaData defaultValue) {
       /**
        * <pre>
        * MetaData about departures.
+       * Key by NgTrafficType_LineId.
        * </pre>
        *
        * <code>map&lt;string, .se.locutus.proto.TrafficMetaData&gt; departure_metadata = 4;</code>
@@ -18235,6 +18461,7 @@ se.locutus.proto.Ng.TrafficMetaData defaultValue) {
       /**
        * <pre>
        * MetaData about departures.
+       * Key by NgTrafficType_LineId.
        * </pre>
        *
        * <code>map&lt;string, .se.locutus.proto.TrafficMetaData&gt; departure_metadata = 4;</code>
@@ -18254,6 +18481,7 @@ se.locutus.proto.Ng.TrafficMetaData defaultValue) {
       /**
        * <pre>
        * MetaData about departures.
+       * Key by NgTrafficType_LineId.
        * </pre>
        *
        * <code>map&lt;string, .se.locutus.proto.TrafficMetaData&gt; departure_metadata = 4;</code>
@@ -18273,6 +18501,7 @@ se.locutus.proto.Ng.TrafficMetaData defaultValue) {
       /**
        * <pre>
        * MetaData about departures.
+       * Key by NgTrafficType_LineId.
        * </pre>
        *
        * <code>map&lt;string, .se.locutus.proto.TrafficMetaData&gt; departure_metadata = 4;</code>
@@ -18289,6 +18518,7 @@ se.locutus.proto.Ng.TrafficMetaData defaultValue) {
       /**
        * <pre>
        * MetaData about departures.
+       * Key by NgTrafficType_LineId.
        * </pre>
        *
        * <code>map&lt;string, .se.locutus.proto.TrafficMetaData&gt; departure_metadata = 4;</code>

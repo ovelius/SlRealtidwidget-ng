@@ -8,4 +8,5 @@
     <color name="baseWidgetTagText">#F5F5F5</color>
     <color name="baseWidgetGreyBg">#303030</color>
     <color name="baseWidgetGreyerBg">#404040</color>
+    <color name="buttonTextColor">#ffffff</color>
 </resources>

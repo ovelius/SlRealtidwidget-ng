@@ -225,6 +225,7 @@ class WidgetConfigureActivity : AppCompatActivity() {
                 widgetConfig = widgetConfig.toBuilder().addStopConfiguration(config).build()
             }
             stopListFragment.mStopListAdapter.update(widgetConfig)
+            stopListFragment.saveConfigButton.show()
         }
     }
 
@@ -287,7 +288,7 @@ class WidgetConfigureActivity : AppCompatActivity() {
         }
     }
 
-    private fun finishSuccessFully() {
+    fun finishSuccessFully() {
         LOG.info("Storing config for $mAppWidgetId")
         storeWidgetConfig(mWidgetPrefs, widgetConfig)
         sendWidgetUpdateBroadcast(this, mAppWidgetId, widgetConfig)

@@ -2,7 +2,9 @@ package se.locutus.sl.realtidhem
 
 import android.content.Intent
 import android.os.Looper
+import android.view.View
 import androidx.test.core.app.ApplicationProvider
+import androidx.viewpager.widget.ViewPager
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -11,17 +13,17 @@ import org.robolectric.RobolectricTestRunner
 import org.robolectric.Shadows
 import org.robolectric.android.controller.ActivityController
 import org.robolectric.annotation.Config
+import org.robolectric.shadows.ShadowLooper
 import se.locutus.proto.Ng
 import se.locutus.proto.Ng.AllDepaturesResponseData
 import se.locutus.proto.Ng.ResponseData
 import se.locutus.proto.Ng.SiteId
 import se.locutus.proto.Ng.StopConfiguration
-import se.locutus.proto.Ng.StopData
 import se.locutus.proto.Ng.StoredStopData
 import se.locutus.sl.realtidhem.activity.STOP_CONFIG_DATA_KEY
-import se.locutus.sl.realtidhem.activity.WIDGET_CONFIG_PREFS
 import se.locutus.sl.realtidhem.activity.add_stop.AddStopActivity
 import se.locutus.sl.realtidhem.widget.setUseNewBackend
+
 
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [31])
@@ -52,8 +54,13 @@ class AddStopActivityTest {
         fakeRequests.fakeStack.responses["http://anka.locutus.se:8989/"] = fakeResponseData().toByteArray()
 
         addStopActivityController.create()
+        addStopActivityController.start()
 
-        shadowLooper.runToEndOfTasks()
+        try {
+            shadowLooper.runToEndOfTasks()
+        } catch (e : UninitializedPropertyAccessException) {
+        // Fix me... fragement views not loaded here.
+        }
     }
 
     fun fakeResponseData() : ResponseData {

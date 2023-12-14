@@ -52,6 +52,9 @@ class DepartureListAdapter(private val activity: AddStopActivity, private val de
         if (checks.size == 1) {
             val dep = departureList[getCheckedPosition()]
             setColor(activity, activity.tabLayout, dep.color)
+            activity.setColorsAndShowSaveButton(dep.color)
+        } else if(checks.isNotEmpty()) {
+            activity.setColorsAndShowSaveButton(0)
         }
         notifyDataSetChanged()
     }

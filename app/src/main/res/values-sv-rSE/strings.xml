@@ -59,6 +59,7 @@
     </string>
     <string name="about_info">Om appen</string>
     <string name="back_to_config">Tillbaka</string>
+    <string name="configure_deps">Välj avgångar att visa</string>
     <string name="on_github">Projekt på Github</string>
     <string name="app_disclaimer">Detta är en öppen sås applikation som utveckas mest för skoj och utan vinstintresse :)
         \nAppen använder din plats för att bestämma vilken information som skall visas beroende på var du befinner dig.</string>
@@ -115,5 +116,6 @@
     </string-array>
     <string name="settings">Inställningar</string>
     <string name="use_new_backend">(Experimental) Use new backend</string>
+    <string name="save_and_exit"><![CDATA[Spara & tillbaka]]></string>
 
     --></resources>

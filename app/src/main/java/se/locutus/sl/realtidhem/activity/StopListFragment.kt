@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ListView
 import android.widget.TextView
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
 import se.locutus.sl.realtidhem.R
 import se.locutus.sl.realtidhem.activity.add_stop.AddStopActivity
 import se.locutus.sl.realtidhem.events.EXTRA_COLOR_THEME
@@ -18,6 +19,7 @@ class StopListFragment : androidx.fragment.app.Fragment() {
     private lateinit var mListView : ListView
     internal lateinit var mStopListAdapter: StopListAdapter
     private lateinit var add_stop_button : View
+    lateinit var saveConfigButton : ExtendedFloatingActionButton
     private lateinit var mAddStopHelperText : TextView
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -46,7 +48,13 @@ class StopListFragment : androidx.fragment.app.Fragment() {
             }
             widgetConfigureActivity.startActivityForResult(addIntent, ADD_STOP_REQUEST_CODE)
         }
-        if (widgetConfigureActivity.color != null) {
+        saveConfigButton = mainView.findViewById(R.id.save_widget_config)
+        saveConfigButton.setOnClickListener {
+            widgetConfigureActivity.finishSuccessFully()
+        }
+        saveConfigButton.backgroundTintList =
+                ColorStateList.valueOf(widgetConfigureActivity.window.statusBarColor)
+        if (widgetConfigureActivity.color != null && widgetConfigureActivity.color != 0) {
             add_stop_button.backgroundTintList= ColorStateList.valueOf(widgetConfigureActivity.color!!)
         }
         return mainView

@@ -64,6 +64,7 @@
     <string name="ok" translatable="false">OK</string>
     <string name="about_info">About</string>
     <string name="back_to_config">Back</string>
+    <string name="configure_deps">Select departures to show</string>
     <string name="on_github">Project on Github</string>
     <string name="app_disclaimer">This is an open source application, developed as a small side-project for fun without
         profit :)
@@ -110,6 +111,7 @@
     <string name="stop_sequence_time">Remove scheduled update</string>
     <string name="will_not_update_undo">Update alarm removed</string>
     <string name="settings">Setttings</string>
+    <string name="save_and_exit"><![CDATA[Save & go back]]></string>
     <string-array name="update_mode_array">
         <item>Learning</item>
         <item>Manual one time update</item>

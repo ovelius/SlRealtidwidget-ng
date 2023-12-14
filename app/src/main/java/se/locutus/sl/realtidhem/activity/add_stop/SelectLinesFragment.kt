@@ -1,12 +1,15 @@
 package se.locutus.sl.realtidhem.activity.add_stop
 
+import android.content.res.ColorStateList
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ListView
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
 import se.locutus.proto.Ng
 import se.locutus.sl.realtidhem.R
+import se.locutus.sl.realtidhem.events.EXTRA_COLOR_THEME
 import java.util.ArrayList
 import java.util.logging.Logger
 import kotlin.collections.HashMap
@@ -30,6 +33,7 @@ class SelectLinesFragment : androidx.fragment.app.Fragment() {
         val LOG = Logger.getLogger(SelectLinesFragment::class.java.name)
     }
     internal lateinit var mLineList : ListView
+    internal lateinit var saveAndExit : ExtendedFloatingActionButton
     internal lateinit var addStopActivity : AddStopActivity
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -42,6 +46,14 @@ class SelectLinesFragment : androidx.fragment.app.Fragment() {
 
         mLineList.setOnItemClickListener { _, _, position, _ ->
             addStopActivity.linesAdapter.clickItem(position)
+        }
+
+        saveAndExit = mainView.findViewById(R.id.save_config)
+        saveAndExit.setOnClickListener {
+            addStopActivity.finishSuccessfully()
+        }
+        if (addStopActivity.window.statusBarColor != 0) {
+            saveAndExit.backgroundTintList = ColorStateList.valueOf(addStopActivity.window.statusBarColor)
         }
 
         return mainView

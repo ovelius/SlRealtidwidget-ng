@@ -101,6 +101,9 @@ class LineListAdapter(private val activity: AddStopActivity, private val lineLis
             if (selected.size == 1) {
                 val item = getItemForKey(selected.first())
                 setColor(activity, activity.tabLayout, item.color)
+                activity.setColorsAndShowSaveButton(item.color)
+            } else if (selected.isNotEmpty()) {
+                activity.setColorsAndShowSaveButton(0)
             }
         }
 

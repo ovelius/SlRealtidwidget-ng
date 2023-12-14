@@ -2,12 +2,11 @@ package se.locutus.sl.realtidhem.activity.add_stop
 
 import android.app.Activity
 import android.content.Context
+import android.content.res.ColorStateList
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.os.Build
 import android.os.Bundle
-import com.google.android.material.snackbar.Snackbar
-import androidx.core.content.ContextCompat
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.KeyEvent
@@ -20,6 +19,8 @@ import android.widget.AutoCompleteTextView
 import android.widget.EditText
 import android.widget.ProgressBar
 import android.widget.TextView
+import androidx.core.content.ContextCompat
+import androidx.core.content.ContextCompat.getSystemService
 import com.android.volley.Request
 import com.android.volley.Response
 import com.android.volley.toolbox.StringRequest
@@ -30,6 +31,8 @@ import com.google.android.gms.maps.model.BitmapDescriptor
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+import com.google.android.material.snackbar.Snackbar
 import org.json.JSONArray
 import org.json.JSONObject
 import se.locutus.proto.Ng
@@ -37,9 +40,8 @@ import se.locutus.proto.Ng.SiteId
 import se.locutus.sl.realtidhem.R
 import se.locutus.sl.realtidhem.widget.getUseNewBackend
 import se.locutus.sl.realtidhem.widget.isSiteConfigured
-import java.lang.Exception
-import java.util.*
 import java.util.logging.Logger
+
 
 fun setGreenBg(view : View) {
     view.setBackgroundColor((0x33484848).toInt())
@@ -55,6 +57,7 @@ class SelectStopFragment : androidx.fragment.app.Fragment() {
     internal lateinit var stopLoadProgressBar : ProgressBar
     internal lateinit var displayNameText : EditText
     internal lateinit var addStopActivity : AddStopActivity
+    internal lateinit var selectDepsButton : ExtendedFloatingActionButton
     private var useNewBackend : Boolean = false
     private lateinit var mapContainer : View
     internal var map : GoogleMap? = null
@@ -74,6 +77,15 @@ class SelectStopFragment : androidx.fragment.app.Fragment() {
         mAutoCompleteTextView = mainView.findViewById(R.id.stop_auto_complete)
         searchProgress = mainView.findViewById(R.id.searchProgressBar)
         stopLoadProgressBar = mainView.findViewById(R.id.stopLoadProgressBar)
+
+        selectDepsButton = mainView.findViewById(R.id.select_deps_fab)
+        selectDepsButton.setOnClickListener {
+            addStopActivity.tabLayout.getTabAt(1)!!.select()
+        }
+        if (addStopActivity.window.statusBarColor != 0) {
+            selectDepsButton.backgroundTintList = ColorStateList.valueOf(addStopActivity.window.statusBarColor)
+        }
+
         mapContainer = mainView.findViewById(R.id.map_container)
         mapContainer.visibility = View.GONE
         mAutoCompleteTextView.threshold = 1
@@ -88,6 +100,14 @@ class SelectStopFragment : androidx.fragment.app.Fragment() {
                 }
             }
             false
+        }
+        if (config.canonicalName.isEmpty()) {
+            mAutoCompleteTextView.requestFocus()
+            val imm = addStopActivity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager?
+            imm!!.toggleSoftInput(
+                InputMethodManager.SHOW_FORCED,
+                InputMethodManager.HIDE_IMPLICIT_ONLY
+            )
         }
 
         displayNameText.setText(config.displayName, TextView.BufferType.EDITABLE)
@@ -263,6 +283,7 @@ class SelectStopFragment : androidx.fragment.app.Fragment() {
             map!!.addMarker(marker)
             map!!.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 11.0f))
         }
+        selectDepsButton.show()
         stopLoadProgressBar.visibility = View.GONE
     }
 
