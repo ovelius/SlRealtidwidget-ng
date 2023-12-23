@@ -4593,6 +4593,12 @@ public final class Ng {
      */
     com.google.protobuf.ByteString
         getQueryBytes();
+
+    /**
+     * <code>int32 max_results = 2;</code>
+     * @return The maxResults.
+     */
+    int getMaxResults();
   }
   /**
    * Protobuf type {@code se.locutus.proto.StopSearchRequest}
@@ -4650,6 +4656,32 @@ public final class Ng {
       checkByteStringIsUtf8(value);
       query_ = value.toStringUtf8();
 
+    }
+
+    public static final int MAX_RESULTS_FIELD_NUMBER = 2;
+    private int maxResults_;
+    /**
+     * <code>int32 max_results = 2;</code>
+     * @return The maxResults.
+     */
+    @java.lang.Override
+    public int getMaxResults() {
+      return maxResults_;
+    }
+    /**
+     * <code>int32 max_results = 2;</code>
+     * @param value The maxResults to set.
+     */
+    private void setMaxResults(int value) {
+      
+      maxResults_ = value;
+    }
+    /**
+     * <code>int32 max_results = 2;</code>
+     */
+    private void clearMaxResults() {
+
+      maxResults_ = 0;
     }
 
     public static se.locutus.proto.Ng.StopSearchRequest parseFrom(
@@ -4798,6 +4830,34 @@ public final class Ng {
         return this;
       }
 
+      /**
+       * <code>int32 max_results = 2;</code>
+       * @return The maxResults.
+       */
+      @java.lang.Override
+      public int getMaxResults() {
+        return instance.getMaxResults();
+      }
+      /**
+       * <code>int32 max_results = 2;</code>
+       * @param value The maxResults to set.
+       * @return This builder for chaining.
+       */
+      public Builder setMaxResults(int value) {
+        copyOnWrite();
+        instance.setMaxResults(value);
+        return this;
+      }
+      /**
+       * <code>int32 max_results = 2;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearMaxResults() {
+        copyOnWrite();
+        instance.clearMaxResults();
+        return this;
+      }
+
       // @@protoc_insertion_point(builder_scope:se.locutus.proto.StopSearchRequest)
     }
     @java.lang.Override
@@ -4815,9 +4875,11 @@ public final class Ng {
         case BUILD_MESSAGE_INFO: {
             java.lang.Object[] objects = new java.lang.Object[] {
               "query_",
+              "maxResults_",
             };
             java.lang.String info =
-                "\u0000\u0001\u0000\u0000\u0001\u0001\u0001\u0000\u0000\u0000\u0001\u0208";
+                "\u0000\u0002\u0000\u0000\u0001\u0002\u0002\u0000\u0000\u0000\u0001\u0208\u0002\u0004" +
+                "";
             return newMessageInfo(DEFAULT_INSTANCE, info, objects);
         }
         // fall through
@@ -13262,7 +13324,7 @@ public final class Ng {
     /**
      * <code>int64 site_id = 1 [deprecated = true];</code>
      * @deprecated se.locutus.proto.StoredStopData.site_id is deprecated.
-     *     See messages.proto;l=272
+     *     See messages.proto;l=273
      * @return The siteId.
      */
     @java.lang.Deprecated long getSiteId();
@@ -13332,7 +13394,7 @@ public final class Ng {
     /**
      * <code>int64 site_id = 1 [deprecated = true];</code>
      * @deprecated se.locutus.proto.StoredStopData.site_id is deprecated.
-     *     See messages.proto;l=272
+     *     See messages.proto;l=273
      * @return The siteId.
      */
     @java.lang.Override
@@ -13342,7 +13404,7 @@ public final class Ng {
     /**
      * <code>int64 site_id = 1 [deprecated = true];</code>
      * @deprecated se.locutus.proto.StoredStopData.site_id is deprecated.
-     *     See messages.proto;l=272
+     *     See messages.proto;l=273
      * @param value The siteId to set.
      */
     private void setSiteId(long value) {
@@ -13352,7 +13414,7 @@ public final class Ng {
     /**
      * <code>int64 site_id = 1 [deprecated = true];</code>
      * @deprecated se.locutus.proto.StoredStopData.site_id is deprecated.
-     *     See messages.proto;l=272
+     *     See messages.proto;l=273
      */
     private void clearSiteId() {
 
@@ -13651,7 +13713,7 @@ public final class Ng {
       /**
        * <code>int64 site_id = 1 [deprecated = true];</code>
        * @deprecated se.locutus.proto.StoredStopData.site_id is deprecated.
-       *     See messages.proto;l=272
+       *     See messages.proto;l=273
        * @return The siteId.
        */
       @java.lang.Override
@@ -13661,7 +13723,7 @@ public final class Ng {
       /**
        * <code>int64 site_id = 1 [deprecated = true];</code>
        * @deprecated se.locutus.proto.StoredStopData.site_id is deprecated.
-       *     See messages.proto;l=272
+       *     See messages.proto;l=273
        * @param value The siteId to set.
        * @return This builder for chaining.
        */
@@ -13673,7 +13735,7 @@ public final class Ng {
       /**
        * <code>int64 site_id = 1 [deprecated = true];</code>
        * @deprecated se.locutus.proto.StoredStopData.site_id is deprecated.
-       *     See messages.proto;l=272
+       *     See messages.proto;l=273
        * @return This builder for chaining.
        */
       @java.lang.Deprecated public Builder clearSiteId() {
@@ -13971,7 +14033,7 @@ public final class Ng {
     /**
      * <code>int64 site_id = 1 [deprecated = true];</code>
      * @deprecated se.locutus.proto.StopDataRequest.site_id is deprecated.
-     *     See messages.proto;l=282
+     *     See messages.proto;l=283
      * @return The siteId.
      */
     @java.lang.Deprecated long getSiteId();
@@ -14041,7 +14103,7 @@ public final class Ng {
     /**
      * <code>int64 site_id = 1 [deprecated = true];</code>
      * @deprecated se.locutus.proto.StopDataRequest.site_id is deprecated.
-     *     See messages.proto;l=282
+     *     See messages.proto;l=283
      * @return The siteId.
      */
     @java.lang.Override
@@ -14051,7 +14113,7 @@ public final class Ng {
     /**
      * <code>int64 site_id = 1 [deprecated = true];</code>
      * @deprecated se.locutus.proto.StopDataRequest.site_id is deprecated.
-     *     See messages.proto;l=282
+     *     See messages.proto;l=283
      * @param value The siteId to set.
      */
     private void setSiteId(long value) {
@@ -14061,7 +14123,7 @@ public final class Ng {
     /**
      * <code>int64 site_id = 1 [deprecated = true];</code>
      * @deprecated se.locutus.proto.StopDataRequest.site_id is deprecated.
-     *     See messages.proto;l=282
+     *     See messages.proto;l=283
      */
     private void clearSiteId() {
 
@@ -14398,7 +14460,7 @@ public final class Ng {
       /**
        * <code>int64 site_id = 1 [deprecated = true];</code>
        * @deprecated se.locutus.proto.StopDataRequest.site_id is deprecated.
-       *     See messages.proto;l=282
+       *     See messages.proto;l=283
        * @return The siteId.
        */
       @java.lang.Override
@@ -14408,7 +14470,7 @@ public final class Ng {
       /**
        * <code>int64 site_id = 1 [deprecated = true];</code>
        * @deprecated se.locutus.proto.StopDataRequest.site_id is deprecated.
-       *     See messages.proto;l=282
+       *     See messages.proto;l=283
        * @param value The siteId to set.
        * @return This builder for chaining.
        */
@@ -14420,7 +14482,7 @@ public final class Ng {
       /**
        * <code>int64 site_id = 1 [deprecated = true];</code>
        * @deprecated se.locutus.proto.StopDataRequest.site_id is deprecated.
-       *     See messages.proto;l=282
+       *     See messages.proto;l=283
        * @return This builder for chaining.
        */
       @java.lang.Deprecated public Builder clearSiteId() {

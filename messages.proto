@@ -59,6 +59,7 @@ message SetDepartureMetaData {
 
 message StopSearchRequest {
   string query = 1;
+  int32 max_results = 2;
 }
 
 message StopSearchResponse {
