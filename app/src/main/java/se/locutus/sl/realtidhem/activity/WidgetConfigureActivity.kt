@@ -265,18 +265,6 @@ class WidgetConfigureActivity : AppCompatActivity() {
             startActivity(Intent.createChooser(sharingIntent, resources.getString(R.string.share_using)))
             true
         }
-
-        val backendMenu = menu.findItem(R.id.use_new_backend)
-        val prefs = getSharedPreferences(null, 0)
-        backendMenu.isChecked = getUseNewBackend(prefs)
-
-        backendMenu.setOnMenuItemClickListener { _ ->
-            val newValue = !backendMenu.isChecked
-            setUseNewBackend(prefs, newValue)
-            backendMenu.isChecked = newValue
-            Toast.makeText(this, "Restart app!", Toast.LENGTH_SHORT).show()
-            true
-        }
         return true
     }
 

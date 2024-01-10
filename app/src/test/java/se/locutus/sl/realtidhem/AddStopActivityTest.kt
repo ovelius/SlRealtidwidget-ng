@@ -22,7 +22,6 @@ import se.locutus.proto.Ng.StopConfiguration
 import se.locutus.proto.Ng.StoredStopData
 import se.locutus.sl.realtidhem.activity.STOP_CONFIG_DATA_KEY
 import se.locutus.sl.realtidhem.activity.add_stop.AddStopActivity
-import se.locutus.sl.realtidhem.widget.setUseNewBackend
 
 
 @RunWith(RobolectricTestRunner::class)
@@ -36,7 +35,6 @@ class AddStopActivityTest {
 
     @Before
     fun setPrefs() {
-        setUseNewBackend(prefs, true)
         fakeRequests.start()
     }
 

@@ -38,7 +38,6 @@ import org.json.JSONObject
 import se.locutus.proto.Ng
 import se.locutus.proto.Ng.SiteId
 import se.locutus.sl.realtidhem.R
-import se.locutus.sl.realtidhem.widget.getUseNewBackend
 import se.locutus.sl.realtidhem.widget.isSiteConfigured
 import java.util.logging.Logger
 
@@ -58,7 +57,6 @@ class SelectStopFragment : androidx.fragment.app.Fragment() {
     internal lateinit var displayNameText : EditText
     internal lateinit var addStopActivity : AddStopActivity
     internal lateinit var selectDepsButton : ExtendedFloatingActionButton
-    private var useNewBackend : Boolean = false
     private lateinit var mapContainer : View
     internal var map : GoogleMap? = null
     internal var nameToSiteIDs : HashMap<String, SiteId> = HashMap()
@@ -66,7 +64,6 @@ class SelectStopFragment : androidx.fragment.app.Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         LOG.info("Fragment create with bundle $savedInstanceState")
-        useNewBackend = getUseNewBackend(requireActivity().getSharedPreferences(null, 0))
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -175,12 +172,7 @@ class SelectStopFragment : androidx.fragment.app.Fragment() {
                     mAutoCompleteTextView.setBackgroundColor((0x00000000).toInt())
                     LOG.info("Searching for $p")
                     searchProgress.visibility = View.VISIBLE
-                    if (useNewBackend) {
-                        doNewStopSearchRequest(p, adapter)
-                    } else {
-                        val stringRequest = buildLegacyStringRequest(p, adapter)
-                        addStopActivity.requestQueue?.add(stringRequest)
-                    }
+                    doNewStopSearchRequest(p, adapter)
                 }
             }
         })
@@ -201,7 +193,7 @@ class SelectStopFragment : androidx.fragment.app.Fragment() {
                     mAutoCompleteTextView,
                     R.string.error_loading_autocomplete,
                     Snackbar.LENGTH_SHORT
-                )
+                ).show()
             } else {
                 for (stop in responseData.stopSearchResponse.stopDataList) {
                     val name = stop.canonicalName
@@ -219,46 +211,6 @@ class SelectStopFragment : androidx.fragment.app.Fragment() {
                 }
             }
         }
-    }
-
-    private fun buildLegacyStringRequest(p : CharSequence?, adapter : ArrayAdapter<String>) : StringRequest {
-        val url = "http://anka.locutus.se/P?q=$p"
-        return StringRequest(Request.Method.GET, url,
-            Response.Listener<String> { response ->
-                LOG.info("got $response")
-                var json = JSONObject(response)
-                var list: JSONArray = json.getJSONArray("suggestions")
-                for (i in 0 until list.length() - 1) {
-                    var item: JSONObject = list.getJSONObject(i)
-                    var name: String = item.getString("name")
-                    var siteId: Int = item.getInt("sid")
-                    if (!autoCompleteSet.contains(name)) {
-                        adapter.add(name)
-                        autoCompleteSet.add(name)
-                    }
-                    nameToSiteIDs[name] = SiteId.newBuilder().setSiteId(siteId.toLong()).build()
-                }
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                    mAutoCompleteTextView.refreshAutoCompleteResults()
-                } else {
-                    mAutoCompleteTextView.performCompletion()
-                }
-                searchProgress.visibility = View.INVISIBLE
-            },
-            Response.ErrorListener {
-                LOG.severe("Error autocompleting $it")
-                searchProgress.visibility = View.INVISIBLE
-                try {
-                    Snackbar.make(
-                        mAutoCompleteTextView,
-                        R.string.error_loading_autocomplete,
-                        Snackbar.LENGTH_SHORT
-                    )
-                        .show()
-                } catch (e: IllegalArgumentException) {
-                    LOG.severe("Failed to create snackbar $e, activity dead?")
-                }
-            })
     }
 
     private fun bitmapDescriptorFromVector(context : Context, vectorResId : Int) : BitmapDescriptor {

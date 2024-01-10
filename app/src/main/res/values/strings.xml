@@ -91,7 +91,6 @@
     <string name="stops_showing_on_widget">Show data from these stops:</string>
     <string name="import_settings">Import settings from string</string>
     <string name="export_settings">Export settings to string</string>
-    <string name="use_new_backend">(Experimental) Use new backend</string>
     <string name="share_using">Store string somewhere</string>
     <string name="import_settings_btn">Import</string>
     <string name="import_settings_btn_cancel">Cancel</string>

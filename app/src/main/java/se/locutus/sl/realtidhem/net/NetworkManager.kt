@@ -10,9 +10,12 @@ import com.android.volley.toolbox.Volley
 import se.locutus.proto.Ng
 import se.locutus.proto.Ng.ResponseData
 import se.locutus.proto.Ng.RequestData
-import se.locutus.sl.realtidhem.widget.getUseNewBackend
 import java.lang.Exception
 import java.util.logging.Logger
+
+fun useNewBackendForRequest(request : Ng.RequestData) : Boolean {
+    return request.stopDataRequest.site.strSiteId.isNotEmpty() || request.stopSearchRequest.query.isNotEmpty()
+}
 
 interface NetworkInterface {
     fun doStopDataRequest(request : Ng.StopDataRequest, forceHttp : Boolean = false, callBack : (Int, ResponseData, Exception?) -> Unit) : Int
@@ -25,7 +28,6 @@ class NetworkManager(var context : Context,
         val LOG = Logger.getLogger(NetworkManager::class.java.name)
     }
     val prefs = context.getSharedPreferences(null, 0)
-    val useNewBackend = getUseNewBackend(prefs)
     val udpSocket = UpdClient(context, prefs).apply { start() }
     private var requestId = 1
 
@@ -48,7 +50,6 @@ class NetworkManager(var context : Context,
         forceHttp: Boolean,
         callBack: (Int, ResponseData, Exception?) -> Unit
     ): Int {
-        check(useNewBackend) {"Only new backend supports generic requests... crashing!"}
         val requestBuilder = request.toBuilder().setRequestHeader(buildHeader())
         doRequest(requestBuilder.build(),  forceHttp, callBack)
         return requestId++
@@ -70,12 +71,12 @@ class NetworkManager(var context : Context,
     }
 
     private fun sendRequestWithHTTP(request : RequestData, callback : (Int, ResponseData, Exception?) -> Unit) {
-        val protoRequest = ProtoRequest(if (useNewBackend) NEW_URL else null, request,
-            Response.Listener { response ->
+        val protoRequest = ProtoRequest(if (useNewBackendForRequest(request)) NEW_URL else null, request,
+            { response ->
                 LOG.fine("Got data $response")
                 callback(request.requestHeader.id, response, null)
             },
-            Response.ErrorListener { error ->
+            { error ->
                 callback(request.requestHeader.id, ResponseData.getDefaultInstance(), error)
             })
         requestQueue.add(protoRequest)
