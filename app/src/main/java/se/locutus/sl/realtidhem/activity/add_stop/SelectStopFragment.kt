@@ -17,13 +17,11 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.EditText
+import android.widget.Filter
+import android.widget.Filterable
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.core.content.ContextCompat
-import androidx.core.content.ContextCompat.getSystemService
-import com.android.volley.Request
-import com.android.volley.Response
-import com.android.volley.toolbox.StringRequest
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.SupportMapFragment
@@ -33,8 +31,6 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
 import com.google.android.material.snackbar.Snackbar
-import org.json.JSONArray
-import org.json.JSONObject
 import se.locutus.proto.Ng
 import se.locutus.proto.Ng.SiteId
 import se.locutus.sl.realtidhem.R
@@ -50,7 +46,6 @@ class SelectStopFragment : androidx.fragment.app.Fragment() {
     companion object {
         val LOG = Logger.getLogger(SelectStopFragment::class.java.name)
     }
-    val autoCompleteSet = HashSet<String>()
     internal lateinit var mAutoCompleteTextView : AutoCompleteTextView
     internal lateinit var searchProgress : ProgressBar
     internal lateinit var stopLoadProgressBar : ProgressBar
@@ -59,7 +54,40 @@ class SelectStopFragment : androidx.fragment.app.Fragment() {
     internal lateinit var selectDepsButton : ExtendedFloatingActionButton
     private lateinit var mapContainer : View
     internal var map : GoogleMap? = null
+
+    lateinit var autoCompleteAdapter : ArrayAdapter<String>
+    val autoCompleteSet = HashSet<String>()
     internal var nameToSiteIDs : HashMap<String, SiteId> = HashMap()
+
+    inner class AutoCompleteFilter: Filter(){
+        override fun performFiltering(constraint: CharSequence?): FilterResults {
+            val results = FilterResults()
+
+            val filteredView = mutableListOf<String>()
+            if (!constraint.isNullOrEmpty()) {
+                val lowerCase = constraint.toString().lowercase()
+                for (it in autoCompleteSet) {
+                    val itLowerCase = it.lowercase()
+                    if (itLowerCase.contains(lowerCase)) {
+                        filteredView.add(it)
+                    }
+                }
+            }
+            activity?.runOnUiThread {
+                autoCompleteAdapter.clear()
+                autoCompleteAdapter.addAll(filteredView)
+            }
+            results.count = filteredView.size
+            return results
+        }
+        override fun publishResults(constraint: CharSequence?, results: FilterResults?) {
+            if (results?.count!! > 0) {
+                autoCompleteAdapter.notifyDataSetChanged()
+            } else {
+                autoCompleteAdapter.notifyDataSetInvalidated()
+            }
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -85,7 +113,7 @@ class SelectStopFragment : androidx.fragment.app.Fragment() {
 
         mapContainer = mainView.findViewById(R.id.map_container)
         mapContainer.visibility = View.GONE
-        mAutoCompleteTextView.threshold = 1
+        mAutoCompleteTextView.threshold = 2
 
         val config = addStopActivity.config.stopData
         LOG.info("onCreateView, set stuff from $config")
@@ -128,11 +156,15 @@ class SelectStopFragment : androidx.fragment.app.Fragment() {
                 stopLoadingFinishedAtPosition(config.lat, config.lng)
             }
         }
-        val adapter = ArrayAdapter<String>(
+        autoCompleteAdapter = object : Filterable, ArrayAdapter<String>(
             this.requireActivity(),
             android.R.layout.simple_dropdown_item_1line, ArrayList()
-        )
-        mAutoCompleteTextView.setAdapter(adapter)
+        ) {
+            override fun getFilter(): Filter {
+                return AutoCompleteFilter()
+            }
+        }
+        mAutoCompleteTextView.setAdapter(autoCompleteAdapter)
         mAutoCompleteTextView.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(p0: Editable?) {
             }
@@ -172,7 +204,7 @@ class SelectStopFragment : androidx.fragment.app.Fragment() {
                     mAutoCompleteTextView.setBackgroundColor((0x00000000).toInt())
                     LOG.info("Searching for $p")
                     searchProgress.visibility = View.VISIBLE
-                    doNewStopSearchRequest(p, adapter)
+                    doNewStopSearchRequest(p)
                 }
             }
         })
@@ -180,9 +212,12 @@ class SelectStopFragment : androidx.fragment.app.Fragment() {
         return mainView
     }
 
-    private fun doNewStopSearchRequest(p : CharSequence?, adapter : ArrayAdapter<String>) {
+    private fun doNewStopSearchRequest(p : CharSequence?) {
         val req = Ng.RequestData.newBuilder()
-            .setStopSearchRequest(Ng.StopSearchRequest.newBuilder().setQuery(p.toString()))
+            .setStopSearchRequest(Ng.StopSearchRequest.newBuilder()
+                .setMaxResults(10)
+                .setUseWideSearch(true)
+                .setQuery(p.toString()))
             .build()
         addStopActivity.network.doGenericRequest(req, forceHttp = true) {
                 incomingRequestId : Int, responseData: Ng.ResponseData, e: Exception? ->
@@ -198,7 +233,6 @@ class SelectStopFragment : androidx.fragment.app.Fragment() {
                 for (stop in responseData.stopSearchResponse.stopDataList) {
                     val name = stop.canonicalName
                     if (!autoCompleteSet.contains(name)) {
-                        adapter.add(name)
                         autoCompleteSet.add(name)
                     }
                     nameToSiteIDs[name] = stop.site

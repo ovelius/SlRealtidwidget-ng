@@ -133,9 +133,10 @@ class StandardWidgetProvider : AppWidgetProvider() {
         for (widgetId in ids.keys) {
             val widgetConfig = ids[widgetId]!!
             val closestStopIndex = getStopClosestToLocation(widgetConfig, location)
-            LOG.info("Setting selected stop for $widgetId to $closestStopIndex based on location")
+            val config = widgetConfig.stopConfigurationList[closestStopIndex]
+            LOG.info("Setting selected stop for $widgetId to ${config.stopData.canonicalName} based on location")
             setSelectedStopIndexFromLocation(prefs, widgetId,
-                closestStopIndex, location, widgetConfig.stopConfigurationList[closestStopIndex])
+                closestStopIndex, location, config)
             updateAppWidget(context, widgetConfig, appWidgetManager, prefs, widgetId)
         }
     }

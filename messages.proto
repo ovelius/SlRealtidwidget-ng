@@ -61,6 +61,13 @@ message StopSearchRequest {
   string query = 1;
   int32 max_results = 2;
   bool use_wide_search = 3;
+  
+  // If searching by position instead.
+  double lat = 4;
+  double lng = 5;
+  // Location search box area.
+  // 0.004 and means the box lat-0.004 lat+0.004 and lng-0.004 lng+0.004.
+  double location_box_area = 6;
 }
 
 message StopSearchResponse {

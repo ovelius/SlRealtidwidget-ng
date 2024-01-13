@@ -4614,6 +4614,33 @@ public final class Ng {
      * @return The useWideSearch.
      */
     boolean getUseWideSearch();
+
+    /**
+     * <pre>
+     * If searching by position instead.
+     * </pre>
+     *
+     * <code>double lat = 4;</code>
+     * @return The lat.
+     */
+    double getLat();
+
+    /**
+     * <code>double lng = 5;</code>
+     * @return The lng.
+     */
+    double getLng();
+
+    /**
+     * <pre>
+     * Location search box area.
+     * 0.004 and means the box lat-0.004 lat+0.004 and lng-0.004 lng+0.004.
+     * </pre>
+     *
+     * <code>double location_box_area = 6;</code>
+     * @return The locationBoxArea.
+     */
+    double getLocationBoxArea();
   }
   /**
    * Protobuf type {@code se.locutus.proto.StopSearchRequest}
@@ -4723,6 +4750,111 @@ public final class Ng {
     private void clearUseWideSearch() {
 
       useWideSearch_ = false;
+    }
+
+    public static final int LAT_FIELD_NUMBER = 4;
+    private double lat_;
+    /**
+     * <pre>
+     * If searching by position instead.
+     * </pre>
+     *
+     * <code>double lat = 4;</code>
+     * @return The lat.
+     */
+    @java.lang.Override
+    public double getLat() {
+      return lat_;
+    }
+    /**
+     * <pre>
+     * If searching by position instead.
+     * </pre>
+     *
+     * <code>double lat = 4;</code>
+     * @param value The lat to set.
+     */
+    private void setLat(double value) {
+      
+      lat_ = value;
+    }
+    /**
+     * <pre>
+     * If searching by position instead.
+     * </pre>
+     *
+     * <code>double lat = 4;</code>
+     */
+    private void clearLat() {
+
+      lat_ = 0D;
+    }
+
+    public static final int LNG_FIELD_NUMBER = 5;
+    private double lng_;
+    /**
+     * <code>double lng = 5;</code>
+     * @return The lng.
+     */
+    @java.lang.Override
+    public double getLng() {
+      return lng_;
+    }
+    /**
+     * <code>double lng = 5;</code>
+     * @param value The lng to set.
+     */
+    private void setLng(double value) {
+      
+      lng_ = value;
+    }
+    /**
+     * <code>double lng = 5;</code>
+     */
+    private void clearLng() {
+
+      lng_ = 0D;
+    }
+
+    public static final int LOCATION_BOX_AREA_FIELD_NUMBER = 6;
+    private double locationBoxArea_;
+    /**
+     * <pre>
+     * Location search box area.
+     * 0.004 and means the box lat-0.004 lat+0.004 and lng-0.004 lng+0.004.
+     * </pre>
+     *
+     * <code>double location_box_area = 6;</code>
+     * @return The locationBoxArea.
+     */
+    @java.lang.Override
+    public double getLocationBoxArea() {
+      return locationBoxArea_;
+    }
+    /**
+     * <pre>
+     * Location search box area.
+     * 0.004 and means the box lat-0.004 lat+0.004 and lng-0.004 lng+0.004.
+     * </pre>
+     *
+     * <code>double location_box_area = 6;</code>
+     * @param value The locationBoxArea to set.
+     */
+    private void setLocationBoxArea(double value) {
+      
+      locationBoxArea_ = value;
+    }
+    /**
+     * <pre>
+     * Location search box area.
+     * 0.004 and means the box lat-0.004 lat+0.004 and lng-0.004 lng+0.004.
+     * </pre>
+     *
+     * <code>double location_box_area = 6;</code>
+     */
+    private void clearLocationBoxArea() {
+
+      locationBoxArea_ = 0D;
     }
 
     public static se.locutus.proto.Ng.StopSearchRequest parseFrom(
@@ -4927,6 +5059,117 @@ public final class Ng {
         return this;
       }
 
+      /**
+       * <pre>
+       * If searching by position instead.
+       * </pre>
+       *
+       * <code>double lat = 4;</code>
+       * @return The lat.
+       */
+      @java.lang.Override
+      public double getLat() {
+        return instance.getLat();
+      }
+      /**
+       * <pre>
+       * If searching by position instead.
+       * </pre>
+       *
+       * <code>double lat = 4;</code>
+       * @param value The lat to set.
+       * @return This builder for chaining.
+       */
+      public Builder setLat(double value) {
+        copyOnWrite();
+        instance.setLat(value);
+        return this;
+      }
+      /**
+       * <pre>
+       * If searching by position instead.
+       * </pre>
+       *
+       * <code>double lat = 4;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearLat() {
+        copyOnWrite();
+        instance.clearLat();
+        return this;
+      }
+
+      /**
+       * <code>double lng = 5;</code>
+       * @return The lng.
+       */
+      @java.lang.Override
+      public double getLng() {
+        return instance.getLng();
+      }
+      /**
+       * <code>double lng = 5;</code>
+       * @param value The lng to set.
+       * @return This builder for chaining.
+       */
+      public Builder setLng(double value) {
+        copyOnWrite();
+        instance.setLng(value);
+        return this;
+      }
+      /**
+       * <code>double lng = 5;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearLng() {
+        copyOnWrite();
+        instance.clearLng();
+        return this;
+      }
+
+      /**
+       * <pre>
+       * Location search box area.
+       * 0.004 and means the box lat-0.004 lat+0.004 and lng-0.004 lng+0.004.
+       * </pre>
+       *
+       * <code>double location_box_area = 6;</code>
+       * @return The locationBoxArea.
+       */
+      @java.lang.Override
+      public double getLocationBoxArea() {
+        return instance.getLocationBoxArea();
+      }
+      /**
+       * <pre>
+       * Location search box area.
+       * 0.004 and means the box lat-0.004 lat+0.004 and lng-0.004 lng+0.004.
+       * </pre>
+       *
+       * <code>double location_box_area = 6;</code>
+       * @param value The locationBoxArea to set.
+       * @return This builder for chaining.
+       */
+      public Builder setLocationBoxArea(double value) {
+        copyOnWrite();
+        instance.setLocationBoxArea(value);
+        return this;
+      }
+      /**
+       * <pre>
+       * Location search box area.
+       * 0.004 and means the box lat-0.004 lat+0.004 and lng-0.004 lng+0.004.
+       * </pre>
+       *
+       * <code>double location_box_area = 6;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearLocationBoxArea() {
+        copyOnWrite();
+        instance.clearLocationBoxArea();
+        return this;
+      }
+
       // @@protoc_insertion_point(builder_scope:se.locutus.proto.StopSearchRequest)
     }
     @java.lang.Override
@@ -4946,10 +5189,13 @@ public final class Ng {
               "query_",
               "maxResults_",
               "useWideSearch_",
+              "lat_",
+              "lng_",
+              "locationBoxArea_",
             };
             java.lang.String info =
-                "\u0000\u0003\u0000\u0000\u0001\u0003\u0003\u0000\u0000\u0000\u0001\u0208\u0002\u0004" +
-                "\u0003\u0007";
+                "\u0000\u0006\u0000\u0000\u0001\u0006\u0006\u0000\u0000\u0000\u0001\u0208\u0002\u0004" +
+                "\u0003\u0007\u0004\u0000\u0005\u0000\u0006\u0000";
             return newMessageInfo(DEFAULT_INSTANCE, info, objects);
         }
         // fall through
@@ -13394,7 +13640,7 @@ public final class Ng {
     /**
      * <code>int64 site_id = 1 [deprecated = true];</code>
      * @deprecated se.locutus.proto.StoredStopData.site_id is deprecated.
-     *     See messages.proto;l=275
+     *     See messages.proto;l=282
      * @return The siteId.
      */
     @java.lang.Deprecated long getSiteId();
@@ -13464,7 +13710,7 @@ public final class Ng {
     /**
      * <code>int64 site_id = 1 [deprecated = true];</code>
      * @deprecated se.locutus.proto.StoredStopData.site_id is deprecated.
-     *     See messages.proto;l=275
+     *     See messages.proto;l=282
      * @return The siteId.
      */
     @java.lang.Override
@@ -13474,7 +13720,7 @@ public final class Ng {
     /**
      * <code>int64 site_id = 1 [deprecated = true];</code>
      * @deprecated se.locutus.proto.StoredStopData.site_id is deprecated.
-     *     See messages.proto;l=275
+     *     See messages.proto;l=282
      * @param value The siteId to set.
      */
     private void setSiteId(long value) {
@@ -13484,7 +13730,7 @@ public final class Ng {
     /**
      * <code>int64 site_id = 1 [deprecated = true];</code>
      * @deprecated se.locutus.proto.StoredStopData.site_id is deprecated.
-     *     See messages.proto;l=275
+     *     See messages.proto;l=282
      */
     private void clearSiteId() {
 
@@ -13783,7 +14029,7 @@ public final class Ng {
       /**
        * <code>int64 site_id = 1 [deprecated = true];</code>
        * @deprecated se.locutus.proto.StoredStopData.site_id is deprecated.
-       *     See messages.proto;l=275
+       *     See messages.proto;l=282
        * @return The siteId.
        */
       @java.lang.Override
@@ -13793,7 +14039,7 @@ public final class Ng {
       /**
        * <code>int64 site_id = 1 [deprecated = true];</code>
        * @deprecated se.locutus.proto.StoredStopData.site_id is deprecated.
-       *     See messages.proto;l=275
+       *     See messages.proto;l=282
        * @param value The siteId to set.
        * @return This builder for chaining.
        */
@@ -13805,7 +14051,7 @@ public final class Ng {
       /**
        * <code>int64 site_id = 1 [deprecated = true];</code>
        * @deprecated se.locutus.proto.StoredStopData.site_id is deprecated.
-       *     See messages.proto;l=275
+       *     See messages.proto;l=282
        * @return This builder for chaining.
        */
       @java.lang.Deprecated public Builder clearSiteId() {
@@ -14103,7 +14349,7 @@ public final class Ng {
     /**
      * <code>int64 site_id = 1 [deprecated = true];</code>
      * @deprecated se.locutus.proto.StopDataRequest.site_id is deprecated.
-     *     See messages.proto;l=285
+     *     See messages.proto;l=292
      * @return The siteId.
      */
     @java.lang.Deprecated long getSiteId();
@@ -14173,7 +14419,7 @@ public final class Ng {
     /**
      * <code>int64 site_id = 1 [deprecated = true];</code>
      * @deprecated se.locutus.proto.StopDataRequest.site_id is deprecated.
-     *     See messages.proto;l=285
+     *     See messages.proto;l=292
      * @return The siteId.
      */
     @java.lang.Override
@@ -14183,7 +14429,7 @@ public final class Ng {
     /**
      * <code>int64 site_id = 1 [deprecated = true];</code>
      * @deprecated se.locutus.proto.StopDataRequest.site_id is deprecated.
-     *     See messages.proto;l=285
+     *     See messages.proto;l=292
      * @param value The siteId to set.
      */
     private void setSiteId(long value) {
@@ -14193,7 +14439,7 @@ public final class Ng {
     /**
      * <code>int64 site_id = 1 [deprecated = true];</code>
      * @deprecated se.locutus.proto.StopDataRequest.site_id is deprecated.
-     *     See messages.proto;l=285
+     *     See messages.proto;l=292
      */
     private void clearSiteId() {
 
@@ -14530,7 +14776,7 @@ public final class Ng {
       /**
        * <code>int64 site_id = 1 [deprecated = true];</code>
        * @deprecated se.locutus.proto.StopDataRequest.site_id is deprecated.
-       *     See messages.proto;l=285
+       *     See messages.proto;l=292
        * @return The siteId.
        */
       @java.lang.Override
@@ -14540,7 +14786,7 @@ public final class Ng {
       /**
        * <code>int64 site_id = 1 [deprecated = true];</code>
        * @deprecated se.locutus.proto.StopDataRequest.site_id is deprecated.
-       *     See messages.proto;l=285
+       *     See messages.proto;l=292
        * @param value The siteId to set.
        * @return This builder for chaining.
        */
@@ -14552,7 +14798,7 @@ public final class Ng {
       /**
        * <code>int64 site_id = 1 [deprecated = true];</code>
        * @deprecated se.locutus.proto.StopDataRequest.site_id is deprecated.
-       *     See messages.proto;l=285
+       *     See messages.proto;l=292
        * @return This builder for chaining.
        */
       @java.lang.Deprecated public Builder clearSiteId() {
