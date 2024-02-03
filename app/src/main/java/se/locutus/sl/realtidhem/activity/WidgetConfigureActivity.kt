@@ -63,7 +63,7 @@ class WidgetConfigureActivity : AppCompatActivity() {
         val LOG = Logger.getLogger(WidgetConfigureActivity::class.java.name)
     }
     private var mAppWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID
-    private lateinit var mWidgetPrefs : SharedPreferences
+    lateinit var mWidgetPrefs : SharedPreferences
     private lateinit var stopListFragment : StopListFragment
     private lateinit var updateModeFragment : UpdateModeFragment
     private lateinit var viewSwitcher : ViewSwitcher

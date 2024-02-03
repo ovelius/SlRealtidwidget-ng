@@ -1,18 +1,25 @@
 package se.locutus.sl.realtidhem.activity
 
+import android.app.AlertDialog
 import android.content.Intent
 import android.content.res.ColorStateList
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.ListView
 import android.widget.TextView
+import android.widget.Toast
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+import se.locutus.proto.Ng
 import se.locutus.sl.realtidhem.R
 import se.locutus.sl.realtidhem.activity.add_stop.AddStopActivity
 import se.locutus.sl.realtidhem.events.EXTRA_COLOR_THEME
 
+const val QUICK_TOGGLE_HINT_SHOWN = "quick_toggle_hint"
 class StopListFragment : androidx.fragment.app.Fragment() {
 
     private lateinit var widgetConfigureActivity : WidgetConfigureActivity
@@ -72,7 +79,48 @@ class StopListFragment : androidx.fragment.app.Fragment() {
         } else {
             mListView.visibility = View.VISIBLE
             mAddStopHelperText.visibility = View.GONE
+            if (widgetConfigureActivity.widgetConfig.stopConfigurationCount > 1) {
+                maybeShowStopSwitcherDialog(widgetConfigureActivity.widgetConfig)
+            }
         }
+    }
+
+    fun maybeShowStopSwitcherDialog(config : Ng.WidgetConfiguration) {
+        val prefs = widgetConfigureActivity.mWidgetPrefs
+        if (prefs.getBoolean(QUICK_TOGGLE_HINT_SHOWN, false)) {
+            return
+        }
+        check(config.stopConfigurationCount > 1) { "Must have at least two stops! "}
+        val builder = AlertDialog.Builder(widgetConfigureActivity)
+        val inflater = requireActivity().layoutInflater;
+        val view = inflater.inflate(R.layout.dialog_stop_toggle, null)
+        val mainText = view.findViewById<TextView>(R.id.widgettag)
+        val line1Text = view.findViewById<TextView>(R.id.widgetline1)
+        val minText = view.findViewById<TextView>(R.id.widgetmin)
+
+        val stop1 = config.stopConfigurationList[0].stopData.displayName
+        val stop2 = config.stopConfigurationList[1].stopData.displayName
+        mainText.text = stop1
+        view.findViewById<TextView>(R.id.widgetline2).text = ""
+        line1Text.text = getString(R.string.sample_departure, stop2)
+        minText.setText(R.string.sample_minutes)
+
+        builder.setTitle(R.string.multiple_stops)
+        builder.setView(view)
+        val dialog = builder.create()
+        val dismissClick : (View) -> Unit = { view ->
+            mainText.text = stop2
+            line1Text.text = getString(R.string.sample_departure, stop1)
+            minText.setText(R.string.sample_minutes2)
+            Toast.makeText(widgetConfigureActivity, R.string.quick_toggle_toast, Toast.LENGTH_SHORT).show()
+            prefs.edit().putBoolean(QUICK_TOGGLE_HINT_SHOWN, true).apply()
+            Handler(Looper.getMainLooper()).postDelayed({
+                dialog.dismiss()
+            }, 2000)
+        }
+        view.findViewById<ImageView>(R.id.larrow).setOnClickListener(dismissClick)
+        view.findViewById<ImageView>(R.id.rarrow).setOnClickListener(dismissClick)
+        dialog.show()
     }
 
 }

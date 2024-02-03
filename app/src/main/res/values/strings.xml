@@ -109,8 +109,18 @@
     <string name="stop_sequence">Stop updating</string>
     <string name="stop_sequence_time">Remove scheduled update</string>
     <string name="will_not_update_undo">Update alarm removed</string>
-    <string name="settings">Setttings</string>
+    <string name="settings">Settings</string>
     <string name="save_and_exit"><![CDATA[Save & go back]]></string>
+
+    <string name="multiple_stops">Quick toggle</string>
+    <string name="quick_toggle">Press on the left or right side of a widget to cycle stops. It will default to closest stop.</string>
+    <string name="quick_toggle_dismiss">Press either side to dismiss</string>
+    <string name="quick_toggle_toast">You got it!</string>
+
+    <string name="sample_departure" translatable="false">12 %1$s</string>
+    <string name="sample_minutes" translatable="false">3 min</string>
+    <string name="sample_minutes2" translatable="false">6 min</string>
+
     <string-array name="update_mode_array">
         <item>Learning</item>
         <item>Manual one time update</item>

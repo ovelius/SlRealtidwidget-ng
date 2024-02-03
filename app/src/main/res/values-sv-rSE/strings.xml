@@ -115,6 +115,10 @@
             Du kan välja hur länge en period varar och om den ska uppdateras när skärmen slås på.</item>
     </string-array>
     <string name="settings">Inställningar</string>
+    <string name="multiple_stops">Snabbväxla</string>
+    <string name="quick_toggle">Tryck till vänster eller höger på en widget för att byta hållplats. Närmaste hållplats visas som standard.</string>
+    <string name="quick_toggle_dismiss">Tryck på en sida för att gå vidare</string>
+    <string name="quick_toggle_toast">Sådär ja!</string>
     <string name="use_new_backend">(Experimental) Use new backend</string>
     <string name="save_and_exit"><![CDATA[Spara & tillbaka]]></string>
 
