@@ -41,18 +41,22 @@ class StopListAdapter(private val activity: WidgetConfigureActivity) : BaseAdapt
             popup.setOnMenuItemClickListener {
                 when (it.itemId) {
                     R.id.menu_delete_stop -> {
-                        if (deleteStopAt(position)) {
-                            Snackbar.make(view, R.string.deleted, Snackbar.LENGTH_LONG)
-                                .setAction(R.string.undo) {
-                                    undoDelete()
-                                }.show()
-                        }
+                        deleteWithUndo(position, view)
                     }
                 }
                 true
             }
         }
         return root
+    }
+
+    fun deleteWithUndo(position : Int, view : View) {
+        if (deleteStopAt(position)) {
+            Snackbar.make(view, R.string.deleted, Snackbar.LENGTH_LONG)
+                .setAction(R.string.undo) {
+                    undoDelete()
+                }.show()
+        }
     }
 
     private fun undoDelete() {
@@ -69,7 +73,7 @@ class StopListAdapter(private val activity: WidgetConfigureActivity) : BaseAdapt
         notifyDataSetChanged()
     }
 
-    private fun deleteStopAt(position: Int) : Boolean {
+    fun deleteStopAt(position: Int) : Boolean {
         if (activity.widgetConfig.stopConfigurationCount == 1) {
             return false
         }

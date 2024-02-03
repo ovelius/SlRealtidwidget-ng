@@ -15,6 +15,9 @@
     <string name="idle_line2">Multiple times to configure</string>
 
 
+    <string name="legacy_stop_detected">Old configuration version</string>
+    <string name="legacy_stop">This stop is from an older version of the widget. The stop can be removed but not changed. Remove it?</string>
+
     <string name="stop_name">Search stop (Anywhere in Sweden)</string>
     <string name="save_stop_title">Save stop</string>
 

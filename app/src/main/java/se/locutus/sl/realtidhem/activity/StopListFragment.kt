@@ -20,6 +20,7 @@ import se.locutus.proto.Ng
 import se.locutus.sl.realtidhem.R
 import se.locutus.sl.realtidhem.activity.add_stop.AddStopActivity
 import se.locutus.sl.realtidhem.events.EXTRA_COLOR_THEME
+import se.locutus.sl.realtidhem.widget.isLegacyStop
 
 const val QUICK_TOGGLE_HINT_SHOWN = "quick_toggle_hint"
 class StopListFragment : androidx.fragment.app.Fragment() {
@@ -39,14 +40,28 @@ class StopListFragment : androidx.fragment.app.Fragment() {
         mListView.adapter = mStopListAdapter
         mAddStopHelperText =  mainView.findViewById(R.id.no_stops_help_text)
         mListView.setOnItemClickListener { _, _, position, _ ->
-            val intent = Intent(activity, AddStopActivity::class.java).apply {
-                putExtra(STOP_CONFIG_DATA_KEY, widgetConfigureActivity.widgetConfig.getStopConfiguration(position).toByteArray())
-                putExtra(STOP_INDEX_DATA_KEY, position)
-                if (widgetConfigureActivity.color != null) {
-                    putExtra(EXTRA_COLOR_THEME, widgetConfigureActivity.color!!)
+            val stopConfig = widgetConfigureActivity.widgetConfig.getStopConfiguration(position)
+            if (isLegacyStop(stopConfig.stopData)) {
+                val builder = AlertDialog.Builder(widgetConfigureActivity)
+                builder.setTitle(R.string.legacy_stop_detected)
+                builder.setMessage(R.string.legacy_stop)
+                    .setPositiveButton(R.string.delete_stop) { dialog, id ->
+                        mStopListAdapter.deleteWithUndo(position, mListView)
+                    }
+                    .setNegativeButton(R.string.import_settings_btn_cancel) { dialog, id ->
+                        dialog.dismiss()
+                    }
+                builder.create().show()
+            } else {
+                val intent = Intent(activity, AddStopActivity::class.java).apply {
+                    putExtra(STOP_CONFIG_DATA_KEY, stopConfig.toByteArray())
+                    putExtra(STOP_INDEX_DATA_KEY, position)
+                    if (widgetConfigureActivity.color != null) {
+                        putExtra(EXTRA_COLOR_THEME, widgetConfigureActivity.color!!)
+                    }
                 }
+                widgetConfigureActivity.startActivityForResult(intent, MODIFY_STOP_REQUEST_CODE)
             }
-            widgetConfigureActivity.startActivityForResult(intent, MODIFY_STOP_REQUEST_CODE)
         }
         add_stop_button = mainView.findViewById(R.id.add_stop_button)
         add_stop_button.setOnClickListener { _ ->

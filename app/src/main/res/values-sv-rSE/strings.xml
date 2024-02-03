@@ -12,6 +12,9 @@
     <string name="idle_line1">Tryck en gång för att uppdatera</string>
     <string name="idle_line2">Flera gånger för att konfigurera</string>
 
+    <string name="legacy_stop_detected">Äldre konfiguration</string>
+§    <string name="legacy_stop">Den här hållplatsen är från en äldre version av widgeten. Den kan tas bort men inte ändras. Ta bort hållplatsen?</string>
+
     <string name="stop_name">Sök hållplats (Hela Sverige)</string>
     <string name="save_stop_title">Spara hållplats</string>
 

@@ -73,6 +73,9 @@ fun isSiteConfigured(stop : StopConfigurationOrBuilder) : Boolean {
 fun isSiteConfigured(stopData : StoredStopDataOrBuilder) : Boolean {
     return stopData.siteId != 0L || stopData.site.siteId != 0L || stopData.site.strSiteId.isNotEmpty()
 }
+fun isLegacyStop(stopData : StoredStopDataOrBuilder) : Boolean {
+    return stopData.site.strSiteId.isEmpty()
+}
 
 fun loadWidgetConfigOrDefault(prefs : SharedPreferences, widgetId : Int) : Ng.WidgetConfiguration {
     val widgetKey = widgetKey(widgetId)
