@@ -12,7 +12,7 @@
     <string name="idle_line1">Tryck en gång för att uppdatera</string>
     <string name="idle_line2">Flera gånger för att konfigurera</string>
 
-    <string name="stop_name">Sök hållplats</string>
+    <string name="stop_name">Sök hållplats (Hela Sverige)</string>
     <string name="save_stop_title">Spara hållplats</string>
 
     <string name="no_departures_selected">Vänligen välj minst en avgång eller linje</string>
@@ -30,7 +30,7 @@
     <string name="select_departures">Välj avgångar</string>
     <string name="add_stop_title">Konfigurera hållplats</string>
     <string name="save_widget">Spara widget config</string>
-    <string name="configure_widget_title">SL widget</string>
+    <string name="configure_widget_title">Kollektivtrafik widget</string>
     <string name="updating">Uppdaterar</string>
 
     <string name="error">Det gick inte att läsa in data</string>
@@ -63,6 +63,9 @@
     <string name="on_github">Projekt på Github</string>
     <string name="app_disclaimer">Detta är en öppen sås applikation som utveckas mest för skoj och utan vinstintresse :)
         \nAppen använder din plats för att bestämma vilken information som skall visas beroende på var du befinner dig.</string>
+    <string name="realtime_info_disclaimer">
+        Information i realtid är tillgängligt för SL, Skånetrafiken, Västtrafik och de flesta tåg, se https://www.trafiklab.se/sv/api/trafiklab-apis/resrobot-v21/timetables/.
+    </string>
     <string name="power_save_mode">Batterisparläge - inget Internet</string>
     <string name="power_save_mode_no_whitelist">Tryck här för att gå till inställningar och tillåta appen använda Internet under Batterisparläget</string>
     <string name="auto_updates_running">Automatisk uppdatering aktiverad</string>

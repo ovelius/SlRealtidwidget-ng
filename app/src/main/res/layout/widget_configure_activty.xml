@@ -82,6 +82,16 @@
                 android:gravity="left"
                 android:text="@string/app_disclaimer"
         />
+
+        <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="bottom"
+                android:layout_margin="@dimen/fab_margin"
+                android:gravity="left"
+                android:text="@string/realtime_info_disclaimer"
+                />
+
         </LinearLayout>
         <Button style="@style/Widget.AppCompat.Button"
                 android:layout_width="wrap_content"

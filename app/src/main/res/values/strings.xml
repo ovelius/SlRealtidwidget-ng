@@ -15,7 +15,7 @@
     <string name="idle_line2">Multiple times to configure</string>
 
 
-    <string name="stop_name">Search stop</string>
+    <string name="stop_name">Search stop (Anywhere in Sweden)</string>
     <string name="save_stop_title">Save stop</string>
 
     <string name="no_departures_selected">Please select at least one departure or line</string>
@@ -35,7 +35,7 @@
     <string name="select_departures">Select departures</string>
     <string name="add_stop_title">Configure stop</string>
     <string name="save_widget">Save widget config</string>
-    <string name="configure_widget_title">SL widget</string>
+    <string name="configure_widget_title">Public transport widget</string>
     <string name="updating">Updating</string>
 
     <string name="error">Error loading data</string>
@@ -69,6 +69,9 @@
     <string name="app_disclaimer">This is an open source application, developed as a small side-project for fun without
         profit :)
         \nThe app uses your location to determine what stop to show on what widget at what time.
+    </string>
+    <string name="realtime_info_disclaimer">
+        Realtime information is available for a subset of operators including SL, Skånetrafiken, Västtrafik and most trains, see https://www.trafiklab.se/sv/api/trafiklab-apis/resrobot-v21/timetables/
     </string>
     <string name="power_save_mode">Battery saver mode - no Internet</string>
     <string name="power_save_mode_no_whitelist">Touch here to go to settings and give the app Internet during battery

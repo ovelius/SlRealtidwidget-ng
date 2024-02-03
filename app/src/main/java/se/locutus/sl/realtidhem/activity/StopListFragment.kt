@@ -3,6 +3,8 @@ package se.locutus.sl.realtidhem.activity
 import android.app.AlertDialog
 import android.content.Intent
 import android.content.res.ColorStateList
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -88,7 +90,7 @@ class StopListFragment : androidx.fragment.app.Fragment() {
     fun maybeShowStopSwitcherDialog(config : Ng.WidgetConfiguration) {
         val prefs = widgetConfigureActivity.mWidgetPrefs
         if (prefs.getBoolean(QUICK_TOGGLE_HINT_SHOWN, false)) {
-            return
+          return
         }
         check(config.stopConfigurationCount > 1) { "Must have at least two stops! "}
         val builder = AlertDialog.Builder(widgetConfigureActivity)
@@ -97,6 +99,7 @@ class StopListFragment : androidx.fragment.app.Fragment() {
         val mainText = view.findViewById<TextView>(R.id.widgettag)
         val line1Text = view.findViewById<TextView>(R.id.widgetline1)
         val minText = view.findViewById<TextView>(R.id.widgetmin)
+        val mainViewColor = view.findViewById<View>(R.id.widgetcolor)
 
         val stop1 = config.stopConfigurationList[0].stopData.displayName
         val stop2 = config.stopConfigurationList[1].stopData.displayName
@@ -112,11 +115,12 @@ class StopListFragment : androidx.fragment.app.Fragment() {
             mainText.text = stop2
             line1Text.text = getString(R.string.sample_departure, stop1)
             minText.setText(R.string.sample_minutes2)
+            mainViewColor.background = ColorDrawable(Color.GREEN)
             Toast.makeText(widgetConfigureActivity, R.string.quick_toggle_toast, Toast.LENGTH_SHORT).show()
             prefs.edit().putBoolean(QUICK_TOGGLE_HINT_SHOWN, true).apply()
             Handler(Looper.getMainLooper()).postDelayed({
                 dialog.dismiss()
-            }, 2000)
+            }, 2500)
         }
         view.findViewById<ImageView>(R.id.larrow).setOnClickListener(dismissClick)
         view.findViewById<ImageView>(R.id.rarrow).setOnClickListener(dismissClick)
