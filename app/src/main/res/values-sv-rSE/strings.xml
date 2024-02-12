@@ -1,5 +1,5 @@
 <!DOCTYPE resources [
-        <!ENTITY appname "SL Realtid widget">
+        <!ENTITY appname "Kollektivtrafik widget">
         ]>
 <resources>
     <string name="app_name">&appname;</string>
