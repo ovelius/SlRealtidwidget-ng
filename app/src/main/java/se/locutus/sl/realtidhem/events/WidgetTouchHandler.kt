@@ -158,7 +158,8 @@ class WidgetTouchHandler(val context: Context, val networkManager : NetworkInter
                 inMemoryState.replaceAndStartThread(ScrollThread(
                     widgetId,
                     inMemoryState.remoteViews[widgetId]!!,
-                    lastLoadedData.line2, context
+                    lastLoadedData.line2, context,
+                    inMemoryState.getScrollThreadSleepMs(widgetId)
                 ))
             }
         } else {
@@ -195,7 +196,7 @@ class WidgetTouchHandler(val context: Context, val networkManager : NetworkInter
                 setWidgetTextViews(views, false, context.getString(R.string.power_save_mode), "", line2)
                 manager.updateAppWidget(widgetId, views)
                 inMemoryState.replaceAndStartThread(ScrollThread(
-                    widgetId, views, line2, context
+                    widgetId, views, line2, context, inMemoryState.getScrollThreadSleepMs(widgetId)
                 ))
                 inMemoryState.nextPowerSaveSettings = true
                 return true
@@ -313,7 +314,8 @@ class WidgetTouchHandler(val context: Context, val networkManager : NetworkInter
                     if (userTouch) {
                         inMemoryState.replaceAndStartThread(
                             ScrollThread(
-                                widgetId, views, responseData.loadResponse.line2, context
+                                widgetId, views, responseData.loadResponse.line2, context,
+                                inMemoryState.getScrollThreadSleepMs(widgetId)
                             )
                         )
                     }
@@ -353,7 +355,8 @@ class WidgetTouchHandler(val context: Context, val networkManager : NetworkInter
         inMemoryState.putLastLoadDataInMemory(prefs, widgetId, Ng.WidgetLoadResponseData.getDefaultInstance())
         inMemoryState.updatedAt[widgetId] = System.currentTimeMillis() - UPDATE_FAIL_STALE
         inMemoryState.replaceAndStartThread(ScrollThread(
-            widgetId, views, line2, context
+            widgetId, views, line2, context,
+            inMemoryState.getScrollThreadSleepMs(widgetId)
         ))
     }
 
@@ -392,7 +395,8 @@ class WidgetTouchHandler(val context: Context, val networkManager : NetworkInter
         val widgetId: Int,
         private val views : RemoteViews,
         private val theLine: String,
-        private val context: Context
+        private val context: Context,
+        private val scrollSleepMs : Long
     ) : Thread("ScrollerThread-$widgetId") {
         var running = true
         var agressiveOff = false
@@ -407,7 +411,6 @@ class WidgetTouchHandler(val context: Context, val networkManager : NetworkInter
                 set[i] = s.substring(i)
             }
 
-            val scrollSpeed = 70L
             val length = line2.length + 5
             var i = 0
 
@@ -420,7 +423,7 @@ class WidgetTouchHandler(val context: Context, val networkManager : NetworkInter
                 i++
 
                 try {
-                    Thread.sleep(scrollSpeed) //sakta = 150, snabbt = 70
+                    Thread.sleep(scrollSleepMs) //sakta = 150, snabbt = 70
                 } catch (e: InterruptedException) {
                 }
             }

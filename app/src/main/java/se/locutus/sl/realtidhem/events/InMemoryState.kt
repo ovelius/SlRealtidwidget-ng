@@ -121,6 +121,14 @@ class InMemoryState {
         return widgetConfigs[widgetId]!!
     }
 
+    fun getScrollThreadSleepMs(widgetId : Int) : Long {
+        val cfg = widgetConfigs[widgetId]
+        if (cfg != null && cfg.updateSettings.scrollThreadStepMs > 0) {
+            return cfg.updateSettings.scrollThreadStepMs.toLong()
+        }
+        return 70L;
+    }
+
     fun resetWidgetInMemoryState(widgetId : Int) {
         widgetConfigs.remove(widgetId)
         lastTouch.remove(widgetId)
