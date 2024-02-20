@@ -408,6 +408,10 @@ public final class Ng {
      */
     VY_EXPRESS(328),
     /**
+     * <code>Y_BUSS = 357;</code>
+     */
+    Y_BUSS(357),
+    /**
      * <code>MASEXPRESSEN = 361;</code>
      */
     MASEXPRESSEN(361),
@@ -427,6 +431,10 @@ public final class Ng {
      * <code>SNALLTAGET = 380;</code>
      */
     SNALLTAGET(380),
+    /**
+     * <code>BERGKVARABUSS = 480;</code>
+     */
+    BERGKVARABUSS(480),
     /**
      * <code>VY_NATTAG = 512;</code>
      */
@@ -619,6 +627,10 @@ public final class Ng {
      */
     public static final int VY_EXPRESS_VALUE = 328;
     /**
+     * <code>Y_BUSS = 357;</code>
+     */
+    public static final int Y_BUSS_VALUE = 357;
+    /**
      * <code>MASEXPRESSEN = 361;</code>
      */
     public static final int MASEXPRESSEN_VALUE = 361;
@@ -638,6 +650,10 @@ public final class Ng {
      * <code>SNALLTAGET = 380;</code>
      */
     public static final int SNALLTAGET_VALUE = 380;
+    /**
+     * <code>BERGKVARABUSS = 480;</code>
+     */
+    public static final int BERGKVARABUSS_VALUE = 480;
     /**
      * <code>VY_NATTAG = 512;</code>
      */
@@ -744,11 +760,13 @@ public final class Ng {
         case 325: return TAG_I_BERGSLAGEN;
         case 327: return BUS4YOU;
         case 328: return VY_EXPRESS;
+        case 357: return Y_BUSS;
         case 361: return MASEXPRESSEN;
         case 364: return SILVERLINJEN;
         case 365: return HARJEDALINGEN;
         case 370: return ORESUNDSLINJEN;
         case 380: return SNALLTAGET;
+        case 480: return BERGKVARABUSS;
         case 512: return VY_NATTAG;
         case 513: return NORRTAG;
         case 583: return KROSATAGEN;
@@ -12951,6 +12969,16 @@ public final class Ng {
      * @return The learningPeriods.
      */
     int getLearningPeriods();
+
+    /**
+     * <pre>
+     * How long the scroll thread should wait for each step.
+     * </pre>
+     *
+     * <code>int32 scroll_thread_step_ms = 6;</code>
+     * @return The scrollThreadStepMs.
+     */
+    int getScrollThreadStepMs();
   }
   /**
    * Protobuf type {@code se.locutus.proto.UpdateSettings}
@@ -13278,6 +13306,44 @@ public final class Ng {
       learningPeriods_ = 0;
     }
 
+    public static final int SCROLL_THREAD_STEP_MS_FIELD_NUMBER = 6;
+    private int scrollThreadStepMs_;
+    /**
+     * <pre>
+     * How long the scroll thread should wait for each step.
+     * </pre>
+     *
+     * <code>int32 scroll_thread_step_ms = 6;</code>
+     * @return The scrollThreadStepMs.
+     */
+    @java.lang.Override
+    public int getScrollThreadStepMs() {
+      return scrollThreadStepMs_;
+    }
+    /**
+     * <pre>
+     * How long the scroll thread should wait for each step.
+     * </pre>
+     *
+     * <code>int32 scroll_thread_step_ms = 6;</code>
+     * @param value The scrollThreadStepMs to set.
+     */
+    private void setScrollThreadStepMs(int value) {
+      
+      scrollThreadStepMs_ = value;
+    }
+    /**
+     * <pre>
+     * How long the scroll thread should wait for each step.
+     * </pre>
+     *
+     * <code>int32 scroll_thread_step_ms = 6;</code>
+     */
+    private void clearScrollThreadStepMs() {
+
+      scrollThreadStepMs_ = 0;
+    }
+
     public static se.locutus.proto.Ng.UpdateSettings parseFrom(
         java.nio.ByteBuffer data)
         throws com.google.protobuf.InvalidProtocolBufferException {
@@ -13581,6 +13647,46 @@ public final class Ng {
         return this;
       }
 
+      /**
+       * <pre>
+       * How long the scroll thread should wait for each step.
+       * </pre>
+       *
+       * <code>int32 scroll_thread_step_ms = 6;</code>
+       * @return The scrollThreadStepMs.
+       */
+      @java.lang.Override
+      public int getScrollThreadStepMs() {
+        return instance.getScrollThreadStepMs();
+      }
+      /**
+       * <pre>
+       * How long the scroll thread should wait for each step.
+       * </pre>
+       *
+       * <code>int32 scroll_thread_step_ms = 6;</code>
+       * @param value The scrollThreadStepMs to set.
+       * @return This builder for chaining.
+       */
+      public Builder setScrollThreadStepMs(int value) {
+        copyOnWrite();
+        instance.setScrollThreadStepMs(value);
+        return this;
+      }
+      /**
+       * <pre>
+       * How long the scroll thread should wait for each step.
+       * </pre>
+       *
+       * <code>int32 scroll_thread_step_ms = 6;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearScrollThreadStepMs() {
+        copyOnWrite();
+        instance.clearScrollThreadStepMs();
+        return this;
+      }
+
       // @@protoc_insertion_point(builder_scope:se.locutus.proto.UpdateSettings)
     }
     @java.lang.Override
@@ -13602,10 +13708,11 @@ public final class Ng {
               "updateSequenceLength_",
               "interactionsToLearn_",
               "learningPeriods_",
+              "scrollThreadStepMs_",
             };
             java.lang.String info =
-                "\u0000\u0005\u0000\u0000\u0001\u0005\u0005\u0000\u0000\u0000\u0001\f\u0002\u0007" +
-                "\u0003\u0004\u0004\u0004\u0005\u0004";
+                "\u0000\u0006\u0000\u0000\u0001\u0006\u0006\u0000\u0000\u0000\u0001\f\u0002\u0007" +
+                "\u0003\u0004\u0004\u0004\u0005\u0004\u0006\u0004";
             return newMessageInfo(DEFAULT_INSTANCE, info, objects);
         }
         // fall through
@@ -13667,7 +13774,7 @@ public final class Ng {
     /**
      * <code>int64 site_id = 1 [deprecated = true];</code>
      * @deprecated se.locutus.proto.StoredStopData.site_id is deprecated.
-     *     See messages.proto;l=285
+     *     See messages.proto;l=289
      * @return The siteId.
      */
     @java.lang.Deprecated long getSiteId();
@@ -13737,7 +13844,7 @@ public final class Ng {
     /**
      * <code>int64 site_id = 1 [deprecated = true];</code>
      * @deprecated se.locutus.proto.StoredStopData.site_id is deprecated.
-     *     See messages.proto;l=285
+     *     See messages.proto;l=289
      * @return The siteId.
      */
     @java.lang.Override
@@ -13747,7 +13854,7 @@ public final class Ng {
     /**
      * <code>int64 site_id = 1 [deprecated = true];</code>
      * @deprecated se.locutus.proto.StoredStopData.site_id is deprecated.
-     *     See messages.proto;l=285
+     *     See messages.proto;l=289
      * @param value The siteId to set.
      */
     private void setSiteId(long value) {
@@ -13757,7 +13864,7 @@ public final class Ng {
     /**
      * <code>int64 site_id = 1 [deprecated = true];</code>
      * @deprecated se.locutus.proto.StoredStopData.site_id is deprecated.
-     *     See messages.proto;l=285
+     *     See messages.proto;l=289
      */
     private void clearSiteId() {
 
@@ -14056,7 +14163,7 @@ public final class Ng {
       /**
        * <code>int64 site_id = 1 [deprecated = true];</code>
        * @deprecated se.locutus.proto.StoredStopData.site_id is deprecated.
-       *     See messages.proto;l=285
+       *     See messages.proto;l=289
        * @return The siteId.
        */
       @java.lang.Override
@@ -14066,7 +14173,7 @@ public final class Ng {
       /**
        * <code>int64 site_id = 1 [deprecated = true];</code>
        * @deprecated se.locutus.proto.StoredStopData.site_id is deprecated.
-       *     See messages.proto;l=285
+       *     See messages.proto;l=289
        * @param value The siteId to set.
        * @return This builder for chaining.
        */
@@ -14078,7 +14185,7 @@ public final class Ng {
       /**
        * <code>int64 site_id = 1 [deprecated = true];</code>
        * @deprecated se.locutus.proto.StoredStopData.site_id is deprecated.
-       *     See messages.proto;l=285
+       *     See messages.proto;l=289
        * @return This builder for chaining.
        */
       @java.lang.Deprecated public Builder clearSiteId() {
@@ -14376,7 +14483,7 @@ public final class Ng {
     /**
      * <code>int64 site_id = 1 [deprecated = true];</code>
      * @deprecated se.locutus.proto.StopDataRequest.site_id is deprecated.
-     *     See messages.proto;l=295
+     *     See messages.proto;l=299
      * @return The siteId.
      */
     @java.lang.Deprecated long getSiteId();
@@ -14446,7 +14553,7 @@ public final class Ng {
     /**
      * <code>int64 site_id = 1 [deprecated = true];</code>
      * @deprecated se.locutus.proto.StopDataRequest.site_id is deprecated.
-     *     See messages.proto;l=295
+     *     See messages.proto;l=299
      * @return The siteId.
      */
     @java.lang.Override
@@ -14456,7 +14563,7 @@ public final class Ng {
     /**
      * <code>int64 site_id = 1 [deprecated = true];</code>
      * @deprecated se.locutus.proto.StopDataRequest.site_id is deprecated.
-     *     See messages.proto;l=295
+     *     See messages.proto;l=299
      * @param value The siteId to set.
      */
     private void setSiteId(long value) {
@@ -14466,7 +14573,7 @@ public final class Ng {
     /**
      * <code>int64 site_id = 1 [deprecated = true];</code>
      * @deprecated se.locutus.proto.StopDataRequest.site_id is deprecated.
-     *     See messages.proto;l=295
+     *     See messages.proto;l=299
      */
     private void clearSiteId() {
 
@@ -14803,7 +14910,7 @@ public final class Ng {
       /**
        * <code>int64 site_id = 1 [deprecated = true];</code>
        * @deprecated se.locutus.proto.StopDataRequest.site_id is deprecated.
-       *     See messages.proto;l=295
+       *     See messages.proto;l=299
        * @return The siteId.
        */
       @java.lang.Override
@@ -14813,7 +14920,7 @@ public final class Ng {
       /**
        * <code>int64 site_id = 1 [deprecated = true];</code>
        * @deprecated se.locutus.proto.StopDataRequest.site_id is deprecated.
-       *     See messages.proto;l=295
+       *     See messages.proto;l=299
        * @param value The siteId to set.
        * @return This builder for chaining.
        */
@@ -14825,7 +14932,7 @@ public final class Ng {
       /**
        * <code>int64 site_id = 1 [deprecated = true];</code>
        * @deprecated se.locutus.proto.StopDataRequest.site_id is deprecated.
-       *     See messages.proto;l=295
+       *     See messages.proto;l=299
        * @return This builder for chaining.
        */
       @java.lang.Deprecated public Builder clearSiteId() {

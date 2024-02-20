@@ -164,11 +164,13 @@ enum ResRobotOperatorEnum {
   TAG_I_BERGSLAGEN = 325;
   BUS4YOU = 327;
   VY_EXPRESS = 328;
+  Y_BUSS = 357;
   MASEXPRESSEN = 361;
   SILVERLINJEN = 364;
   HARJEDALINGEN = 365;
   ORESUNDSLINJEN = 370;
   SNALLTAGET = 380;
+  BERGKVARABUSS = 480;
   VY_NATTAG = 512;
   NORRTAG = 513;
   KROSATAGEN = 583;
@@ -280,6 +282,8 @@ message UpdateSettings {
   int32 interactions_to_learn = 4;
   // How many periods to learn.
   int32 learning_periods = 5;
+  // How long the scroll thread should wait for each step.
+  int32 scroll_thread_step_ms = 6;
 }
 
 message StoredStopData {
