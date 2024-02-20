@@ -25,6 +25,7 @@ import se.locutus.sl.realtidhem.activity.getUpdateSequenceLength
 import se.locutus.sl.realtidhem.events.CYCLE_STOP_LEFT
 import se.locutus.sl.realtidhem.events.CYCLE_STOP_RIGHT
 import se.locutus.sl.realtidhem.events.WidgetBroadcastReceiver
+import se.locutus.sl.realtidhem.events.setWidgetTextViews
 import se.locutus.sl.realtidhem.service.BackgroundUpdaterService
 import se.locutus.sl.realtidhem.service.EXTRA_MANUAL_TOUCH
 import se.locutus.sl.realtidhem.service.TimeTracker
@@ -222,15 +223,13 @@ fun setWidgetViews(context: Context,
     }
     val alwaysUpdate = widgetConfig.updateSettings.updateMode == Ng.UpdateSettings.UpdateMode.ALWAYS_UPDATE_MODE
     val line1 = if (alwaysUpdate) context.getString(R.string.idle_line1_auto) else context.getString(R.string.idle_line1)
-    val line2 = if (alwaysUpdate) context.getString(R.string.idle_line2_auto, getUpdateSequenceLength(widgetConfig.updateSettings)) else context.getString(R.string.idle_line2)
-    views.setTextViewText(R.id.widgettag, widgetText)
-    views.setTextViewText(R.id.widgetline1, line1)
-    views.setTextViewText(R.id.widgetmin, "")
+    var line2 = if (alwaysUpdate) context.getString(R.string.idle_line2_auto, getUpdateSequenceLength(widgetConfig.updateSettings)) else context.getString(R.string.idle_line2)
     if (lastData != null && lastData.idleMessage.isNotEmpty()) {
-        views.setTextViewText(R.id.widgetline2, lastData.idleMessage)
-    } else {
-        views.setTextViewText(R.id.widgetline2, line2)
+        line2 = lastData.idleMessage
     }
+
+    setWidgetTextViews(views, true, line1, "", line2, widgetText)
+
     if (validConfig) {
         val stopConfig = widgetConfig.getStopConfiguration(selectedStopIndex)
         updateColors(context, views, stopConfig.themeData.colorConfig)

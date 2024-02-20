@@ -21,6 +21,7 @@ import java.lang.Exception
 import java.net.SocketTimeoutException
 import java.util.logging.Logger
 import android.os.PowerManager
+import android.view.Gravity
 import android.widget.Toast
 import java.net.URLEncoder
 
@@ -45,6 +46,28 @@ interface TouchHandlerInterface {
                       // Invoked with the lines we set on the widget.
                       loadedLinesCallback : (String, String, String) -> Unit = {_, _,_ -> })
     fun getInMemoryState() : InMemoryState
+}
+
+fun setWidgetTextViews(views : RemoteViews, centerLines: Boolean, line1 : String? = null, min: String? = null, line2 : String? = null, widgetTag : String? = null) {
+    if (line1 != null) {
+        views.setTextViewText(R.id.widgetline1, line1)
+    }
+    if (min != null) {
+        views.setTextViewText(R.id.widgetmin, min)
+    }
+    if (line2 != null) {
+        views.setTextViewText(R.id.widgetline2, line2)
+    }
+    if (widgetTag != null) {
+        views.setTextViewText(R.id.widgettag, widgetTag)
+    }
+    if (centerLines) {
+        views.setInt(R.id.widgetline1, "setGravity", Gravity.CENTER)
+        views.setInt(R.id.widgetline2, "setGravity", Gravity.CENTER)
+    } else {
+        views.setInt(R.id.widgetline1, "setGravity", Gravity.LEFT)
+        views.setInt(R.id.widgetline2, "setGravity", Gravity.LEFT)
+    }
 }
 
 fun openWidgetConfig(context : Context, color : Int?, widgetId: Int) {
@@ -169,7 +192,7 @@ class WidgetTouchHandler(val context: Context, val networkManager : NetworkInter
                 LOG.info("Power save mode detected without being whitelisted!")
                 val views = inMemoryState.getRemoveViews(widgetId, prefs, context, false)
                 val line2 = context.getString(R.string.power_save_mode_no_whitelist)
-                setWidgetTextViews(views, context.getString(R.string.power_save_mode), "", line2)
+                setWidgetTextViews(views, false, context.getString(R.string.power_save_mode), "", line2)
                 manager.updateAppWidget(widgetId, views)
                 inMemoryState.replaceAndStartThread(ScrollThread(
                     widgetId, views, line2, context
@@ -236,7 +259,7 @@ class WidgetTouchHandler(val context: Context, val networkManager : NetworkInter
         val views = inMemoryState.getRemoveViews(widgetId, prefs, context, true)
 
         val line1 = if (attempt > 1) context.getString(R.string.updating_attempt, attempt) else context.getString(R.string.updating)
-        setWidgetTextViews(views, line1, "", context.getString(R.string.updating), stopConfig.stopData.displayName)
+        setWidgetTextViews(views, false, line1, "", context.getString(R.string.updating), stopConfig.stopData.displayName)
         manager.updateAppWidget(widgetId, views)
 
         val stopDataRequest = Ng.StopDataRequest.newBuilder()
@@ -281,7 +304,7 @@ class WidgetTouchHandler(val context: Context, val networkManager : NetworkInter
                 val loadResponse = responseData.loadResponse
                 val time = System.currentTimeMillis()
                 if (loadResponse.line1.isNotEmpty()) {
-                    setWidgetTextViews(views, loadResponse.line1, loadResponse.minutes, loadResponse.line2)
+                    setWidgetTextViews(views, false, loadResponse.line1, loadResponse.minutes, loadResponse.line2)
                     loadedLinesCallback(loadResponse.line1, loadResponse.minutes, loadResponse.line2)
                     if (!stopConfig.themeData.colorConfig.overrideMainColor) {
                         views.setInt(R.id.widgetcolor, "setBackgroundColor", responseData.loadResponse.color)
@@ -297,6 +320,7 @@ class WidgetTouchHandler(val context: Context, val networkManager : NetworkInter
                 } else {
                     setWidgetTextViews(
                         views,
+                        false,
                         context.getString(R.string.no_data),
                         "",
                         context.getString(R.string.no_data_detail)
@@ -323,7 +347,7 @@ class WidgetTouchHandler(val context: Context, val networkManager : NetworkInter
             line2 = context.getString(R.string.sl_api_error_detail, e.message)
             errorResource = R.string.sl_api_error
         }
-        setWidgetTextViews(views, context.getString(errorResource), "", line2)
+        setWidgetTextViews(views, false, context.getString(errorResource), "", line2)
         loadedLinesCallback(context.getString(errorResource), "", line2)
 
         inMemoryState.putLastLoadDataInMemory(prefs, widgetId, Ng.WidgetLoadResponseData.getDefaultInstance())
@@ -342,7 +366,7 @@ class WidgetTouchHandler(val context: Context, val networkManager : NetworkInter
         if (e is com.android.volley.TimeoutError || e is SocketTimeoutException) {
             errorResource = R.string.error_timeout
         }
-        setWidgetTextViews(views, context.getString(errorResource), "", errorDetailString)
+        setWidgetTextViews(views, false, context.getString(errorResource), "", errorDetailString)
         loadedLinesCallback(context.getString(errorResource), "", errorDetailString)
 
         inMemoryState.putLastLoadDataInMemory(prefs, widgetId, Ng.WidgetLoadResponseData.newBuilder()
@@ -362,22 +386,6 @@ class WidgetTouchHandler(val context: Context, val networkManager : NetworkInter
                 putInt(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId)
             }))
         scheduler.schedule(builder.build())
-    }
-
-
-    fun setWidgetTextViews(views : RemoteViews, line1 : String? = null, min: String? = null, line2 : String? = null, widgetTag : String? = null) {
-        if (line1 != null) {
-            views.setTextViewText(R.id.widgetline1, line1)
-        }
-        if (min != null) {
-            views.setTextViewText(R.id.widgetmin, min)
-        }
-        if (line2 != null) {
-            views.setTextViewText(R.id.widgetline2, line2)
-        }
-        if (widgetTag != null) {
-            views.setTextViewText(R.id.widgettag, widgetTag)
-        }
     }
 
     class ScrollThread(

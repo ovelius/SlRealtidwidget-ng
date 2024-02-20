@@ -53,15 +53,6 @@ class ResetWidget : JobService() {
         return false
     }
 
-    private fun getRemoveViews(widgetId : Int) : RemoteViews {
-        val handler = WidgetBroadcastReceiver.widgetTouchHandler
-        val prefs = getSharedPreferences(WIDGET_CONFIG_PREFS, 0)
-        if (handler != null) {
-            return handler.inMemoryState.getRemoveViews(widgetId, prefs,this, false)
-        }
-        return RemoteViews(packageName, getWidgetLayoutId(prefs, widgetId))
-    }
-
     override fun onStartJob(params: JobParameters?): Boolean {
         val widgetId: Int = params!!.extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID)
         val prefs = getSharedPreferences(WIDGET_CONFIG_PREFS, 0)
