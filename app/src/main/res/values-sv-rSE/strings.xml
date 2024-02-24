@@ -126,5 +126,6 @@
     <string name="quick_toggle_dismiss">Tryck på en sida för att gå vidare</string>
     <string name="quick_toggle_toast">Sådär ja!</string>
     <string name="save_and_exit"><![CDATA[Spara & tillbaka]]></string>
+    <string name="scroller_speed">Skrollhastighet:</string>
 
     --></resources>

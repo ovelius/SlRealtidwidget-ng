@@ -392,6 +392,10 @@ public final class Ng {
      */
     VARMLANDSTRAFIK_TRAIN(317),
     /**
+     * <code>WAXHOLMSBOLAGET = 320;</code>
+     */
+    WAXHOLMSBOLAGET(320),
+    /**
      * <code>FLIXTRAIN = 324;</code>
      */
     FLIXTRAIN(324),
@@ -611,6 +615,10 @@ public final class Ng {
      */
     public static final int VARMLANDSTRAFIK_TRAIN_VALUE = 317;
     /**
+     * <code>WAXHOLMSBOLAGET = 320;</code>
+     */
+    public static final int WAXHOLMSBOLAGET_VALUE = 320;
+    /**
      * <code>FLIXTRAIN = 324;</code>
      */
     public static final int FLIXTRAIN_VALUE = 324;
@@ -756,6 +764,7 @@ public final class Ng {
         case 313: return MALARTAG;
         case 315: return VY_TAG;
         case 317: return VARMLANDSTRAFIK_TRAIN;
+        case 320: return WAXHOLMSBOLAGET;
         case 324: return FLIXTRAIN;
         case 325: return TAG_I_BERGSLAGEN;
         case 327: return BUS4YOU;
@@ -8168,6 +8177,16 @@ public final class Ng {
      */
     com.google.protobuf.ByteString
         getOperatorNameBytes();
+
+    /**
+     * <pre>
+     * Indication that this departure has realtime information.
+     * </pre>
+     *
+     * <code>bool is_realtime = 8;</code>
+     * @return The isRealtime.
+     */
+    boolean getIsRealtime();
   }
   /**
    * <pre>
@@ -8535,6 +8554,44 @@ public final class Ng {
       checkByteStringIsUtf8(value);
       operatorName_ = value.toStringUtf8();
 
+    }
+
+    public static final int IS_REALTIME_FIELD_NUMBER = 8;
+    private boolean isRealtime_;
+    /**
+     * <pre>
+     * Indication that this departure has realtime information.
+     * </pre>
+     *
+     * <code>bool is_realtime = 8;</code>
+     * @return The isRealtime.
+     */
+    @java.lang.Override
+    public boolean getIsRealtime() {
+      return isRealtime_;
+    }
+    /**
+     * <pre>
+     * Indication that this departure has realtime information.
+     * </pre>
+     *
+     * <code>bool is_realtime = 8;</code>
+     * @param value The isRealtime to set.
+     */
+    private void setIsRealtime(boolean value) {
+      
+      isRealtime_ = value;
+    }
+    /**
+     * <pre>
+     * Indication that this departure has realtime information.
+     * </pre>
+     *
+     * <code>bool is_realtime = 8;</code>
+     */
+    private void clearIsRealtime() {
+
+      isRealtime_ = false;
     }
 
     public static se.locutus.proto.Ng.DepartureData parseFrom(
@@ -9008,6 +9065,46 @@ public final class Ng {
         return this;
       }
 
+      /**
+       * <pre>
+       * Indication that this departure has realtime information.
+       * </pre>
+       *
+       * <code>bool is_realtime = 8;</code>
+       * @return The isRealtime.
+       */
+      @java.lang.Override
+      public boolean getIsRealtime() {
+        return instance.getIsRealtime();
+      }
+      /**
+       * <pre>
+       * Indication that this departure has realtime information.
+       * </pre>
+       *
+       * <code>bool is_realtime = 8;</code>
+       * @param value The isRealtime to set.
+       * @return This builder for chaining.
+       */
+      public Builder setIsRealtime(boolean value) {
+        copyOnWrite();
+        instance.setIsRealtime(value);
+        return this;
+      }
+      /**
+       * <pre>
+       * Indication that this departure has realtime information.
+       * </pre>
+       *
+       * <code>bool is_realtime = 8;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearIsRealtime() {
+        copyOnWrite();
+        instance.clearIsRealtime();
+        return this;
+      }
+
       // @@protoc_insertion_point(builder_scope:se.locutus.proto.DepartureData)
     }
     @java.lang.Override
@@ -9031,10 +9128,11 @@ public final class Ng {
               "trafficType_",
               "operator_",
               "operatorName_",
+              "isRealtime_",
             };
             java.lang.String info =
-                "\u0000\u0007\u0000\u0000\u0001\u0007\u0007\u0000\u0000\u0000\u0001\u0208\u0002\u0004" +
-                "\u0003\u0004\u0004\u0004\u0005\f\u0006\f\u0007\u0208";
+                "\u0000\b\u0000\u0000\u0001\b\b\u0000\u0000\u0000\u0001\u0208\u0002\u0004\u0003\u0004" +
+                "\u0004\u0004\u0005\f\u0006\f\u0007\u0208\b\u0007";
             return newMessageInfo(DEFAULT_INSTANCE, info, objects);
         }
         // fall through
@@ -13774,7 +13872,7 @@ public final class Ng {
     /**
      * <code>int64 site_id = 1 [deprecated = true];</code>
      * @deprecated se.locutus.proto.StoredStopData.site_id is deprecated.
-     *     See messages.proto;l=289
+     *     See messages.proto;l=292
      * @return The siteId.
      */
     @java.lang.Deprecated long getSiteId();
@@ -13844,7 +13942,7 @@ public final class Ng {
     /**
      * <code>int64 site_id = 1 [deprecated = true];</code>
      * @deprecated se.locutus.proto.StoredStopData.site_id is deprecated.
-     *     See messages.proto;l=289
+     *     See messages.proto;l=292
      * @return The siteId.
      */
     @java.lang.Override
@@ -13854,7 +13952,7 @@ public final class Ng {
     /**
      * <code>int64 site_id = 1 [deprecated = true];</code>
      * @deprecated se.locutus.proto.StoredStopData.site_id is deprecated.
-     *     See messages.proto;l=289
+     *     See messages.proto;l=292
      * @param value The siteId to set.
      */
     private void setSiteId(long value) {
@@ -13864,7 +13962,7 @@ public final class Ng {
     /**
      * <code>int64 site_id = 1 [deprecated = true];</code>
      * @deprecated se.locutus.proto.StoredStopData.site_id is deprecated.
-     *     See messages.proto;l=289
+     *     See messages.proto;l=292
      */
     private void clearSiteId() {
 
@@ -14163,7 +14261,7 @@ public final class Ng {
       /**
        * <code>int64 site_id = 1 [deprecated = true];</code>
        * @deprecated se.locutus.proto.StoredStopData.site_id is deprecated.
-       *     See messages.proto;l=289
+       *     See messages.proto;l=292
        * @return The siteId.
        */
       @java.lang.Override
@@ -14173,7 +14271,7 @@ public final class Ng {
       /**
        * <code>int64 site_id = 1 [deprecated = true];</code>
        * @deprecated se.locutus.proto.StoredStopData.site_id is deprecated.
-       *     See messages.proto;l=289
+       *     See messages.proto;l=292
        * @param value The siteId to set.
        * @return This builder for chaining.
        */
@@ -14185,7 +14283,7 @@ public final class Ng {
       /**
        * <code>int64 site_id = 1 [deprecated = true];</code>
        * @deprecated se.locutus.proto.StoredStopData.site_id is deprecated.
-       *     See messages.proto;l=289
+       *     See messages.proto;l=292
        * @return This builder for chaining.
        */
       @java.lang.Deprecated public Builder clearSiteId() {
@@ -14483,7 +14581,7 @@ public final class Ng {
     /**
      * <code>int64 site_id = 1 [deprecated = true];</code>
      * @deprecated se.locutus.proto.StopDataRequest.site_id is deprecated.
-     *     See messages.proto;l=299
+     *     See messages.proto;l=302
      * @return The siteId.
      */
     @java.lang.Deprecated long getSiteId();
@@ -14553,7 +14651,7 @@ public final class Ng {
     /**
      * <code>int64 site_id = 1 [deprecated = true];</code>
      * @deprecated se.locutus.proto.StopDataRequest.site_id is deprecated.
-     *     See messages.proto;l=299
+     *     See messages.proto;l=302
      * @return The siteId.
      */
     @java.lang.Override
@@ -14563,7 +14661,7 @@ public final class Ng {
     /**
      * <code>int64 site_id = 1 [deprecated = true];</code>
      * @deprecated se.locutus.proto.StopDataRequest.site_id is deprecated.
-     *     See messages.proto;l=299
+     *     See messages.proto;l=302
      * @param value The siteId to set.
      */
     private void setSiteId(long value) {
@@ -14573,7 +14671,7 @@ public final class Ng {
     /**
      * <code>int64 site_id = 1 [deprecated = true];</code>
      * @deprecated se.locutus.proto.StopDataRequest.site_id is deprecated.
-     *     See messages.proto;l=299
+     *     See messages.proto;l=302
      */
     private void clearSiteId() {
 
@@ -14910,7 +15008,7 @@ public final class Ng {
       /**
        * <code>int64 site_id = 1 [deprecated = true];</code>
        * @deprecated se.locutus.proto.StopDataRequest.site_id is deprecated.
-       *     See messages.proto;l=299
+       *     See messages.proto;l=302
        * @return The siteId.
        */
       @java.lang.Override
@@ -14920,7 +15018,7 @@ public final class Ng {
       /**
        * <code>int64 site_id = 1 [deprecated = true];</code>
        * @deprecated se.locutus.proto.StopDataRequest.site_id is deprecated.
-       *     See messages.proto;l=299
+       *     See messages.proto;l=302
        * @param value The siteId to set.
        * @return This builder for chaining.
        */
@@ -14932,7 +15030,7 @@ public final class Ng {
       /**
        * <code>int64 site_id = 1 [deprecated = true];</code>
        * @deprecated se.locutus.proto.StopDataRequest.site_id is deprecated.
-       *     See messages.proto;l=299
+       *     See messages.proto;l=302
        * @return This builder for chaining.
        */
       @java.lang.Deprecated public Builder clearSiteId() {

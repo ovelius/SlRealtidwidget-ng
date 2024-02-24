@@ -126,6 +126,11 @@
     <string name="sample_departure" translatable="false">12 %1$s</string>
     <string name="sample_minutes" translatable="false">3 min</string>
     <string name="sample_minutes2" translatable="false">6 min</string>
+    <string name="sample_stop" translatable="false">T-Centralen</string>
+    <string name="sample_line1" translatable="false">11 Akalla</string>
+    <string name="sample_line2" translatable="false">11 Kungsträdgården, 10 Hjulsta, 28 Göteborg Centralstation     </string>
+    <string name="sample_wee" translatable="false">Weeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee!!</string>
+    <string name="scroller_speed">Scroll speed:</string>
 
     <string-array name="update_mode_array">
         <item>Learning</item>

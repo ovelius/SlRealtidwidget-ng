@@ -62,8 +62,8 @@ fun setWidgetTextViews(views : RemoteViews, centerLines: Boolean, line1 : String
         views.setTextViewText(R.id.widgettag, widgetTag)
     }
     if (centerLines) {
-        views.setInt(R.id.widgetline1, "setGravity", Gravity.CENTER)
-        views.setInt(R.id.widgetline2, "setGravity", Gravity.CENTER)
+        views.setInt(R.id.widgetline1, "setGravity", Gravity.CENTER_HORIZONTAL)
+        views.setInt(R.id.widgetline2, "setGravity", Gravity.CENTER_HORIZONTAL)
     } else {
         views.setInt(R.id.widgetline1, "setGravity", Gravity.LEFT)
         views.setInt(R.id.widgetline2, "setGravity", Gravity.LEFT)
@@ -260,7 +260,7 @@ class WidgetTouchHandler(val context: Context, val networkManager : NetworkInter
         val views = inMemoryState.getRemoveViews(widgetId, prefs, context, true)
 
         val line1 = if (attempt > 1) context.getString(R.string.updating_attempt, attempt) else context.getString(R.string.updating)
-        setWidgetTextViews(views, false, line1, "", context.getString(R.string.updating), stopConfig.stopData.displayName)
+        setWidgetTextViews(views, true, line1, "", context.getString(R.string.updating), stopConfig.stopData.displayName)
         manager.updateAppWidget(widgetId, views)
 
         val stopDataRequest = Ng.StopDataRequest.newBuilder()
@@ -391,7 +391,7 @@ class WidgetTouchHandler(val context: Context, val networkManager : NetworkInter
         scheduler.schedule(builder.build())
     }
 
-    class ScrollThread(
+    open class ScrollThread(
         val widgetId: Int,
         private val views : RemoteViews,
         private val theLine: String,
@@ -400,6 +400,11 @@ class WidgetTouchHandler(val context: Context, val networkManager : NetworkInter
     ) : Thread("ScrollerThread-$widgetId") {
         var running = true
         var agressiveOff = false
+
+        open fun updateView(manager : AppWidgetManager, s : String) {
+            views.setTextViewText(R.id.widgetline2, s)
+            manager.updateAppWidget(widgetId, views)
+        }
 
         override fun run() {
             val manager = AppWidgetManager.getInstance(context)
@@ -417,20 +422,17 @@ class WidgetTouchHandler(val context: Context, val networkManager : NetworkInter
             while (i < length && running) {
                 s = set[i]!!
 
-                views.setTextViewText(R.id.widgetline2, s)
-                // java.lang.RuntimeException: android.os.TransactionTooLargeException: data parcel size 558860 bytes
-                manager.updateAppWidget(widgetId, views)
+                updateView(manager, s)
                 i++
 
                 try {
-                    Thread.sleep(scrollSleepMs) //sakta = 150, snabbt = 70
+                    Thread.sleep(scrollSleepMs)
                 } catch (e: InterruptedException) {
                 }
             }
 
             if (!agressiveOff) {
-                views.setTextViewText(R.id.widgetline2, line2)
-                manager.updateAppWidget(widgetId, views)
+                updateView(manager, line2)
                 running = false
             }
         }

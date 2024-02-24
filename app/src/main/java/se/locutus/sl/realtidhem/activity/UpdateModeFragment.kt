@@ -1,17 +1,30 @@
 package se.locutus.sl.realtidhem.activity
 
+import android.appwidget.AppWidgetManager
+import android.content.Context
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import com.google.android.material.slider.Slider
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import se.locutus.proto.Ng
 import se.locutus.sl.realtidhem.R
+import se.locutus.sl.realtidhem.events.WidgetTouchHandler
 import se.locutus.sl.realtidhem.service.TimeTracker
 import se.locutus.sl.realtidhem.service.sortRecordsByTimeAndCutoff
+import se.locutus.sl.realtidhem.widget.getWidgetLayoutId
 import java.util.logging.Logger
+import kotlin.coroutines.CoroutineContext
 
 const val MAX_UPDATE_PERIOD = 100000000
 const val DEFAULT_UPDATE_PERIOD = 4
@@ -39,6 +52,16 @@ fun getUpdateSequenceLength(updateSettings: Ng.UpdateSettings) : Int {
     return updateSettings.updateSequenceLength
 }
 
+class DebugScrollThread(private val theLine: String,
+                        private val textView: TextView,
+                        private val context: Context,
+                        private val scrollSleepMs : Long) :
+    WidgetTouchHandler.ScrollThread(-1, RemoteViews(context.packageName, R.layout.widgetlayout_base), theLine, context, scrollSleepMs) {
+    override fun updateView(manager: AppWidgetManager, s: String) {
+        textView.setText(s)
+    }
+}
+
 class UpdateModeFragment : androidx.fragment.app.Fragment() {
     companion object {
         val LOG = Logger.getLogger(UpdateModeFragment::class.java.name)
@@ -58,6 +81,12 @@ class UpdateModeFragment : androidx.fragment.app.Fragment() {
 
     private lateinit var learnPeriodCount : EditText
     private lateinit var interactionsToLearn : EditText
+    private lateinit var speedSlider: Slider
+    private lateinit var widgetLine2 : TextView
+    private var debugScrollThread : DebugScrollThread? = null
+    private var mainHandler = Handler(Looper.getMainLooper())
+    private var scrollDebouncer : Runnable? = null
+    private var touchCount = 0
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val mainView = inflater.inflate(R.layout.content_update_mode, container, false)
@@ -129,6 +158,40 @@ class UpdateModeFragment : androidx.fragment.app.Fragment() {
                         updateUpdatePeriod()
                     }
                 }})
+        widgetLine2 = mainView.findViewById(R.id.widgetline2)
+        widgetLine2.setText(R.string.sample_line2)
+        mainView.findViewById<TextView>(R.id.widgettag).setText(R.string.sample_stop)
+        mainView.findViewById<TextView>(R.id.widgetline1).setText(R.string.sample_line1)
+        mainView.findViewById<TextView>(R.id.widgetmin).setText(R.string.sample_minutes)
+
+        speedSlider = mainView.findViewById(R.id.speed_slider)
+        val configured = if (widgetConfigureActivity.widgetConfig.updateSettings.scrollThreadStepMs > 0) widgetConfigureActivity.widgetConfig.updateSettings.scrollThreadStepMs.toFloat() else 70.0f
+        speedSlider.value = configured
+        speedSlider.addOnChangeListener { slider, value, fromUser ->
+            touchCount++
+            if (scrollDebouncer != null) {
+                mainHandler.removeCallbacks(scrollDebouncer!!)
+                debugScrollThread?.running = false
+                debugScrollThread?.agressiveOff = true
+            }
+            scrollDebouncer = Runnable{
+                debugScrollThread?.running = false
+                debugScrollThread?.agressiveOff = true
+                val updateSettings = widgetConfigureActivity.widgetConfig.updateSettings.toBuilder()
+                updateSettings.setScrollThreadStepMs(value.toInt())
+                debugScrollThread = DebugScrollThread(
+                    if (touchCount> 3) getString(R.string.sample_wee) else getString(R.string.sample_line2),
+                    widgetLine2,
+                    widgetConfigureActivity,
+                    value.toLong()
+                )
+                widgetConfigureActivity.widgetConfig =
+                    widgetConfigureActivity.widgetConfig.toBuilder()
+                        .setUpdateSettings(updateSettings).build()
+                debugScrollThread?.start()
+            }
+            mainHandler.postDelayed(scrollDebouncer!!, 300)
+        }
         updateUpdatePeriod()
         return mainView
     }

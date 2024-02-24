@@ -160,6 +160,7 @@ enum ResRobotOperatorEnum {
   MALARTAG = 313;
   VY_TAG = 315;
   VARMLANDSTRAFIK_TRAIN = 317;
+  WAXHOLMSBOLAGET = 320;
   FLIXTRAIN = 324;
   TAG_I_BERGSLAGEN = 325;
   BUS4YOU = 327;
@@ -200,6 +201,8 @@ message DepartureData {
   ResRobotOperatorEnum operator = 6;
   // Actual text representation of operator.
   string operator_name = 7;
+  // Indication that this departure has realtime information.
+  bool is_realtime = 8;
 }
 
 message SiteId {
