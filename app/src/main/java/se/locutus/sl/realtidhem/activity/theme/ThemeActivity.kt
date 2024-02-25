@@ -246,7 +246,7 @@ class ThemeActivity : AppCompatActivity() {
     private fun extractDepartures() : List<Ng.DepartureData> {
         val result = ArrayList<Ng.DepartureData>()
         val depSet = HashSet<String>().apply { addAll(stopConfig.departuresFilter.departuresList) }
-        for (departure in departureResponse.depatureDataList) {
+        for (departure in departureResponse.departureDataList) {
             if (depSet.contains(departure.canonicalName)) {
                 result.add(departure)
             } else if (stopConfig.lineFilterCount > 0) {

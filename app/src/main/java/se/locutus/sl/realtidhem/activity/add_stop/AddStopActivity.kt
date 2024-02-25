@@ -211,7 +211,7 @@ class AddStopActivity : AppCompatActivity() {
                 LOG.warning("Got error response $e")
                 snackbarRetryError(R.string.error, siteId)
             } else {
-                LOG.info("Got response with ${responseData.allDepaturesResponse.depatureDataCount} departures")
+                LOG.info("Got response with ${responseData.allDeparturesResponse.departureDataCount} departures")
                 handleLoadResonse(responseData)
             }
         }
@@ -219,8 +219,8 @@ class AddStopActivity : AppCompatActivity() {
 
     private fun handleLoadResonse(response : Ng.ResponseData) {
         val existing = config.departuresFilter.departuresList.toSet()
-        val stopDataResponse = response.allDepaturesResponse.stopData
-        val departures = response.allDepaturesResponse.depatureDataList
+        val stopDataResponse = response.allDeparturesResponse.stopData
+        val departures = response.allDeparturesResponse.departureDataList
         val stopData = Ng.StoredStopData.newBuilder()
             .setCanonicalName(stopDataResponse.canonicalName)
             .setLat(stopDataResponse.lat)
@@ -263,12 +263,12 @@ class AddStopActivity : AppCompatActivity() {
             departureAdapter.add(departure, existing.contains(name))
         }
 
-        val colorMap = createColorMap(response.allDepaturesResponse)
+        val colorMap = createColorMap(response.allDeparturesResponse)
         LOG.info("Mapped ${colorMap.size} colors.")
-        stopConfigureTabAdapter.selectLinesFragment.indexDepartures(colorMap, response.allDepaturesResponse, linesAdapter, config.lineFilterList)
+        stopConfigureTabAdapter.selectLinesFragment.indexDepartures(colorMap, response.allDeparturesResponse, linesAdapter, config.lineFilterList)
         departureAdapter.sort(colorMap)
         departureAdapter.notifyDataSetChanged()
-        allDeparturesResponse = response.allDepaturesResponse
+        allDeparturesResponse = response.allDeparturesResponse
     }
 
     private fun getConfigErrorMessage() : Int? {

@@ -22,7 +22,7 @@ import kotlin.collections.set
  */
 fun createColorMap(data : Ng.AllDepaturesResponseData) : Map<Int, Int> {
     val colorMap = HashMap<Int, Int>()
-    for (departure in data.depatureDataList) {
+    for (departure in data.departureDataList) {
         colorMap[departure.color] = if (colorMap.containsKey(departure.color)) colorMap[departure.color]!! + 1 else 1
     }
     return colorMap
@@ -62,11 +62,11 @@ class SelectLinesFragment : androidx.fragment.app.Fragment() {
     fun indexDepartures(colorMap : Map<Int, Int>, data : Ng.AllDepaturesResponseData,
                         linesAdapter : LineListAdapter,
                         lineFilterList: List<Ng.LineFilter>) {
-        LOG.info("Indexing departures ${data.depatureDataCount}")
+        LOG.info("Indexing departures ${data.departureDataCount}")
         linesAdapter.clear()
         // Map with line as key, departureList as value.
         val map = HashMap<String, MutableList<Ng.DepartureData>>()
-        for (departure in data.depatureDataList) {
+        for (departure in data.departureDataList) {
             val key = "${departure.groupOfLineId}_${departure.directionId}"
             if (!map.containsKey(key)) {
                 map[key] = ArrayList()

@@ -41,7 +41,7 @@ message ResponseData {
   // Response with data suitable to display in widget.
   WidgetLoadResponseData load_response = 2;
   // Returns all departures for a stop.
-  AllDepaturesResponseData all_depatures_response = 3;
+  AllDepaturesResponseData all_departures_response = 3;
   // A response to a ping.
   PingRequestResponse ping_response = 4;
   // Error response, set if we could handle the error
@@ -113,7 +113,7 @@ message AllDepaturesResponseData {
   // Details about this stop.
   StopData stop_data = 1;
   // Details about all the known departure from this stop.
-  repeated DepartureData depature_data = 2;
+  repeated DepartureData departure_data = 2;
 }
 
 enum NgTrafficType {

@@ -2934,19 +2934,19 @@ public final class Ng {
      * Returns all departures for a stop.
      * </pre>
      *
-     * <code>.se.locutus.proto.AllDepaturesResponseData all_depatures_response = 3;</code>
-     * @return Whether the allDepaturesResponse field is set.
+     * <code>.se.locutus.proto.AllDepaturesResponseData all_departures_response = 3;</code>
+     * @return Whether the allDeparturesResponse field is set.
      */
-    boolean hasAllDepaturesResponse();
+    boolean hasAllDeparturesResponse();
     /**
      * <pre>
      * Returns all departures for a stop.
      * </pre>
      *
-     * <code>.se.locutus.proto.AllDepaturesResponseData all_depatures_response = 3;</code>
-     * @return The allDepaturesResponse.
+     * <code>.se.locutus.proto.AllDepaturesResponseData all_departures_response = 3;</code>
+     * @return The allDeparturesResponse.
      */
-    se.locutus.proto.Ng.AllDepaturesResponseData getAllDepaturesResponse();
+    se.locutus.proto.Ng.AllDepaturesResponseData getAllDeparturesResponse();
 
     /**
      * <pre>
@@ -3159,17 +3159,17 @@ public final class Ng {
       bitField0_ = (bitField0_ & ~0x00000002);
     }
 
-    public static final int ALL_DEPATURES_RESPONSE_FIELD_NUMBER = 3;
-    private se.locutus.proto.Ng.AllDepaturesResponseData allDepaturesResponse_;
+    public static final int ALL_DEPARTURES_RESPONSE_FIELD_NUMBER = 3;
+    private se.locutus.proto.Ng.AllDepaturesResponseData allDeparturesResponse_;
     /**
      * <pre>
      * Returns all departures for a stop.
      * </pre>
      *
-     * <code>.se.locutus.proto.AllDepaturesResponseData all_depatures_response = 3;</code>
+     * <code>.se.locutus.proto.AllDepaturesResponseData all_departures_response = 3;</code>
      */
     @java.lang.Override
-    public boolean hasAllDepaturesResponse() {
+    public boolean hasAllDeparturesResponse() {
       return ((bitField0_ & 0x00000004) != 0);
     }
     /**
@@ -3177,22 +3177,22 @@ public final class Ng {
      * Returns all departures for a stop.
      * </pre>
      *
-     * <code>.se.locutus.proto.AllDepaturesResponseData all_depatures_response = 3;</code>
+     * <code>.se.locutus.proto.AllDepaturesResponseData all_departures_response = 3;</code>
      */
     @java.lang.Override
-    public se.locutus.proto.Ng.AllDepaturesResponseData getAllDepaturesResponse() {
-      return allDepaturesResponse_ == null ? se.locutus.proto.Ng.AllDepaturesResponseData.getDefaultInstance() : allDepaturesResponse_;
+    public se.locutus.proto.Ng.AllDepaturesResponseData getAllDeparturesResponse() {
+      return allDeparturesResponse_ == null ? se.locutus.proto.Ng.AllDepaturesResponseData.getDefaultInstance() : allDeparturesResponse_;
     }
     /**
      * <pre>
      * Returns all departures for a stop.
      * </pre>
      *
-     * <code>.se.locutus.proto.AllDepaturesResponseData all_depatures_response = 3;</code>
+     * <code>.se.locutus.proto.AllDepaturesResponseData all_departures_response = 3;</code>
      */
-    private void setAllDepaturesResponse(se.locutus.proto.Ng.AllDepaturesResponseData value) {
+    private void setAllDeparturesResponse(se.locutus.proto.Ng.AllDepaturesResponseData value) {
       value.getClass();
-  allDepaturesResponse_ = value;
+  allDeparturesResponse_ = value;
       bitField0_ |= 0x00000004;
       }
     /**
@@ -3200,17 +3200,17 @@ public final class Ng {
      * Returns all departures for a stop.
      * </pre>
      *
-     * <code>.se.locutus.proto.AllDepaturesResponseData all_depatures_response = 3;</code>
+     * <code>.se.locutus.proto.AllDepaturesResponseData all_departures_response = 3;</code>
      */
     @java.lang.SuppressWarnings({"ReferenceEquality"})
-    private void mergeAllDepaturesResponse(se.locutus.proto.Ng.AllDepaturesResponseData value) {
+    private void mergeAllDeparturesResponse(se.locutus.proto.Ng.AllDepaturesResponseData value) {
       value.getClass();
-  if (allDepaturesResponse_ != null &&
-          allDepaturesResponse_ != se.locutus.proto.Ng.AllDepaturesResponseData.getDefaultInstance()) {
-        allDepaturesResponse_ =
-          se.locutus.proto.Ng.AllDepaturesResponseData.newBuilder(allDepaturesResponse_).mergeFrom(value).buildPartial();
+  if (allDeparturesResponse_ != null &&
+          allDeparturesResponse_ != se.locutus.proto.Ng.AllDepaturesResponseData.getDefaultInstance()) {
+        allDeparturesResponse_ =
+          se.locutus.proto.Ng.AllDepaturesResponseData.newBuilder(allDeparturesResponse_).mergeFrom(value).buildPartial();
       } else {
-        allDepaturesResponse_ = value;
+        allDeparturesResponse_ = value;
       }
       bitField0_ |= 0x00000004;
     }
@@ -3219,9 +3219,9 @@ public final class Ng {
      * Returns all departures for a stop.
      * </pre>
      *
-     * <code>.se.locutus.proto.AllDepaturesResponseData all_depatures_response = 3;</code>
+     * <code>.se.locutus.proto.AllDepaturesResponseData all_departures_response = 3;</code>
      */
-    private void clearAllDepaturesResponse() {  allDepaturesResponse_ = null;
+    private void clearAllDeparturesResponse() {  allDeparturesResponse_ = null;
       bitField0_ = (bitField0_ & ~0x00000004);
     }
 
@@ -3785,33 +3785,33 @@ public final class Ng {
        * Returns all departures for a stop.
        * </pre>
        *
-       * <code>.se.locutus.proto.AllDepaturesResponseData all_depatures_response = 3;</code>
+       * <code>.se.locutus.proto.AllDepaturesResponseData all_departures_response = 3;</code>
        */
       @java.lang.Override
-      public boolean hasAllDepaturesResponse() {
-        return instance.hasAllDepaturesResponse();
+      public boolean hasAllDeparturesResponse() {
+        return instance.hasAllDeparturesResponse();
       }
       /**
        * <pre>
        * Returns all departures for a stop.
        * </pre>
        *
-       * <code>.se.locutus.proto.AllDepaturesResponseData all_depatures_response = 3;</code>
+       * <code>.se.locutus.proto.AllDepaturesResponseData all_departures_response = 3;</code>
        */
       @java.lang.Override
-      public se.locutus.proto.Ng.AllDepaturesResponseData getAllDepaturesResponse() {
-        return instance.getAllDepaturesResponse();
+      public se.locutus.proto.Ng.AllDepaturesResponseData getAllDeparturesResponse() {
+        return instance.getAllDeparturesResponse();
       }
       /**
        * <pre>
        * Returns all departures for a stop.
        * </pre>
        *
-       * <code>.se.locutus.proto.AllDepaturesResponseData all_depatures_response = 3;</code>
+       * <code>.se.locutus.proto.AllDepaturesResponseData all_departures_response = 3;</code>
        */
-      public Builder setAllDepaturesResponse(se.locutus.proto.Ng.AllDepaturesResponseData value) {
+      public Builder setAllDeparturesResponse(se.locutus.proto.Ng.AllDepaturesResponseData value) {
         copyOnWrite();
-        instance.setAllDepaturesResponse(value);
+        instance.setAllDeparturesResponse(value);
         return this;
         }
       /**
@@ -3819,12 +3819,12 @@ public final class Ng {
        * Returns all departures for a stop.
        * </pre>
        *
-       * <code>.se.locutus.proto.AllDepaturesResponseData all_depatures_response = 3;</code>
+       * <code>.se.locutus.proto.AllDepaturesResponseData all_departures_response = 3;</code>
        */
-      public Builder setAllDepaturesResponse(
+      public Builder setAllDeparturesResponse(
           se.locutus.proto.Ng.AllDepaturesResponseData.Builder builderForValue) {
         copyOnWrite();
-        instance.setAllDepaturesResponse(builderForValue.build());
+        instance.setAllDeparturesResponse(builderForValue.build());
         return this;
       }
       /**
@@ -3832,11 +3832,11 @@ public final class Ng {
        * Returns all departures for a stop.
        * </pre>
        *
-       * <code>.se.locutus.proto.AllDepaturesResponseData all_depatures_response = 3;</code>
+       * <code>.se.locutus.proto.AllDepaturesResponseData all_departures_response = 3;</code>
        */
-      public Builder mergeAllDepaturesResponse(se.locutus.proto.Ng.AllDepaturesResponseData value) {
+      public Builder mergeAllDeparturesResponse(se.locutus.proto.Ng.AllDepaturesResponseData value) {
         copyOnWrite();
-        instance.mergeAllDepaturesResponse(value);
+        instance.mergeAllDeparturesResponse(value);
         return this;
       }
       /**
@@ -3844,10 +3844,10 @@ public final class Ng {
        * Returns all departures for a stop.
        * </pre>
        *
-       * <code>.se.locutus.proto.AllDepaturesResponseData all_depatures_response = 3;</code>
+       * <code>.se.locutus.proto.AllDepaturesResponseData all_departures_response = 3;</code>
        */
-      public Builder clearAllDepaturesResponse() {  copyOnWrite();
-        instance.clearAllDepaturesResponse();
+      public Builder clearAllDeparturesResponse() {  copyOnWrite();
+        instance.clearAllDeparturesResponse();
         return this;
       }
 
@@ -4233,7 +4233,7 @@ public final class Ng {
               "bitField0_",
               "responseHeader_",
               "loadResponse_",
-              "allDepaturesResponse_",
+              "allDeparturesResponse_",
               "pingResponse_",
               "errorResponse_",
               "stopSearchResponse_",
@@ -7433,26 +7433,26 @@ public final class Ng {
      * Details about all the known departure from this stop.
      * </pre>
      *
-     * <code>repeated .se.locutus.proto.DepartureData depature_data = 2;</code>
+     * <code>repeated .se.locutus.proto.DepartureData departure_data = 2;</code>
      */
     java.util.List<se.locutus.proto.Ng.DepartureData> 
-        getDepatureDataList();
+        getDepartureDataList();
     /**
      * <pre>
      * Details about all the known departure from this stop.
      * </pre>
      *
-     * <code>repeated .se.locutus.proto.DepartureData depature_data = 2;</code>
+     * <code>repeated .se.locutus.proto.DepartureData departure_data = 2;</code>
      */
-    se.locutus.proto.Ng.DepartureData getDepatureData(int index);
+    se.locutus.proto.Ng.DepartureData getDepartureData(int index);
     /**
      * <pre>
      * Details about all the known departure from this stop.
      * </pre>
      *
-     * <code>repeated .se.locutus.proto.DepartureData depature_data = 2;</code>
+     * <code>repeated .se.locutus.proto.DepartureData departure_data = 2;</code>
      */
-    int getDepatureDataCount();
+    int getDepartureDataCount();
   }
   /**
    * <pre>
@@ -7467,7 +7467,7 @@ public final class Ng {
       // @@protoc_insertion_point(message_implements:se.locutus.proto.AllDepaturesResponseData)
       AllDepaturesResponseDataOrBuilder {
     private AllDepaturesResponseData() {
-      depatureData_ = emptyProtobufList();
+      departureData_ = emptyProtobufList();
     }
     private int bitField0_;
     public static final int STOP_DATA_FIELD_NUMBER = 1;
@@ -7536,67 +7536,67 @@ public final class Ng {
       bitField0_ = (bitField0_ & ~0x00000001);
     }
 
-    public static final int DEPATURE_DATA_FIELD_NUMBER = 2;
-    private com.google.protobuf.Internal.ProtobufList<se.locutus.proto.Ng.DepartureData> depatureData_;
+    public static final int DEPARTURE_DATA_FIELD_NUMBER = 2;
+    private com.google.protobuf.Internal.ProtobufList<se.locutus.proto.Ng.DepartureData> departureData_;
     /**
      * <pre>
      * Details about all the known departure from this stop.
      * </pre>
      *
-     * <code>repeated .se.locutus.proto.DepartureData depature_data = 2;</code>
+     * <code>repeated .se.locutus.proto.DepartureData departure_data = 2;</code>
      */
     @java.lang.Override
-    public java.util.List<se.locutus.proto.Ng.DepartureData> getDepatureDataList() {
-      return depatureData_;
+    public java.util.List<se.locutus.proto.Ng.DepartureData> getDepartureDataList() {
+      return departureData_;
     }
     /**
      * <pre>
      * Details about all the known departure from this stop.
      * </pre>
      *
-     * <code>repeated .se.locutus.proto.DepartureData depature_data = 2;</code>
+     * <code>repeated .se.locutus.proto.DepartureData departure_data = 2;</code>
      */
     public java.util.List<? extends se.locutus.proto.Ng.DepartureDataOrBuilder> 
-        getDepatureDataOrBuilderList() {
-      return depatureData_;
+        getDepartureDataOrBuilderList() {
+      return departureData_;
     }
     /**
      * <pre>
      * Details about all the known departure from this stop.
      * </pre>
      *
-     * <code>repeated .se.locutus.proto.DepartureData depature_data = 2;</code>
+     * <code>repeated .se.locutus.proto.DepartureData departure_data = 2;</code>
      */
     @java.lang.Override
-    public int getDepatureDataCount() {
-      return depatureData_.size();
+    public int getDepartureDataCount() {
+      return departureData_.size();
     }
     /**
      * <pre>
      * Details about all the known departure from this stop.
      * </pre>
      *
-     * <code>repeated .se.locutus.proto.DepartureData depature_data = 2;</code>
+     * <code>repeated .se.locutus.proto.DepartureData departure_data = 2;</code>
      */
     @java.lang.Override
-    public se.locutus.proto.Ng.DepartureData getDepatureData(int index) {
-      return depatureData_.get(index);
+    public se.locutus.proto.Ng.DepartureData getDepartureData(int index) {
+      return departureData_.get(index);
     }
     /**
      * <pre>
      * Details about all the known departure from this stop.
      * </pre>
      *
-     * <code>repeated .se.locutus.proto.DepartureData depature_data = 2;</code>
+     * <code>repeated .se.locutus.proto.DepartureData departure_data = 2;</code>
      */
-    public se.locutus.proto.Ng.DepartureDataOrBuilder getDepatureDataOrBuilder(
+    public se.locutus.proto.Ng.DepartureDataOrBuilder getDepartureDataOrBuilder(
         int index) {
-      return depatureData_.get(index);
+      return departureData_.get(index);
     }
-    private void ensureDepatureDataIsMutable() {
-      com.google.protobuf.Internal.ProtobufList<se.locutus.proto.Ng.DepartureData> tmp = depatureData_;
+    private void ensureDepartureDataIsMutable() {
+      com.google.protobuf.Internal.ProtobufList<se.locutus.proto.Ng.DepartureData> tmp = departureData_;
       if (!tmp.isModifiable()) {
-        depatureData_ =
+        departureData_ =
             com.google.protobuf.GeneratedMessageLite.mutableCopy(tmp);
        }
     }
@@ -7606,72 +7606,72 @@ public final class Ng {
      * Details about all the known departure from this stop.
      * </pre>
      *
-     * <code>repeated .se.locutus.proto.DepartureData depature_data = 2;</code>
+     * <code>repeated .se.locutus.proto.DepartureData departure_data = 2;</code>
      */
-    private void setDepatureData(
+    private void setDepartureData(
         int index, se.locutus.proto.Ng.DepartureData value) {
       value.getClass();
-  ensureDepatureDataIsMutable();
-      depatureData_.set(index, value);
+  ensureDepartureDataIsMutable();
+      departureData_.set(index, value);
     }
     /**
      * <pre>
      * Details about all the known departure from this stop.
      * </pre>
      *
-     * <code>repeated .se.locutus.proto.DepartureData depature_data = 2;</code>
+     * <code>repeated .se.locutus.proto.DepartureData departure_data = 2;</code>
      */
-    private void addDepatureData(se.locutus.proto.Ng.DepartureData value) {
+    private void addDepartureData(se.locutus.proto.Ng.DepartureData value) {
       value.getClass();
-  ensureDepatureDataIsMutable();
-      depatureData_.add(value);
+  ensureDepartureDataIsMutable();
+      departureData_.add(value);
     }
     /**
      * <pre>
      * Details about all the known departure from this stop.
      * </pre>
      *
-     * <code>repeated .se.locutus.proto.DepartureData depature_data = 2;</code>
+     * <code>repeated .se.locutus.proto.DepartureData departure_data = 2;</code>
      */
-    private void addDepatureData(
+    private void addDepartureData(
         int index, se.locutus.proto.Ng.DepartureData value) {
       value.getClass();
-  ensureDepatureDataIsMutable();
-      depatureData_.add(index, value);
+  ensureDepartureDataIsMutable();
+      departureData_.add(index, value);
     }
     /**
      * <pre>
      * Details about all the known departure from this stop.
      * </pre>
      *
-     * <code>repeated .se.locutus.proto.DepartureData depature_data = 2;</code>
+     * <code>repeated .se.locutus.proto.DepartureData departure_data = 2;</code>
      */
-    private void addAllDepatureData(
+    private void addAllDepartureData(
         java.lang.Iterable<? extends se.locutus.proto.Ng.DepartureData> values) {
-      ensureDepatureDataIsMutable();
+      ensureDepartureDataIsMutable();
       com.google.protobuf.AbstractMessageLite.addAll(
-          values, depatureData_);
+          values, departureData_);
     }
     /**
      * <pre>
      * Details about all the known departure from this stop.
      * </pre>
      *
-     * <code>repeated .se.locutus.proto.DepartureData depature_data = 2;</code>
+     * <code>repeated .se.locutus.proto.DepartureData departure_data = 2;</code>
      */
-    private void clearDepatureData() {
-      depatureData_ = emptyProtobufList();
+    private void clearDepartureData() {
+      departureData_ = emptyProtobufList();
     }
     /**
      * <pre>
      * Details about all the known departure from this stop.
      * </pre>
      *
-     * <code>repeated .se.locutus.proto.DepartureData depature_data = 2;</code>
+     * <code>repeated .se.locutus.proto.DepartureData departure_data = 2;</code>
      */
-    private void removeDepatureData(int index) {
-      ensureDepatureDataIsMutable();
-      depatureData_.remove(index);
+    private void removeDepartureData(int index) {
+      ensureDepartureDataIsMutable();
+      departureData_.remove(index);
     }
 
     public static se.locutus.proto.Ng.AllDepaturesResponseData parseFrom(
@@ -7851,45 +7851,45 @@ public final class Ng {
        * Details about all the known departure from this stop.
        * </pre>
        *
-       * <code>repeated .se.locutus.proto.DepartureData depature_data = 2;</code>
+       * <code>repeated .se.locutus.proto.DepartureData departure_data = 2;</code>
        */
       @java.lang.Override
-      public java.util.List<se.locutus.proto.Ng.DepartureData> getDepatureDataList() {
+      public java.util.List<se.locutus.proto.Ng.DepartureData> getDepartureDataList() {
         return java.util.Collections.unmodifiableList(
-            instance.getDepatureDataList());
+            instance.getDepartureDataList());
       }
       /**
        * <pre>
        * Details about all the known departure from this stop.
        * </pre>
        *
-       * <code>repeated .se.locutus.proto.DepartureData depature_data = 2;</code>
+       * <code>repeated .se.locutus.proto.DepartureData departure_data = 2;</code>
        */
       @java.lang.Override
-      public int getDepatureDataCount() {
-        return instance.getDepatureDataCount();
+      public int getDepartureDataCount() {
+        return instance.getDepartureDataCount();
       }/**
        * <pre>
        * Details about all the known departure from this stop.
        * </pre>
        *
-       * <code>repeated .se.locutus.proto.DepartureData depature_data = 2;</code>
+       * <code>repeated .se.locutus.proto.DepartureData departure_data = 2;</code>
        */
       @java.lang.Override
-      public se.locutus.proto.Ng.DepartureData getDepatureData(int index) {
-        return instance.getDepatureData(index);
+      public se.locutus.proto.Ng.DepartureData getDepartureData(int index) {
+        return instance.getDepartureData(index);
       }
       /**
        * <pre>
        * Details about all the known departure from this stop.
        * </pre>
        *
-       * <code>repeated .se.locutus.proto.DepartureData depature_data = 2;</code>
+       * <code>repeated .se.locutus.proto.DepartureData departure_data = 2;</code>
        */
-      public Builder setDepatureData(
+      public Builder setDepartureData(
           int index, se.locutus.proto.Ng.DepartureData value) {
         copyOnWrite();
-        instance.setDepatureData(index, value);
+        instance.setDepartureData(index, value);
         return this;
       }
       /**
@@ -7897,12 +7897,12 @@ public final class Ng {
        * Details about all the known departure from this stop.
        * </pre>
        *
-       * <code>repeated .se.locutus.proto.DepartureData depature_data = 2;</code>
+       * <code>repeated .se.locutus.proto.DepartureData departure_data = 2;</code>
        */
-      public Builder setDepatureData(
+      public Builder setDepartureData(
           int index, se.locutus.proto.Ng.DepartureData.Builder builderForValue) {
         copyOnWrite();
-        instance.setDepatureData(index,
+        instance.setDepartureData(index,
             builderForValue.build());
         return this;
       }
@@ -7911,11 +7911,11 @@ public final class Ng {
        * Details about all the known departure from this stop.
        * </pre>
        *
-       * <code>repeated .se.locutus.proto.DepartureData depature_data = 2;</code>
+       * <code>repeated .se.locutus.proto.DepartureData departure_data = 2;</code>
        */
-      public Builder addDepatureData(se.locutus.proto.Ng.DepartureData value) {
+      public Builder addDepartureData(se.locutus.proto.Ng.DepartureData value) {
         copyOnWrite();
-        instance.addDepatureData(value);
+        instance.addDepartureData(value);
         return this;
       }
       /**
@@ -7923,12 +7923,12 @@ public final class Ng {
        * Details about all the known departure from this stop.
        * </pre>
        *
-       * <code>repeated .se.locutus.proto.DepartureData depature_data = 2;</code>
+       * <code>repeated .se.locutus.proto.DepartureData departure_data = 2;</code>
        */
-      public Builder addDepatureData(
+      public Builder addDepartureData(
           int index, se.locutus.proto.Ng.DepartureData value) {
         copyOnWrite();
-        instance.addDepatureData(index, value);
+        instance.addDepartureData(index, value);
         return this;
       }
       /**
@@ -7936,12 +7936,12 @@ public final class Ng {
        * Details about all the known departure from this stop.
        * </pre>
        *
-       * <code>repeated .se.locutus.proto.DepartureData depature_data = 2;</code>
+       * <code>repeated .se.locutus.proto.DepartureData departure_data = 2;</code>
        */
-      public Builder addDepatureData(
+      public Builder addDepartureData(
           se.locutus.proto.Ng.DepartureData.Builder builderForValue) {
         copyOnWrite();
-        instance.addDepatureData(builderForValue.build());
+        instance.addDepartureData(builderForValue.build());
         return this;
       }
       /**
@@ -7949,12 +7949,12 @@ public final class Ng {
        * Details about all the known departure from this stop.
        * </pre>
        *
-       * <code>repeated .se.locutus.proto.DepartureData depature_data = 2;</code>
+       * <code>repeated .se.locutus.proto.DepartureData departure_data = 2;</code>
        */
-      public Builder addDepatureData(
+      public Builder addDepartureData(
           int index, se.locutus.proto.Ng.DepartureData.Builder builderForValue) {
         copyOnWrite();
-        instance.addDepatureData(index,
+        instance.addDepartureData(index,
             builderForValue.build());
         return this;
       }
@@ -7963,12 +7963,12 @@ public final class Ng {
        * Details about all the known departure from this stop.
        * </pre>
        *
-       * <code>repeated .se.locutus.proto.DepartureData depature_data = 2;</code>
+       * <code>repeated .se.locutus.proto.DepartureData departure_data = 2;</code>
        */
-      public Builder addAllDepatureData(
+      public Builder addAllDepartureData(
           java.lang.Iterable<? extends se.locutus.proto.Ng.DepartureData> values) {
         copyOnWrite();
-        instance.addAllDepatureData(values);
+        instance.addAllDepartureData(values);
         return this;
       }
       /**
@@ -7976,11 +7976,11 @@ public final class Ng {
        * Details about all the known departure from this stop.
        * </pre>
        *
-       * <code>repeated .se.locutus.proto.DepartureData depature_data = 2;</code>
+       * <code>repeated .se.locutus.proto.DepartureData departure_data = 2;</code>
        */
-      public Builder clearDepatureData() {
+      public Builder clearDepartureData() {
         copyOnWrite();
-        instance.clearDepatureData();
+        instance.clearDepartureData();
         return this;
       }
       /**
@@ -7988,11 +7988,11 @@ public final class Ng {
        * Details about all the known departure from this stop.
        * </pre>
        *
-       * <code>repeated .se.locutus.proto.DepartureData depature_data = 2;</code>
+       * <code>repeated .se.locutus.proto.DepartureData departure_data = 2;</code>
        */
-      public Builder removeDepatureData(int index) {
+      public Builder removeDepartureData(int index) {
         copyOnWrite();
-        instance.removeDepatureData(index);
+        instance.removeDepartureData(index);
         return this;
       }
 
@@ -8014,7 +8014,7 @@ public final class Ng {
             java.lang.Object[] objects = new java.lang.Object[] {
               "bitField0_",
               "stopData_",
-              "depatureData_",
+              "departureData_",
               se.locutus.proto.Ng.DepartureData.class,
             };
             java.lang.String info =
