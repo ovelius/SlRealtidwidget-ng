@@ -163,37 +163,55 @@ class UpdateModeFragment : androidx.fragment.app.Fragment() {
         mainView.findViewById<TextView>(R.id.widgettag).setText(R.string.sample_stop)
         mainView.findViewById<TextView>(R.id.widgetline1).setText(R.string.sample_line1)
         mainView.findViewById<TextView>(R.id.widgetmin).setText(R.string.sample_minutes)
+        mainView.findViewById<TextView>(R.id.widgettag).setOnClickListener{
+            sampleScrollThread(getConfiguredScrollDelay(), 10)
+        }
+        mainView.findViewById<TextView>(R.id.widgetline1).setOnClickListener{
+            sampleScrollThread(getConfiguredScrollDelay(), 10)
+        }
+        mainView.findViewById<TextView>(R.id.widgetline2).setOnClickListener{
+            sampleScrollThread(getConfiguredScrollDelay(), 10)
+        }
 
         speedSlider = mainView.findViewById(R.id.speed_slider)
-        val configured = if (widgetConfigureActivity.widgetConfig.updateSettings.scrollThreadStepMs > 0) widgetConfigureActivity.widgetConfig.updateSettings.scrollThreadStepMs.toFloat() else 70.0f
-        speedSlider.value = configured
+        speedSlider.value = getConfiguredScrollDelay().toFloat()
         speedSlider.addOnChangeListener { slider, value, fromUser ->
             touchCount++
-            if (scrollDebouncer != null) {
-                mainHandler.removeCallbacks(scrollDebouncer!!)
-                debugScrollThread?.running = false
-                debugScrollThread?.agressiveOff = true
-            }
-            scrollDebouncer = Runnable{
-                debugScrollThread?.running = false
-                debugScrollThread?.agressiveOff = true
-                val updateSettings = widgetConfigureActivity.widgetConfig.updateSettings.toBuilder()
-                updateSettings.setScrollThreadStepMs(value.toInt())
-                debugScrollThread = DebugScrollThread(
-                    if (touchCount> 3) getString(R.string.sample_wee) else getString(R.string.sample_line2),
-                    widgetLine2,
-                    widgetConfigureActivity,
-                    value.toLong()
-                )
-                widgetConfigureActivity.widgetConfig =
-                    widgetConfigureActivity.widgetConfig.toBuilder()
-                        .setUpdateSettings(updateSettings).build()
-                debugScrollThread?.start()
-            }
-            mainHandler.postDelayed(scrollDebouncer!!, 300)
+            sampleScrollThread(value.toInt())
         }
         updateUpdatePeriod()
         return mainView
+    }
+
+    private fun getConfiguredScrollDelay() : Int {
+        return if (widgetConfigureActivity.widgetConfig.updateSettings.scrollThreadStepMs > 0) widgetConfigureActivity.widgetConfig.updateSettings.scrollThreadStepMs else 70
+    }
+
+    private fun sampleScrollThread(value : Int, delay : Long = 300) {
+        if (scrollDebouncer != null) {
+            mainHandler.removeCallbacks(scrollDebouncer!!)
+            debugScrollThread?.running = false
+            debugScrollThread?.agressiveOff = true
+        }
+
+        val updateSettings = widgetConfigureActivity.widgetConfig.updateSettings.toBuilder()
+        updateSettings.setScrollThreadStepMs(value)
+        widgetConfigureActivity.widgetConfig =
+            widgetConfigureActivity.widgetConfig.toBuilder()
+                .setUpdateSettings(updateSettings).build()
+
+        scrollDebouncer = Runnable{
+            debugScrollThread?.running = false
+            debugScrollThread?.agressiveOff = true
+            debugScrollThread = DebugScrollThread(
+                if (touchCount> 3) getString(R.string.sample_wee) else getString(R.string.sample_line2),
+                widgetLine2,
+                widgetConfigureActivity,
+                value.toLong()
+            )
+            debugScrollThread?.start()
+        }
+        mainHandler.postDelayed(scrollDebouncer!!, delay)
     }
 
     private fun refreshUpdatePeriod(isChecked : Boolean) {
