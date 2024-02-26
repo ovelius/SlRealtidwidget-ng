@@ -353,7 +353,9 @@ class BackgroundUpdaterTest {
             .setUpdateSettings(updateSettings)
             .setWidgetId(widgetId.toLong())
             .addStopConfiguration(Ng.StopConfiguration.newBuilder()
-                .setStopData(Ng.StoredStopData.newBuilder().setDisplayName("stop display name")))
+                .setStopData(Ng.StoredStopData.newBuilder()
+                    .setSite(Ng.SiteId.newBuilder().setStrSiteId("123"))
+                    .setDisplayName("stop display name")))
             .build()
         storeWidgetConfig(prefs, config)
         return widgetId

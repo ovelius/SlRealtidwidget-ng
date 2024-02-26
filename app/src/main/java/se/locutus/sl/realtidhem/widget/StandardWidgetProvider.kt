@@ -1,23 +1,26 @@
 package se.locutus.sl.realtidhem.widget
 
 import android.Manifest
+import android.app.PendingIntent
 import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProvider
 import android.content.Context
-import android.widget.RemoteViews
-import com.google.android.gms.location.LocationServices;
-import se.locutus.sl.realtidhem.R
-import java.util.logging.Logger
-import android.app.PendingIntent
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.location.Location
 import android.os.Build
 import android.os.Bundle
-import androidx.core.content.ContextCompat
 import android.view.View
+import android.widget.RemoteViews
+import androidx.core.content.ContextCompat
+import com.google.android.gms.location.LocationCallback
+import com.google.android.gms.location.LocationRequest
+import com.google.android.gms.location.LocationResult
+import com.google.android.gms.location.LocationServices
+import com.google.android.gms.location.Priority
 import se.locutus.proto.Ng
+import se.locutus.sl.realtidhem.R
 import se.locutus.sl.realtidhem.activity.WIDGET_CONFIG_PREFS
 import se.locutus.sl.realtidhem.activity.getInteractionsToLearn
 import se.locutus.sl.realtidhem.activity.getLearningPeriods
@@ -30,6 +33,7 @@ import se.locutus.sl.realtidhem.service.BackgroundUpdaterService
 import se.locutus.sl.realtidhem.service.EXTRA_MANUAL_TOUCH
 import se.locutus.sl.realtidhem.service.TimeTracker
 import se.locutus.sl.realtidhem.service.sortRecordsByTimeAndCutoff
+import java.util.logging.Logger
 
 
 /**
@@ -92,6 +96,7 @@ class StandardWidgetProvider : AppWidgetProvider() {
 
         if (widgetsNeedingLocation.isNotEmpty()) {
             LOG.info("Found widgets with multiple stops ${widgetsNeedingLocation.keys}")
+            forceSingleLocationUpdate(context)
             requestSingleLocationUpdate(context, widgetsNeedingLocation, prefs, appWidgetManager)
        }
     }
@@ -104,6 +109,20 @@ class StandardWidgetProvider : AppWidgetProvider() {
                 recordsWithCutoff, getInteractionsToLearn(updateSettings), getLearningPeriods(updateSettings))
         LOG.info("Scheduling ${filteredSortedList.size} update periods for $widgetId")
         timeTracker.scheduleAlarmsFrom(widgetId, filteredSortedList)
+    }
+
+    private fun forceSingleLocationUpdate(context: Context) {
+        if (ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION)
+            != PackageManager.PERMISSION_GRANTED) {
+            LOG.warning("No permission to access location!")
+            return
+        }
+        val mLocationRequest: LocationRequest = LocationRequest.Builder(Priority.PRIORITY_PASSIVE, 120000L)
+            .setDurationMillis(10000L)
+            .build()
+        val mLocationCallback: LocationCallback = object : LocationCallback() {}
+        LocationServices.getFusedLocationProviderClient(context)
+            .requestLocationUpdates(mLocationRequest, mLocationCallback, null)
     }
 
     fun requestSingleLocationUpdate(context: Context,
@@ -228,10 +247,12 @@ fun setWidgetViews(context: Context,
         line2 = lastData.idleMessage
     }
 
-    setWidgetTextViews(views, true, line1, "", line2, widgetText)
-
     if (validConfig) {
         val stopConfig = widgetConfig.getStopConfiguration(selectedStopIndex)
+        if (isLegacyStop(stopConfig.stopData)) {
+            line2 = context.getString(R.string.idle_line2_legacy)
+        }
+        setWidgetTextViews(views, true, line1, "", line2, widgetText)
         updateColors(context, views, stopConfig.themeData.colorConfig)
         setPendingIntents(context, views, appWidgetId, alwaysUpdate)
     } else {

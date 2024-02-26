@@ -13,7 +13,7 @@
 
     <string name="idle_line1">Touch once to update</string>
     <string name="idle_line2">Multiple times to configure</string>
-
+    <string name="idle_line2_legacy">Old config - reconfigure me!</string>
 
     <string name="legacy_stop_detected">Old configuration version</string>
     <string name="legacy_stop">This stop is from an older version of the widget. The stop can be removed but not changed. Remove it?</string>

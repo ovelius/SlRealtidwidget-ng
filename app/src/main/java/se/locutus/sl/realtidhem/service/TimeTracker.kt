@@ -149,6 +149,7 @@ class TimeTracker(val context : Context) {
             return
         }
         val intent = createPendingIntent(widgetId, timeRecord, calendar.timeInMillis, day)
+        LOG.info("Created Alarm for $calendar")
         alarmManager.setWindow(AlarmManager.RTC_WAKEUP, calendar.timeInMillis, ALARM_WINDOW_LENGTH, intent)
     }
 

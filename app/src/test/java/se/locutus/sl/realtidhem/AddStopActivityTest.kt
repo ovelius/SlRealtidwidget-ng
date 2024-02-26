@@ -63,8 +63,8 @@ class AddStopActivityTest {
 
     fun fakeResponseData() : ResponseData {
         return ResponseData.newBuilder()
-            .setAllDepaturesResponse(AllDepaturesResponseData.newBuilder()
-                .addDepatureData(Ng.DepartureData.newBuilder().setCanonicalName("test")))
+            .setAllDeparturesResponse(AllDepaturesResponseData.newBuilder()
+                .addDepartureData(Ng.DepartureData.newBuilder().setCanonicalName("test")))
             .build()
     }
 }

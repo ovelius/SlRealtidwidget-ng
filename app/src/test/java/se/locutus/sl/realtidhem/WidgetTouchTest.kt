@@ -39,12 +39,16 @@ class WidgetTouchTest {
     private val context = ApplicationProvider.getApplicationContext<android.app.Application>()
     private val prefs = context.getSharedPreferences(WIDGET_CONFIG_PREFS, 0)
     private val stop1 = Ng.StopConfiguration.newBuilder()
-        .setStopData(Ng.StoredStopData.newBuilder().setSiteId(123L).setDisplayName("Stop1"))
+        .setStopData(Ng.StoredStopData.newBuilder().setSite(Ng.SiteId.newBuilder().setStrSiteId("site1")).setDisplayName("Stop1"))
         .setDeparturesFilter(Ng.DeparturesFilter.newBuilder().addDepartures("123 Bla"))
         .build()
     private val stop2 = Ng.StopConfiguration.newBuilder()
-        .setStopData(Ng.StoredStopData.newBuilder().setSiteId(321L).setDisplayName("Stop2"))
+        .setStopData(Ng.StoredStopData.newBuilder().setSite(Ng.SiteId.newBuilder().setStrSiteId("site2")).setDisplayName("Stop2"))
         .addLineFilter(Ng.LineFilter.newBuilder().setDirectionId(1).setGroupOfLineId(1))
+        .build()
+    private val legacyStop = Ng.StopConfiguration.newBuilder()
+        .setStopData(Ng.StoredStopData.newBuilder().setSiteId(123L).setDisplayName("Stop1"))
+        .setDeparturesFilter(Ng.DeparturesFilter.newBuilder().addDepartures("123 Bla"))
         .build()
     private val shadowAppWidgetManager: ShadowAppWidgetManager = shadowOf(AppWidgetManager.getInstance(context))
     private val shadowPowerManager: ShadowPowerManager = shadowOf(context.getSystemService(Context.POWER_SERVICE) as PowerManager)
@@ -151,6 +155,23 @@ class WidgetTouchTest {
         touchHandler.configUpdated(widgetId, false)
         assertViewText(widgetId, R.id.widgetline1, R.string.idle_line1)
         assertViewText(widgetId, R.id.widgetline2,  R.string.idle_line2)
+    }
+
+    @Test
+    fun testWidgetConfigUpdatedShowLegacyMessage() {
+        val widgetId = createWidgetId(shadowAppWidgetManager)
+        val config = createWidgetConfigProto(widgetId).toBuilder()
+            .clearStopConfiguration()
+            .addStopConfiguration(legacyStop)
+            .build()
+        storeWidgetConfig(prefs, config)
+
+        val touchHandler = createTouchHandler()
+
+        touchHandler.configUpdated(widgetId, false)
+
+        assertViewText(widgetId, R.id.widgetline1, R.string.idle_line1)
+        assertViewText(widgetId, R.id.widgetline2,  R.string.idle_line2_legacy)
     }
 
     @Test
@@ -296,13 +317,16 @@ class WidgetTouchTest {
             .build()
     }
 
-    private fun createWidgetConfig() : Int{
-        val widgetId = createWidgetId(shadowAppWidgetManager)
-        val config = Ng.WidgetConfiguration.newBuilder()
+    private fun createWidgetConfigProto(widgetId: Int) : Ng.WidgetConfiguration {
+        return Ng.WidgetConfiguration.newBuilder()
             .setWidgetId(widgetId.toLong())
             .addStopConfiguration(stop1)
             .addStopConfiguration(stop2)
             .build()
+    }
+    private fun createWidgetConfig() : Int{
+        val widgetId = createWidgetId(shadowAppWidgetManager)
+        val config = createWidgetConfigProto(widgetId)
         storeWidgetConfig(prefs, config)
         return widgetId
     }

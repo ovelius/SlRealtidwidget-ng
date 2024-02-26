@@ -11,6 +11,7 @@
 
     <string name="idle_line1">Tryck en gång för att uppdatera</string>
     <string name="idle_line2">Flera gånger för att konfigurera</string>
+    <string name="idle_line2_legacy">Gammal - omkonfigurera mig!</string>
 
     <string name="legacy_stop_detected">Äldre konfiguration</string>
 §    <string name="legacy_stop">Den här hållplatsen är från en äldre version av widgeten. Den kan tas bort men inte ändras. Ta bort hållplatsen?</string>
