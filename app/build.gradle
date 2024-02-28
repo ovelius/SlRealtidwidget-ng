@@ -8,9 +8,9 @@ android {
     defaultConfig {
         applicationId "se.locutus.sl.realtidhem"
         minSdkVersion 22
-        versionCode 68
+        versionCode 69
         targetSdkVersion 33
-        versionName "2.5.1"
+        versionName "2.5.2"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
     }

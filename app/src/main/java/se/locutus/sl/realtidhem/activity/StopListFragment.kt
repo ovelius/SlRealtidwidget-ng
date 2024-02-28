@@ -23,6 +23,7 @@ import se.locutus.sl.realtidhem.events.EXTRA_COLOR_THEME
 import se.locutus.sl.realtidhem.widget.isLegacyStop
 
 const val QUICK_TOGGLE_HINT_SHOWN = "quick_toggle_hint"
+const val REALTIME_INFO_HINT_SHOWN = "realtime_info_hint"
 class StopListFragment : androidx.fragment.app.Fragment() {
 
     private lateinit var widgetConfigureActivity : WidgetConfigureActivity
@@ -142,4 +143,38 @@ class StopListFragment : androidx.fragment.app.Fragment() {
         dialog.show()
     }
 
+    // TODO complete this.
+    fun maybeShowRealtimeDialog(config : Ng.WidgetConfiguration) {
+        val prefs = widgetConfigureActivity.mWidgetPrefs
+        if (prefs.getBoolean(REALTIME_INFO_HINT_SHOWN, false)) {
+            return
+        }
+        check(config.stopConfigurationCount > 0) { "Must have at least two stops! "}
+        val builder = AlertDialog.Builder(widgetConfigureActivity)
+        val inflater = requireActivity().layoutInflater;
+        val view = inflater.inflate(R.layout.dialog_realtime_info, null)
+
+        val widgetView1 = view.findViewById<View>(R.id.include1)
+        val widgetView2 = view.findViewById<View>(R.id.include2)
+
+        widgetView1.findViewById<TextView>(R.id.widgettag).text = "test1"
+        widgetView2.findViewById<TextView>(R.id.widgettag).text = "test1"
+
+        val stop1 = config.stopConfigurationList[0].stopData.displayName
+
+
+        builder.setTitle(R.string.dot_is_scheduled)
+        builder.setView(view)
+        val dialog = builder.create()
+        val dismissClick : (View) -> Unit = { view ->
+            Toast.makeText(widgetConfigureActivity, R.string.quick_toggle_toast, Toast.LENGTH_SHORT).show()
+            //prefs.edit().putBoolean(REALTIME_INFO_HINT_SHOWN, true).apply()
+            Handler(Looper.getMainLooper()).postDelayed({
+                dialog.dismiss()
+            }, 2500)
+        }
+        view.findViewById<ImageView>(R.id.larrow).setOnClickListener(dismissClick)
+        view.findViewById<ImageView>(R.id.rarrow).setOnClickListener(dismissClick)
+        dialog.show()
+    }
 }

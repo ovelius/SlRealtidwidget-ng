@@ -123,9 +123,17 @@
     <string name="quick_toggle_dismiss">Press either side to dismiss</string>
     <string name="quick_toggle_toast">You got it!</string>
 
+    <string name="dot_is_scheduled">Scheduled vs realtime departures</string>
+    <string name="dot_is_scheduled_text">"min." means scheduled time, "min" is realtime. Take note of the dot!</string>
+    <string name="dot_is_scheduled_text_dismiss">Touch the widget with realtime information to dismiss!</string>
+    <string name="dot_is_scheduled_text_wrong">This widget shows scheduled time, try again.</string>
+    <string name="dot_is_scheduled_text_right">Just "min" means realtime, you go it!</string>
+
     <string name="sample_departure" translatable="false">12 %1$s</string>
     <string name="sample_minutes" translatable="false">3 min</string>
+    <string name="sample_minutes_dot" translatable="false">3 min.</string>
     <string name="sample_minutes2" translatable="false">6 min</string>
+    <string name="sample_minutes2_dot" translatable="false">6 min.</string>
     <string name="sample_stop" translatable="false">T-Centralen</string>
     <string name="sample_line1" translatable="false">11 Akalla</string>
     <string name="sample_line2" translatable="false">11 Kungsträdgården, 10 Hjulsta, 28 Göteborg Centralstation     </string>

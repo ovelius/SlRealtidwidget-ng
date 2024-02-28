@@ -61,12 +61,15 @@ fun setWidgetTextViews(views : RemoteViews, centerLines: Boolean, line1 : String
     if (widgetTag != null) {
         views.setTextViewText(R.id.widgettag, widgetTag)
     }
-    if (centerLines) {
-        views.setInt(R.id.widgetline1, "setGravity", Gravity.CENTER_HORIZONTAL)
-        views.setInt(R.id.widgetline2, "setGravity", Gravity.CENTER_HORIZONTAL)
-    } else {
-        views.setInt(R.id.widgetline1, "setGravity", Gravity.LEFT)
-        views.setInt(R.id.widgetline2, "setGravity", Gravity.LEFT)
+    // This doesn't work on older versions.
+    if (android.os.Build.VERSION.SDK_INT > 30) {
+        if (centerLines) {
+            views.setInt(R.id.widgetline1, "setGravity", Gravity.CENTER_HORIZONTAL)
+            views.setInt(R.id.widgetline2, "setGravity", Gravity.CENTER_HORIZONTAL)
+        } else {
+            views.setInt(R.id.widgetline1, "setGravity", Gravity.LEFT)
+            views.setInt(R.id.widgetline2, "setGravity", Gravity.LEFT)
+        }
     }
 }
 
