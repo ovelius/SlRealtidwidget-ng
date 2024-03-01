@@ -1,6 +1,7 @@
 package se.locutus.sl.realtidhem.net
 
 import android.content.Context
+import com.android.volley.DefaultRetryPolicy
 import com.android.volley.NetworkResponse
 import com.android.volley.Request
 import com.android.volley.RequestQueue
@@ -8,10 +9,10 @@ import com.android.volley.Response
 import com.android.volley.toolbox.HttpHeaderParser
 import com.android.volley.toolbox.Volley
 import se.locutus.proto.Ng
-import se.locutus.proto.Ng.ResponseData
 import se.locutus.proto.Ng.RequestData
-import java.lang.Exception
+import se.locutus.proto.Ng.ResponseData
 import java.util.logging.Logger
+
 
 fun useNewBackendForRequest(request : Ng.RequestData) : Boolean {
     return request.stopDataRequest.site.strSiteId.isNotEmpty() || request.stopSearchRequest.query.isNotEmpty()
@@ -79,6 +80,13 @@ class NetworkManager(var context : Context,
             { error ->
                 callback(request.requestHeader.id, ResponseData.getDefaultInstance(), error)
             })
+        protoRequest.setRetryPolicy(
+            DefaultRetryPolicy(
+                10000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
+            )
+        )
         requestQueue.add(protoRequest)
     }
 }
