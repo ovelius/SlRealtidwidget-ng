@@ -127,6 +127,16 @@
     <string name="quick_toggle_dismiss">Tryck på en sida för att gå vidare</string>
     <string name="quick_toggle_toast">Sådär ja!</string>
     <string name="save_and_exit"><![CDATA[Spara & tillbaka]]></string>
+
+    <string name="dot_is_scheduled">Realtid vs schemalagd</string>
+    <string name="dot_is_scheduled_text"><b><font size="20">min.= </font></b>schemalagd tid <font size="20"><b>min = </b></font> realtid</string>
+    <string name="dot_is_scheduled_text_dismiss">Peta på den widget nedan med realtidsinformation för att fortsätta!</string>
+    <string name="dot_is_scheduled_text_wrong">En punkt efter min är schemalagd tid, försök igen!</string>
+    <string name="dot_is_scheduled_text_right">Precis rätt! Utan punkt är realtid.</string>
+
+    <string name="resize_hint">Andra storlek: Tryck länge på widget.
+        Lyft fingret. Dra i prickarna.</string>
+
     <string name="scroller_speed">Skrollhastighet:</string>
 
     --></resources>

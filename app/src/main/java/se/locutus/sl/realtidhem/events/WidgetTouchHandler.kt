@@ -40,6 +40,7 @@ const val TOUCH_TO_CONFIG = 3
 const val MAX_ATTEMPTS = 3
 const val CLEAR_TIME_MIN_MILLIS = 60 * 1000L
 const val CLEAR_TIME_MAX_MILLIS = 80 * 1000L
+const val WIDGET_RESIZE_HINT_SHOWN = "WIDGET_RESIZE_HINT_SHOWN"
 
 interface TouchHandlerInterface {
     fun widgetTouched(widgetId :  Int, action : String?, userTouch : Boolean = true,
@@ -62,7 +63,7 @@ fun setWidgetTextViews(views : RemoteViews, centerLines: Boolean, line1 : String
         views.setTextViewText(R.id.widgettag, widgetTag)
     }
     // This doesn't work on older versions.
-    if (android.os.Build.VERSION.SDK_INT > 30) {
+    if (Build.VERSION.SDK_INT > 30) {
         if (centerLines) {
             views.setInt(R.id.widgetline1, "setGravity", Gravity.CENTER_HORIZONTAL)
             views.setInt(R.id.widgetline2, "setGravity", Gravity.CENTER_HORIZONTAL)
@@ -132,6 +133,19 @@ class WidgetTouchHandler(val context: Context, val networkManager : NetworkInter
 
         if (CYCLE_STOP_RIGHT.equals(action) ||  (CYCLE_STOP_LEFT.equals(action))) {
             configUpdated(widgetId, false)
+        }
+
+        // Show initial message for quite a while on the screen.
+        if (inMemoryState.shouldDoOneTimeEvent(prefs, WIDGET_RESIZE_HINT_SHOWN)) {
+            mainHandler.post() {
+                Toast.makeText(context, R.string.resize_hint, Toast.LENGTH_LONG).show()
+            }
+            mainHandler.postDelayed({
+                Toast.makeText(context, R.string.resize_hint, Toast.LENGTH_LONG).show()
+            }, 3000)
+            mainHandler.postDelayed({
+                Toast.makeText(context, R.string.resize_hint, Toast.LENGTH_LONG).show()
+            }, 6000)
         }
 
         LOG.info("Selected stop index is $selectedStopIndex")

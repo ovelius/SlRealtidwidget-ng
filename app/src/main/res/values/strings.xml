@@ -123,11 +123,13 @@
     <string name="quick_toggle_dismiss">Press either side to dismiss</string>
     <string name="quick_toggle_toast">You got it!</string>
 
-    <string name="dot_is_scheduled">Scheduled vs realtime departures</string>
-    <string name="dot_is_scheduled_text">"min." means scheduled time, "min" is realtime. Take note of the dot!</string>
-    <string name="dot_is_scheduled_text_dismiss">Touch the widget with realtime information to dismiss!</string>
-    <string name="dot_is_scheduled_text_wrong">This widget shows scheduled time, try again.</string>
-    <string name="dot_is_scheduled_text_right">Just "min" means realtime, you go it!</string>
+    <string name="resize_hint">Resize widget: Touch and hold it. Lift finger. Drag the dots.</string>
+
+    <string name="dot_is_scheduled">Realtime vs scheduled</string>
+    <string name="dot_is_scheduled_text"><b><font size="20">min.= </font></b>scheduled time\n<font size="20"><b>min = </b></font> realtime information</string>
+    <string name="dot_is_scheduled_text_dismiss">Touch the widget below showing realtime information to dismiss!</string>
+    <string name="dot_is_scheduled_text_wrong">A dot after min is scheduled time, try again.</string>
+    <string name="dot_is_scheduled_text_right">No dot means realtime, you go it!</string>
 
     <string name="sample_departure" translatable="false">12 %1$s</string>
     <string name="sample_minutes" translatable="false">3 min</string>
@@ -136,6 +138,7 @@
     <string name="sample_minutes2_dot" translatable="false">6 min.</string>
     <string name="sample_stop" translatable="false">T-Centralen</string>
     <string name="sample_line1" translatable="false">11 Akalla</string>
+    <string name="sample_line2_2" translatable="false">28 Göteborg Centralstation</string>
     <string name="sample_line2" translatable="false">11 Kungsträdgården, 10 Hjulsta, 28 Göteborg Centralstation     </string>
     <string name="sample_wee" translatable="false">Weeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee!!</string>
     <string name="scroller_speed">Scroll speed:</string>

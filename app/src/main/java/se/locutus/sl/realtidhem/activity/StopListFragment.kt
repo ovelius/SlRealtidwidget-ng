@@ -99,6 +99,8 @@ class StopListFragment : androidx.fragment.app.Fragment() {
             mAddStopHelperText.visibility = View.GONE
             if (widgetConfigureActivity.widgetConfig.stopConfigurationCount > 1) {
                 maybeShowStopSwitcherDialog(widgetConfigureActivity.widgetConfig)
+            } else  if (widgetConfigureActivity.widgetConfig.stopConfigurationCount == 1) {
+                maybeShowRealtimeDialog(widgetConfigureActivity.widgetConfig)
             }
         }
     }
@@ -143,13 +145,12 @@ class StopListFragment : androidx.fragment.app.Fragment() {
         dialog.show()
     }
 
-    // TODO complete this.
     fun maybeShowRealtimeDialog(config : Ng.WidgetConfiguration) {
         val prefs = widgetConfigureActivity.mWidgetPrefs
         if (prefs.getBoolean(REALTIME_INFO_HINT_SHOWN, false)) {
             return
         }
-        check(config.stopConfigurationCount > 0) { "Must have at least two stops! "}
+        check(config.stopConfigurationCount > 0) { "Must have at least one stops! "}
         val builder = AlertDialog.Builder(widgetConfigureActivity)
         val inflater = requireActivity().layoutInflater;
         val view = inflater.inflate(R.layout.dialog_realtime_info, null)
@@ -157,24 +158,44 @@ class StopListFragment : androidx.fragment.app.Fragment() {
         val widgetView1 = view.findViewById<View>(R.id.include1)
         val widgetView2 = view.findViewById<View>(R.id.include2)
 
-        widgetView1.findViewById<TextView>(R.id.widgettag).text = "test1"
-        widgetView2.findViewById<TextView>(R.id.widgettag).text = "test1"
+        widgetView1.findViewById<View>(R.id.larrow).visibility = View.GONE
+        widgetView1.findViewById<View>(R.id.rarrow).visibility = View.GONE
+        widgetView1.findViewById<TextView>(R.id.widgettag).text = config.stopConfigurationList[0].stopData.displayName
+        widgetView1.findViewById<TextView>(R.id.widgetmin).text = getString(R.string.sample_minutes_dot)
+        widgetView1.findViewById<TextView>(R.id.widgetline1).text = getString(R.string.sample_line1)
+        widgetView1.findViewById<TextView>(R.id.widgetline2).text = getString(R.string.sample_line2_2) + " " + getString(R.string.sample_minutes2_dot)
 
-        val stop1 = config.stopConfigurationList[0].stopData.displayName
-
+        widgetView2.findViewById<View>(R.id.larrow).visibility = View.GONE
+        widgetView2.findViewById<View>(R.id.rarrow).visibility = View.GONE
+        widgetView2.findViewById<TextView>(R.id.widgettag).text = config.stopConfigurationList[0].stopData.displayName
+        widgetView2.findViewById<TextView>(R.id.widgetmin).text = getString(R.string.sample_minutes)
+        widgetView2.findViewById<TextView>(R.id.widgetline1).text = getString(R.string.sample_line1)
+        widgetView2.findViewById<TextView>(R.id.widgetline2).text = getString(R.string.sample_line2_2) + " " + getString(R.string.sample_minutes2)
 
         builder.setTitle(R.string.dot_is_scheduled)
         builder.setView(view)
         val dialog = builder.create()
         val dismissClick : (View) -> Unit = { view ->
-            Toast.makeText(widgetConfigureActivity, R.string.quick_toggle_toast, Toast.LENGTH_SHORT).show()
-            //prefs.edit().putBoolean(REALTIME_INFO_HINT_SHOWN, true).apply()
-            Handler(Looper.getMainLooper()).postDelayed({
-                dialog.dismiss()
-            }, 2500)
+            if (view.id == R.id.include1) {
+                Toast.makeText(
+                    widgetConfigureActivity,
+                    R.string.dot_is_scheduled_text_wrong,
+                    Toast.LENGTH_SHORT
+                ).show()
+            } else {
+                prefs.edit().putBoolean(REALTIME_INFO_HINT_SHOWN, true).apply()
+                Toast.makeText(
+                    widgetConfigureActivity,
+                    R.string.dot_is_scheduled_text_right,
+                    Toast.LENGTH_SHORT
+                ).show()
+                Handler(Looper.getMainLooper()).postDelayed({
+                    dialog.dismiss()
+                }, 2000)
+            }
         }
-        view.findViewById<ImageView>(R.id.larrow).setOnClickListener(dismissClick)
-        view.findViewById<ImageView>(R.id.rarrow).setOnClickListener(dismissClick)
+        widgetView1.setOnClickListener(dismissClick)
+        widgetView2.setOnClickListener(dismissClick)
         dialog.show()
     }
 }

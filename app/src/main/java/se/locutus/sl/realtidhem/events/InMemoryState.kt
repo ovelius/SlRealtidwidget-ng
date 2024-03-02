@@ -121,6 +121,14 @@ class InMemoryState {
         return widgetConfigs[widgetId]!!
     }
 
+    fun shouldDoOneTimeEvent(prefs : SharedPreferences, prefKey : String) : Boolean {
+        val oneTimeEvent = prefs.getBoolean(prefKey, true)
+        if (oneTimeEvent) {
+           prefs.edit().putBoolean(prefKey, false).apply()
+        }
+        return oneTimeEvent
+    }
+
     fun getScrollThreadSleepMs(widgetId : Int) : Long {
         val cfg = widgetConfigs[widgetId]
         if (cfg != null && cfg.updateSettings.scrollThreadStepMs > 0) {
