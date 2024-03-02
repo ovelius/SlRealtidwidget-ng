@@ -200,7 +200,7 @@ class AddStopActivity : AppCompatActivity() {
             .build()
         departureAdapter.clear()
         LOG.info("Loading departures for $siteId")
-        network.doStopDataRequest(request, true) { _: Int, responseData: Ng.ResponseData, e: Exception? ->
+        network.doStopDataRequest(request, Ng.UpdateMode.UPDATE_MODE_UNKNOWN, true) { _: Int, responseData: Ng.ResponseData, e: Exception? ->
             if (responseData.hasErrorResponse() && responseData.errorResponse.errorType != Ng.ErrorType.UNKNOWN_ERROR) {
                 if (responseData.errorResponse.errorType == Ng.ErrorType.SL_API_ERROR) {
                     snackbarRetryError(R.string.sl_api_error, siteId)

@@ -30,6 +30,7 @@ internal class TestNetworkInterface : NetworkInterface {
     var callback : ((Int, Ng.ResponseData, Exception?) -> Unit) = { _, _, _ -> }
     override fun doStopDataRequest(
         request: Ng.StopDataRequest,
+        updateMode : Ng.UpdateMode,
         forceHttp : Boolean,
         callback: (Int, Ng.ResponseData, Exception?) -> Unit
     ): Int {

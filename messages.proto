@@ -276,6 +276,8 @@ enum UpdateMode {
   MANUAL_UPDATE_MODE = 1;
   // Always keep updated when screen is on.
   ALWAYS_UPDATE_MODE = 2;
+  // We don't know at this time.
+  UPDATE_MODE_UNKNOWN = 3;
 }
 
 message UpdateSettings {

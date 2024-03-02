@@ -86,7 +86,7 @@ class BackgroundUpdaterTest {
 
     @Test
     fun testStopNoUpdatableWidgets() {
-        val widgetId = createWidgetConfig(createUpdateSettings(Ng.UpdateSettings.UpdateMode.MANUAL_UPDATE_MODE))
+        val widgetId = createWidgetConfig(createUpdateSettings(Ng.UpdateMode.MANUAL_UPDATE_MODE))
         service.widgetIdProvider = {
             intArrayOf(widgetId)
         }
@@ -102,7 +102,7 @@ class BackgroundUpdaterTest {
 
     @Test
     fun testStopAutoUpdateSequence() {
-        val widgetId = createWidgetConfig(createUpdateSettings(Ng.UpdateSettings.UpdateMode.ALWAYS_UPDATE_MODE, 2))
+        val widgetId = createWidgetConfig(createUpdateSettings(Ng.UpdateMode.ALWAYS_UPDATE_MODE, 2))
         service.widgetIdProvider = {
             intArrayOf(widgetId)
         }
@@ -137,8 +137,8 @@ class BackgroundUpdaterTest {
 
     @Test
     fun testRunSequenceOnScreenOn() {
-        val widgetId = createWidgetConfig(createUpdateSettings(Ng.UpdateSettings.UpdateMode.ALWAYS_UPDATE_MODE,2, true))
-        val widgetId2 = createWidgetConfig(createUpdateSettings(Ng.UpdateSettings.UpdateMode.ALWAYS_UPDATE_MODE,2, false))
+        val widgetId = createWidgetConfig(createUpdateSettings(Ng.UpdateMode.ALWAYS_UPDATE_MODE,2, true))
+        val widgetId2 = createWidgetConfig(createUpdateSettings(Ng.UpdateMode.ALWAYS_UPDATE_MODE,2, false))
         service.widgetIdProvider = {
             intArrayOf(widgetId, widgetId2)
         }
@@ -190,7 +190,7 @@ class BackgroundUpdaterTest {
 
     @Test
     fun testStartSelfLearningWidgets() {
-        val widgetId = createWidgetConfig(createUpdateSettings(Ng.UpdateSettings.UpdateMode.LEARNING_UPDATE_MODE))
+        val widgetId = createWidgetConfig(createUpdateSettings(Ng.UpdateMode.LEARNING_UPDATE_MODE))
         service.widgetIdProvider = {
             intArrayOf(widgetId)
         }
@@ -250,7 +250,7 @@ class BackgroundUpdaterTest {
 
     @Test
     fun testStartSelfLearningUnschedule() {
-        val widgetId = createWidgetConfig(createUpdateSettings(Ng.UpdateSettings.UpdateMode.LEARNING_UPDATE_MODE))
+        val widgetId = createWidgetConfig(createUpdateSettings(Ng.UpdateMode.LEARNING_UPDATE_MODE))
         service.widgetIdProvider = {
             intArrayOf(widgetId)
         }
@@ -280,7 +280,7 @@ class BackgroundUpdaterTest {
 
     @Test
     fun testStartSelfLearningWidgetsLateUpdate() {
-        val widgetId = createWidgetConfig(createUpdateSettings(Ng.UpdateSettings.UpdateMode.LEARNING_UPDATE_MODE))
+        val widgetId = createWidgetConfig(createUpdateSettings(Ng.UpdateMode.LEARNING_UPDATE_MODE))
         service.widgetIdProvider = {
             intArrayOf(widgetId)
         }
@@ -332,7 +332,7 @@ class BackgroundUpdaterTest {
       }
     }
 
-    private fun createUpdateSettings(mode : Ng.UpdateSettings.UpdateMode, sequenceMinutes : Int = 1, listenForScreenOn : Boolean = false) : Ng.UpdateSettings {
+    private fun createUpdateSettings(mode : Ng.UpdateMode, sequenceMinutes : Int = 1, listenForScreenOn : Boolean = false) : Ng.UpdateSettings {
         return Ng.UpdateSettings.newBuilder()
             .setUpdateMode(mode)
             .setUpdateSequenceLength(sequenceMinutes)
@@ -342,7 +342,7 @@ class BackgroundUpdaterTest {
 
     private fun createLearningUpdateSettings(minInteractions : Int) : Ng.UpdateSettings {
         return Ng.UpdateSettings.newBuilder()
-            .setUpdateMode(Ng.UpdateSettings.UpdateMode.LEARNING_UPDATE_MODE)
+            .setUpdateMode(Ng.UpdateMode.LEARNING_UPDATE_MODE)
             .setInteractionsToLearn(minInteractions)
             .build()
     }

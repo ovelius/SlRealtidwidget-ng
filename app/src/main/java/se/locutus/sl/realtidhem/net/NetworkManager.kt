@@ -11,6 +11,7 @@ import com.android.volley.toolbox.Volley
 import se.locutus.proto.Ng
 import se.locutus.proto.Ng.RequestData
 import se.locutus.proto.Ng.ResponseData
+import se.locutus.proto.Ng.UpdateMode
 import java.util.logging.Logger
 
 
@@ -19,7 +20,7 @@ fun useNewBackendForRequest(request : Ng.RequestData) : Boolean {
 }
 
 interface NetworkInterface {
-    fun doStopDataRequest(request : Ng.StopDataRequest, forceHttp : Boolean = false, callBack : (Int, ResponseData, Exception?) -> Unit) : Int
+    fun doStopDataRequest(request : Ng.StopDataRequest, updateMode: UpdateMode, forceHttp : Boolean = false, callBack : (Int, ResponseData, Exception?) -> Unit) : Int
     fun doGenericRequest(request : Ng.RequestData, forceHttp : Boolean = false, callBack : (Int, ResponseData, Exception?) -> Unit) : Int
 }
 
@@ -32,17 +33,18 @@ class NetworkManager(var context : Context,
     val udpSocket = UpdClient(context, prefs).apply { start() }
     private var requestId = 1
 
-    fun buildHeader() : Ng.RequestHeader {
+    fun buildHeader(updateMode: UpdateMode) : Ng.RequestHeader {
         val api = context.packageManager.getPackageInfo(context.packageName, 0).versionCode
 
         return Ng.RequestHeader.newBuilder()
             .setApi(api)
             .setId(requestId)
+            .setUpdateMode(updateMode)
             .build()
     }
-    override fun doStopDataRequest(request : Ng.StopDataRequest, forceHttp : Boolean, callBack : (Int, ResponseData, Exception?) -> Unit) : Int {
+    override fun doStopDataRequest(request : Ng.StopDataRequest, updateMode: UpdateMode, forceHttp : Boolean, callBack : (Int, ResponseData, Exception?) -> Unit) : Int {
         doRequest(RequestData.newBuilder().setStopDataRequest(request)
-            .setRequestHeader(buildHeader()).build(),  forceHttp, callBack)
+            .setRequestHeader(buildHeader(updateMode)).build(),  forceHttp, callBack)
         return requestId++
     }
 
@@ -51,7 +53,7 @@ class NetworkManager(var context : Context,
         forceHttp: Boolean,
         callBack: (Int, ResponseData, Exception?) -> Unit
     ): Int {
-        val requestBuilder = request.toBuilder().setRequestHeader(buildHeader())
+        val requestBuilder = request.toBuilder().setRequestHeader(buildHeader(UpdateMode.UPDATE_MODE_UNKNOWN))
         doRequest(requestBuilder.build(),  forceHttp, callBack)
         return requestId++
     }

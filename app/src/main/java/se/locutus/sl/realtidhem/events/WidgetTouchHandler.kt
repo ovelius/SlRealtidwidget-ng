@@ -160,7 +160,7 @@ class WidgetTouchHandler(val context: Context, val networkManager : NetworkInter
         if (inMemoryState.sinceLastUpdate(widgetId) > STALE_MILLIS) {
             if (inMemoryState.sinceUpdateStarted(widgetId) > UPDATE_RETRY_MILLIS) {
                 LOG.info("Triggering update for config for widget $widgetId")
-                loadWidgetData(widgetId, manager, widgetConfig.getStopConfiguration(selectedStopIndex), 1, userTouch, loadedLinesCallback)
+                loadWidgetData(widgetId, manager, widgetConfig, widgetConfig.getStopConfiguration(selectedStopIndex), 1, userTouch, loadedLinesCallback)
                 // Only record if this was an update from a users interaction.
                 if (userTouch) {
                     timeTracker.record(widgetId)
@@ -269,7 +269,8 @@ class WidgetTouchHandler(val context: Context, val networkManager : NetworkInter
 
     }
 
-    fun loadWidgetData(widgetId :  Int, manager : AppWidgetManager, stopConfig : Ng.StopConfiguration, attempt : Int, userTouch : Boolean,
+    fun loadWidgetData(widgetId :  Int, manager : AppWidgetManager, widgetConfig :  Ng.WidgetConfiguration,
+                       stopConfig : Ng.StopConfiguration, attempt : Int, userTouch : Boolean,
                        loadedLinesCallback : (String, String, String) -> Unit) {
         inMemoryState.disposeScroller(widgetId)
         inMemoryState.updateStartedAt[widgetId] = System.currentTimeMillis()
@@ -287,7 +288,7 @@ class WidgetTouchHandler(val context: Context, val networkManager : NetworkInter
             .addAllLineFilter(stopConfig.lineFilterList)
             .build()
         val time = System.currentTimeMillis()
-        val requestId = networkManager.doStopDataRequest(stopDataRequest) {
+        val requestId = networkManager.doStopDataRequest(stopDataRequest, widgetConfig.updateSettings.updateMode) {
                 incomingRequestId : Int, responseData: Ng.ResponseData, e: Exception? ->
             LOG.info("Got response in ${System.currentTimeMillis() - time} ms")
             handleLoadResponse(views, widgetId, incomingRequestId, responseData, e, stopConfig, userTouch, loadedLinesCallback)
@@ -298,7 +299,7 @@ class WidgetTouchHandler(val context: Context, val networkManager : NetworkInter
             mainHandler.postDelayed({
                 if (inMemoryState.shouldRetry(widgetId, retryMillis)) {
                     LOG.info("retrying update...")
-                    loadWidgetData(widgetId, manager, stopConfig , attempt + 1, userTouch, loadedLinesCallback)
+                    loadWidgetData(widgetId, manager, widgetConfig, stopConfig , attempt + 1, userTouch, loadedLinesCallback)
                 }
             }, retryMillis * attempt)
         }
