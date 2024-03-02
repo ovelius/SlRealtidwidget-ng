@@ -10,6 +10,8 @@ message RequestHeader {
   int32 api = 1;
   // ID of this request, so the response can be identified.
   int32 id = 2;
+  // The update mode of this client.
+  UpdateMode update_mode = 3;
 }
 
 // Present in each response.
@@ -267,15 +269,16 @@ message WidgetConfiguration {
   UpdateSettings update_settings = 3;
 }
 
+enum UpdateMode {
+  // Learn when to update from user interaction. This is default.
+  LEARNING_UPDATE_MODE = 0;
+  // Update only from user interaction.
+  MANUAL_UPDATE_MODE = 1;
+  // Always keep updated when screen is on.
+  ALWAYS_UPDATE_MODE = 2;
+}
+
 message UpdateSettings {
-  enum UpdateMode {
-	// Learn when to update from user interaction. This is default.
-	LEARNING_UPDATE_MODE = 0;
-	// Update only from user interaction.
-    MANUAL_UPDATE_MODE = 1;
-	// Always keep updated when screen is on.
-    ALWAYS_UPDATE_MODE = 2;
-  }
   UpdateMode update_mode = 1;
   // Always update mode
   bool update_when_screen_on = 2;

@@ -203,7 +203,7 @@ fun sendWidgetUpdateBroadcast(context : Context, widgetId : Int, widgetConfig : 
         putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId)
     }
     if (widgetConfig != null &&
-        widgetConfig.updateSettings.updateMode == Ng.UpdateSettings.UpdateMode.ALWAYS_UPDATE_MODE) {
+        widgetConfig.updateSettings.updateMode == Ng.UpdateMode.ALWAYS_UPDATE_MODE) {
         val intent = Intent(context, BackgroundUpdaterService::class.java)
         context!!.stopService(intent)
         context!!.startService(intent)

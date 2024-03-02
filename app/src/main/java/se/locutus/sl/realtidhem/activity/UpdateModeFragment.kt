@@ -268,13 +268,13 @@ class UpdateModeFragment : androidx.fragment.app.Fragment() {
              updateSettings.updateModeValue = position
              widgetConfigureActivity.widgetConfig = widgetConfigureActivity.widgetConfig.toBuilder()
                  .setUpdateSettings(updateSettings).build()
-             if (position == Ng.UpdateSettings.UpdateMode.LEARNING_UPDATE_MODE_VALUE) {
+             if (position == Ng.UpdateMode.LEARNING_UPDATE_MODE_VALUE) {
                  selfLearningSettings.visibility = View.VISIBLE
                  updateUpdatePeriod()
              } else {
                  selfLearningSettings.visibility = View.GONE
              }
-             if (position == Ng.UpdateSettings.UpdateMode.ALWAYS_UPDATE_MODE_VALUE) {
+             if (position == Ng.UpdateMode.ALWAYS_UPDATE_MODE_VALUE) {
                  alwaysUpdateSettings.visibility = View.VISIBLE
              } else {
                  alwaysUpdateSettings.visibility = View.GONE

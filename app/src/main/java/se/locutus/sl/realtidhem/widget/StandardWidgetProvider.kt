@@ -89,7 +89,7 @@ class StandardWidgetProvider : AppWidgetProvider() {
             LOG.info("Updating $id")
             updateAppWidget(context, widgetConfig, appWidgetManager, prefs, id)
             LOG.info("Compacting widget touch records to ${timeTracker.compactRecords(id)}")
-            if (widgetConfig.updateSettings.updateMode == Ng.UpdateSettings.UpdateMode.LEARNING_UPDATE_MODE)  {
+            if (widgetConfig.updateSettings.updateMode == Ng.UpdateMode.LEARNING_UPDATE_MODE)  {
                 scheduleWidgetUpdates(id, widgetConfig.updateSettings)
             }
         }
@@ -240,7 +240,7 @@ fun setWidgetViews(context: Context,
     if (lastData != null) {
         views.setInt(R.id.widgetcolor, "setBackgroundColor", lastData.color)
     }
-    val alwaysUpdate = widgetConfig.updateSettings.updateMode == Ng.UpdateSettings.UpdateMode.ALWAYS_UPDATE_MODE
+    val alwaysUpdate = widgetConfig.updateSettings.updateMode == Ng.UpdateMode.ALWAYS_UPDATE_MODE
     val line1 = if (alwaysUpdate) context.getString(R.string.idle_line1_auto) else context.getString(R.string.idle_line1)
     var line2 = if (alwaysUpdate) context.getString(R.string.idle_line2_auto, getUpdateSequenceLength(widgetConfig.updateSettings)) else context.getString(R.string.idle_line2)
     if (lastData != null && lastData.idleMessage.isNotEmpty()) {

@@ -67,7 +67,7 @@ class BackgroundUpdaterService : Service() {
                 selfLearningTimeouts.remove(widgetId)
                 autoUpdateSequenceEndTime.remove(widgetId)
                 LOG.info("Manually stopping sequence for $widgetId")
-            } else if (config.updateSettings.updateMode == Ng.UpdateSettings.UpdateMode.LEARNING_UPDATE_MODE) {
+            } else if (config.updateSettings.updateMode == Ng.UpdateMode.LEARNING_UPDATE_MODE) {
                 val alarmKey = intent!!.getStringExtra(EXTRA_UPDATE_TIME_KEY)!!
                 val alarmMinCount = config.updateSettings.interactionsToLearn
                 val alarmKeyValue = timeTracker.getAlarmKeyValue(alarmKey)
@@ -82,7 +82,7 @@ class BackgroundUpdaterService : Service() {
                 } else {
                     LOG.warning("Received alarm with missing/too low alarm key for $widgetId - not scheduling.")
                 }
-            } else if (config.updateSettings.updateMode == Ng.UpdateSettings.UpdateMode.ALWAYS_UPDATE_MODE) {
+            } else if (config.updateSettings.updateMode == Ng.UpdateMode.ALWAYS_UPDATE_MODE) {
                 LOG.info("Received extra widgetId $widgetId for auto update widget manual extra ${intent?.hasExtra(EXTRA_MANUAL_TOUCH)}")
                 setAutoUpdateSequence(widgetId, config.updateSettings.updateSequenceLength)
                 if (intent!!.hasExtra(EXTRA_MANUAL_TOUCH)) {
@@ -103,7 +103,7 @@ class BackgroundUpdaterService : Service() {
         for (widgetId in allWidgetIds) {
             val config = widgetTouchProvider().getInMemoryState().getWidgetConfig(widgetId, prefs)
             val updateSetting = config.updateSettings
-            if (updateSetting.updateMode == Ng.UpdateSettings.UpdateMode.ALWAYS_UPDATE_MODE
+            if (updateSetting.updateMode == Ng.UpdateMode.ALWAYS_UPDATE_MODE
                 && updateSetting.updateWhenScreenOn) {
                 hasAlwaysUpdateWidgetRequiringScreenOn = true
             }
@@ -199,7 +199,7 @@ class BackgroundUpdaterService : Service() {
         for (widgetId in widgetIdProvider()) {
             val config = widgetTouchProvider().getInMemoryState().getWidgetConfig(widgetId, prefs)
             val updateSetting = config.updateSettings
-            if (updateSetting.updateMode == Ng.UpdateSettings.UpdateMode.ALWAYS_UPDATE_MODE
+            if (updateSetting.updateMode == Ng.UpdateMode.ALWAYS_UPDATE_MODE
                 && updateSetting.updateWhenScreenOn) {
                 hasAlwaysUpdateWidgetRequiringScreenOn = true
             }
@@ -246,14 +246,14 @@ class BackgroundUpdaterService : Service() {
 
     private fun shouldUpdate(widgetId : Int, updateSettings : Ng.UpdateSettings) : Boolean {
         val updateMode = updateSettings.updateMode
-        if (updateMode == Ng.UpdateSettings.UpdateMode.MANUAL_UPDATE_MODE) {
+        if (updateMode == Ng.UpdateMode.MANUAL_UPDATE_MODE) {
             return false
         }
-        if (updateMode == Ng.UpdateSettings.UpdateMode.LEARNING_UPDATE_MODE) {
+        if (updateMode == Ng.UpdateMode.LEARNING_UPDATE_MODE) {
             return selfLearningTimeouts.containsKey(widgetId)
                     && System.currentTimeMillis() <= selfLearningTimeouts[widgetId]!!
         }
-        if (updateMode == Ng.UpdateSettings.UpdateMode.ALWAYS_UPDATE_MODE) {
+        if (updateMode == Ng.UpdateMode.ALWAYS_UPDATE_MODE) {
             if (!autoUpdateSequenceEndTime.containsKey(widgetId)) {
                 return false
             }
@@ -278,7 +278,7 @@ class BackgroundUpdaterService : Service() {
             for (widgetId in widgetIdProvider()) {
                 val config = widgetTouchProvider().getInMemoryState().getWidgetConfig(widgetId, prefs)
                 val updateSetting = config.updateSettings
-                if (updateSetting.updateWhenScreenOn && updateSetting.updateMode == Ng.UpdateSettings.UpdateMode.ALWAYS_UPDATE_MODE) {
+                if (updateSetting.updateWhenScreenOn && updateSetting.updateMode == Ng.UpdateMode.ALWAYS_UPDATE_MODE) {
                     // This widget should update from screen turning on!
                     // But only if location makes sense...
                     if (verifyLocationSanity(widgetId)) {
@@ -307,8 +307,8 @@ class BackgroundUpdaterService : Service() {
         for (widgetId in widgetIdProvider()) {
             val config = widgetTouchProvider().getInMemoryState().getWidgetConfig(widgetId, prefs)
             val updateMode = config.updateSettings.updateMode
-            if (updateMode == Ng.UpdateSettings.UpdateMode.ALWAYS_UPDATE_MODE ||
-                    updateMode == Ng.UpdateSettings.UpdateMode.LEARNING_UPDATE_MODE) {
+            if (updateMode == Ng.UpdateMode.ALWAYS_UPDATE_MODE ||
+                    updateMode == Ng.UpdateMode.LEARNING_UPDATE_MODE) {
                 // Explicitly reset the timers so that any event will update
                 // the widgets again.
                 widgetTouchProvider().getInMemoryState().resetTimers(widgetId)

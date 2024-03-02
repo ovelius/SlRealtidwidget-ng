@@ -828,6 +828,128 @@ public final class Ng {
     // @@protoc_insertion_point(enum_scope:se.locutus.proto.ResRobotOperatorEnum)
   }
 
+  /**
+   * Protobuf enum {@code se.locutus.proto.UpdateMode}
+   */
+  public enum UpdateMode
+      implements com.google.protobuf.Internal.EnumLite {
+    /**
+     * <pre>
+     * Learn when to update from user interaction. This is default.
+     * </pre>
+     *
+     * <code>LEARNING_UPDATE_MODE = 0;</code>
+     */
+    LEARNING_UPDATE_MODE(0),
+    /**
+     * <pre>
+     * Update only from user interaction.
+     * </pre>
+     *
+     * <code>MANUAL_UPDATE_MODE = 1;</code>
+     */
+    MANUAL_UPDATE_MODE(1),
+    /**
+     * <pre>
+     * Always keep updated when screen is on.
+     * </pre>
+     *
+     * <code>ALWAYS_UPDATE_MODE = 2;</code>
+     */
+    ALWAYS_UPDATE_MODE(2),
+    UNRECOGNIZED(-1),
+    ;
+
+    /**
+     * <pre>
+     * Learn when to update from user interaction. This is default.
+     * </pre>
+     *
+     * <code>LEARNING_UPDATE_MODE = 0;</code>
+     */
+    public static final int LEARNING_UPDATE_MODE_VALUE = 0;
+    /**
+     * <pre>
+     * Update only from user interaction.
+     * </pre>
+     *
+     * <code>MANUAL_UPDATE_MODE = 1;</code>
+     */
+    public static final int MANUAL_UPDATE_MODE_VALUE = 1;
+    /**
+     * <pre>
+     * Always keep updated when screen is on.
+     * </pre>
+     *
+     * <code>ALWAYS_UPDATE_MODE = 2;</code>
+     */
+    public static final int ALWAYS_UPDATE_MODE_VALUE = 2;
+
+
+    @java.lang.Override
+    public final int getNumber() {
+      if (this == UNRECOGNIZED) {
+        throw new java.lang.IllegalArgumentException(
+            "Can't get the number of an unknown enum value.");
+      }
+      return value;
+    }
+
+    /**
+     * @param value The number of the enum to look for.
+     * @return The enum associated with the given number.
+     * @deprecated Use {@link #forNumber(int)} instead.
+     */
+    @java.lang.Deprecated
+    public static UpdateMode valueOf(int value) {
+      return forNumber(value);
+    }
+
+    public static UpdateMode forNumber(int value) {
+      switch (value) {
+        case 0: return LEARNING_UPDATE_MODE;
+        case 1: return MANUAL_UPDATE_MODE;
+        case 2: return ALWAYS_UPDATE_MODE;
+        default: return null;
+      }
+    }
+
+    public static com.google.protobuf.Internal.EnumLiteMap<UpdateMode>
+        internalGetValueMap() {
+      return internalValueMap;
+    }
+    private static final com.google.protobuf.Internal.EnumLiteMap<
+        UpdateMode> internalValueMap =
+          new com.google.protobuf.Internal.EnumLiteMap<UpdateMode>() {
+            @java.lang.Override
+            public UpdateMode findValueByNumber(int number) {
+              return UpdateMode.forNumber(number);
+            }
+          };
+
+    public static com.google.protobuf.Internal.EnumVerifier 
+        internalGetVerifier() {
+      return UpdateModeVerifier.INSTANCE;
+    }
+
+    private static final class UpdateModeVerifier implements 
+         com.google.protobuf.Internal.EnumVerifier { 
+            static final com.google.protobuf.Internal.EnumVerifier           INSTANCE = new UpdateModeVerifier();
+            @java.lang.Override
+            public boolean isInRange(int number) {
+              return UpdateMode.forNumber(number) != null;
+            }
+          };
+
+    private final int value;
+
+    private UpdateMode(int value) {
+      this.value = value;
+    }
+
+    // @@protoc_insertion_point(enum_scope:se.locutus.proto.UpdateMode)
+  }
+
   public interface RequestHeaderOrBuilder extends
       // @@protoc_insertion_point(interface_extends:se.locutus.proto.RequestHeader)
       com.google.protobuf.MessageLiteOrBuilder {
@@ -851,6 +973,25 @@ public final class Ng {
      * @return The id.
      */
     int getId();
+
+    /**
+     * <pre>
+     * The update mode of this client.
+     * </pre>
+     *
+     * <code>.se.locutus.proto.UpdateMode update_mode = 3;</code>
+     * @return The enum numeric value on the wire for updateMode.
+     */
+    int getUpdateModeValue();
+    /**
+     * <pre>
+     * The update mode of this client.
+     * </pre>
+     *
+     * <code>.se.locutus.proto.UpdateMode update_mode = 3;</code>
+     * @return The updateMode.
+     */
+    se.locutus.proto.Ng.UpdateMode getUpdateMode();
   }
   /**
    * <pre>
@@ -940,6 +1081,68 @@ public final class Ng {
     private void clearId() {
 
       id_ = 0;
+    }
+
+    public static final int UPDATE_MODE_FIELD_NUMBER = 3;
+    private int updateMode_;
+    /**
+     * <pre>
+     * The update mode of this client.
+     * </pre>
+     *
+     * <code>.se.locutus.proto.UpdateMode update_mode = 3;</code>
+     * @return The enum numeric value on the wire for updateMode.
+     */
+    @java.lang.Override
+    public int getUpdateModeValue() {
+      return updateMode_;
+    }
+    /**
+     * <pre>
+     * The update mode of this client.
+     * </pre>
+     *
+     * <code>.se.locutus.proto.UpdateMode update_mode = 3;</code>
+     * @return The updateMode.
+     */
+    @java.lang.Override
+    public se.locutus.proto.Ng.UpdateMode getUpdateMode() {
+      se.locutus.proto.Ng.UpdateMode result = se.locutus.proto.Ng.UpdateMode.forNumber(updateMode_);
+      return result == null ? se.locutus.proto.Ng.UpdateMode.UNRECOGNIZED : result;
+    }
+    /**
+     * <pre>
+     * The update mode of this client.
+     * </pre>
+     *
+     * <code>.se.locutus.proto.UpdateMode update_mode = 3;</code>
+     * @param value The enum numeric value on the wire for updateMode to set.
+     */
+    private void setUpdateModeValue(int value) {
+        updateMode_ = value;
+    }
+    /**
+     * <pre>
+     * The update mode of this client.
+     * </pre>
+     *
+     * <code>.se.locutus.proto.UpdateMode update_mode = 3;</code>
+     * @param value The updateMode to set.
+     */
+    private void setUpdateMode(se.locutus.proto.Ng.UpdateMode value) {
+      updateMode_ = value.getNumber();
+
+    }
+    /**
+     * <pre>
+     * The update mode of this client.
+     * </pre>
+     *
+     * <code>.se.locutus.proto.UpdateMode update_mode = 3;</code>
+     */
+    private void clearUpdateMode() {
+
+      updateMode_ = 0;
     }
 
     public static se.locutus.proto.Ng.RequestHeader parseFrom(
@@ -1123,6 +1326,72 @@ public final class Ng {
         return this;
       }
 
+      /**
+       * <pre>
+       * The update mode of this client.
+       * </pre>
+       *
+       * <code>.se.locutus.proto.UpdateMode update_mode = 3;</code>
+       * @return The enum numeric value on the wire for updateMode.
+       */
+      @java.lang.Override
+      public int getUpdateModeValue() {
+        return instance.getUpdateModeValue();
+      }
+      /**
+       * <pre>
+       * The update mode of this client.
+       * </pre>
+       *
+       * <code>.se.locutus.proto.UpdateMode update_mode = 3;</code>
+       * @param value The updateMode to set.
+       * @return This builder for chaining.
+       */
+      public Builder setUpdateModeValue(int value) {
+        copyOnWrite();
+        instance.setUpdateModeValue(value);
+        return this;
+      }
+      /**
+       * <pre>
+       * The update mode of this client.
+       * </pre>
+       *
+       * <code>.se.locutus.proto.UpdateMode update_mode = 3;</code>
+       * @return The updateMode.
+       */
+      @java.lang.Override
+      public se.locutus.proto.Ng.UpdateMode getUpdateMode() {
+        return instance.getUpdateMode();
+      }
+      /**
+       * <pre>
+       * The update mode of this client.
+       * </pre>
+       *
+       * <code>.se.locutus.proto.UpdateMode update_mode = 3;</code>
+       * @param value The enum numeric value on the wire for updateMode to set.
+       * @return This builder for chaining.
+       */
+      public Builder setUpdateMode(se.locutus.proto.Ng.UpdateMode value) {
+        copyOnWrite();
+        instance.setUpdateMode(value);
+        return this;
+      }
+      /**
+       * <pre>
+       * The update mode of this client.
+       * </pre>
+       *
+       * <code>.se.locutus.proto.UpdateMode update_mode = 3;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearUpdateMode() {
+        copyOnWrite();
+        instance.clearUpdateMode();
+        return this;
+      }
+
       // @@protoc_insertion_point(builder_scope:se.locutus.proto.RequestHeader)
     }
     @java.lang.Override
@@ -1141,10 +1410,11 @@ public final class Ng {
             java.lang.Object[] objects = new java.lang.Object[] {
               "api_",
               "id_",
+              "updateMode_",
             };
             java.lang.String info =
-                "\u0000\u0002\u0000\u0000\u0001\u0002\u0002\u0000\u0000\u0000\u0001\u0004\u0002\u0004" +
-                "";
+                "\u0000\u0003\u0000\u0000\u0001\u0003\u0003\u0000\u0000\u0000\u0001\u0004\u0002\u0004" +
+                "\u0003\f";
             return newMessageInfo(DEFAULT_INSTANCE, info, objects);
         }
         // fall through
@@ -13018,15 +13288,15 @@ public final class Ng {
       com.google.protobuf.MessageLiteOrBuilder {
 
     /**
-     * <code>.se.locutus.proto.UpdateSettings.UpdateMode update_mode = 1;</code>
+     * <code>.se.locutus.proto.UpdateMode update_mode = 1;</code>
      * @return The enum numeric value on the wire for updateMode.
      */
     int getUpdateModeValue();
     /**
-     * <code>.se.locutus.proto.UpdateSettings.UpdateMode update_mode = 1;</code>
+     * <code>.se.locutus.proto.UpdateMode update_mode = 1;</code>
      * @return The updateMode.
      */
-    se.locutus.proto.Ng.UpdateSettings.UpdateMode getUpdateMode();
+    se.locutus.proto.Ng.UpdateMode getUpdateMode();
 
     /**
      * <pre>
@@ -13088,132 +13358,10 @@ public final class Ng {
       UpdateSettingsOrBuilder {
     private UpdateSettings() {
     }
-    /**
-     * Protobuf enum {@code se.locutus.proto.UpdateSettings.UpdateMode}
-     */
-    public enum UpdateMode
-        implements com.google.protobuf.Internal.EnumLite {
-      /**
-       * <pre>
-       * Learn when to update from user interaction. This is default.
-       * </pre>
-       *
-       * <code>LEARNING_UPDATE_MODE = 0;</code>
-       */
-      LEARNING_UPDATE_MODE(0),
-      /**
-       * <pre>
-       * Update only from user interaction.
-       * </pre>
-       *
-       * <code>MANUAL_UPDATE_MODE = 1;</code>
-       */
-      MANUAL_UPDATE_MODE(1),
-      /**
-       * <pre>
-       * Always keep updated when screen is on.
-       * </pre>
-       *
-       * <code>ALWAYS_UPDATE_MODE = 2;</code>
-       */
-      ALWAYS_UPDATE_MODE(2),
-      UNRECOGNIZED(-1),
-      ;
-
-      /**
-       * <pre>
-       * Learn when to update from user interaction. This is default.
-       * </pre>
-       *
-       * <code>LEARNING_UPDATE_MODE = 0;</code>
-       */
-      public static final int LEARNING_UPDATE_MODE_VALUE = 0;
-      /**
-       * <pre>
-       * Update only from user interaction.
-       * </pre>
-       *
-       * <code>MANUAL_UPDATE_MODE = 1;</code>
-       */
-      public static final int MANUAL_UPDATE_MODE_VALUE = 1;
-      /**
-       * <pre>
-       * Always keep updated when screen is on.
-       * </pre>
-       *
-       * <code>ALWAYS_UPDATE_MODE = 2;</code>
-       */
-      public static final int ALWAYS_UPDATE_MODE_VALUE = 2;
-
-
-      @java.lang.Override
-      public final int getNumber() {
-        if (this == UNRECOGNIZED) {
-          throw new java.lang.IllegalArgumentException(
-              "Can't get the number of an unknown enum value.");
-        }
-        return value;
-      }
-
-      /**
-       * @param value The number of the enum to look for.
-       * @return The enum associated with the given number.
-       * @deprecated Use {@link #forNumber(int)} instead.
-       */
-      @java.lang.Deprecated
-      public static UpdateMode valueOf(int value) {
-        return forNumber(value);
-      }
-
-      public static UpdateMode forNumber(int value) {
-        switch (value) {
-          case 0: return LEARNING_UPDATE_MODE;
-          case 1: return MANUAL_UPDATE_MODE;
-          case 2: return ALWAYS_UPDATE_MODE;
-          default: return null;
-        }
-      }
-
-      public static com.google.protobuf.Internal.EnumLiteMap<UpdateMode>
-          internalGetValueMap() {
-        return internalValueMap;
-      }
-      private static final com.google.protobuf.Internal.EnumLiteMap<
-          UpdateMode> internalValueMap =
-            new com.google.protobuf.Internal.EnumLiteMap<UpdateMode>() {
-              @java.lang.Override
-              public UpdateMode findValueByNumber(int number) {
-                return UpdateMode.forNumber(number);
-              }
-            };
-
-      public static com.google.protobuf.Internal.EnumVerifier 
-          internalGetVerifier() {
-        return UpdateModeVerifier.INSTANCE;
-      }
-
-      private static final class UpdateModeVerifier implements 
-           com.google.protobuf.Internal.EnumVerifier { 
-              static final com.google.protobuf.Internal.EnumVerifier           INSTANCE = new UpdateModeVerifier();
-              @java.lang.Override
-              public boolean isInRange(int number) {
-                return UpdateMode.forNumber(number) != null;
-              }
-            };
-
-      private final int value;
-
-      private UpdateMode(int value) {
-        this.value = value;
-      }
-
-      // @@protoc_insertion_point(enum_scope:se.locutus.proto.UpdateSettings.UpdateMode)
-    }
-
     public static final int UPDATE_MODE_FIELD_NUMBER = 1;
     private int updateMode_;
     /**
-     * <code>.se.locutus.proto.UpdateSettings.UpdateMode update_mode = 1;</code>
+     * <code>.se.locutus.proto.UpdateMode update_mode = 1;</code>
      * @return The enum numeric value on the wire for updateMode.
      */
     @java.lang.Override
@@ -13221,31 +13369,31 @@ public final class Ng {
       return updateMode_;
     }
     /**
-     * <code>.se.locutus.proto.UpdateSettings.UpdateMode update_mode = 1;</code>
+     * <code>.se.locutus.proto.UpdateMode update_mode = 1;</code>
      * @return The updateMode.
      */
     @java.lang.Override
-    public se.locutus.proto.Ng.UpdateSettings.UpdateMode getUpdateMode() {
-      se.locutus.proto.Ng.UpdateSettings.UpdateMode result = se.locutus.proto.Ng.UpdateSettings.UpdateMode.forNumber(updateMode_);
-      return result == null ? se.locutus.proto.Ng.UpdateSettings.UpdateMode.UNRECOGNIZED : result;
+    public se.locutus.proto.Ng.UpdateMode getUpdateMode() {
+      se.locutus.proto.Ng.UpdateMode result = se.locutus.proto.Ng.UpdateMode.forNumber(updateMode_);
+      return result == null ? se.locutus.proto.Ng.UpdateMode.UNRECOGNIZED : result;
     }
     /**
-     * <code>.se.locutus.proto.UpdateSettings.UpdateMode update_mode = 1;</code>
+     * <code>.se.locutus.proto.UpdateMode update_mode = 1;</code>
      * @param value The enum numeric value on the wire for updateMode to set.
      */
     private void setUpdateModeValue(int value) {
         updateMode_ = value;
     }
     /**
-     * <code>.se.locutus.proto.UpdateSettings.UpdateMode update_mode = 1;</code>
+     * <code>.se.locutus.proto.UpdateMode update_mode = 1;</code>
      * @param value The updateMode to set.
      */
-    private void setUpdateMode(se.locutus.proto.Ng.UpdateSettings.UpdateMode value) {
+    private void setUpdateMode(se.locutus.proto.Ng.UpdateMode value) {
       updateMode_ = value.getNumber();
 
     }
     /**
-     * <code>.se.locutus.proto.UpdateSettings.UpdateMode update_mode = 1;</code>
+     * <code>.se.locutus.proto.UpdateMode update_mode = 1;</code>
      */
     private void clearUpdateMode() {
 
@@ -13540,7 +13688,7 @@ public final class Ng {
 
 
       /**
-       * <code>.se.locutus.proto.UpdateSettings.UpdateMode update_mode = 1;</code>
+       * <code>.se.locutus.proto.UpdateMode update_mode = 1;</code>
        * @return The enum numeric value on the wire for updateMode.
        */
       @java.lang.Override
@@ -13548,7 +13696,7 @@ public final class Ng {
         return instance.getUpdateModeValue();
       }
       /**
-       * <code>.se.locutus.proto.UpdateSettings.UpdateMode update_mode = 1;</code>
+       * <code>.se.locutus.proto.UpdateMode update_mode = 1;</code>
        * @param value The updateMode to set.
        * @return This builder for chaining.
        */
@@ -13558,25 +13706,25 @@ public final class Ng {
         return this;
       }
       /**
-       * <code>.se.locutus.proto.UpdateSettings.UpdateMode update_mode = 1;</code>
+       * <code>.se.locutus.proto.UpdateMode update_mode = 1;</code>
        * @return The updateMode.
        */
       @java.lang.Override
-      public se.locutus.proto.Ng.UpdateSettings.UpdateMode getUpdateMode() {
+      public se.locutus.proto.Ng.UpdateMode getUpdateMode() {
         return instance.getUpdateMode();
       }
       /**
-       * <code>.se.locutus.proto.UpdateSettings.UpdateMode update_mode = 1;</code>
+       * <code>.se.locutus.proto.UpdateMode update_mode = 1;</code>
        * @param value The enum numeric value on the wire for updateMode to set.
        * @return This builder for chaining.
        */
-      public Builder setUpdateMode(se.locutus.proto.Ng.UpdateSettings.UpdateMode value) {
+      public Builder setUpdateMode(se.locutus.proto.Ng.UpdateMode value) {
         copyOnWrite();
         instance.setUpdateMode(value);
         return this;
       }
       /**
-       * <code>.se.locutus.proto.UpdateSettings.UpdateMode update_mode = 1;</code>
+       * <code>.se.locutus.proto.UpdateMode update_mode = 1;</code>
        * @return This builder for chaining.
        */
       public Builder clearUpdateMode() {
@@ -13872,7 +14020,7 @@ public final class Ng {
     /**
      * <code>int64 site_id = 1 [deprecated = true];</code>
      * @deprecated se.locutus.proto.StoredStopData.site_id is deprecated.
-     *     See messages.proto;l=292
+     *     See messages.proto;l=295
      * @return The siteId.
      */
     @java.lang.Deprecated long getSiteId();
@@ -13942,7 +14090,7 @@ public final class Ng {
     /**
      * <code>int64 site_id = 1 [deprecated = true];</code>
      * @deprecated se.locutus.proto.StoredStopData.site_id is deprecated.
-     *     See messages.proto;l=292
+     *     See messages.proto;l=295
      * @return The siteId.
      */
     @java.lang.Override
@@ -13952,7 +14100,7 @@ public final class Ng {
     /**
      * <code>int64 site_id = 1 [deprecated = true];</code>
      * @deprecated se.locutus.proto.StoredStopData.site_id is deprecated.
-     *     See messages.proto;l=292
+     *     See messages.proto;l=295
      * @param value The siteId to set.
      */
     private void setSiteId(long value) {
@@ -13962,7 +14110,7 @@ public final class Ng {
     /**
      * <code>int64 site_id = 1 [deprecated = true];</code>
      * @deprecated se.locutus.proto.StoredStopData.site_id is deprecated.
-     *     See messages.proto;l=292
+     *     See messages.proto;l=295
      */
     private void clearSiteId() {
 
@@ -14261,7 +14409,7 @@ public final class Ng {
       /**
        * <code>int64 site_id = 1 [deprecated = true];</code>
        * @deprecated se.locutus.proto.StoredStopData.site_id is deprecated.
-       *     See messages.proto;l=292
+       *     See messages.proto;l=295
        * @return The siteId.
        */
       @java.lang.Override
@@ -14271,7 +14419,7 @@ public final class Ng {
       /**
        * <code>int64 site_id = 1 [deprecated = true];</code>
        * @deprecated se.locutus.proto.StoredStopData.site_id is deprecated.
-       *     See messages.proto;l=292
+       *     See messages.proto;l=295
        * @param value The siteId to set.
        * @return This builder for chaining.
        */
@@ -14283,7 +14431,7 @@ public final class Ng {
       /**
        * <code>int64 site_id = 1 [deprecated = true];</code>
        * @deprecated se.locutus.proto.StoredStopData.site_id is deprecated.
-       *     See messages.proto;l=292
+       *     See messages.proto;l=295
        * @return This builder for chaining.
        */
       @java.lang.Deprecated public Builder clearSiteId() {
@@ -14581,7 +14729,7 @@ public final class Ng {
     /**
      * <code>int64 site_id = 1 [deprecated = true];</code>
      * @deprecated se.locutus.proto.StopDataRequest.site_id is deprecated.
-     *     See messages.proto;l=302
+     *     See messages.proto;l=305
      * @return The siteId.
      */
     @java.lang.Deprecated long getSiteId();
@@ -14651,7 +14799,7 @@ public final class Ng {
     /**
      * <code>int64 site_id = 1 [deprecated = true];</code>
      * @deprecated se.locutus.proto.StopDataRequest.site_id is deprecated.
-     *     See messages.proto;l=302
+     *     See messages.proto;l=305
      * @return The siteId.
      */
     @java.lang.Override
@@ -14661,7 +14809,7 @@ public final class Ng {
     /**
      * <code>int64 site_id = 1 [deprecated = true];</code>
      * @deprecated se.locutus.proto.StopDataRequest.site_id is deprecated.
-     *     See messages.proto;l=302
+     *     See messages.proto;l=305
      * @param value The siteId to set.
      */
     private void setSiteId(long value) {
@@ -14671,7 +14819,7 @@ public final class Ng {
     /**
      * <code>int64 site_id = 1 [deprecated = true];</code>
      * @deprecated se.locutus.proto.StopDataRequest.site_id is deprecated.
-     *     See messages.proto;l=302
+     *     See messages.proto;l=305
      */
     private void clearSiteId() {
 
@@ -15008,7 +15156,7 @@ public final class Ng {
       /**
        * <code>int64 site_id = 1 [deprecated = true];</code>
        * @deprecated se.locutus.proto.StopDataRequest.site_id is deprecated.
-       *     See messages.proto;l=302
+       *     See messages.proto;l=305
        * @return The siteId.
        */
       @java.lang.Override
@@ -15018,7 +15166,7 @@ public final class Ng {
       /**
        * <code>int64 site_id = 1 [deprecated = true];</code>
        * @deprecated se.locutus.proto.StopDataRequest.site_id is deprecated.
-       *     See messages.proto;l=302
+       *     See messages.proto;l=305
        * @param value The siteId to set.
        * @return This builder for chaining.
        */
@@ -15030,7 +15178,7 @@ public final class Ng {
       /**
        * <code>int64 site_id = 1 [deprecated = true];</code>
        * @deprecated se.locutus.proto.StopDataRequest.site_id is deprecated.
-       *     See messages.proto;l=302
+       *     See messages.proto;l=305
        * @return This builder for chaining.
        */
       @java.lang.Deprecated public Builder clearSiteId() {
