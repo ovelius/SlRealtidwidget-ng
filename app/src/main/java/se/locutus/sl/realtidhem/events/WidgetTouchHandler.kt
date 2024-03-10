@@ -24,6 +24,7 @@ import android.os.PowerManager
 import android.view.Gravity
 import android.widget.Toast
 import java.net.URLEncoder
+import kotlin.math.abs
 
 
 const val CYCLE_STOP_LEFT = "CYCLE_STOP_LEFT"
@@ -291,7 +292,7 @@ class WidgetTouchHandler(val context: Context, val networkManager : NetworkInter
         val requestId = networkManager.doStopDataRequest(stopDataRequest, widgetConfig.updateSettings.updateMode) {
                 incomingRequestId : Int, responseData: Ng.ResponseData, e: Exception? ->
             LOG.info("Got response in ${System.currentTimeMillis() - time} ms")
-            handleLoadResponse(views, widgetId, incomingRequestId, responseData, e, stopConfig, userTouch, loadedLinesCallback)
+            handleLoadResponse(views, widgetId, stopConfig.stopData.site, incomingRequestId, responseData, e, stopConfig, userTouch, loadedLinesCallback)
         }
         inMemoryState.currentRequestId[widgetId] = requestId
 
@@ -305,12 +306,15 @@ class WidgetTouchHandler(val context: Context, val networkManager : NetworkInter
         }
     }
 
-    private fun handleLoadResponse(views : RemoteViews, widgetId : Int, incomingRequestId : Int, responseData: Ng.ResponseData, e: Exception?, stopConfig : Ng.StopConfiguration, userTouch : Boolean,
+    private fun handleLoadResponse(views : RemoteViews, widgetId : Int, siteId : Ng.SiteId, incomingRequestId : Int, responseData: Ng.ResponseData, e: Exception?, stopConfig : Ng.StopConfiguration, userTouch : Boolean,
                            loadedLinesCallback : (String, String, String) -> Unit) {
         val currentRequestId = inMemoryState.currentRequestId[widgetId]
-        if (currentRequestId != null && incomingRequestId != currentRequestId) {
-            LOG.info("Not handling network response due to requestId mismatch got $incomingRequestId wanted $currentRequestId")
-            return
+        if (currentRequestId != null) {
+            val allowedDiff = if (siteId.equals(responseData.loadResponse.site)) 2 else 0
+            if (abs(incomingRequestId-currentRequestId) > allowedDiff) {
+                LOG.info("Not handling network response due to requestId mismatch got $incomingRequestId wanted $currentRequestId")
+                return
+            }
         }
         inMemoryState.updateStartedAt.remove(widgetId)
         val manager = AppWidgetManager.getInstance(context)

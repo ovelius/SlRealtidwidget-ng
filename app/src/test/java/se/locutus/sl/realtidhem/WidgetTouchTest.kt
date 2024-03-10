@@ -208,6 +208,42 @@ class WidgetTouchTest {
     }
 
     @Test
+    fun testTouchWidgetIncorrectResponseId() {
+        val widgetId = createWidgetConfig()
+        val touchHandler = createTouchHandler()
+
+        // Touch the widget.
+        touchHandler.widgetTouched(widgetId, null)
+
+        assertThat(testNetwork.request, notNullValue())
+
+        val siteId = testNetwork.request!!.site
+
+        // Too far away.
+        testNetwork.sendResponse(7, Ng.ResponseData.newBuilder()
+            .setLoadResponse(widgetLoadResponse("123 Hej", "1 min", "Mooore").toBuilder().setSite(siteId))
+            .build(), null)
+
+        assertViewText(widgetId, R.id.widgetline1,  R.string.updating)
+
+        // This is ok!
+        testNetwork.sendResponse(2, Ng.ResponseData.newBuilder()
+            .setLoadResponse(widgetLoadResponse("123 Hej", "1 min", "Mooore").toBuilder().setSite(siteId))
+            .build(), null)
+
+        // Mismatch requestId.
+        assertViewText(widgetId, R.id.widgetline1,  "123 Hej")
+
+        // Another request comes in.
+        testNetwork.sendResponse(1, Ng.ResponseData.newBuilder()
+            .setLoadResponse(widgetLoadResponse("123 Hej2", "1 min", "Mooore").toBuilder().setSite(siteId))
+            .build(), null)
+
+        // We updated again.
+        assertViewText(widgetId, R.id.widgetline1,  "123 Hej2")
+    }
+
+    @Test
     fun testTouchWidgetAndExceptionLoadingData() {
         val widgetId = createWidgetConfig()
         val touchHandler = createTouchHandler()

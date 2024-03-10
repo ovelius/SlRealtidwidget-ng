@@ -96,6 +96,9 @@ message WidgetLoadResponseData {
   string idle_message = 7;
   // URL with information that opens when line2 is touched.
   string url = 8;
+
+  // Echo back the siteId.
+  SiteId site = 9;
 }
 
 enum ErrorType {

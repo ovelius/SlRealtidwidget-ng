@@ -54,6 +54,10 @@ internal class TestNetworkInterface : NetworkInterface {
     fun sendResponse(response : Ng.ResponseData, e : Exception?) {
         callback(0, response, e)
     }
+
+    fun sendResponse(requestId : Int, response : Ng.ResponseData, e : Exception?) {
+        callback(requestId, response, e);
+    }
 }
 
 class FakeHttpStack : BaseHttpStack() {
