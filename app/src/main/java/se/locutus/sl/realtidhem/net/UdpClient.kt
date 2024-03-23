@@ -38,7 +38,7 @@ class UpdClient(val context : Context, private val prefs : SharedPreferences
         super.run()
     }
 
-    fun tryResolveAddr() {
+    private fun tryResolveAddr() {
         try {
             address = Inet4Address.getByName(getBackendIp(prefs))
             responsive = true
@@ -59,6 +59,10 @@ class UpdClient(val context : Context, private val prefs : SharedPreferences
 
     fun sendRequest(message : Ng.RequestData, callback : (Int, Ng.ResponseData, Exception?) -> Unit) {
         selfHandler!!.post(RequestRunnable(this, message, callback))
+        checkBackendIp()
+    }
+
+    private fun checkBackendIp() {
         if (shouldUpdateBackendIp(prefs)) {
             selfHandler!!.post {
                 LOG.info("Refreshing backend IP record to ${ updateBackendIp(prefs)}")
@@ -123,6 +127,8 @@ class UpdClient(val context : Context, private val prefs : SharedPreferences
     }
 
     fun bringBackToLife() {
+        // Is the backend IP old?
+        checkBackendIp()
         // We failed to resolve address, try it again.
         if (address == null) {
             selfHandler!!.post {
