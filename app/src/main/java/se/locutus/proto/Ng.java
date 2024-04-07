@@ -280,6 +280,10 @@ public final class Ng {
      */
     VY(76),
     /**
+     * <code>VIKING_LINE = 221;</code>
+     */
+    VIKING_LINE(221),
+    /**
      * <code>UL = 251;</code>
      */
     UL(251),
@@ -468,6 +472,10 @@ public final class Ng {
      */
     TROSABUSSEN(604),
     /**
+     * <code>STROMMA = 636;</code>
+     */
+    STROMMA(636),
+    /**
      * <code>STADSBUSSARNA_OSTERSUND = 647;</code>
      */
     STADSBUSSARNA_OSTERSUND(647),
@@ -475,6 +483,10 @@ public final class Ng {
      * <code>KROSATAGEN2 = 648;</code>
      */
     KROSATAGEN2(648),
+    /**
+     * <code>SJ_NORD = 781;</code>
+     */
+    SJ_NORD(781),
     /**
      * <code>MTRX = 812;</code>
      */
@@ -502,6 +514,10 @@ public final class Ng {
      * <code>VY = 76;</code>
      */
     public static final int VY_VALUE = 76;
+    /**
+     * <code>VIKING_LINE = 221;</code>
+     */
+    public static final int VIKING_LINE_VALUE = 221;
     /**
      * <code>UL = 251;</code>
      */
@@ -691,6 +707,10 @@ public final class Ng {
      */
     public static final int TROSABUSSEN_VALUE = 604;
     /**
+     * <code>STROMMA = 636;</code>
+     */
+    public static final int STROMMA_VALUE = 636;
+    /**
      * <code>STADSBUSSARNA_OSTERSUND = 647;</code>
      */
     public static final int STADSBUSSARNA_OSTERSUND_VALUE = 647;
@@ -698,6 +718,10 @@ public final class Ng {
      * <code>KROSATAGEN2 = 648;</code>
      */
     public static final int KROSATAGEN2_VALUE = 648;
+    /**
+     * <code>SJ_NORD = 781;</code>
+     */
+    public static final int SJ_NORD_VALUE = 781;
     /**
      * <code>MTRX = 812;</code>
      */
@@ -736,6 +760,7 @@ public final class Ng {
         case 0: return UKNOWN_OPERATOR;
         case 74: return SJ;
         case 76: return VY;
+        case 221: return VIKING_LINE;
         case 251: return UL;
         case 252: return SORMLANDSTRAFIKEN;
         case 253: return OSTGOTATRAFIKEN;
@@ -783,8 +808,10 @@ public final class Ng {
         case 601: return KARLSTADSBUSS;
         case 602: return LULEA_LOKALTRAFIK;
         case 604: return TROSABUSSEN;
+        case 636: return STROMMA;
         case 647: return STADSBUSSARNA_OSTERSUND;
         case 648: return KROSATAGEN2;
+        case 781: return SJ_NORD;
         case 812: return MTRX;
         case 821: return VASTERVIK_EXPRESS;
         case 838: return FLIXBUS;
@@ -14196,7 +14223,7 @@ public final class Ng {
     /**
      * <code>int64 site_id = 1 [deprecated = true];</code>
      * @deprecated se.locutus.proto.StoredStopData.site_id is deprecated.
-     *     See messages.proto;l=300
+     *     See messages.proto;l=303
      * @return The siteId.
      */
     @java.lang.Deprecated long getSiteId();
@@ -14266,7 +14293,7 @@ public final class Ng {
     /**
      * <code>int64 site_id = 1 [deprecated = true];</code>
      * @deprecated se.locutus.proto.StoredStopData.site_id is deprecated.
-     *     See messages.proto;l=300
+     *     See messages.proto;l=303
      * @return The siteId.
      */
     @java.lang.Override
@@ -14276,7 +14303,7 @@ public final class Ng {
     /**
      * <code>int64 site_id = 1 [deprecated = true];</code>
      * @deprecated se.locutus.proto.StoredStopData.site_id is deprecated.
-     *     See messages.proto;l=300
+     *     See messages.proto;l=303
      * @param value The siteId to set.
      */
     private void setSiteId(long value) {
@@ -14286,7 +14313,7 @@ public final class Ng {
     /**
      * <code>int64 site_id = 1 [deprecated = true];</code>
      * @deprecated se.locutus.proto.StoredStopData.site_id is deprecated.
-     *     See messages.proto;l=300
+     *     See messages.proto;l=303
      */
     private void clearSiteId() {
 
@@ -14585,7 +14612,7 @@ public final class Ng {
       /**
        * <code>int64 site_id = 1 [deprecated = true];</code>
        * @deprecated se.locutus.proto.StoredStopData.site_id is deprecated.
-       *     See messages.proto;l=300
+       *     See messages.proto;l=303
        * @return The siteId.
        */
       @java.lang.Override
@@ -14595,7 +14622,7 @@ public final class Ng {
       /**
        * <code>int64 site_id = 1 [deprecated = true];</code>
        * @deprecated se.locutus.proto.StoredStopData.site_id is deprecated.
-       *     See messages.proto;l=300
+       *     See messages.proto;l=303
        * @param value The siteId to set.
        * @return This builder for chaining.
        */
@@ -14607,7 +14634,7 @@ public final class Ng {
       /**
        * <code>int64 site_id = 1 [deprecated = true];</code>
        * @deprecated se.locutus.proto.StoredStopData.site_id is deprecated.
-       *     See messages.proto;l=300
+       *     See messages.proto;l=303
        * @return This builder for chaining.
        */
       @java.lang.Deprecated public Builder clearSiteId() {
@@ -14905,7 +14932,7 @@ public final class Ng {
     /**
      * <code>int64 site_id = 1 [deprecated = true];</code>
      * @deprecated se.locutus.proto.StopDataRequest.site_id is deprecated.
-     *     See messages.proto;l=310
+     *     See messages.proto;l=313
      * @return The siteId.
      */
     @java.lang.Deprecated long getSiteId();
@@ -14975,7 +15002,7 @@ public final class Ng {
     /**
      * <code>int64 site_id = 1 [deprecated = true];</code>
      * @deprecated se.locutus.proto.StopDataRequest.site_id is deprecated.
-     *     See messages.proto;l=310
+     *     See messages.proto;l=313
      * @return The siteId.
      */
     @java.lang.Override
@@ -14985,7 +15012,7 @@ public final class Ng {
     /**
      * <code>int64 site_id = 1 [deprecated = true];</code>
      * @deprecated se.locutus.proto.StopDataRequest.site_id is deprecated.
-     *     See messages.proto;l=310
+     *     See messages.proto;l=313
      * @param value The siteId to set.
      */
     private void setSiteId(long value) {
@@ -14995,7 +15022,7 @@ public final class Ng {
     /**
      * <code>int64 site_id = 1 [deprecated = true];</code>
      * @deprecated se.locutus.proto.StopDataRequest.site_id is deprecated.
-     *     See messages.proto;l=310
+     *     See messages.proto;l=313
      */
     private void clearSiteId() {
 
@@ -15332,7 +15359,7 @@ public final class Ng {
       /**
        * <code>int64 site_id = 1 [deprecated = true];</code>
        * @deprecated se.locutus.proto.StopDataRequest.site_id is deprecated.
-       *     See messages.proto;l=310
+       *     See messages.proto;l=313
        * @return The siteId.
        */
       @java.lang.Override
@@ -15342,7 +15369,7 @@ public final class Ng {
       /**
        * <code>int64 site_id = 1 [deprecated = true];</code>
        * @deprecated se.locutus.proto.StopDataRequest.site_id is deprecated.
-       *     See messages.proto;l=310
+       *     See messages.proto;l=313
        * @param value The siteId to set.
        * @return This builder for chaining.
        */
@@ -15354,7 +15381,7 @@ public final class Ng {
       /**
        * <code>int64 site_id = 1 [deprecated = true];</code>
        * @deprecated se.locutus.proto.StopDataRequest.site_id is deprecated.
-       *     See messages.proto;l=310
+       *     See messages.proto;l=313
        * @return This builder for chaining.
        */
       @java.lang.Deprecated public Builder clearSiteId() {
