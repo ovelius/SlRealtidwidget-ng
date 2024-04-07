@@ -12,7 +12,6 @@ import java.lang.Exception
 import java.net.*
 import java.util.logging.Logger
 
-const val PORT = 1199
 const val NEW_PORT = 1701
 const val BUFFER = 8096
 const val READ_TIMEOUT_MILLIS = 5000
@@ -96,9 +95,8 @@ class UpdClient(val context : Context, private val prefs : SharedPreferences
     }
 
     fun send(message : Ng.RequestData) {
-        val port = if(useNewBackendForRequest(message)) NEW_PORT else PORT
         val bytes = message.toByteArray()
-        val p = DatagramPacket(bytes, bytes.size, address, port)
+        val p = DatagramPacket(bytes, bytes.size, address, NEW_PORT)
         LOG.fine("Sending UDP message of $message size ${bytes.size}")
         try {
             udpSocket.send(p)

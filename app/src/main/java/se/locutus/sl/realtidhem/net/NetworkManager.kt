@@ -14,11 +14,6 @@ import se.locutus.proto.Ng.ResponseData
 import se.locutus.proto.Ng.UpdateMode
 import java.util.logging.Logger
 
-
-fun useNewBackendForRequest(request : Ng.RequestData) : Boolean {
-    return request.stopDataRequest.site.strSiteId.isNotEmpty() || request.stopSearchRequest.query.isNotEmpty()
-}
-
 interface NetworkInterface {
     fun doStopDataRequest(request : Ng.StopDataRequest, updateMode: UpdateMode, forceHttp : Boolean = false, callBack : (Int, ResponseData, Exception?) -> Unit) : Int
     fun doGenericRequest(request : Ng.RequestData, forceHttp : Boolean = false, callBack : (Int, ResponseData, Exception?) -> Unit) : Int
@@ -74,7 +69,7 @@ class NetworkManager(var context : Context,
     }
 
     private fun sendRequestWithHTTP(request : RequestData, callback : (Int, ResponseData, Exception?) -> Unit) {
-        val protoRequest = ProtoRequest(if (useNewBackendForRequest(request)) NEW_URL else null, request,
+        val protoRequest = ProtoRequest(request,
             { response ->
                 LOG.fine("Got data $response")
                 callback(request.requestHeader.id, response, null)
@@ -94,11 +89,10 @@ class NetworkManager(var context : Context,
 }
 
 class ProtoRequest
-    (val urlOverride: String?,
-     val requestData : RequestData,
+    (val requestData : RequestData,
      var mListener: Response.Listener<ResponseData>?,
     errorListener: Response.ErrorListener?
-) : Request<ResponseData>(Request.Method.POST, urlOverride ?: URL, errorListener) {
+) : Request<ResponseData>(Request.Method.POST, URL, errorListener) {
 
 
     override fun getHeaders(): MutableMap<String, String> {
